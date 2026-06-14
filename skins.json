@@ -1,0 +1,52 @@
+[
+  {
+    "Category": "Turrets",
+    "ItemName": "Railgun",
+    "Name": "Railgun XT",
+    "SourceFolder": "Textures/Turrets/Railgun/XT/M3",
+    "PreviewImage": "Textures/Turrets/Railgun/XT/M3/Railgun_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Firebird",
+    "Name": "Firebird XT",
+    "SourceFolder": "Textures/Turrets/Firebird/XT/M3",
+    "PreviewImage": "Textures/Turrets/Firebird/XT/M3/Firebird_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Thunder",
+    "Name": "Thunder XT",
+    "SourceFolder": "Textures/Turrets/Thunder/XT/M3",
+    "PreviewImage": "Textures/Turrets/Thunder/XT/M3/Thunder_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Ricochet",
+    "Name": "Ricochet XT",
+    "SourceFolder": "Textures/Turrets/Ricochet/XT/M3",
+    "PreviewImage": "Textures/Turrets/Ricochet/XT/M3/Ricochet_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81MS8xMTAvMzE2MzQ0MjYzNjAzNTEvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Vulcan",
+    "Name": "Vulcan XT",
+    "SourceFolder": "Textures/Turrets/Vulcan/XT/M3",
+    "PreviewImage": "Textures/Turrets/Vulcan/XT/M3/Vulcan_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzE0NjQxNDMxMTI3MjcvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81MS8xMTAvMzE2MzQ0MjYzNjAzNTEvZGV0YWlsc19hbHBoYS5qcGc="
+  }
+]
