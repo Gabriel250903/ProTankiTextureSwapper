@@ -21,7 +21,7 @@ namespace TextureSwapper.Services
             string originalsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir, Constants.OriginalsDir);
             _ = Directory.CreateDirectory(originalsDir);
 
-            string[] targets = { skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget };
+            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
             foreach (string target in targets)
             {
                 if (string.IsNullOrEmpty(target))
@@ -50,7 +50,7 @@ namespace TextureSwapper.Services
                 Log.Information("Creating selective backup for {SkinName} at {BackupDir}", skin.Name, backupDir);
                 _ = Directory.CreateDirectory(backupDir);
 
-                string[] targets = { skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget };
+                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
                 foreach (string target in targets)
                 {
                     if (string.IsNullOrEmpty(target))
@@ -110,7 +110,7 @@ namespace TextureSwapper.Services
                 throw new DirectoryNotFoundException("Cache directory not found.");
             }
 
-            foreach (var skin in skins)
+            foreach (SkinModel skin in skins)
             {
                 try
                 {
@@ -129,7 +129,7 @@ namespace TextureSwapper.Services
             Log.Information("Restoring original textures from Originals backup...");
             string originalsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir, Constants.OriginalsDir);
 
-            if (!Directory.Exists(originalsDir) || !Directory.GetFiles(originalsDir).Any())
+            if (!Directory.Exists(originalsDir) || Directory.GetFiles(originalsDir).Length == 0)
             {
                 Log.Warning("Restore skipped: Originals backup directory {BackupDir} is empty or does not exist.", originalsDir);
                 return false;

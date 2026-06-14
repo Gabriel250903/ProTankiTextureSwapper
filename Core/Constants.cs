@@ -14,7 +14,7 @@ namespace TextureSwapper.Core
         public const string CacheDirName = "cache";
 
         public const string GitHubRepo = "Gabriel250903/ProTankiTextureSwapper";
-        public const string GitHubRawUrl = "https://raw.githubusercontent.com/Gabriel250903/ProTankiTextureSwapper/main/TextureSwapper";
+        public const string GitHubRawUrl = "https://raw.githubusercontent.com/Gabriel250903/ProTankiTextureSwapper/main";
         public const string GitHubApiUrl = "https://api.github.com/repos/Gabriel250903/ProTankiTextureSwapper";
     }
 }

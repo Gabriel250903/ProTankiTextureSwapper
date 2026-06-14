@@ -9,15 +9,41 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         Title="ProTanki Texture Swapper" 
-        Height="700" Width="750"
+        Height="780" Width="1100"
         WindowStartupLocation="CenterScreen"
         ExtendsContentIntoTitleBar="True"
         WindowBackdropType="Mica"
+        Background="#0F0F0F"
         d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+
+        <Style x:Key="CategoryButtonStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorPrimaryBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorPrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#10FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -27,8 +53,12 @@
         </Grid.RowDefinitions>
 
         <ui:TitleBar
-            Title="ProTanki Texture Swapper"
-            Grid.Row="0">
+            Title="PROTANKI TEXTURE SWAPPER"
+            Grid.Row="0"
+            FontWeight="Bold">
+            <ui:TitleBar.Icon>
+                <ui:SymbolIcon Symbol="Flash24" Foreground="{DynamicResource SystemAccentColorPrimaryBrush}" />
+            </ui:TitleBar.Icon>
             <ui:TitleBar.TrailingContent>
                 <ui:Button x:Name="btnThemeToggle"
                            Margin="0,0,10,0"
@@ -40,182 +70,163 @@
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <Grid Grid.Row="1" Margin="20">
+        <Grid Grid.Row="1" Margin="30,10,30,30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0,0,0,20">
-                <ui:TextBlock Text="Texture Swapper" FontTypography="Title" />
+            <StackPanel Grid.Row="0" Margin="0,0,0,25">
+                <ui:TextBlock Text="Texture Swapper" FontTypography="Title" FontSize="32" FontWeight="Bold"/>
             </StackPanel>
 
-            <GroupBox Grid.Row="1" Header="ProTanki Cache Path" Margin="0,0,0,15">
-                <Grid Margin="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <ui:TextBox x:Name="txtCachePath" 
-                                Text="{Binding CachePath, UpdateSourceTrigger=PropertyChanged}"
-                                PlaceholderText="Detecting cache path..." 
-                                Margin="0,0,5,0" />
-                    <ui:Button Grid.Column="1" 
-                               Content="Browse" 
-                               Icon="{ui:SymbolIcon Folder24}"
-                               Command="{Binding BrowseCommand}" />
-                </Grid>
-            </GroupBox>
+            <ListBox Grid.Row="1" 
+                     ItemsSource="{Binding Categories}" 
+                     SelectedItem="{Binding SelectedCategory}"
+                     ItemContainerStyle="{StaticResource CategoryButtonStyle}"
+                     Margin="0,0,0,20"
+                     Background="Transparent"
+                     BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
 
-            <Grid Grid.Row="2" Margin="0,0,0,15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" MinWidth="150"/>
-                    <ColumnDefinition Width="2*" MinWidth="300"/>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <ListBox Grid.Row="0" Grid.ColumnSpan="2" 
-                         ItemsSource="{Binding Categories}" 
-                         SelectedItem="{Binding SelectedCategory}"
-                         Margin="0,0,0,15">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                            <Setter Property="Margin" Value="5,0"/>
-                            <Setter Property="Padding" Value="15,5"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Border x:Name="RootBorder" 
-                                                Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                BorderThickness="1" 
-                                                CornerRadius="4" 
-                                                Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource SystemAccentColorPrimaryBrush}"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}"/>
-                                            </Trigger>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="IsSelected" Value="True"/>
-                                                    <Condition Property="IsMouseOver" Value="True"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource SystemAccentColorSecondaryBrush}"/>
-                                            </MultiTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
+                <Border Grid.Column="0" Background="#0AFFFFFF" CornerRadius="12,0,0,12" BorderThickness="1,1,0,1" BorderBrush="#1AFFFFFF">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ui:TextBlock Text="MODELS" FontTypography="Caption" Margin="15,15,15,10" Opacity="0.5" FontWeight="SemiBold"/>
+                        <ui:ListView Grid.Row="1" 
+                                     ItemsSource="{Binding ItemNames}"
+                                     SelectedItem="{Binding SelectedItemName}"
+                                     Padding="5,0,5,10"/>
+                    </Grid>
+                </Border>
 
-                <GroupBox Grid.Row="1" Header="{Binding SelectedCategory, StringFormat='Select {0}'}" Margin="0,0,10,0">
-                    <ui:ListView x:Name="lstItemNames" 
-                                 ItemsSource="{Binding ItemNames}"
-                                 SelectedItem="{Binding SelectedItemName}" />
-                </GroupBox>
+                <Border Grid.Column="1" Background="#0FFFFFFF" CornerRadius="0,12,12,0" BorderThickness="0,1,1,1" BorderBrush="#1AFFFFFF">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                <GroupBox Grid.Row="1" Grid.Column="1" Header="Select Skin">
-                    <ui:ListView x:Name="lstSkins" 
-                                 ItemsSource="{Binding FilteredSkins}"
-                                 SelectedItem="{Binding SelectedSkin}"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ui:ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel ItemWidth="150" />
-                            </ItemsPanelTemplate>
-                        </ui:ListView.ItemsPanel>
-                        <ui:ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="5">
-                                    <Border CornerRadius="8" ClipToBounds="True" BorderThickness="1" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
-                                        <Grid>
-                                            <Image Source="{Binding FullPreviewPath}" 
-                                                   Height="90" 
-                                                   Stretch="UniformToFill" />
-                                            <CheckBox IsChecked="{Binding IsSelected}" 
-                                                      HorizontalAlignment="Right" 
-                                                      VerticalAlignment="Top" 
-                                                      Margin="5"/>
-                                        </Grid>
-                                    </Border>
-                                    <ui:TextBlock Text="{Binding Name}" 
-                                                  HorizontalAlignment="Center" 
-                                                  Margin="0,5,0,0" 
-                                                  TextWrapping="Wrap"
-                                                  FontTypography="Caption" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ui:ListView.ItemTemplate>
-                    </ui:ListView>
-                </GroupBox>
+                        <ui:TextBlock Text="AVAILABLE SKINS" FontTypography="Caption" Margin="20,15,20,10" Opacity="0.5" FontWeight="SemiBold"/>
+
+                        <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
+                            <ItemsControl ItemsSource="{Binding FilteredSkins}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ui:Button BorderThickness="0" Background="Transparent" 
+                                                   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                                   Command="{Binding DataContext.SwapCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                   CommandParameter="{Binding}">
+                                            <Border Width="200" Background="#15FFFFFF" CornerRadius="12" BorderThickness="1" BorderBrush="#20FFFFFF" ClipToBounds="True">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="120"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+
+                                                    <Image Source="{Binding FullPreviewPath}" Stretch="UniformToFill" Opacity="0.9"/>
+
+                                                    <Border HorizontalAlignment="Right" VerticalAlignment="Top" 
+                                                        Background="#40000000" CornerRadius="0,12,0,12" Padding="8">
+                                                        <CheckBox IsChecked="{Binding IsSelected}" 
+                                                              Margin="0" Padding="0" MinWidth="0" MinHeight="0"/>
+                                                    </Border>
+
+                                                    <StackPanel Grid.Row="1" Margin="12,10">
+                                                        <ui:TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                                        <ui:TextBlock Text="XT VERSION" FontTypography="Caption" Opacity="0.6"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </ui:Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
             </Grid>
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10">
-                <ui:Button x:Name="btnSelectAll" 
-                           Content="Change all available textures" 
-                           Appearance="Secondary"
-                           Padding="20,10"
-                           Margin="0,0,10,0"
-                           Icon="{ui:SymbolIcon CheckmarkCircle24}"
-                           Command="{Binding SelectAllAvailableCommand}" />
+            <Border Grid.Row="3" Margin="0,20,0,0" Background="#0AFFFFFF" CornerRadius="12" BorderThickness="1" BorderBrush="#1AFFFFFF">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <ui:Button x:Name="btnSwap" 
-                           Content="Apply Skin" 
-                           Appearance="Primary"
-                           Padding="25,10"
-                           Margin="0,0,10,0"
-                           Icon="{ui:SymbolIcon Flash24}"
-                           Command="{Binding SwapCommand}" />
 
-                <ui:Button x:Name="btnRestore" 
-                           Content="Restore Original" 
-                           Appearance="Secondary"
-                           Padding="25,10"
-                           Margin="0,0,10,0"
-                           Icon="{ui:SymbolIcon ArrowUndo24}"
-                           Command="{Binding RestoreCommand}" />
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <ui:Button Content="Select all available textures" 
+                                   Appearance="Secondary"
+                                   Margin="0,0,10,0"
+                                   Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                                   Command="{Binding SelectAllAvailableCommand}" />
 
-                <ui:Button x:Name="btnClearCache" 
-                           Content="Clear Cache" 
-                           Appearance="Secondary"
-                           Padding="25,10"
-                           Icon="{ui:SymbolIcon Delete24}"
-                           Command="{Binding ClearCacheCommand}" />
-            </StackPanel>
+                        <ui:Button Content="Clear Cache" 
+                                   Appearance="Secondary"
+                                   Margin="0,0,10,0"
+                                   Icon="{ui:SymbolIcon Delete24}"
+                                   Command="{Binding ClearCacheCommand}" />
+
+                        <ui:Button Content="Restore Originals" 
+                                   Appearance="Secondary"
+                                   Margin="0,0,10,0"
+                                   Icon="{ui:SymbolIcon ArrowUndo24}"
+                                   Command="{Binding RestoreCommand}" />
+
+                        <ui:Button Content="APPLY SELECTED" 
+                                   Appearance="Primary"
+                                   FontWeight="Bold"
+                                   Icon="{ui:SymbolIcon Flash24}"
+                                   Command="{Binding SwapCommand}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
-<!-- Loading Overlay -->
-        <Grid x:Name="LoadingOverlay" Grid.RowSpan="2" Background="#88000000" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+        <Grid x:Name="LoadingOverlay" Grid.RowSpan="2" Background="#F0000000" Panel.ZIndex="10000">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <ui:ProgressRing IsIndeterminate="True" Width="60" Height="60" />
-                <ui:TextBlock Text="{Binding UpdateStatus}" Margin="0,15,0,0" HorizontalAlignment="Center" Foreground="White" FontTypography="BodyStrong" />
-                <ui:TextBlock Text="Please wait..." Visibility="{Binding UpdateStatus, Converter={StaticResource StringToVisibilityConverter}}" Margin="0,5,0,0" HorizontalAlignment="Center" Foreground="White" FontTypography="Caption" />
+                <ui:ProgressRing IsIndeterminate="True" Width="80" Height="60"/>
+                <ui:TextBlock Text="{Binding UpdateStatus}" Margin="0,20,0,0" HorizontalAlignment="Center" Foreground="White" 
+                              FontTypography="Title" FontSize="18" />
             </StackPanel>
         </Grid>
 
         <ui:InfoBar x:Name="ToastInfoBar"
                     Grid.Row="1"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,10,20,0"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,20,20"
                     Panel.ZIndex="1000"
                     IsClosable="True"
                     IsOpen="False"

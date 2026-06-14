@@ -1,6 +1,7 @@
 using Serilog;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 using System.Windows.Input;
 using TextureSwapper.Core;
@@ -86,11 +87,11 @@ namespace TextureSwapper.ViewModels
         public ICommand ClearCacheCommand { get; }
         public ICommand SelectAllAvailableCommand { get; }
 
-        public MainViewModel(INotificationService notificationService)
+        public MainViewModel(INotificationService notificationService, UpdateService updateService)
         {
             _notificationService = notificationService;
+            _updateService = updateService;
             _swapService = new SwapService();
-            _updateService = new UpdateService();
             _settingsService = new SettingsService();
             Settings = _settingsService.Load();
 
@@ -109,10 +110,19 @@ namespace TextureSwapper.ViewModels
         {
             IsLoading = true;
             UpdateStatus = "Checking for updates...";
-            
+
             await LoadSkinsAsync();
             await CheckForAppUpdatesAsync();
-            
+
+            IsLoading = false;
+            UpdateStatus = string.Empty;
+        }
+
+        public async Task TriggerUpdateCheckAsync()
+        {
+            IsLoading = true;
+            UpdateStatus = "Checking for updates...";
+            await CheckForAppUpdatesAsync();
             IsLoading = false;
             UpdateStatus = string.Empty;
         }
@@ -125,30 +135,41 @@ namespace TextureSwapper.ViewModels
 
         private async Task CheckForAppUpdatesAsync()
         {
-            var release = await _updateService.CheckForAppUpdatesAsync();
+            GitHubRelease? release = await _updateService.CheckForAppUpdatesAsync();
             if (release != null)
             {
-                MessageBox messageBox = new()
-                {
-                    Title = "Update Available",
-                    Content = $"A new version ({release.TagName}) is available. Would you like to download and install it now?",
-                    PrimaryButtonText = "Update Now",
-                    SecondaryButtonText = "Later",
-                    MaxWidth = 450
-                };
+                string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
+                string latestVersion = release.TagName.TrimStart('v');
 
-                var result = await messageBox.ShowDialogAsync();
-                if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                if (IsNewerVersion(currentVersion, latestVersion))
                 {
-                    var asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
-                    if (asset != null)
+                    MessageBox messageBox = new()
                     {
-                        IsLoading = true;
-                        UpdateStatus = "Downloading update...";
-                        await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => UpdateStatus = $"Downloading update ({p:F0}%)...");
+                        Title = "Update Available",
+                        Content = $"A new version ({release.TagName}) is available. Would you like to download and install it now?",
+                        PrimaryButtonText = "Update Now",
+                        SecondaryButtonText = "Later",
+                        MaxWidth = 450
+                    };
+
+                    MessageBoxResult result = await messageBox.ShowDialogAsync();
+                    if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                    {
+                        GitHubAsset? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
+                        if (asset != null)
+                        {
+                            IsLoading = true;
+                            UpdateStatus = "Downloading update...";
+                            await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => UpdateStatus = $"Downloading update ({p:F0}%)...");
+                        }
                     }
                 }
             }
+        }
+
+        private bool IsNewerVersion(string current, string latest)
+        {
+            return Version.TryParse(current, out Version? vCurrent) && Version.TryParse(latest, out Version? vLatest) && vLatest > vCurrent;
         }
 
         private async Task LoadSkinsAsync()
@@ -157,14 +178,13 @@ namespace TextureSwapper.ViewModels
             {
                 UpdateStatus = "Syncing skins...";
                 List<SkinModel>? remoteSkins = await _updateService.FetchRemoteSkinsAsync();
-                
+
                 if (remoteSkins != null)
                 {
                     _allSkins = remoteSkins;
                 }
                 else
                 {
-                    // Fallback to local
                     string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SkinsJson);
                     if (File.Exists(jsonPath))
                     {
@@ -173,26 +193,32 @@ namespace TextureSwapper.ViewModels
                     }
                 }
 
-                if (_allSkins.Any())
+                if (_allSkins.Count == 0)
                 {
-                    UpdateStatus = "Ensuring textures are local...";
-                    foreach (var skin in _allSkins)
-                    {
-                        await _updateService.EnsureAssetsExistAsync(skin, s => UpdateStatus = s);
-                    }
-
-                    Categories.Clear();
-                    List<string> uniqueCategories = _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c).ToList();
-                    foreach (string category in uniqueCategories)
-                    {
-                        Categories.Add(category);
-                    }
-
-                    if (Categories.Any())
-                    {
-                        SelectedCategory = Categories.First();
-                    }
+                    return;
                 }
+                Categories.Clear();
+                List<string> uniqueCategories = [.. _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c)];
+                foreach (string category in uniqueCategories)
+                {
+                    Categories.Add(category);
+                }
+
+                if (Categories.Any())
+                {
+                    SelectedCategory = Categories.First();
+                }
+
+                _ = Task.Run(async () =>
+                {
+                    foreach (SkinModel skin in _allSkins)
+                    {
+                        if (IsSkinMissingAssets(skin))
+                        {
+                            await _updateService.EnsureAssetsExistAsync(skin);
+                        }
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -204,36 +230,56 @@ namespace TextureSwapper.ViewModels
         private void ExecuteSelectAllAvailable(object? parameter)
         {
             Log.Information("Selecting all available textures globally.");
-            
-            // Group by item name and pick the first skin for each item
-            var itemsToSelect = _allSkins
+
+            IEnumerable<SkinModel> itemsToSelect = _allSkins
                 .GroupBy(s => s.ItemName)
                 .Select(g => g.First());
 
-            // Clear previous selections
-            foreach (var skin in _allSkins)
+            foreach (SkinModel skin in _allSkins)
             {
                 skin.IsSelected = false;
             }
 
-            // Select the unique items
-            foreach (var skin in itemsToSelect)
+            foreach (SkinModel? skin in itemsToSelect)
             {
                 skin.IsSelected = true;
             }
 
-            _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
+            _ = _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
+        }
+
+        private bool IsSkinMissingAssets(SkinModel skin)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            string previewPath = Path.GetFullPath(Path.Combine(baseDir, skin.PreviewImage.Replace("\\", "/")));
+            if (!File.Exists(previewPath))
+            {
+                return true;
+            }
+
+            string[] files = ["details.png", "lightmap.png", "alpha.png"];
+            foreach (string file in files)
+            {
+                string relativePath = Path.Combine(skin.SourceFolder, file).Replace("\\", "/");
+                string fullPath = Path.GetFullPath(Path.Combine(baseDir, relativePath));
+                if (!File.Exists(fullPath))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void FilterItems()
         {
             ItemNames.Clear();
-            List<string> matchingItems = _allSkins
+            List<string> matchingItems = [.. _allSkins
                 .Where(s => s.Category == SelectedCategory)
                 .Select(s => s.ItemName)
                 .Distinct()
-                .OrderBy(i => i)
-                .ToList();
+                .OrderBy(i => i)];
 
             foreach (string itemName in matchingItems)
             {
@@ -300,9 +346,9 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
-            var selectedSkins = _allSkins.Where(s => s.IsSelected).ToList();
+            List<SkinModel> selectedSkins = [.. _allSkins.Where(s => s.IsSelected)];
 
-            if (!selectedSkins.Any() && SelectedSkin == null)
+            if (selectedSkins.Count == 0 && SelectedSkin == null)
             {
                 await _notificationService.ShowAsync("Error", "Please select at least one skin first.", ControlAppearance.Danger);
                 return;
@@ -317,7 +363,7 @@ namespace TextureSwapper.ViewModels
             try
             {
                 IsLoading = true;
-                if (selectedSkins.Any())
+                if (selectedSkins.Count != 0)
                 {
                     await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
                     await _notificationService.ShowAsync("Success", $"{selectedSkins.Count} skins applied successfully!", ControlAppearance.Success);

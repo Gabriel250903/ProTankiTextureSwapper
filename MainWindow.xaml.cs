@@ -1,4 +1,3 @@
-using Serilog;
 using TextureSwapper.Services;
 using TextureSwapper.ViewModels;
 using Wpf.Ui.Appearance;
@@ -8,18 +7,17 @@ namespace TextureSwapper
 {
     public partial class MainWindow : FluentWindow, INotificationService
     {
-        private readonly MainViewModel _viewModel;
+        private readonly MainViewModel _mainViewModel;
+        private readonly UpdateService _updateService;
+
         public MainWindow()
         {
-            Log.Information("MainWindow initializing with MVVM...");
+            _updateService = new UpdateService();
+            _mainViewModel = new MainViewModel(this, _updateService);
 
-            _viewModel = new MainViewModel(this);
+            DataContext = _mainViewModel;
 
-            DataContext = _viewModel;
             InitializeComponent();
-
-            ApplicationThemeManager.Apply(_viewModel.Settings.Theme);
-            UpdateThemeIcon(_viewModel.Settings.Theme);
         }
 
         private void BtnThemeToggle_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -27,30 +25,22 @@ namespace TextureSwapper
             ApplicationTheme currentTheme = ApplicationThemeManager.GetAppTheme();
             ApplicationTheme newTheme = currentTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
 
-            Log.Information("Toggling theme to {Theme}", newTheme);
             ApplicationThemeManager.Apply(newTheme);
-            _viewModel.SaveTheme(newTheme);
+            _mainViewModel.SaveTheme(newTheme);
 
-            UpdateThemeIcon(newTheme);
+            btnThemeToggle.Icon = new SymbolIcon(newTheme == ApplicationTheme.Light ? SymbolRegular.WeatherMoon24 : SymbolRegular.WeatherSunny24);
         }
-
-        private void UpdateThemeIcon(ApplicationTheme theme)
-        {
-            btnThemeToggle.Icon = theme == ApplicationTheme.Light
-                ? new SymbolIcon { Symbol = SymbolRegular.WeatherMoon24 }
-                : new SymbolIcon { Symbol = SymbolRegular.WeatherSunny24 };
-        }
-
 
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {
             ToastInfoBar.Title = title;
             ToastInfoBar.Message = message;
-
             ToastInfoBar.Severity = appearance switch
             {
+                ControlAppearance.Primary => InfoBarSeverity.Informational,
                 ControlAppearance.Success => InfoBarSeverity.Success,
                 ControlAppearance.Danger => InfoBarSeverity.Error,
+                ControlAppearance.Caution => InfoBarSeverity.Warning,
                 ControlAppearance.Info => InfoBarSeverity.Informational,
                 _ => InfoBarSeverity.Informational
             };
