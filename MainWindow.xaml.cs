@@ -1,6 +1,5 @@
 using TextureSwapper.Services;
 using TextureSwapper.ViewModels;
-using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper
@@ -14,21 +13,21 @@ namespace TextureSwapper
         {
             _updateService = new UpdateService();
             _mainViewModel = new MainViewModel(this, _updateService);
+            _mainViewModel.RequestSettings += OnRequestSettings;
 
             DataContext = _mainViewModel;
 
             InitializeComponent();
         }
 
-        private void BtnThemeToggle_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OnRequestSettings()
         {
-            ApplicationTheme currentTheme = ApplicationThemeManager.GetAppTheme();
-            ApplicationTheme newTheme = currentTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
-
-            ApplicationThemeManager.Apply(newTheme);
-            _mainViewModel.SaveTheme(newTheme);
-
-            btnThemeToggle.Icon = new SymbolIcon(newTheme == ApplicationTheme.Light ? SymbolRegular.WeatherMoon24 : SymbolRegular.WeatherSunny24);
+            SettingsViewModel settingsViewModel = new(_mainViewModel.Settings, _mainViewModel._settingsService, _mainViewModel);
+            SettingsWindow settingsWindow = new(settingsViewModel)
+            {
+                Owner = this
+            };
+            _ = settingsWindow.ShowDialog();
         }
 
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)

@@ -16,8 +16,8 @@ namespace TextureSwapper.ViewModels
     {
         private readonly SwapService _swapService;
         private readonly UpdateService _updateService;
-        private readonly INotificationService _notificationService;
-        private readonly SettingsService _settingsService;
+        internal readonly INotificationService _notificationService;
+        internal readonly SettingsService _settingsService;
         private List<SkinModel> _allSkins = [];
 
         private string _cachePath = string.Empty;
@@ -26,12 +26,33 @@ namespace TextureSwapper.ViewModels
         private SkinModel? _selectedSkin;
         private bool _isLoading;
         private string _updateStatus = string.Empty;
+        private readonly string _searchQuery = string.Empty;
+        private BackupModel? _selectedBackup;
 
         public ObservableCollection<SkinModel> FilteredSkins { get; } = [];
         public ObservableCollection<string> Categories { get; } = [];
         public ObservableCollection<string> ItemNames { get; } = [];
+        public ObservableCollection<BackupModel> SnapshotBackups { get; } = [];
 
         public AppSettings Settings { get; }
+
+        public BackupModel? SelectedBackup
+        {
+            get => _selectedBackup;
+            set => SetProperty(ref _selectedBackup, value);
+        }
+
+        public string SearchQuery
+        {
+            get => Settings.LastSearchQuery ?? string.Empty;
+            set
+            {
+                Settings.LastSearchQuery = value;
+                _settingsService.Save(Settings);
+                OnPropertyChanged();
+                FilterSkins();
+            }
+        }
 
         public string CachePath
         {
@@ -46,6 +67,8 @@ namespace TextureSwapper.ViewModels
             {
                 if (SetProperty(ref _selectedCategory, value))
                 {
+                    Settings.LastSelectedCategory = value;
+                    _settingsService.Save(Settings);
                     FilterItems();
                 }
             }
@@ -58,6 +81,8 @@ namespace TextureSwapper.ViewModels
             {
                 if (SetProperty(ref _selectedItemName, value))
                 {
+                    Settings.LastSelectedItemName = value;
+                    _settingsService.Save(Settings);
                     FilterSkins();
                 }
             }
@@ -86,6 +111,11 @@ namespace TextureSwapper.ViewModels
         public ICommand RestoreCommand { get; }
         public ICommand ClearCacheCommand { get; }
         public ICommand SelectAllAvailableCommand { get; }
+        public ICommand OpenSettingsCommand { get; }
+        public ICommand RestoreBackupCommand { get; }
+        public ICommand ToggleSkinSelectionCommand { get; }
+
+        public event Action? RequestSettings;
 
         public MainViewModel(INotificationService notificationService, UpdateService updateService)
         {
@@ -95,20 +125,45 @@ namespace TextureSwapper.ViewModels
             _settingsService = new SettingsService();
             Settings = _settingsService.Load();
 
-            CachePath = _swapService.DetectCachePath();
+            CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();
 
             BrowseCommand = new RelayCommand(ExecuteBrowse);
-            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ => !IsLoading);
+            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ => !IsLoading && _allSkins.Any(s => s.IsSelected));
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
             SelectAllAvailableCommand = new RelayCommand(ExecuteSelectAllAvailable);
+            OpenSettingsCommand = new RelayCommand(_ => RequestSettings?.Invoke());
+            RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !IsLoading && SelectedBackup != null);
+            ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
 
             _ = InitializeAsync();
+        }
+
+        private void ExecuteToggleSkinSelection(object? parameter)
+        {
+            if (parameter is SkinModel skin)
+            {
+                skin.IsSelected = !skin.IsSelected;
+                Log.Information("Toggled selection for skin: {SkinName}. New state: {IsSelected}", skin.Name, skin.IsSelected);
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
 
         private async Task InitializeAsync()
         {
             IsLoading = true;
+            UpdateStatus = "Initializing...";
+
+            try
+            {
+                await Task.Run(() => _swapService.PurgeOldBackups(Settings.MaxBackupRetentionDays));
+                LoadBackups();
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to purge or load backups.");
+            }
+
             UpdateStatus = "Checking for updates...";
 
             await LoadSkinsAsync();
@@ -118,13 +173,78 @@ namespace TextureSwapper.ViewModels
             UpdateStatus = string.Empty;
         }
 
+        private void LoadBackups()
+        {
+            SnapshotBackups.Clear();
+            string backupsRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
+            if (!Directory.Exists(backupsRoot))
+            {
+                return;
+            }
+
+            IOrderedEnumerable<DirectoryInfo> dirs = Directory.GetDirectories(backupsRoot)
+                .Select(d => new DirectoryInfo(d))
+                .Where(di => !di.Name.Equals(Constants.OriginalsDir, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(di => di.CreationTime);
+
+            foreach (DirectoryInfo? di in dirs)
+            {
+                SnapshotBackups.Add(new BackupModel
+                {
+                    FolderName = di.Name,
+                    DisplayName = di.Name.Replace("_", " "),
+                    CreationDate = di.CreationTime,
+                    FullPath = di.FullName
+                });
+            }
+        }
+
+        private async Task ExecuteRestoreBackup(object? parameter)
+        {
+            if (SelectedBackup == null)
+            {
+                return;
+            }
+
+            if (!await EnsureSafeToOperate())
+            {
+                return;
+            }
+
+            try
+            {
+                IsLoading = true;
+                UpdateStatus = $"Restoring from {SelectedBackup.DisplayName}...";
+                bool success = await Task.Run(() => _swapService.RestoreFromBackup(CachePath, SelectedBackup.FullPath));
+                if (success)
+                {
+                    await _notificationService.ShowAsync("Success", $"Restored from {SelectedBackup.DisplayName}", ControlAppearance.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to restore from snapshot.");
+                await _notificationService.ShowAsync("Error", $"Restore failed: {ex.Message}", ControlAppearance.Danger);
+            }
+            finally
+            {
+                IsLoading = false;
+                UpdateStatus = string.Empty;
+            }
+        }
+
         public async Task TriggerUpdateCheckAsync()
         {
             IsLoading = true;
             UpdateStatus = "Checking for updates...";
-            await CheckForAppUpdatesAsync();
+            await CheckForAppUpdatesAsync(p => UpdateStatus = p);
             IsLoading = false;
             UpdateStatus = string.Empty;
+        }
+
+        internal async Task PerformUpdateCheckAsync(Action<string> onProgress)
+        {
+            await CheckForAppUpdatesAsync(onProgress);
         }
 
         public void SaveTheme(Wpf.Ui.Appearance.ApplicationTheme theme)
@@ -133,9 +253,11 @@ namespace TextureSwapper.ViewModels
             _settingsService.Save(Settings);
         }
 
-        private async Task CheckForAppUpdatesAsync()
+        private async Task CheckForAppUpdatesAsync(Action<string>? onProgress = null)
         {
-            GitHubRelease? release = await _updateService.CheckForAppUpdatesAsync();
+            onProgress?.Invoke("Checking for updates...");
+
+            GitHubReleaseModel? release = await _updateService.CheckForAppUpdatesAsync();
             if (release != null)
             {
                 string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
@@ -155,12 +277,11 @@ namespace TextureSwapper.ViewModels
                     MessageBoxResult result = await messageBox.ShowDialogAsync();
                     if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                     {
-                        GitHubAsset? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
+                        GitHubAssetModel? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
                         if (asset != null)
                         {
-                            IsLoading = true;
-                            UpdateStatus = "Downloading update...";
-                            await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => UpdateStatus = $"Downloading update ({p:F0}%)...");
+                            onProgress?.Invoke("Downloading update...");
+                            await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => onProgress?.Invoke($"Downloading update ({p:F0}%)..."));
                         }
                     }
                 }
@@ -176,52 +297,56 @@ namespace TextureSwapper.ViewModels
         {
             try
             {
+                IsLoading = true;
                 UpdateStatus = "Syncing skins...";
-                List<SkinModel>? remoteSkins = await _updateService.FetchRemoteSkinsAsync();
+                string localJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SkinsJson);
+                string localJson = File.Exists(localJsonPath) ? await File.ReadAllTextAsync(localJsonPath) : string.Empty;
 
-                if (remoteSkins != null)
+                if (!string.IsNullOrEmpty(localJson))
                 {
+                    _allSkins = JsonSerializer.Deserialize<List<SkinModel>>(localJson) ?? [];
+                    InitializeCategories();
+                    FilterItems();
+                }
+
+                (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsAsync();
+
+                if (remoteSkins != null && remoteJson != localJson)
+                {
+                    Log.Information("Remote skins.json is different from local. Updating...");
                     _allSkins = remoteSkins;
-                }
-                else
-                {
-                    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SkinsJson);
-                    if (File.Exists(jsonPath))
-                    {
-                        string json = await File.ReadAllTextAsync(jsonPath);
-                        _allSkins = JsonSerializer.Deserialize<List<SkinModel>>(json) ?? [];
-                    }
-                }
+                    await File.WriteAllTextAsync(localJsonPath, remoteJson!);
 
-                if (_allSkins.Count == 0)
+                    InitializeCategories();
+                    FilterItems();
+                }
+                else if (remoteSkins == null && _allSkins.Count == 0)
                 {
+                    Log.Warning("Could not load skins from remote or local source.");
+                    IsLoading = false;
                     return;
                 }
-                Categories.Clear();
-                List<string> uniqueCategories = [.. _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c)];
-                foreach (string category in uniqueCategories)
-                {
-                    Categories.Add(category);
-                }
 
-                if (Categories.Any())
+                List<SkinModel> missingSkins = [.. _allSkins.Where(IsSkinMissingAssets)];
+                if (missingSkins.Count > 0)
                 {
-                    SelectedCategory = Categories.First();
-                }
-
-                _ = Task.Run(async () =>
-                {
-                    foreach (SkinModel skin in _allSkins)
+                    int completed = 0;
+                    foreach (SkinModel skin in missingSkins)
                     {
-                        if (IsSkinMissingAssets(skin))
-                        {
-                            await _updateService.EnsureAssetsExistAsync(skin);
-                        }
+                        UpdateStatus = $"Syncing assets ({completed}/{missingSkins.Count}): {skin.Name}...";
+                        await _updateService.EnsureAssetsExistAsync(skin);
+                        completed++;
                     }
-                });
+                }
+
+                UpdateStatus = "Syncing skins from github...";
+                await Task.Delay(2500);
+
+                IsLoading = false;
             }
             catch (Exception ex)
             {
+                IsLoading = false;
                 Log.Error(ex, "Failed to load skins.");
                 await _notificationService.ShowAsync("Error", $"Failed to load skins: {ex.Message}", ControlAppearance.Danger);
             }
@@ -245,6 +370,7 @@ namespace TextureSwapper.ViewModels
                 skin.IsSelected = true;
             }
 
+            CommandManager.InvalidateRequerySuggested();
             _ = _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
         }
 
@@ -272,9 +398,36 @@ namespace TextureSwapper.ViewModels
             return false;
         }
 
+        private void InitializeCategories()
+        {
+            if (_allSkins == null || !_allSkins.Any())
+            {
+                return;
+            }
+
+            string? currentCategory = SelectedCategory;
+            Categories.Clear();
+            List<string> uniqueCategories = [.. _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c)];
+            foreach (string category in uniqueCategories)
+            {
+                Categories.Add(category);
+            }
+
+            if (Categories.Any())
+            {
+                SelectedCategory = !string.IsNullOrEmpty(currentCategory) && Categories.Contains(currentCategory)
+                    ? currentCategory
+                    : (Settings.LastSelectedCategory != null && Categories.Contains(Settings.LastSelectedCategory))
+                        ? Settings.LastSelectedCategory
+                        : Categories.First();
+            }
+        }
+
         private void FilterItems()
         {
             ItemNames.Clear();
+            ItemNames.Add("All models");
+
             List<string> matchingItems = [.. _allSkins
                 .Where(s => s.Category == SelectedCategory)
                 .Select(s => s.ItemName)
@@ -288,14 +441,22 @@ namespace TextureSwapper.ViewModels
 
             if (ItemNames.Any())
             {
-                SelectedItemName = ItemNames.First();
+                SelectedItemName = (Settings.LastSelectedItemName != null && ItemNames.Contains(Settings.LastSelectedItemName))
+                    ? Settings.LastSelectedItemName
+                    : "All models";
             }
         }
 
         private void FilterSkins()
         {
             FilteredSkins.Clear();
-            IEnumerable<SkinModel> matchingSkins = _allSkins.Where(s => s.Category == SelectedCategory && s.ItemName == SelectedItemName);
+            IEnumerable<SkinModel> matchingSkins = _allSkins.Where(s =>
+                s.Category == SelectedCategory &&
+                (SelectedItemName == "All models" || s.ItemName == SelectedItemName) &&
+                (string.IsNullOrWhiteSpace(SearchQuery) ||
+                 s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                 s.ItemName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)));
+
             foreach (SkinModel skin in matchingSkins)
             {
                 FilteredSkins.Add(skin);
@@ -318,6 +479,8 @@ namespace TextureSwapper.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 CachePath = dialog.FolderName;
+                Settings.CustomCachePath = CachePath;
+                _settingsService.Save(Settings);
                 Log.Information("User selected cache path: {Path}", CachePath);
             }
         }
@@ -366,11 +529,13 @@ namespace TextureSwapper.ViewModels
                 if (selectedSkins.Count != 0)
                 {
                     await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
+                    LoadBackups();
                     await _notificationService.ShowAsync("Success", $"{selectedSkins.Count} skins applied successfully!", ControlAppearance.Success);
                 }
                 else if (SelectedSkin != null)
                 {
                     await Task.Run(() => _swapService.Swap(CachePath, SelectedSkin));
+                    LoadBackups();
                     await _notificationService.ShowAsync("Success", $"{SelectedSkin.Name} applied successfully!", ControlAppearance.Success);
                 }
             }

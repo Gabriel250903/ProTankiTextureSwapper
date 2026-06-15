@@ -13,6 +13,8 @@ artifacts/
 
 Backups/
 Logs/
+Output/
+Publish/
 settings.json
 installer.iss
 *.iss

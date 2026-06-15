@@ -2,51 +2,64 @@ using Serilog;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Cryptography;
 using System.Text.Json;
 using TextureSwapper.Core;
+using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 
 namespace TextureSwapper.Services
 {
     public class UpdateService
     {
-        private readonly HttpClient _httpClient;
+        private static readonly HttpClient _httpClient;
 
-        public UpdateService()
+        static UpdateService()
         {
-            _httpClient = new HttpClient();
+            SocketsHttpHandler handler = new()
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+            };
+            _httpClient = new HttpClient(handler);
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "ProTankiTextureSwapper");
         }
 
-        public async Task<List<SkinModel>?> FetchRemoteSkinsAsync()
+        public async Task<HttpResponseMessage> GetWithRetryAsync(string url, int maxRetries = 3)
+        {
+            for (int i = 0; i < maxRetries; i++)
+            {
+                try
+                {
+                    HttpResponseMessage response = await _httpClient.GetAsync(url);
+                    _ = response.EnsureSuccessStatusCode();
+                    return response;
+                }
+                catch (HttpRequestException ex) when (i < maxRetries - 1)
+                {
+                    Log.Warning("Request failed, retrying in {Delay}s. Error: {Message}", Math.Pow(2, i), ex.Message);
+                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                }
+            }
+            throw new HttpRequestException("Max retries exceeded.");
+        }
+
+        public async Task<(List<SkinModel>? Skins, string? RawJson)> FetchRemoteSkinsAsync()
         {
             try
             {
                 Log.Information("Fetching remote skins.json from GitHub...");
                 string url = $"{Constants.GitHubRawUrl}/{Constants.SkinsJson}?t={DateTime.Now.Ticks}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-                if (!response.IsSuccessStatusCode)
-                {
-                    Log.Warning("Could not fetch remote skins. Status: {Status}. URL: {Url}", response.StatusCode, url);
-                    return null;
-                }
-
+                HttpResponseMessage response = await GetWithRetryAsync(url);
                 string json = await response.Content.ReadAsStringAsync();
                 List<SkinModel>? skins = JsonSerializer.Deserialize<List<SkinModel>>(json);
 
-                if (skins != null)
-                {
-                    string localPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SkinsJson);
-                    await File.WriteAllTextAsync(localPath, json);
-                }
-
-                return skins;
+                return (skins, json);
             }
             catch (Exception ex)
             {
                 Log.Warning("Network error while fetching remote skins: {Message}", ex.Message);
-                return null;
+                return (null, null);
             }
         }
 
@@ -54,13 +67,12 @@ namespace TextureSwapper.Services
         {
             try
             {
-                await EnsureFileExistsAsync(skin.PreviewImage, onProgress);
+                await EnsureFileExistsAsync(skin.PreviewImage, "Preview", skin.SourceFolder, onProgress);
 
-                string[] files = ["details.png", "lightmap.png", "alpha.png"];
-                foreach (string file in files)
+                string[] prefixes = ["details", "lightmap", "alpha"];
+                foreach (string prefix in prefixes)
                 {
-                    string relativePath = Path.Combine(skin.SourceFolder, file).Replace("\\", "/");
-                    await EnsureFileExistsAsync(relativePath, onProgress);
+                    await EnsureFileExistsAsync(string.Empty, prefix, skin.SourceFolder, onProgress);
                 }
             }
             catch (Exception ex)
@@ -69,56 +81,80 @@ namespace TextureSwapper.Services
             }
         }
 
-        private async Task EnsureFileExistsAsync(string relativePath, Action<string>? onProgress = null)
+        private async Task EnsureFileExistsAsync(string exactRelativePath, string filePrefix, string sourceFolder, Action<string>? onProgress = null)
         {
-            string normalizedPath = relativePath.Replace("\\", "/");
-            string localPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, normalizedPath));
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string localFolder = FileHelper.GetSafePath(baseDir, sourceFolder.Replace("\\", "/"));
 
-            if (File.Exists(localPath))
+            string[] validExtensions = [".png", ".jpg", ".jpeg"];
+
+            if (Directory.Exists(localFolder))
             {
-                Log.Debug("Asset already exists locally: {Path}", localPath);
-                return;
+                string[] localFiles = Directory.GetFiles(localFolder, $"{filePrefix}.*");
+                foreach (string file in localFiles)
+                {
+                    string ext = Path.GetExtension(file).ToLower();
+                    if (validExtensions.Contains(ext))
+                    {
+                        Log.Debug("Asset already exists locally: {Path}", file);
+                        return;
+                    }
+                }
             }
 
-            Log.Information("Asset missing. Starting download: {Path}", localPath);
-            string url = $"{Constants.GitHubRawUrl}/{normalizedPath}";
-            onProgress?.Invoke($"Downloading {Path.GetFileName(normalizedPath)}...");
-
-            _ = Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
-
-            HttpResponseMessage response = await _httpClient.GetAsync(url);
-            if (!response.IsSuccessStatusCode)
+            if (!string.IsNullOrEmpty(exactRelativePath))
             {
-                Log.Warning("Failed to download asset {Path}. Status: {Status}. URL: {Url}", normalizedPath, response.StatusCode, url);
-                return;
+                string exactLocalPath = FileHelper.GetSafePath(baseDir, exactRelativePath.Replace("\\", "/"));
+                if (File.Exists(exactLocalPath))
+                {
+                    Log.Debug("Asset already exists locally: {Path}", exactLocalPath);
+                    return;
+                }
             }
 
+            string fileNameWithDefaultExtension = !string.IsNullOrEmpty(exactRelativePath)
+                ? Path.GetFileName(exactRelativePath)
+                : $"{filePrefix}.png";
+
+            string normalizedRelativePath = Path.Combine(sourceFolder, fileNameWithDefaultExtension).Replace("\\", "/");
+            string downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
+
+            Log.Information("Asset missing. Starting download: {Path}", downloadLocalPath);
+            string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
+            onProgress?.Invoke($"Downloading {fileNameWithDefaultExtension}...");
+
+            _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
+
+            HttpResponseMessage response = await GetWithRetryAsync(url);
             byte[] data = await response.Content.ReadAsByteArrayAsync();
-            await File.WriteAllBytesAsync(localPath, data);
-            Log.Information("Asset downloaded and saved: {Path}", localPath);
+
+            await VerifyAndSaveFileAsync(data, downloadLocalPath);
+            Log.Information("Asset downloaded and saved: {Path}", downloadLocalPath);
         }
 
-        public async Task<GitHubRelease?> CheckForAppUpdatesAsync()
+        private async Task VerifyAndSaveFileAsync(byte[] data, string targetPath, string? expectedSha256 = null)
+        {
+            byte[] hashBytes = SHA256.HashData(data);
+            string computedHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+
+            if (!string.IsNullOrEmpty(expectedSha256) && !computedHash.Equals(expectedSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                Log.Error("Hash mismatch for {Path}. Expected: {Expected}, Computed: {Computed}", targetPath, expectedSha256, computedHash);
+                throw new CryptographicException($"Hash mismatch for {targetPath}. File compromised.");
+            }
+
+            await File.WriteAllBytesAsync(targetPath, data);
+        }
+
+        public async Task<GitHubReleaseModel?> CheckForAppUpdatesAsync()
         {
             try
             {
                 Log.Information("Checking for app updates on GitHub...");
                 string url = $"{Constants.GitHubApiUrl}/releases/latest";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    Log.Information("No app releases found on GitHub.");
-                    return null;
-                }
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    Log.Warning("Failed to check for updates. Status: {Status}", response.StatusCode);
-                    return null;
-                }
-
-                return await response.Content.ReadFromJsonAsync<GitHubRelease>();
+                HttpResponseMessage response = await GetWithRetryAsync(url);
+                return await response.Content.ReadFromJsonAsync<GitHubReleaseModel>();
             }
             catch (Exception ex)
             {
@@ -160,29 +196,5 @@ namespace TextureSwapper.Services
             _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
             Environment.Exit(0);
         }
-    }
-
-    public class GitHubRelease
-    {
-        [System.Text.Json.Serialization.JsonPropertyName("tag_name")]
-        public string TagName { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("html_url")]
-        public string HtmlUrl { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("body")]
-        public string Body { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("assets")]
-        public List<GitHubAsset> Assets { get; set; } = [];
-    }
-
-    public class GitHubAsset
-    {
-        [System.Text.Json.Serialization.JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("browser_download_url")]
-        public string BrowserDownloadUrl { get; set; } = string.Empty;
     }
 }

@@ -48,5 +48,15 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzE0NjQxNDMxMTI3MjcvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81MS8xMTAvMzE2MzQ0MjYzNjAzNTEvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Twins",
+    "Name": "Twins XT",
+    "SourceFolder": "Textures/Turrets/Twins/XT/M3",
+    "PreviewImage": "Textures/Turrets/Twins/XT/M3/Twins_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvZGV0YWlsc19hbHBoYS5qcGc="
   }
 ]

@@ -7,6 +7,20 @@ namespace TextureSwapper.Helpers
 {
     public static class FileHelper
     {
+        public static string GetSafePath(string basePath, string relativePath)
+        {
+            string fullPath = Path.GetFullPath(Path.Combine(basePath, relativePath.Replace("\\", "/")));
+            string rootPath = Path.GetFullPath(basePath);
+
+            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Error("Path traversal attempt blocked! Base: {Base}, Attempted: {Attempted}", rootPath, fullPath);
+                throw new UnauthorizedAccessException("Path traversal attack detected!");
+            }
+
+            return fullPath;
+        }
+
         public static bool IsGameRunning()
         {
             if (Process.GetProcessesByName(Constants.GameProcessName).Length != 0)

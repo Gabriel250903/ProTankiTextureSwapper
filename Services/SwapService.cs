@@ -1,6 +1,7 @@
 using Serilog;
 using System.IO;
 using TextureSwapper.Core;
+using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 
 namespace TextureSwapper.Services
@@ -18,7 +19,8 @@ namespace TextureSwapper.Services
 
         private void EnsureOriginalsBackup(string cachePath, SkinModel skin)
         {
-            string originalsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir, Constants.OriginalsDir);
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string originalsDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, Constants.OriginalsDir));
             _ = Directory.CreateDirectory(originalsDir);
 
             string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
@@ -29,8 +31,8 @@ namespace TextureSwapper.Services
                     continue;
                 }
 
-                string sourceFile = Path.Combine(cachePath, target);
-                string backupFile = Path.Combine(originalsDir, target);
+                string sourceFile = FileHelper.GetSafePath(cachePath, target);
+                string backupFile = FileHelper.GetSafePath(originalsDir, target);
 
                 if (File.Exists(sourceFile) && !File.Exists(backupFile))
                 {
@@ -42,8 +44,9 @@ namespace TextureSwapper.Services
 
         public void SelectiveBackup(string cachePath, SkinModel skin)
         {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string backupDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir, $"{skin.Name}_{timestamp}");
+            string backupDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, $"{skin.Name}_{timestamp}"));
 
             try
             {
@@ -58,10 +61,10 @@ namespace TextureSwapper.Services
                         continue;
                     }
 
-                    string sourceFile = Path.Combine(cachePath, target);
+                    string sourceFile = FileHelper.GetSafePath(cachePath, target);
                     if (File.Exists(sourceFile))
                     {
-                        File.Copy(sourceFile, Path.Combine(backupDir, target), true);
+                        File.Copy(sourceFile, FileHelper.GetSafePath(backupDir, target), true);
                     }
                 }
             }
@@ -129,30 +132,77 @@ namespace TextureSwapper.Services
             Log.Information("Restoring original textures from Originals backup...");
             string originalsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir, Constants.OriginalsDir);
 
-            if (!Directory.Exists(originalsDir) || Directory.GetFiles(originalsDir).Length == 0)
+            return RestoreFromBackup(cachePath, originalsDir);
+        }
+
+        public bool RestoreFromBackup(string cachePath, string backupDir)
+        {
+            if (!Directory.Exists(backupDir) || Directory.GetFiles(backupDir).Length == 0)
             {
-                Log.Warning("Restore skipped: Originals backup directory {BackupDir} is empty or does not exist.", originalsDir);
+                Log.Warning("Restore skipped: Backup directory {BackupDir} is empty or does not exist.", backupDir);
                 return false;
             }
 
             try
             {
                 int restoreCount = 0;
-                foreach (string file in Directory.GetFiles(originalsDir))
+                foreach (string file in Directory.GetFiles(backupDir))
                 {
-                    string destFile = Path.Combine(cachePath, Path.GetFileName(file));
+                    string targetName = Path.GetFileName(file);
+                    string destFile = FileHelper.GetSafePath(cachePath, targetName);
                     File.Copy(file, destFile, true);
                     restoreCount++;
                 }
-                Log.Information("Successfully restored {Count} original files.", restoreCount);
+                Log.Information("Successfully restored {Count} files from {BackupDir}.", restoreCount, backupDir);
                 return true;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to restore original textures.");
+                Log.Error(ex, "Failed to restore textures from {BackupDir}.", backupDir);
                 throw;
             }
         }
+
+        public void PurgeOldBackups(int maxDays)
+        {
+            string backupsRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
+            if (!Directory.Exists(backupsRoot))
+            {
+                return;
+            }
+
+            try
+            {
+                DateTime threshold = DateTime.Now.AddDays(-maxDays);
+                int purgeCount = 0;
+
+                foreach (string dir in Directory.GetDirectories(backupsRoot))
+                {
+                    if (Path.GetFileName(dir).Equals(Constants.OriginalsDir, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    DirectoryInfo di = new(dir);
+                    if (di.CreationTime < threshold)
+                    {
+                        Log.Information("Purging old backup: {DirName} (Created: {Date})", di.Name, di.CreationTime);
+                        di.Delete(true);
+                        purgeCount++;
+                    }
+                }
+
+                if (purgeCount > 0)
+                {
+                    Log.Information("Purged {Count} old backups.", purgeCount);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to purge old backups.");
+            }
+        }
+
         public void ClearCache(string cachePath)
         {
             Log.Information("Clearing ProTanki cache at {CachePath}...", cachePath);
@@ -182,8 +232,13 @@ namespace TextureSwapper.Services
 
         private void CopyAndRename(string sourceDir, string sourceFile, string targetDir, string targetName)
         {
-            string fullSourcePath = Path.Combine(sourceDir, sourceFile);
-            string fullTargetPath = Path.Combine(targetDir, targetName);
+            if (string.IsNullOrEmpty(targetName))
+            {
+                return;
+            }
+
+            string fullSourcePath = FileHelper.GetSafePath(sourceDir, sourceFile);
+            string fullTargetPath = FileHelper.GetSafePath(targetDir, targetName);
 
             Log.Debug("Copying {Source} to {Target}", fullSourcePath, fullTargetPath);
 

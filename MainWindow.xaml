@@ -20,6 +20,13 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
+        <Style x:Key="StandardButtonStyle" TargetType="ui:Button">
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="15,8"/>
+        </Style>
+
         <Style x:Key="CategoryButtonStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0,0,0,2"/>
@@ -29,12 +36,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <Border x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorPrimaryBrush}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorPrimaryBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#10FFFFFF"/>
@@ -57,152 +64,226 @@
             Grid.Row="0"
             FontWeight="Bold">
             <ui:TitleBar.Icon>
-                <ui:SymbolIcon Symbol="Flash24" Foreground="{DynamicResource SystemAccentColorPrimaryBrush}" />
+                <ui:SymbolIcon Symbol="Flash24" Foreground="{DynamicResource SystemAccentColorBrush}" />
             </ui:TitleBar.Icon>
             <ui:TitleBar.TrailingContent>
-                <ui:Button x:Name="btnThemeToggle"
+                <ui:Button x:Name="btnOpenSettings"
                            Margin="0,0,10,0"
                            Padding="8"
                            Appearance="Transparent"
-                           Icon="{ui:SymbolIcon WeatherMoon24}"
-                           Click="BtnThemeToggle_Click"
-                           ToolTip="Toggle Light/Dark Theme" />
+                           Icon="{ui:SymbolIcon Settings24}"
+                           Command="{Binding OpenSettingsCommand}"
+                           ToolTip="Settings" />
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <Grid Grid.Row="1" Margin="30,10,30,30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <TabControl Grid.Row="1" Margin="30,0,30,30" Background="Transparent" BorderThickness="0">
+            <TabItem Header="SKINS" Padding="20,10">
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0,0,0,25">
-                <ui:TextBlock Text="Texture Swapper" FontTypography="Title" FontSize="32" FontWeight="Bold"/>
-            </StackPanel>
-
-            <ListBox Grid.Row="1" 
-                     ItemsSource="{Binding Categories}" 
-                     SelectedItem="{Binding SelectedCategory}"
-                     ItemContainerStyle="{StaticResource CategoryButtonStyle}"
-                     Margin="0,0,0,20"
-                     Background="Transparent"
-                     BorderThickness="0">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="0" Background="#0AFFFFFF" CornerRadius="12,0,0,12" BorderThickness="1,1,0,1" BorderBrush="#1AFFFFFF">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ui:TextBlock Text="MODELS" FontTypography="Caption" Margin="15,15,15,10" Opacity="0.5" FontWeight="SemiBold"/>
-                        <ui:ListView Grid.Row="1" 
-                                     ItemsSource="{Binding ItemNames}"
-                                     SelectedItem="{Binding SelectedItemName}"
-                                     Padding="5,0,5,10"/>
-                    </Grid>
-                </Border>
-
-                <Border Grid.Column="1" Background="#0FFFFFFF" CornerRadius="0,12,12,0" BorderThickness="0,1,1,1" BorderBrush="#1AFFFFFF">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <ui:TextBlock Text="AVAILABLE SKINS" FontTypography="Caption" Margin="20,15,20,10" Opacity="0.5" FontWeight="SemiBold"/>
-
-                        <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
-                            <ItemsControl ItemsSource="{Binding FilteredSkins}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <ui:Button BorderThickness="0" Background="Transparent" 
-                                                   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
-                                                   Command="{Binding DataContext.SwapCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                   CommandParameter="{Binding}">
-                                            <Border Width="200" Background="#15FFFFFF" CornerRadius="12" BorderThickness="1" BorderBrush="#20FFFFFF" ClipToBounds="True">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="120"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-
-                                                    <Image Source="{Binding FullPreviewPath}" Stretch="UniformToFill" Opacity="0.9"/>
-
-                                                    <Border HorizontalAlignment="Right" VerticalAlignment="Top" 
-                                                        Background="#40000000" CornerRadius="0,12,0,12" Padding="8">
-                                                        <CheckBox IsChecked="{Binding IsSelected}" 
-                                                              Margin="0" Padding="0" MinWidth="0" MinHeight="0"/>
-                                                    </Border>
-
-                                                    <StackPanel Grid.Row="1" Margin="12,10">
-                                                        <ui:TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
-                                                        <ui:TextBlock Text="XT VERSION" FontTypography="Caption" Opacity="0.6"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Border>
-                                        </ui:Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
-            </Grid>
-
-            <Border Grid.Row="3" Margin="0,20,0,0" Background="#0AFFFFFF" CornerRadius="12" BorderThickness="1" BorderBrush="#1AFFFFFF">
-                <Grid Margin="20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-
-                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <ui:Button Content="Select all available textures" 
-                                   Appearance="Secondary"
-                                   Margin="0,0,10,0"
-                                   Icon="{ui:SymbolIcon CheckmarkCircle24}"
-                                   Command="{Binding SelectAllAvailableCommand}" />
-
-                        <ui:Button Content="Clear Cache" 
-                                   Appearance="Secondary"
-                                   Margin="0,0,10,0"
-                                   Icon="{ui:SymbolIcon Delete24}"
-                                   Command="{Binding ClearCacheCommand}" />
-
-                        <ui:Button Content="Restore Originals" 
-                                   Appearance="Secondary"
-                                   Margin="0,0,10,0"
-                                   Icon="{ui:SymbolIcon ArrowUndo24}"
-                                   Command="{Binding RestoreCommand}" />
-
-                        <ui:Button Content="APPLY SELECTED" 
-                                   Appearance="Primary"
-                                   FontWeight="Bold"
-                                   Icon="{ui:SymbolIcon Flash24}"
-                                   Command="{Binding SwapCommand}" />
+                    <StackPanel Grid.Row="0" Margin="0,0,0,25">
+                        <ui:TextBlock Text="Texture Swapper" FontTypography="Title" FontSize="32" FontWeight="Bold"/>
                     </StackPanel>
+
+                    <ListBox Grid.Row="1" 
+                             ItemsSource="{Binding Categories}" 
+                             SelectedItem="{Binding SelectedCategory}"
+                             ItemContainerStyle="{StaticResource CategoryButtonStyle}"
+                             Margin="0,0,0,20"
+                             Background="Transparent"
+                             BorderThickness="0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Background="#0AFFFFFF" CornerRadius="12,0,0,12" BorderThickness="1,1,0,1" BorderBrush="#1AFFFFFF">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <ui:TextBlock Text="MODELS" FontTypography="Caption" Margin="15,15,15,10" Opacity="0.5" FontWeight="SemiBold"/>
+                                <ui:ListView Grid.Row="1" 
+                                             ItemsSource="{Binding ItemNames}"
+                                             SelectedItem="{Binding SelectedItemName}"
+                                             Padding="5,0,5,10"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Column="1" Background="#0FFFFFFF" CornerRadius="0,12,12,0" BorderThickness="0,1,1,1" BorderBrush="#1AFFFFFF">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Margin="20,15,20,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBlock Grid.Column="0" Text="AVAILABLE SKINS" FontTypography="Caption" VerticalAlignment="Center" Opacity="0.5" FontWeight="SemiBold"/>
+                                    
+                                    <ui:TextBox Grid.Column="2" 
+                                                PlaceholderText="Search skins..." 
+                                                Width="250" 
+                                                Icon="{ui:SymbolIcon Search24}"
+                                                Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                HorizontalAlignment="Right"/>
+                                </Grid>
+
+                                <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
+                                    <ItemsControl ItemsSource="{Binding FilteredSkins}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="200" Margin="5" CornerRadius="12" ClipToBounds="True" Cursor="Hand">
+                                                    <Border.InputBindings>
+                                                        <MouseBinding MouseAction="LeftClick" 
+                                                                      Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                                      CommandParameter="{Binding}"/>
+                                                    </Border.InputBindings>
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#15FFFFFF"/>
+                                                            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+                                                            <Setter Property="BorderThickness" Value="1"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                    <Setter Property="BorderBrush" Value="#4CC3FF"/>
+                                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                                </DataTrigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#25FFFFFF"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="120"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <Image Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}" 
+                                                               Stretch="UniformToFill" 
+                                                               Opacity="0.9"/>
+
+                                                        <StackPanel Grid.Row="1" Margin="12,10">
+                                                            <ui:TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                                            <ui:TextBlock Text="XT VERSION" FontTypography="Caption" Opacity="0.6"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Row="3" Margin="0,20,0,0" Background="#0AFFFFFF" CornerRadius="12" BorderThickness="1" BorderBrush="#1AFFFFFF">
+                        <Grid Margin="20">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:Button Content="Select all available textures" 
+                                           Appearance="Secondary"
+                                           Margin="0,0,10,0"
+                                           Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                                           Command="{Binding SelectAllAvailableCommand}" />
+
+                                <ui:Button Content="Clear Cache" 
+                                           Appearance="Secondary"
+                                           Margin="0,0,10,0"
+                                           Icon="{ui:SymbolIcon Delete24}"
+                                           Command="{Binding ClearCacheCommand}" />
+
+                                <ui:Button Content="Restore Originals" 
+                                           Appearance="Secondary"
+                                           Margin="0,0,10,0"
+                                           Icon="{ui:SymbolIcon ArrowUndo24}"
+                                           Command="{Binding RestoreCommand}" />
+
+                                <ui:Button Content="APPLY SELECTED" 
+                                           Appearance="Primary"
+                                           FontWeight="Bold"
+                                           Icon="{ui:SymbolIcon Flash24}"
+                                           Command="{Binding SwapCommand}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </Border>
-        </Grid>
+            </TabItem>
+
+            <TabItem Header="BACKUP HISTORY" Padding="20,10">
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,25">
+                        <ui:TextBlock Text="Snapshot Backups" FontTypography="Title" FontSize="32" FontWeight="Bold"/>
+                        <ui:TextBlock Text="View and restore previously applied texture snapshots." Opacity="0.6"/>
+                    </StackPanel>
+
+                    <ui:ListView Grid.Row="1" 
+                                 ItemsSource="{Binding SnapshotBackups}"
+                                 SelectedItem="{Binding SelectedBackup}">
+                        <ui:ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="10,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Symbol="History24" Grid.Column="0" Margin="0,0,15,0" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <ui:TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="16"/>
+                                        <ui:TextBlock Text="{Binding CreationDate, StringFormat='{}Created on {0:MMMM dd, yyyy HH:mm}'}" FontTypography="Caption" Opacity="0.6"/>
+                                    </StackPanel>
+                                    <ui:Button Grid.Column="2" 
+                                               Content="RESTORE THIS" 
+                                               Appearance="Secondary"
+                                               Command="{Binding DataContext.RestoreBackupCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{Binding}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ui:ListView.ItemTemplate>
+                    </ui:ListView>
+
+                    <ui:InfoBar Grid.Row="2" 
+                                Title="Note" 
+                                Message="Backups are automatically cleaned up based on your Max Retention settings." 
+                                Severity="Informational" 
+                                IsOpen="True" 
+                                Margin="0,20,0,0"
+                                IsClosable="False" />
+                </Grid>
+            </TabItem>
+        </TabControl>
 
         <Grid x:Name="LoadingOverlay" Grid.RowSpan="2" Background="#F0000000" Panel.ZIndex="10000">
             <Grid.Style>
