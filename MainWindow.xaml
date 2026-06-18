@@ -271,15 +271,41 @@
                         CornerRadius="12">
                         <Grid Margin="20">
                             <StackPanel Orientation="Horizontal">
-                                <ui:Button
-                                    Margin="0,0,10,0"
-                                    Appearance="Secondary"
-                                    Command="{Binding SelectAllAvailableCommand}"
-                                    Content="{Binding SelectAllText}">
-                                    <ui:Button.Icon>
-                                        <ui:SymbolIcon Symbol="{Binding SelectAllIcon}" />
-                                    </ui:Button.Icon>
-                                </ui:Button>
+                                 <ui:Button
+                                     Margin="0,0,10,0"
+                                     Appearance="Secondary"
+                                     Command="{Binding SelectAllAvailableCommand}"
+                                     CommandParameter="XT"
+                                     Content="Select All XT"
+                                     ToolTip="Selects XT version for all items.">
+                                     <ui:Button.Icon>
+                                         <ui:SymbolIcon Symbol="CheckmarkCircle24" />
+                                     </ui:Button.Icon>
+                                 </ui:Button>
+
+                                 <ui:Button
+                                     Margin="0,0,10,0"
+                                     Appearance="Secondary"
+                                     Command="{Binding SelectAllAvailableCommand}"
+                                     CommandParameter="Legacy"
+                                     Content="Select All Legacy"
+                                     ToolTip="Selects Legacy/LC version for all items where available.">
+                                     <ui:Button.Icon>
+                                         <ui:SymbolIcon Symbol="History24" />
+                                     </ui:Button.Icon>
+                                 </ui:Button>
+
+                                 <ui:Button
+                                     Margin="0,0,10,0"
+                                     Appearance="Secondary"
+                                     Command="{Binding SelectAllAvailableCommand}"
+                                     CommandParameter="Deselect"
+                                     Content="Deselect All"
+                                     ToolTip="Clear all selected textures.">
+                                     <ui:Button.Icon>
+                                         <ui:SymbolIcon Symbol="DismissCircle24" />
+                                     </ui:Button.Icon>
+                                 </ui:Button>
 
                                 <ui:Button
                                     Margin="0,0,10,0"

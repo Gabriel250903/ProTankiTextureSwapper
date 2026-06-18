@@ -148,6 +148,19 @@ namespace TextureSwapper.ViewModels
             {
                 skin.IsSelected = !skin.IsSelected;
                 Log.Information("Toggled selection for skin: {SkinName}. New state: {IsSelected}", skin.Name, skin.IsSelected);
+
+                if (skin.IsSelected)
+                {
+                    foreach (SkinModel otherSkin in _allSkins)
+                    {
+                        if (otherSkin != skin && otherSkin.Category == skin.Category && otherSkin.ItemName == skin.ItemName && otherSkin.IsSelected)
+                        {
+                            otherSkin.IsSelected = false;
+                            Log.Information("Deselected conflicting skin {OtherSkinName} because {SkinName} was selected.", otherSkin.Name, skin.Name);
+                        }
+                    }
+                }
+
                 CommandManager.InvalidateRequerySuggested();
                 OnPropertyChanged(nameof(SelectAllText));
                 OnPropertyChanged(nameof(SelectAllIcon));
@@ -375,7 +388,9 @@ namespace TextureSwapper.ViewModels
 
         private void ExecuteSelectAllAvailable(object? parameter)
         {
-            if (_allSkins.Any(s => s.IsSelected))
+            string mode = parameter as string ?? "XT";
+
+            if (mode == "Deselect")
             {
                 Log.Information("Deselecting all textures.");
                 foreach (SkinModel skin in _allSkins)
@@ -386,17 +401,37 @@ namespace TextureSwapper.ViewModels
             }
             else
             {
-                Log.Information("Selecting all available textures globally.");
+                Log.Information("Selecting all {Mode} skins.", mode);
 
-                IEnumerable<SkinModel> itemsToSelect = _allSkins
-                    .GroupBy(s => s.ItemName)
-                    .Select(g => g.First());
-
-                foreach (SkinModel? skin in itemsToSelect)
+                foreach (SkinModel skin in _allSkins)
                 {
-                    skin.IsSelected = true;
+                    skin.IsSelected = false;
                 }
-                _ = _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
+
+                var groups = _allSkins.GroupBy(s => new { s.Category, s.ItemName });
+                int selectedCount = 0;
+
+                foreach (var group in groups)
+                {
+                    SkinModel? targetSkin = null;
+
+                    if (mode == "Legacy")
+                    {
+                        targetSkin = group.FirstOrDefault(s => s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || s.Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase));
+                    }
+                    else if (mode == "XT")
+                    {
+                        targetSkin = group.FirstOrDefault(s => s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase));
+                    }
+
+                    if (targetSkin != null)
+                    {
+                        targetSkin.IsSelected = true;
+                        selectedCount++;
+                    }
+                }
+
+                _ = _notificationService.ShowAsync("Selected All", $"Selected {selectedCount} textures ({mode} priority) for batch application.", ControlAppearance.Info);
             }
 
             CommandManager.InvalidateRequerySuggested();
