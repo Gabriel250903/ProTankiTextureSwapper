@@ -17,7 +17,8 @@ Output/
 Publish/
 settings.json
 installer.iss
-*.iss
+Textures/logo.ico
+Textures/logo.png
 
 Thumbs.db
 ehthumbs.db

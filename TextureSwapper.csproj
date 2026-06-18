@@ -21,5 +21,7 @@
     <None Update="Textures\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Remove="Textures\logo.png" />
+    <Resource Include="Textures\logo.png" />
   </ItemGroup>
 </Project>

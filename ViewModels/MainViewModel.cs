@@ -115,6 +115,9 @@ namespace TextureSwapper.ViewModels
         public ICommand RestoreBackupCommand { get; }
         public ICommand ToggleSkinSelectionCommand { get; }
 
+        public string SelectAllText => _allSkins.Any(s => s.IsSelected) ? "Deselect all textures" : "Select all available textures";
+        public string SelectAllIcon => _allSkins.Any(s => s.IsSelected) ? "DismissCircle24" : "CheckmarkCircle24";
+
         public event Action? RequestSettings;
 
         public MainViewModel(INotificationService notificationService, UpdateService updateService)
@@ -146,6 +149,8 @@ namespace TextureSwapper.ViewModels
                 skin.IsSelected = !skin.IsSelected;
                 Log.Information("Toggled selection for skin: {SkinName}. New state: {IsSelected}", skin.Name, skin.IsSelected);
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(SelectAllText));
+                OnPropertyChanged(nameof(SelectAllIcon));
             }
         }
 
@@ -211,6 +216,10 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
             try
             {
                 IsLoading = true;
@@ -218,18 +227,30 @@ namespace TextureSwapper.ViewModels
                 bool success = await Task.Run(() => _swapService.RestoreFromBackup(CachePath, SelectedBackup.FullPath));
                 if (success)
                 {
-                    await _notificationService.ShowAsync("Success", $"Restored from {SelectedBackup.DisplayName}", ControlAppearance.Success);
+                    notificationTitle = "Success";
+                    notificationMessage = $"Restored from {SelectedBackup.DisplayName}";
+                    notificationAppearance = ControlAppearance.Success;
+
+                    UpdateStatus = $"Restoring from backup: {SelectedBackup.DisplayName}";
+                    await Task.Delay(2500);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to restore from snapshot.");
-                await _notificationService.ShowAsync("Error", $"Restore failed: {ex.Message}", ControlAppearance.Danger);
+                notificationTitle = "Error";
+                notificationMessage = $"Restore failed: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
             }
             finally
             {
                 IsLoading = false;
                 UpdateStatus = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(notificationTitle))
+            {
+                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
 
@@ -354,24 +375,33 @@ namespace TextureSwapper.ViewModels
 
         private void ExecuteSelectAllAvailable(object? parameter)
         {
-            Log.Information("Selecting all available textures globally.");
-
-            IEnumerable<SkinModel> itemsToSelect = _allSkins
-                .GroupBy(s => s.ItemName)
-                .Select(g => g.First());
-
-            foreach (SkinModel skin in _allSkins)
+            if (_allSkins.Any(s => s.IsSelected))
             {
-                skin.IsSelected = false;
+                Log.Information("Deselecting all textures.");
+                foreach (SkinModel skin in _allSkins)
+                {
+                    skin.IsSelected = false;
+                }
+                _ = _notificationService.ShowAsync("Deselected All", "All textures have been deselected.", ControlAppearance.Info);
             }
-
-            foreach (SkinModel? skin in itemsToSelect)
+            else
             {
-                skin.IsSelected = true;
+                Log.Information("Selecting all available textures globally.");
+
+                IEnumerable<SkinModel> itemsToSelect = _allSkins
+                    .GroupBy(s => s.ItemName)
+                    .Select(g => g.First());
+
+                foreach (SkinModel? skin in itemsToSelect)
+                {
+                    skin.IsSelected = true;
+                }
+                _ = _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
             }
 
             CommandManager.InvalidateRequerySuggested();
-            _ = _notificationService.ShowAsync("Selected All", $"Selected {itemsToSelect.Count()} textures for batch application.", ControlAppearance.Info);
+            OnPropertyChanged(nameof(SelectAllText));
+            OnPropertyChanged(nameof(SelectAllIcon));
         }
 
         private bool IsSkinMissingAssets(SkinModel skin)
@@ -400,7 +430,7 @@ namespace TextureSwapper.ViewModels
 
         private void InitializeCategories()
         {
-            if (_allSkins == null || !_allSkins.Any())
+            if (_allSkins == null || _allSkins.Count == 0)
             {
                 return;
             }
@@ -523,30 +553,63 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
             try
             {
                 IsLoading = true;
                 if (selectedSkins.Count != 0)
                 {
+                    UpdateStatus = $"Applying {selectedSkins.Count} textures...";
                     await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
                     LoadBackups();
-                    await _notificationService.ShowAsync("Success", $"{selectedSkins.Count} skins applied successfully!", ControlAppearance.Success);
+                    notificationTitle = "Success";
+                    notificationMessage = $"{selectedSkins.Count} skins applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+
+                    foreach (SkinModel skin in _allSkins)
+                    {
+                        skin.IsSelected = false;
+                    }
                 }
                 else if (SelectedSkin != null)
                 {
+                    UpdateStatus = $"Applying {SelectedSkin.Name}...";
                     await Task.Run(() => _swapService.Swap(CachePath, SelectedSkin));
                     LoadBackups();
-                    await _notificationService.ShowAsync("Success", $"{SelectedSkin.Name} applied successfully!", ControlAppearance.Success);
+                    notificationTitle = "Success";
+                    notificationMessage = $"{SelectedSkin.Name} applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+                }
+
+                string countSkins = selectedSkins.Count < 2 ? "skin" : "skins";
+                if (!string.IsNullOrEmpty(notificationTitle) && notificationAppearance == ControlAppearance.Success)
+                {
+                    UpdateStatus = $"Finalizing applying {selectedSkins.Count} {countSkins}...";
+                    await Task.Delay(2500);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to apply skins.");
-                await _notificationService.ShowAsync("Error", $"Failed to apply skins: {ex.Message}", ControlAppearance.Danger);
+                notificationTitle = "Error";
+                notificationMessage = $"Failed to apply skins: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
             }
             finally
             {
                 IsLoading = false;
+                UpdateStatus = string.Empty;
+                CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(SelectAllText));
+                OnPropertyChanged(nameof(SelectAllIcon));
+            }
+
+            if (!string.IsNullOrEmpty(notificationTitle))
+            {
+                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
 
@@ -563,27 +626,50 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
             try
             {
                 IsLoading = true;
+                UpdateStatus = "Restoring original textures...";
                 bool restored = await Task.Run(() => _swapService.RestoreFullCache(CachePath));
                 if (restored)
                 {
-                    await _notificationService.ShowAsync("Restored", "Original textures restored successfully.", ControlAppearance.Success);
+                    notificationTitle = "Restored";
+                    notificationMessage = "Original textures restored successfully.";
+                    notificationAppearance = ControlAppearance.Success;
                 }
                 else
                 {
-                    await _notificationService.ShowAsync("No Backup", "No original textures found to restore. Apply a skin first to create a backup.", ControlAppearance.Info);
+                    notificationTitle = "No Backup";
+                    notificationMessage = "No original textures found to restore. Apply a skin first to create a backup.";
+                    notificationAppearance = ControlAppearance.Info;
+                }
+
+                if (!string.IsNullOrEmpty(notificationTitle))
+                {
+                    UpdateStatus = "Original textures are being restored...";
+                    await Task.Delay(2500);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to restore textures.");
-                await _notificationService.ShowAsync("Error", $"Failed to restore: {ex.Message}", ControlAppearance.Danger);
+                notificationTitle = "Error";
+                notificationMessage = $"Failed to restore: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
             }
             finally
             {
                 IsLoading = false;
+                UpdateStatus = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(notificationTitle))
+            {
+                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
 
@@ -617,20 +703,38 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
             try
             {
                 IsLoading = true;
+                UpdateStatus = "Clearing ProTanki cache...";
                 await Task.Run(() => _swapService.ClearCache(CachePath));
-                await _notificationService.ShowAsync("Cache Cleared", "ProTanki cache has been emptied.", ControlAppearance.Success);
+                notificationTitle = "Cache Cleared";
+                notificationMessage = "ProTanki cache has been emptied.";
+                notificationAppearance = ControlAppearance.Success;
+
+                UpdateStatus = "Clearing ProTanki cache...";
+                await Task.Delay(2500);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to clear cache.");
-                await _notificationService.ShowAsync("Error", $"Failed to clear cache: {ex.Message}", ControlAppearance.Danger);
+                notificationTitle = "Error";
+                notificationMessage = $"Failed to clear cache: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
             }
             finally
             {
                 IsLoading = false;
+                UpdateStatus = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(notificationTitle))
+            {
+                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
     }

@@ -11,6 +11,16 @@
   },
   {
     "Category": "Turrets",
+    "ItemName": "Railgun",
+    "Name": "Railgun LC",
+    "SourceFolder": "Textures/Turrets/Railgun/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Railgun/Legacy/M3/Railgun_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
     "ItemName": "Firebird",
     "Name": "Firebird XT",
     "SourceFolder": "Textures/Turrets/Firebird/XT/M3",
@@ -51,12 +61,32 @@
   },
   {
     "Category": "Turrets",
-    "ItemName": "Twins",
-    "Name": "Twins XT",
-    "SourceFolder": "Textures/Turrets/Twins/XT/M3",
-    "PreviewImage": "Textures/Turrets/Twins/XT/M3/Twins_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNTYvMzE0NjQxNDMxMTEyNTIvZGV0YWlsc19hbHBoYS5qcGc="
+    "ItemName": "Smoky",
+    "Name": "Smoky XT",
+    "SourceFolder": "Textures/Turrets/Smoky/XT/M3",
+    "PreviewImage": "Textures/Turrets/Smoky/XT/M3/Smoky_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Isida",
+    "Name": "Isida XT",
+    "SourceFolder": "Textures/Turrets/Isida/XT/M3",
+    "PreviewImage": "Textures/Turrets/Isida/XT/M3/Isida_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Freeze",
+    "Name": "Freeze XT",
+    "SourceFolder": "Textures/Turrets/Freeze/XT/M3",
+    "PreviewImage": "Textures/Turrets/Freeze/XT/M3/Freeze_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzX2FscGhhLmpwZw=="
   }
 ]
