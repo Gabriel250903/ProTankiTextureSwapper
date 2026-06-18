@@ -17,8 +17,7 @@ Output/
 Publish/
 settings.json
 installer.iss
-Textures/logo.ico
-Textures/logo.png
+CodeDependencies.iss
 cache_preview/
 
 Thumbs.db
