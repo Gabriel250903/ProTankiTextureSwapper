@@ -116,6 +116,22 @@ namespace TextureSwapper.Services
                     Log.Debug("Asset already exists locally: {Path}", exactLocalPath);
                     return;
                 }
+
+                string ext = Path.GetExtension(exactLocalPath).ToLower();
+                string[] altExts = [".png", ".jpg", ".jpeg"];
+                if (altExts.Contains(ext))
+                {
+                    foreach (string alt in altExts)
+                    {
+                        if (alt == ext) continue;
+                        string altPath = Path.ChangeExtension(exactLocalPath, alt);
+                        if (File.Exists(altPath))
+                        {
+                            Log.Debug("Asset already exists locally with alternative extension: {Path}", altPath);
+                            return;
+                        }
+                    }
+                }
             }
 
             string fileNameWithDefaultExtension = !string.IsNullOrEmpty(exactRelativePath)

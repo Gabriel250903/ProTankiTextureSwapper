@@ -48,7 +48,22 @@ namespace TextureSwapper.Models
                 if (string.IsNullOrEmpty(PreviewImage))
                     return null;
                 string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
-                return File.Exists(fullPath) ? fullPath : null;
+                if (File.Exists(fullPath))
+                    return fullPath;
+
+                string ext = Path.GetExtension(fullPath).ToLower();
+                string[] altExts = [".png", ".jpg", ".jpeg"];
+                if (altExts.Contains(ext))
+                {
+                    foreach (string alt in altExts)
+                    {
+                        if (alt == ext) continue;
+                        string altPath = Path.ChangeExtension(fullPath, alt);
+                        if (File.Exists(altPath))
+                            return altPath;
+                    }
+                }
+                return null;
             }
         }
 
