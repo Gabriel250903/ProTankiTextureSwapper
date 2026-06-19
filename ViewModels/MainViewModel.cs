@@ -342,17 +342,40 @@ namespace TextureSwapper.ViewModels
                 string localSuppliesJson = File.Exists(localSuppliesPath) ? await File.ReadAllTextAsync(localSuppliesPath) : string.Empty;
 
                 List<SkinModel> localSkins = [];
-                if (!string.IsNullOrEmpty(localHullsJson))
+                try
                 {
-                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
+                    if (!string.IsNullOrEmpty(localHullsJson))
+                    {
+                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
+                    }
                 }
-                if (!string.IsNullOrEmpty(localTurretsJson))
+                catch (JsonException ex)
                 {
-                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
+                    Log.Error(ex, "Failed to deserialize local hulls skins.");
                 }
-                if (!string.IsNullOrEmpty(localSuppliesJson))
+
+                try
                 {
-                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
+                    if (!string.IsNullOrEmpty(localTurretsJson))
+                    {
+                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    Log.Error(ex, "Failed to deserialize local turrets skins.");
+                }
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(localSuppliesJson))
+                    {
+                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    Log.Error(ex, "Failed to deserialize local supplies skins.");
                 }
 
                 if (localSkins.Count > 0)
@@ -424,6 +447,7 @@ namespace TextureSwapper.ViewModels
                     {
                         UpdateStatus = $"Syncing assets ({completed}/{missingSkins.Count}): {skin.Name}...";
                         await _updateService.EnsureAssetsExistAsync(skin);
+                        skin.NotifyPreviewChanged();
                         completed++;
                     }
                 }

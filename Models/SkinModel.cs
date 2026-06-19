@@ -41,7 +41,21 @@ namespace TextureSwapper.Models
         public string LightmapTarget { get; set; } = string.Empty;
         public string AlphaTarget { get; set; } = string.Empty;
         public string PreviewImage { get; set; } = string.Empty;
-        public string FullPreviewPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage);
+        public string? FullPreviewPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(PreviewImage))
+                    return null;
+                string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
+                return File.Exists(fullPath) ? fullPath : null;
+            }
+        }
+
+        public void NotifyPreviewChanged()
+        {
+            OnPropertyChanged(nameof(FullPreviewPath));
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
