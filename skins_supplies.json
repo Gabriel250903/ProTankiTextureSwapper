@@ -4,9 +4,7 @@
     "ItemName": "Double Damage",
     "Name": "Double Damage New",
     "SourceFolder": "Textures/Supplies/DoubleDamage/New",
-    "PreviewImage": "Textures/Supplies/DoubleDamage/New/DoubleDamage_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzLmpwZw==",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9saWdodG1hcC5qcGc=",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMTQ2NDE0MzEwMTYxNi9kZXRhaWxzX2FscGhhLmpwZw=="
+    "PreviewImage": "Textures/Supplies/DoubleDamage/New/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
   }
-]
+]fi
