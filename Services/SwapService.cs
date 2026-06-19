@@ -23,7 +23,7 @@ namespace TextureSwapper.Services
             string originalsDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, Constants.OriginalsDir));
             _ = Directory.CreateDirectory(originalsDir);
 
-            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
             foreach (string target in targets)
             {
                 if (string.IsNullOrEmpty(target))
@@ -53,7 +53,7 @@ namespace TextureSwapper.Services
                 Log.Information("Creating selective backup for {SkinName} at {BackupDir}", skin.Name, backupDir);
                 _ = Directory.CreateDirectory(backupDir);
 
-                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
                 foreach (string target in targets)
                 {
                     if (string.IsNullOrEmpty(target))
@@ -94,6 +94,10 @@ namespace TextureSwapper.Services
                 CopyAndRename(texturesDir, "details.png", cachePath, skin.DetailsTarget);
                 CopyAndRename(texturesDir, "lightmap.png", cachePath, skin.LightmapTarget);
                 CopyAndRename(texturesDir, "alpha.png", cachePath, skin.AlphaTarget);
+                if (!string.IsNullOrEmpty(skin.ModelTarget))
+                {
+                    CopyAndRename(texturesDir, "object.3ds", cachePath, skin.ModelTarget);
+                }
                 Log.Information("Skin {SkinName} applied successfully.", skin.Name);
             }
             catch (Exception ex)

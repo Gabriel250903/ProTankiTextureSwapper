@@ -80,6 +80,12 @@ namespace TextureSwapper.Services
                 {
                     await EnsureFileExistsAsync(string.Empty, prefix, skin.SourceFolder, onProgress);
                 }
+
+                if (!string.IsNullOrEmpty(skin.ModelTarget))
+                {
+                    string modelPath = Path.Combine(skin.SourceFolder, "object.3ds").Replace("\\", "/");
+                    await EnsureFileExistsAsync(modelPath, "object", skin.SourceFolder, onProgress);
+                }
             }
             catch (Exception ex)
             {

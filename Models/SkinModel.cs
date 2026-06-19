@@ -40,6 +40,7 @@ namespace TextureSwapper.Models
         public string DetailsTarget { get; set; } = string.Empty;
         public string LightmapTarget { get; set; } = string.Empty;
         public string AlphaTarget { get; set; } = string.Empty;
+        public string ModelTarget { get; set; } = string.Empty;
         public string PreviewImage { get; set; } = string.Empty;
         public string? FullPreviewPath
         {

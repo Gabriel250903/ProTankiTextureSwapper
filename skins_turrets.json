@@ -158,5 +158,25 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzE0NjQxNDMxMTEyMDcvbGlnaHRtYXAuanBn",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzE0NjQxNDMxMTEyMDcvZGV0YWlscy5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzE0NjQxNDMxMTEyMDcvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Shaft",
+    "Name": "Shaft XT",
+    "SourceFolder": "Textures/Turrets/Shaft/XT/M3",
+    "PreviewImage": "Textures/Turrets/Shaft/XT/M3/Shaft_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Shaft",
+    "Name": "Shaft LC",
+    "SourceFolder": "Textures/Turrets/Shaft/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Shaft/Legacy/M3/Shaft_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzE0NjQxNDMxMDU0NjMvZGV0YWlsc19hbHBoYS5qcGc="
   }
 ]

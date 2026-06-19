@@ -62,5 +62,14 @@
     "SourceFolder": "Textures/Supplies/SpeedBoost/NY2015",
     "PreviewImage": "Textures/Supplies/SpeedBoost/NY2015/details.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "GoldBox",
+    "Name": "Gold Box New",
+    "SourceFolder": "Textures/Supplies/GoldBox/New",
+    "PreviewImage": "Textures/Supplies/GoldBox/New/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTczMjI1NzQ3NjcwNi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTY1NDUxMjEzNTMzMS9vYmplY3QuM2Rz"
   }
 ]

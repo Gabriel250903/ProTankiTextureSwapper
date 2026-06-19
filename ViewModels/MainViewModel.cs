@@ -556,6 +556,15 @@ namespace TextureSwapper.ViewModels
                 }
             }
 
+            if (!string.IsNullOrEmpty(skin.ModelTarget))
+            {
+                string modelPath = Path.GetFullPath(Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"), "object.3ds"));
+                if (!File.Exists(modelPath))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
