@@ -250,7 +250,7 @@
                                                             <ui:TextBlock
                                                                 FontTypography="Caption"
                                                                 Opacity="0.6"
-                                                                Text="XT VERSION" />
+                                                                Text="{Binding VersionText}" />
                                                         </StackPanel>
                                                     </Grid>
                                                 </Border>

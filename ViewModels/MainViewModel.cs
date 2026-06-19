@@ -333,28 +333,65 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = "Syncing skins...";
-                string localJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SkinsJson);
-                string localJson = File.Exists(localJsonPath) ? await File.ReadAllTextAsync(localJsonPath) : string.Empty;
+                string localHullsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.HullsSkinsJson);
+                string localTurretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.TurretsSkinsJson);
 
-                if (!string.IsNullOrEmpty(localJson))
+                string localHullsJson = File.Exists(localHullsPath) ? await File.ReadAllTextAsync(localHullsPath) : string.Empty;
+                string localTurretsJson = File.Exists(localTurretsPath) ? await File.ReadAllTextAsync(localTurretsPath) : string.Empty;
+
+                List<SkinModel> localSkins = [];
+                if (!string.IsNullOrEmpty(localHullsJson))
                 {
-                    _allSkins = JsonSerializer.Deserialize<List<SkinModel>>(localJson) ?? [];
+                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
+                }
+                if (!string.IsNullOrEmpty(localTurretsJson))
+                {
+                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
+                }
+
+                if (localSkins.Count > 0)
+                {
+                    _allSkins = localSkins;
                     InitializeCategories();
                     FilterItems();
                 }
 
-                (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsAsync();
+                (List<SkinModel>? remoteHullsSkins, string? remoteHullsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.HullsSkinsJson);
+                (List<SkinModel>? remoteTurretsSkins, string? remoteTurretsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.TurretsSkinsJson);
 
-                if (remoteSkins != null && remoteJson != localJson)
+                bool updated = false;
+                if (remoteHullsSkins != null && remoteHullsJson != localHullsJson)
                 {
-                    Log.Information("Remote skins.json is different from local. Updating...");
-                    _allSkins = remoteSkins;
-                    await File.WriteAllTextAsync(localJsonPath, remoteJson!);
+                    Log.Information("Remote skins_hulls.json is different from local. Updating...");
+                    await File.WriteAllTextAsync(localHullsPath, remoteHullsJson!);
+                    localHullsJson = remoteHullsJson!;
+                    updated = true;
+                }
+                if (remoteTurretsSkins != null && remoteTurretsJson != localTurretsJson)
+                {
+                    Log.Information("Remote skins_turrets.json is different from local. Updating...");
+                    await File.WriteAllTextAsync(localTurretsPath, remoteTurretsJson!);
+                    localTurretsJson = remoteTurretsJson!;
+                    updated = true;
+                }
 
+                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null)))
+                {
+                    List<SkinModel> combinedSkins = [];
+                    if (!string.IsNullOrEmpty(localHullsJson))
+                    {
+                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
+                    }
+                    if (!string.IsNullOrEmpty(localTurretsJson))
+                    {
+                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
+                    }
+
+                    _allSkins = combinedSkins;
                     InitializeCategories();
                     FilterItems();
                 }
-                else if (remoteSkins == null && _allSkins.Count == 0)
+                else if (remoteHullsSkins == null && remoteTurretsSkins == null && _allSkins.Count == 0)
                 {
                     Log.Warning("Could not load skins from remote or local source.");
                     IsLoading = false;

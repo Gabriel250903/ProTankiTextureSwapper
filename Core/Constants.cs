@@ -4,7 +4,8 @@ namespace TextureSwapper.Core
     {
         public const string AppName = "ProTanki Texture Swapper";
         public const string GameProcessName = "ProTanki";
-        public const string SkinsJson = "skins.json";
+        public const string HullsSkinsJson = "skins_hulls.json";
+        public const string TurretsSkinsJson = "skins_turrets.json";
         public const string BackupsDir = "Backups";
         public const string OriginalsDir = "Originals";
         public const string LogsDir = "Logs";

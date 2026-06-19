@@ -43,12 +43,12 @@ namespace TextureSwapper.Services
             throw new HttpRequestException("Max retries exceeded.");
         }
 
-        public async Task<(List<SkinModel>? Skins, string? RawJson)> FetchRemoteSkinsAsync()
+        public async Task<(List<SkinModel>? Skins, string? RawJson)> FetchRemoteSkinsFileAsync(string fileName)
         {
             try
             {
-                Log.Information("Fetching remote skins.json from GitHub...");
-                string url = $"{Constants.GitHubRawUrl}/{Constants.SkinsJson}?t={DateTime.Now.Ticks}";
+                Log.Information("Fetching remote {FileName} from GitHub...", fileName);
+                string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
 
                 HttpResponseMessage response = await GetWithRetryAsync(url);
                 string json = await response.Content.ReadAsStringAsync();
@@ -58,7 +58,7 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Warning("Network error while fetching remote skins: {Message}", ex.Message);
+                Log.Warning("Network error while fetching remote skins ({FileName}): {Message}", fileName, ex.Message);
                 return (null, null);
             }
         }

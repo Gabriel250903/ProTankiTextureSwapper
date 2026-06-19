@@ -24,6 +24,18 @@ namespace TextureSwapper.Models
         public string Category { get; set; } = string.Empty;
         public string ItemName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+
+        public string VersionText
+        {
+            get
+            {
+                if (Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase))
+                    return "LC";
+                if (Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase))
+                    return "XT";
+                return string.Empty;
+            }
+        }
         public string SourceFolder { get; set; } = string.Empty;
         public string DetailsTarget { get; set; } = string.Empty;
         public string LightmapTarget { get; set; } = string.Empty;
