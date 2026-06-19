@@ -335,9 +335,11 @@ namespace TextureSwapper.ViewModels
                 UpdateStatus = "Syncing skins...";
                 string localHullsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.HullsSkinsJson);
                 string localTurretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.TurretsSkinsJson);
+                string localSuppliesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SuppliesSkinsJson);
 
                 string localHullsJson = File.Exists(localHullsPath) ? await File.ReadAllTextAsync(localHullsPath) : string.Empty;
                 string localTurretsJson = File.Exists(localTurretsPath) ? await File.ReadAllTextAsync(localTurretsPath) : string.Empty;
+                string localSuppliesJson = File.Exists(localSuppliesPath) ? await File.ReadAllTextAsync(localSuppliesPath) : string.Empty;
 
                 List<SkinModel> localSkins = [];
                 if (!string.IsNullOrEmpty(localHullsJson))
@@ -347,6 +349,10 @@ namespace TextureSwapper.ViewModels
                 if (!string.IsNullOrEmpty(localTurretsJson))
                 {
                     localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
+                }
+                if (!string.IsNullOrEmpty(localSuppliesJson))
+                {
+                    localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
                 }
 
                 if (localSkins.Count > 0)
@@ -358,6 +364,7 @@ namespace TextureSwapper.ViewModels
 
                 (List<SkinModel>? remoteHullsSkins, string? remoteHullsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.HullsSkinsJson);
                 (List<SkinModel>? remoteTurretsSkins, string? remoteTurretsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.TurretsSkinsJson);
+                (List<SkinModel>? remoteSuppliesSkins, string? remoteSuppliesJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.SuppliesSkinsJson);
 
                 bool updated = false;
                 if (remoteHullsSkins != null && remoteHullsJson != localHullsJson)
@@ -374,8 +381,15 @@ namespace TextureSwapper.ViewModels
                     localTurretsJson = remoteTurretsJson!;
                     updated = true;
                 }
+                if (remoteSuppliesSkins != null && remoteSuppliesJson != localSuppliesJson)
+                {
+                    Log.Information("Remote skins_supplies.json is different from local. Updating...");
+                    await File.WriteAllTextAsync(localSuppliesPath, remoteSuppliesJson!);
+                    localSuppliesJson = remoteSuppliesJson!;
+                    updated = true;
+                }
 
-                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null)))
+                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null || remoteSuppliesSkins != null)))
                 {
                     List<SkinModel> combinedSkins = [];
                     if (!string.IsNullOrEmpty(localHullsJson))
@@ -386,12 +400,16 @@ namespace TextureSwapper.ViewModels
                     {
                         combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
                     }
+                    if (!string.IsNullOrEmpty(localSuppliesJson))
+                    {
+                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
+                    }
 
                     _allSkins = combinedSkins;
                     InitializeCategories();
                     FilterItems();
                 }
-                else if (remoteHullsSkins == null && remoteTurretsSkins == null && _allSkins.Count == 0)
+                else if (remoteHullsSkins == null && remoteTurretsSkins == null && remoteSuppliesSkins == null && _allSkins.Count == 0)
                 {
                     Log.Warning("Could not load skins from remote or local source.");
                     IsLoading = false;
@@ -486,12 +504,29 @@ namespace TextureSwapper.ViewModels
                 return true;
             }
 
-            string[] files = ["details.png", "lightmap.png", "alpha.png"];
-            foreach (string file in files)
+            string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
+                ? ["details"]
+                : ["details", "lightmap", "alpha"];
+
+            foreach (string suffix in suffixes)
             {
-                string relativePath = Path.Combine(skin.SourceFolder, file).Replace("\\", "/");
-                string fullPath = Path.GetFullPath(Path.Combine(baseDir, relativePath));
-                if (!File.Exists(fullPath))
+                string folder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
+                bool found = false;
+                if (Directory.Exists(folder))
+                {
+                    string[] matchingFiles = Directory.GetFiles(folder, $"{suffix}.*");
+                    foreach (string file in matchingFiles)
+                    {
+                        string ext = Path.GetExtension(file).ToLower();
+                        if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!found)
                 {
                     return true;
                 }

@@ -69,7 +69,13 @@ namespace TextureSwapper.Services
             {
                 await EnsureFileExistsAsync(skin.PreviewImage, "Preview", skin.SourceFolder, onProgress);
 
-                string[] prefixes = ["details", "lightmap", "alpha"];
+                List<string> prefixes = ["details"];
+                if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase))
+                {
+                    prefixes.Add("lightmap");
+                    prefixes.Add("alpha");
+                }
+
                 foreach (string prefix in prefixes)
                 {
                     await EnsureFileExistsAsync(string.Empty, prefix, skin.SourceFolder, onProgress);
