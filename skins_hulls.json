@@ -51,6 +51,16 @@
   },
   {
     "Category": "Hulls",
+    "ItemName": "Wasp",
+    "Name": "Wasp LC",
+    "SourceFolder": "Textures/Hulls/Wasp/Legacy/M3",
+    "PreviewImage": "Textures/Hulls/Wasp/Legacy/M3/Wasp_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMTQ2NDE0MzA3NDcxNi9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMTQ2NDE0MzA3NDcxNi9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMTQ2NDE0MzA3NDcxNi9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Hulls",
     "ItemName": "Hunter",
     "Name": "Hunter XT",
     "SourceFolder": "Textures/Hulls/Hunter/XT/M3",
@@ -115,9 +125,9 @@
     "Name": "Titan XT",
     "SourceFolder": "Textures/Hulls/Titan/XT/M3",
     "PreviewImage": "Textures/Hulls/Titan/XT/M3/Titan_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9kZXRhaWxzLmpwZw==",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9saWdodG1hcC5qcGc=",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9kZXRhaWxzX2FscGhhLmpwZw=="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2RldGFpbHNfYWxwaGEuanBn"
   },
   {
     "Category": "Hulls",
@@ -125,8 +135,8 @@
     "Name": "Titan LC",
     "SourceFolder": "Textures/Hulls/Titan/Legacy/M3",
     "PreviewImage": "Textures/Hulls/Titan/Legacy/M3/Titan_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9kZXRhaWxzLmpwZw==",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9saWdodG1hcC5qcGc=",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMTQ2NDE0MzA2MTc2Ni9kZXRhaWxzX2FscGhhLmpwZw=="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMxNDY0MTQzMDcxMDIwL2RldGFpbHNfYWxwaGEuanBn"
   }
 ]
