@@ -55,8 +55,8 @@
     "Name": "Ricochet XT",
     "SourceFolder": "Textures/Turrets/Ricochet/XT/M3",
     "PreviewImage": "Textures/Turrets/Ricochet/XT/M3/Ricochet_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvZGV0YWlscy5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81MS8xMTAvMzE2MzQ0MjYzNjAzNTEvZGV0YWlsc19hbHBoYS5qcGc="
   },
   {
@@ -65,8 +65,8 @@
     "Name": "Ricochet LC",
     "SourceFolder": "Textures/Turrets/Ricochet/Legacy/M3",
     "PreviewImage": "Textures/Turrets/Ricochet/Legacy/M3/Ricochet_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvbGlnaHRtYXAuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzE0NjQxNDMxMDQyMzEvZGV0YWlscy5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81MS8xMTAvMzE2MzQ0MjYzNjAzNTEvZGV0YWlsc19hbHBoYS5qcGc="
   },
   {

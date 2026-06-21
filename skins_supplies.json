@@ -9,26 +9,10 @@
   },
   {
     "Category": "Supplies",
-    "ItemName": "Repair Kit",
-    "Name": "Repair Kit NY2015",
-    "SourceFolder": "Textures/Supplies/RepairKit/NY2015",
-    "PreviewImage": "Textures/Supplies/RepairKit/NY2015/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
-  },
-  {
-    "Category": "Supplies",
     "ItemName": "Double Damage",
     "Name": "Double Damage New",
     "SourceFolder": "Textures/Supplies/DoubleDamage/New",
     "PreviewImage": "Textures/Supplies/DoubleDamage/New/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Double Damage",
-    "Name": "Double Damage NY2015",
-    "SourceFolder": "Textures/Supplies/DoubleDamage/NY2015",
-    "PreviewImage": "Textures/Supplies/DoubleDamage/NY2015/details.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
   },
   {
@@ -41,26 +25,10 @@
   },
   {
     "Category": "Supplies",
-    "ItemName": "Double Armor",
-    "Name": "Double Armor NY2015",
-    "SourceFolder": "Textures/Supplies/DoubleArmor/NY2015",
-    "PreviewImage": "Textures/Supplies/DoubleArmor/NY2015/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
-  },
-  {
-    "Category": "Supplies",
     "ItemName": "Speed Boost",
     "Name": "Speed Boost New",
     "SourceFolder": "Textures/Supplies/SpeedBoost/New",
     "PreviewImage": "Textures/Supplies/SpeedBoost/New/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Speed Boost",
-    "Name": "Speed Boost NY2015",
-    "SourceFolder": "Textures/Supplies/SpeedBoost/NY2015",
-    "PreviewImage": "Textures/Supplies/SpeedBoost/NY2015/details.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
   },
   {
