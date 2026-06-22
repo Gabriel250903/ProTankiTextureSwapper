@@ -1,10 +1,1409 @@
-[
-  {
-    "Category": "Paints",
-    "ItemName": "Custom Paints",
-    "Name": "Eternity",
-    "SourceFolder": "Textures/Paints",
-    "PreviewImage": "Textures/Paints/Eternity.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn"
-  }
+﻿[
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "11_years!",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/11_years!.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "450_Nanometers",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/450_Nanometers.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Active_viewer",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Active_viewer.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Adam_and_Eve",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Adam_and_Eve.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Adam_and_Eve_old",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Adam_and_Eve_old.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Alien_Chainmail",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Alien_Chainmail.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Alien_Nebula",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Alien_Nebula.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Alien_Regeneration",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Alien_Regeneration.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Alloy",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Alloy.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "All_the_Goodies",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/All_the_Goodies.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Ancient_dragon",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Ancient_dragon.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Andromeda",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Andromeda.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "And_Roll",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/And_Roll.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Area_52",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Area_52.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Armor_Blocks",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Armor_Blocks.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Atmospheric_Conditions",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Atmospheric_Conditions.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Avant-garde",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Avant-garde.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Babushka\u0027s_Quilt",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Babushka\u0027s_Quilt.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Babushka\u0027s_Sofa",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Babushka\u0027s_Sofa.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Badger-badger",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Badger-badger.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Barricade_tape",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Barricade_tape.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Battleship",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Battleship.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Baubles_Galore",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Baubles_Galore.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Beach",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Beach.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Black_Ruby",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Black_Ruby.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Blanket",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Blanket.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Blue_lilac",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Blue_lilac.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Blue_marmalade",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Blue_marmalade.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Blue_planet",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Blue_planet.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Bounty_hunter",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Bounty_hunter.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Breeze",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Breeze.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Bubble_gum",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Bubble_gum.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Buckwheat",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Buckwheat.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Burst_of_Light",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Burst_of_Light.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Busted",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Busted.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Campfire",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Campfire.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Carbon_stars",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Carbon_stars.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Cartridge",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Cartridge.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Charred",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Charred.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Chemical_Reaction",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Chemical_Reaction.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Christmas_Eve",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Christmas_Eve.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "City_Dweller",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/City_Dweller.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Constellation",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Constellation.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Cosmic_Blast",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Cosmic_Blast.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Craft_Scissors",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Craft_Scissors.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Creative_Engineer",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Creative_Engineer.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Crop_Circles",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Crop_Circles.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Cyberpunk",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Cyberpunk.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Cyber_Shuriken",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Cyber_Shuriken.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Darts",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Darts.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Deep_blue_pixel",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Deep_blue_pixel.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Designer_Vibe",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Designer_Vibe.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Diamond",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Diamond.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Digital_Borealis",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Digital_Borealis.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Disco_2.0",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Disco_2.0.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Eagle_eye",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Eagle_eye.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Earthling",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Earthling.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Easter",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Easter.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Easter_Egg",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Easter_Egg.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Ecofriendly",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Ecofriendly.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Electric_Sheep",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Electric_Sheep.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Eternity",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Eternity.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Falling_leaves",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Falling_leaves.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Fan",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Fan.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Far_North",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Far_North.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Fire_golem",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Fire_golem.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Flash",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Flash.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Flowing_Metal",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Flowing_Metal.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Frigid_Coat",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Frigid_Coat.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Funky_medicine",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Funky_medicine.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Galacticus",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Galacticus.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Galaxian_Explosion",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Galaxian_Explosion.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gamepad",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gamepad.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gamer",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gamer.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Geometric_Blue",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Geometric_Blue.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gift_wrap",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gift_wrap.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gingerbread",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gingerbread.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Glam_Croc",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Glam_Croc.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gloom",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gloom.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gloss",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gloss.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gold_alloy",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gold_alloy.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Gold_digger",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Gold_digger.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Green_Quads",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Green_Quads.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Griller",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Griller.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Groovy_Neon",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Groovy_Neon.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Hand_Sanitizer",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Hand_Sanitizer.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Head_Ripper",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Head_Ripper.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Heart_of_Steel",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Heart_of_Steel.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Holo",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Holo.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Horror",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Horror.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Ice_Flurry",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Ice_Flurry.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Jade_Scales",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Jade_Scales.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Jolly_Season",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Jolly_Season.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Kapuljat",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Kapuljat.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Katakana",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Katakana.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Lava_Lamp",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Lava_Lamp.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Liana",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Liana.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Lifesaver",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Lifesaver.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Lightning_storm",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Lightning_storm.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Light_organ",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Light_organ.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Living_Armor",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Living_Armor.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Log_cabin",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Log_cabin.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Loving_Camo",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Loving_Camo.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Magic_Circles",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Magic_Circles.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Masquerade",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Masquerade.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Microbiology",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Microbiology.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Miner",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Miner.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Miniature_Masonry",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Miniature_Masonry.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mint_Candy",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mint_Candy.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Monochrome",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Monochrome.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Apple",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Apple.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Aquamarine",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Aquamarine.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Azure",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Azure.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Blue",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Blue.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Coral",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Coral.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Fuchsia",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Fuchsia.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Gold",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Gold.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Orange",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Orange.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Red",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Red.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Violet",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Violet.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mono_Yellow",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mono_Yellow.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Mucus",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Mucus.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "NanoHUD",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/NanoHUD.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Nanosuit_Armor",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Nanosuit_Armor.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Neon_Geometry",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Neon_Geometry.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Neural_Network",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Neural_Network.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Northern_Lights",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Northern_Lights.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Nostalgia",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Nostalgia.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Not_a_lantern",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Not_a_lantern.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Nuclear_sun",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Nuclear_sun.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Oasis",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Oasis.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Obsidian",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Obsidian.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Oceania",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Oceania.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Off-road_vehicle",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Off-road_vehicle.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Offensive",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Offensive.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Orange_urchin",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Orange_urchin.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Packed_Stocking",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Packed_Stocking.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "PCB",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/PCB.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Peace,_Work,_May!",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Peace,_Work,_May!.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Pink_Elephant",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Pink_Elephant.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Pixel_Plasma",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Pixel_Plasma.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Playground",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Playground.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "POP_IT",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/POP_IT.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Precious_Studs",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Precious_Studs.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Pumpkin_puree",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Pumpkin_puree.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Puzzles",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Puzzles.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Quantum_Camo",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Quantum_Camo.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Question",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Question.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Rare_Easter_Egg",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Rare_Easter_Egg.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Reddit",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Reddit.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Red_Marks",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Red_Marks.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Red_marmalade",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Red_marmalade.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Red_planet",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Red_planet.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Retrowave",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Retrowave.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Scarier_Things",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Scarier_Things.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Seventies_Fun",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Seventies_Fun.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Shredded",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Shredded.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Sight",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Sight.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Silver_Bricks",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Silver_Bricks.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Singapore",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Singapore.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Singularity",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Singularity.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Skomorokh",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Skomorokh.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Smoke_Screen",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Smoke_Screen.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Snowy_Surprize",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Snowy_Surprize.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Sonar",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Sonar.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Souls",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Souls.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Space-time",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Space-time.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Speeding_Star",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Speeding_Star.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Spreading_Fast",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Spreading_Fast.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Spring_bouquet",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Spring_bouquet.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Squid_Fingers",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Squid_Fingers.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Stars_and_Flames",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Stars_and_Flames.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Stylish_Tanker",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Stylish_Tanker.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Surf",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Surf.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Survivor",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Survivor.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Sweet_Gift",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Sweet_Gift.png"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Sweet_trick",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Sweet_trick.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Tankoin_Tank",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Tankoin_Tank.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Target",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Target.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Tectonic_plates",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Tectonic_plates.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Tessaract_Camo",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Tessaract_Camo.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Tetris",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Tetris.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Thankos\u0027_Armor",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Thankos\u0027_Armor.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Thug",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Thug.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Timber_camo",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Timber_camo.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Trapped_Inside",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Trapped_Inside.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Tropics",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Tropics.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "UFO",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/UFO.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Under_the_Tree",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Under_the_Tree.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Valour",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Valour.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Vector",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Vector.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Viscum",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Viscum.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Visual_Disruptor",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Visual_Disruptor.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Volcanic_eruption",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Volcanic_eruption.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Walk_of_Fame",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Walk_of_Fame.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Watermelon",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Watermelon.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "White_planet",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/White_planet.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Wildstyle",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Wildstyle.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Wonderbird",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Wonderbird.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "Wonder_fish",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/Wonder_fish.jpg"
+    },
+    {
+        "Category":  "Paints",
+        "ItemName":  "Custom Paints",
+        "Name":  "X_Noir",
+        "SourceFolder":  "Textures/Paints",
+        "PreviewImage":  "Textures/Paints/X_Noir.jpg"
+    }
 ]
