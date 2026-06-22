@@ -7,7 +7,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="Settings"
-    Width="700"
+    Width="500"
     Height="650"
     d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
     Background="#0F0F0F"

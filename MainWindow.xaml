@@ -11,9 +11,10 @@
     Title="ProTanki Texture Swapper"
     Width="1100"
     Height="780"
+    MinWidth="1025"
     d:DataContext="{d:DesignInstance vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
-    Background="#0F0F0F"
+    Background="Transparent"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterScreen"
@@ -24,8 +25,8 @@
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
         <Style x:Key="StandardButtonStyle" TargetType="ui:Button">
-            <Setter Property="Background" Value="#15FFFFFF" />
-            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="15,8" />
         </Style>
@@ -52,7 +53,7 @@
                                 <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#10FFFFFF" />
+                                <Setter TargetName="Root" Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -79,331 +80,619 @@
                     Source="pack://application:,,,/Textures/logo.png" />
             </ui:TitleBar.Icon>
 
-            <ui:TitleBar.TrailingContent>
-                <ui:Button
-                    x:Name="btnOpenSettings"
-                    Margin="0,0,10,0"
-                    Padding="8"
-                    Appearance="Transparent"
-                    Command="{Binding OpenSettingsCommand}"
-                    Icon="{ui:SymbolIcon Settings24}"
-                    ToolTip="Settings" />
-            </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <TabControl
-            Grid.Row="1"
-            Margin="30,0,30,30"
-            Background="Transparent"
-            BorderThickness="0">
-            <TabItem Padding="20,10" Header="SKINS">
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Margin="0,0,0,25">
-                        <ui:TextBlock
-                            FontSize="32"
-                            FontTypography="Title"
-                            FontWeight="Bold"
-                            Text="Texture Swapper" />
-                    </StackPanel>
+            <ui:NavigationView
+                x:Name="RootNavigation"
+                Grid.Column="0"
+                IsBackButtonVisible="Collapsed"
+                OpenPaneLength="250"
+                PaneDisplayMode="Left">
+                <ui:NavigationView.MenuItems>
+                    <ui:NavigationViewItem
+                        Click="OnNavigationItemClick"
+                        Content="Skins"
+                        Icon="{ui:SymbolIcon Cube24}"
+                        IsActive="True"
+                        Tag="Skins" />
+                    <ui:NavigationViewItem
+                        Click="OnNavigationItemClick"
+                        Content="Paints Swap"
+                        Icon="{ui:SymbolIcon PaintBrush24}"
+                        Tag="Paints" />
+                    <ui:NavigationViewItem
+                        Click="OnNavigationItemClick"
+                        Content="Backup History"
+                        Icon="{ui:SymbolIcon History24}"
+                        Tag="Backups" />
+                </ui:NavigationView.MenuItems>
+                <ui:NavigationView.FooterMenuItems>
+                    <ui:NavigationViewItem
+                        Click="OnNavigationItemClick"
+                        Content="Settings"
+                        Icon="{ui:SymbolIcon Settings24}"
+                        Tag="Settings" />
+                </ui:NavigationView.FooterMenuItems>
+            </ui:NavigationView>
 
-                    <ListBox
-                        Grid.Row="1"
-                        Margin="0,0,0,20"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        ItemContainerStyle="{StaticResource CategoryButtonStyle}"
-                        ItemsSource="{Binding Categories}"
-                        SelectedItem="{Binding SelectedCategory}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
+            <Grid Grid.Column="1" Margin="20,10,20,20">
+                <TabControl
+                    x:Name="MainTabControl"
+                    Background="Transparent"
+                    BorderThickness="0">
+                    <TabControl.Template>
+                        <ControlTemplate TargetType="TabControl">
+                            <ContentPresenter ContentSource="SelectedContent" />
+                        </ControlTemplate>
+                    </TabControl.Template>
 
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="220" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!--  Page 1: SKINS  -->
+                    <TabItem Header="SKINS">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                        <Border
-                            Grid.Column="0"
-                            Background="#0AFFFFFF"
-                            BorderBrush="#1AFFFFFF"
-                            BorderThickness="1,1,0,1"
-                            CornerRadius="12,0,0,12">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,20">
                                 <ui:TextBlock
-                                    Margin="15,15,15,10"
-                                    FontTypography="Caption"
-                                    FontWeight="SemiBold"
-                                    Opacity="0.5"
-                                    Text="MODELS" />
-                                <ui:ListView
-                                    Grid.Row="1"
-                                    Padding="5,0,5,10"
-                                    ItemsSource="{Binding ItemNames}"
-                                    SelectedItem="{Binding SelectedItemName}" />
-                            </Grid>
-                        </Border>
+                                    FontSize="32"
+                                    FontTypography="Title"
+                                    FontWeight="Bold"
+                                    Text="Texture Swapper" />
+                            </StackPanel>
 
-                        <Border
-                            Grid.Column="1"
-                            Background="#0FFFFFFF"
-                            BorderBrush="#1AFFFFFF"
-                            BorderThickness="0,1,1,1"
-                            CornerRadius="0,12,12,0">
-                            <Grid>
+                            <ListBox
+                                Grid.Row="1"
+                                Margin="0,0,0,20"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                ItemContainerStyle="{StaticResource CategoryButtonStyle}"
+                                ItemsSource="{Binding SkinsCategories}"
+                                SelectedItem="{Binding SelectedCategory}">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1,1,0,1"
+                                    CornerRadius="12,0,0,12">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ui:TextBlock
+                                            Margin="15,15,15,10"
+                                            FontTypography="Caption"
+                                            FontWeight="SemiBold"
+                                            Opacity="0.5"
+                                            Text="MODELS" />
+                                        <ui:ListView
+                                            Grid.Row="1"
+                                            Padding="5,0,5,10"
+                                            ItemsSource="{Binding ItemNames}"
+                                            SelectedItem="{Binding SelectedItemName}" />
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    Grid.Column="1"
+                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="0,1,1,1"
+                                    CornerRadius="0,12,12,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid Margin="20,15,20,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ui:TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                FontTypography="Caption"
+                                                FontWeight="SemiBold"
+                                                Opacity="0.5"
+                                                Text="AVAILABLE SKINS" />
+
+                                            <ui:TextBox
+                                                Grid.Column="2"
+                                                Width="250"
+                                                HorizontalAlignment="Right"
+                                                Icon="{ui:SymbolIcon Search24}"
+                                                PlaceholderText="Search skins..."
+                                                Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        </Grid>
+
+                                        <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
+                                            <ItemsControl ItemsSource="{Binding FilteredSkins}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border
+                                                            Width="220"
+                                                            Margin="5"
+                                                            ClipToBounds="True"
+                                                            CornerRadius="12"
+                                                            Cursor="Hand">
+                                                            <Border.InputBindings>
+                                                                <MouseBinding
+                                                                    Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    MouseAction="LeftClick" />
+                                                            </Border.InputBindings>
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                                    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                                    <Setter Property="BorderThickness" Value="1" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                                                                            <Setter Property="BorderThickness" Value="2" />
+                                                                        </DataTrigger>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="120" />
+                                                                    <RowDefinition Height="Auto" />
+                                                                </Grid.RowDefinitions>
+
+                                                                <Border
+                                                                    Grid.Row="0"
+                                                                    ClipToBounds="True"
+                                                                    CornerRadius="12,12,0,0">
+                                                                    <Image
+                                                                        Opacity="0.9"
+                                                                        Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
+                                                                        Stretch="UniformToFill" />
+                                                                </Border>
+
+                                                                <StackPanel Grid.Row="1" Margin="12,10">
+                                                                    <ui:TextBlock
+                                                                        FontSize="14"
+                                                                        FontWeight="SemiBold"
+                                                                        Text="{Binding Name}" />
+                                                                    <ui:TextBlock
+                                                                        FontTypography="Caption"
+                                                                        Opacity="0.6"
+                                                                        Text="{Binding VersionText}" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+
+                            <Border
+                                Grid.Row="3"
+                                Margin="0,20,0,0"
+                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="12">
+                                <Grid Margin="15,10">
+                                    <WrapPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Secondary"
+                                            Command="{Binding SelectAllAvailableCommand}"
+                                            CommandParameter="XT"
+                                            Content="Select All XT"
+                                            ToolTip="Selects XT version for all items.">
+                                            <ui:Button.Icon>
+                                                <ui:SymbolIcon Symbol="CheckmarkCircle24" />
+                                            </ui:Button.Icon>
+                                        </ui:Button>
+
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Secondary"
+                                            Command="{Binding SelectAllAvailableCommand}"
+                                            CommandParameter="Legacy"
+                                            Content="Select All Legacy"
+                                            ToolTip="Selects Legacy/LC version for all items where available.">
+                                            <ui:Button.Icon>
+                                                <ui:SymbolIcon Symbol="History24" />
+                                            </ui:Button.Icon>
+                                        </ui:Button>
+
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Secondary"
+                                            Command="{Binding SelectAllAvailableCommand}"
+                                            CommandParameter="Deselect"
+                                            Content="Deselect All"
+                                            ToolTip="Clear all selected textures.">
+                                            <ui:Button.Icon>
+                                                <ui:SymbolIcon Symbol="DismissCircle24" />
+                                            </ui:Button.Icon>
+                                        </ui:Button>
+
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Danger"
+                                            Command="{Binding ClearCacheCommand}"
+                                            Content="Clear Cache"
+                                            Icon="{ui:SymbolIcon Delete24}" />
+
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Primary"
+                                            Command="{Binding RestoreCommand}"
+                                            Content="Restore Originals"
+                                            Icon="{ui:SymbolIcon ArrowUndo24}" />
+
+                                        <ui:Button
+                                            Margin="5"
+                                            Appearance="Success"
+                                            Command="{Binding SwapCommand}"
+                                            Content="APPLY SELECTED"
+                                            FontWeight="Bold"
+                                            Icon="{ui:SymbolIcon Flash24}" />
+                                    </WrapPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+
+                    <!--  Page 2: PAINTS SWAP  -->
+                    <TabItem Header="PAINTS">
+                        <Grid Margin="0,10,0,0">
+                            <!-- STEP 1: Select In-Game Paint -->
+                            <Grid Visibility="{Binding ShowInGamePaints, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <Grid Margin="20,15,20,10">
+                                <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                    <ui:TextBlock
+                                        FontSize="32"
+                                        FontTypography="Title"
+                                        FontWeight="Bold"
+                                        Text="Select In-Game Paint" />
+                                    <ui:TextBlock Opacity="0.6" Text="Choose the in-game paint you want to replace." />
+                                </StackPanel>
+
+                                <Border
+                                    Grid.Row="1"
+                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                    <ScrollViewer Margin="10">
+                                        <ListBox
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            ItemsSource="{Binding InGamePaints}"
+                                            SelectedItem="{Binding SelectedInGamePaint}">
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel />
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemContainerStyle>
+                                                <Style TargetType="ListBoxItem">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border
+                                                        Width="220"
+                                                        Height="170"
+                                                        Margin="5"
+                                                        ClipToBounds="True"
+                                                        CornerRadius="12"
+                                                        Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                                        BorderThickness="1"
+                                                        Cursor="Hand">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="120" />
+                                                                <RowDefinition Height="*" />
+                                                            </Grid.RowDefinitions>
+                                                            <Border Grid.Row="0" CornerRadius="12,12,0,0" ClipToBounds="True">
+                                                                <Image Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}" Stretch="UniformToFill" />
+                                                            </Border>
+                                                            <ui:TextBlock Grid.Row="1" Text="{Binding Name}" Margin="12,8" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+
+                            <!-- STEP 2: Select Custom Paint to Replace target -->
+                            <Grid Visibility="{Binding ShowCustomPaints, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0" Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:Button
+                                        Grid.Column="0"
+                                        Margin="0,0,15,0"
+                                        Command="{Binding GoBackToInGamePaintsCommand}"
+                                        Icon="{ui:SymbolIcon ArrowLeft24}"
+                                        Appearance="Transparent"
+                                        ToolTip="Go back to in-game paints" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <ui:TextBlock
+                                            FontSize="28"
+                                            FontTypography="Title"
+                                            FontWeight="Bold"
+                                            Text="{Binding SelectedInGamePaint.Name, StringFormat='Replace {0}'}" />
+                                        <ui:TextBlock Opacity="0.6" Text="Choose a custom texture to swap onto this paint." />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Row="1" Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:TextBlock
-                                        Grid.Column="0"
-                                        VerticalAlignment="Center"
-                                        FontTypography="Caption"
-                                        FontWeight="SemiBold"
-                                        Opacity="0.5"
-                                        Text="AVAILABLE SKINS" />
-
                                     <ui:TextBox
-                                        Grid.Column="2"
-                                        Width="250"
-                                        HorizontalAlignment="Right"
+                                        Grid.Column="1"
+                                        Width="300"
                                         Icon="{ui:SymbolIcon Search24}"
-                                        PlaceholderText="Search skins..."
+                                        PlaceholderText="Search custom paints..."
                                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
-                                <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
-                                    <ItemsControl ItemsSource="{Binding FilteredSkins}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border
-                                                    Width="200"
-                                                    Margin="5"
-                                                    ClipToBounds="True"
-                                                    CornerRadius="12"
-                                                    Cursor="Hand">
-                                                    <Border.InputBindings>
-                                                        <MouseBinding
-                                                            Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                            CommandParameter="{Binding}"
-                                                            MouseAction="LeftClick" />
-                                                    </Border.InputBindings>
-                                                    <Border.Style>
-                                                        <Style TargetType="Border">
-                                                            <Setter Property="Background" Value="#15FFFFFF" />
-                                                            <Setter Property="BorderBrush" Value="#20FFFFFF" />
-                                                            <Setter Property="BorderThickness" Value="1" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                    <Setter Property="BorderBrush" Value="#4CC3FF" />
-                                                                    <Setter Property="BorderThickness" Value="2" />
-                                                                </DataTrigger>
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter Property="Background" Value="#25FFFFFF" />
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Border.Style>
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="120" />
-                                                            <RowDefinition Height="Auto" />
-                                                        </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="2"
+                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                    <ScrollViewer Margin="10">
+                                        <ItemsControl ItemsSource="{Binding FilteredSkins}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border
+                                                        Width="220"
+                                                        Margin="5"
+                                                        ClipToBounds="True"
+                                                        CornerRadius="12"
+                                                        Cursor="Hand">
+                                                        <Border.InputBindings>
+                                                            <MouseBinding
+                                                                Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                CommandParameter="{Binding}"
+                                                                MouseAction="LeftClick" />
+                                                        </Border.InputBindings>
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                                <Setter Property="BorderThickness" Value="1" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                                                                        <Setter Property="BorderThickness" Value="2" />
+                                                                    </DataTrigger>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="120" />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
 
-                                                        <Image
-                                                            Opacity="0.9"
-                                                            Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
-                                                            Stretch="UniformToFill" />
+                                                            <Border Grid.Row="0" CornerRadius="12,12,0,0" ClipToBounds="True">
+                                                                <Image
+                                                                    Opacity="0.9"
+                                                                    Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
+                                                                    Stretch="UniformToFill" />
+                                                            </Border>
 
-                                                        <StackPanel Grid.Row="1" Margin="12,10">
-                                                            <ui:TextBlock
-                                                                FontSize="14"
-                                                                FontWeight="SemiBold"
-                                                                Text="{Binding Name}" />
-                                                            <ui:TextBlock
-                                                                FontTypography="Caption"
-                                                                Opacity="0.6"
-                                                                Text="{Binding VersionText}" />
-                                                        </StackPanel>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
+                                                            <StackPanel Grid.Row="1" Margin="12,10">
+                                                                <ui:TextBlock
+                                                                    FontSize="14"
+                                                                    FontWeight="SemiBold"
+                                                                    Text="{Binding Name}" />
+                                                                <ui:TextBlock
+                                                                    FontTypography="Caption"
+                                                                    Opacity="0.6"
+                                                                    Text="Paint Texture" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <Border
+                                    Grid.Row="3"
+                                    Margin="0,20,0,0"
+                                    Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                    <Grid Margin="15,10">
+                                        <WrapPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                            <ui:Button
+                                                Margin="5"
+                                                Appearance="Danger"
+                                                Command="{Binding ClearCacheCommand}"
+                                                Content="Clear Cache"
+                                                Icon="{ui:SymbolIcon Delete24}" />
+
+                                            <ui:Button
+                                                Margin="5"
+                                                Appearance="Primary"
+                                                Command="{Binding RestoreCommand}"
+                                                Content="Restore Originals"
+                                                Icon="{ui:SymbolIcon ArrowUndo24}" />
+
+                                            <ui:Button
+                                                Margin="5"
+                                                Appearance="Success"
+                                                Command="{Binding SwapCommand}"
+                                                Content="APPLY SELECTED PAINT"
+                                                FontWeight="Bold"
+                                                Icon="{ui:SymbolIcon Flash24}" />
+                                        </WrapPanel>
+                                    </Grid>
+                                </Border>
                             </Grid>
-                        </Border>
-                    </Grid>
-
-                    <Border
-                        Grid.Row="3"
-                        Margin="0,20,0,0"
-                        Background="#0AFFFFFF"
-                        BorderBrush="#1AFFFFFF"
-                        BorderThickness="1"
-                        CornerRadius="12">
-                        <Grid Margin="20">
-                            <StackPanel Orientation="Horizontal">
-                                 <ui:Button
-                                     Margin="0,0,10,0"
-                                     Appearance="Secondary"
-                                     Command="{Binding SelectAllAvailableCommand}"
-                                     CommandParameter="XT"
-                                     Content="Select All XT"
-                                     ToolTip="Selects XT version for all items.">
-                                     <ui:Button.Icon>
-                                         <ui:SymbolIcon Symbol="CheckmarkCircle24" />
-                                     </ui:Button.Icon>
-                                 </ui:Button>
-
-                                 <ui:Button
-                                     Margin="0,0,10,0"
-                                     Appearance="Secondary"
-                                     Command="{Binding SelectAllAvailableCommand}"
-                                     CommandParameter="Legacy"
-                                     Content="Select All Legacy"
-                                     ToolTip="Selects Legacy/LC version for all items where available.">
-                                     <ui:Button.Icon>
-                                         <ui:SymbolIcon Symbol="History24" />
-                                     </ui:Button.Icon>
-                                 </ui:Button>
-
-                                 <ui:Button
-                                     Margin="0,0,10,0"
-                                     Appearance="Secondary"
-                                     Command="{Binding SelectAllAvailableCommand}"
-                                     CommandParameter="Deselect"
-                                     Content="Deselect All"
-                                     ToolTip="Clear all selected textures.">
-                                     <ui:Button.Icon>
-                                         <ui:SymbolIcon Symbol="DismissCircle24" />
-                                     </ui:Button.Icon>
-                                 </ui:Button>
-
-                                <ui:Button
-                                    Margin="0,0,10,0"
-                                    Appearance="Danger"
-                                    Command="{Binding ClearCacheCommand}"
-                                    Content="Clear Cache"
-                                    Icon="{ui:SymbolIcon Delete24}" />
-
-                                <ui:Button
-                                    Margin="0,0,10,0"
-                                    Appearance="Primary"
-                                    Command="{Binding RestoreCommand}"
-                                    Content="Restore Originals"
-                                    Icon="{ui:SymbolIcon ArrowUndo24}" />
-
-                                <ui:Button
-                                    Appearance="Success"
-                                    Command="{Binding SwapCommand}"
-                                    Content="APPLY SELECTED"
-                                    FontWeight="Bold"
-                                    Icon="{ui:SymbolIcon Flash24}" />
-                            </StackPanel>
                         </Grid>
-                    </Border>
-                </Grid>
-            </TabItem>
+                    </TabItem>
 
-            <TabItem Padding="20,10" Header="BACKUP HISTORY">
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                    <!--  Page 3: BACKUP HISTORY  -->
+                    <TabItem Header="BACKUP HISTORY">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Margin="0,0,0,25">
-                        <ui:TextBlock
-                            FontSize="32"
-                            FontTypography="Title"
-                            FontWeight="Bold"
-                            Text="Snapshot Backups" />
-                        <ui:TextBlock Opacity="0.6" Text="View and restore previously applied texture snapshots." />
-                    </StackPanel>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,25">
+                                <ui:TextBlock
+                                    FontSize="32"
+                                    FontTypography="Title"
+                                    FontWeight="Bold"
+                                    Text="Snapshot Backups" />
+                                <ui:TextBlock Opacity="0.6" Text="View and restore previously applied texture snapshots." />
+                            </StackPanel>
 
-                    <ui:ListView
-                        Grid.Row="1"
-                        ItemsSource="{Binding SnapshotBackups}"
-                        SelectedItem="{Binding SelectedBackup}">
-                        <ui:ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="10,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <ui:SymbolIcon
-                                        Grid.Column="0"
-                                        Margin="0,0,15,0"
-                                        Symbol="History24" />
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <ui:TextBlock
-                                            FontSize="16"
-                                            FontWeight="SemiBold"
-                                            Text="{Binding DisplayName}" />
-                                        <ui:TextBlock
-                                            FontTypography="Caption"
-                                            Opacity="0.6"
-                                            Text="{Binding CreationDate, StringFormat='{}Created on {0:MMMM dd, yyyy HH:mm}'}" />
-                                    </StackPanel>
-                                    <ui:Button
-                                        Grid.Column="2"
-                                        Appearance="Secondary"
-                                        Command="{Binding DataContext.RestoreBackupCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}"
-                                        Content="RESTORE THIS" />
-                                </Grid>
-                            </DataTemplate>
-                        </ui:ListView.ItemTemplate>
-                    </ui:ListView>
+                            <ui:ListView
+                                Grid.Row="1"
+                                ItemsSource="{Binding SnapshotBackups}"
+                                SelectedItem="{Binding SelectedBackup}">
+                                <ui:ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="10,5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ui:SymbolIcon
+                                                Grid.Column="0"
+                                                Margin="0,0,15,0"
+                                                Symbol="History24" />
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <ui:TextBlock
+                                                    FontSize="16"
+                                                    FontWeight="SemiBold"
+                                                    Text="{Binding DisplayName}" />
+                                                <ui:TextBlock
+                                                    FontTypography="Caption"
+                                                    Opacity="0.6"
+                                                    Text="{Binding CreationDate, StringFormat='{}Created on {0:MMMM dd, yyyy HH:mm}'}" />
+                                            </StackPanel>
+                                            <ui:Button
+                                                Grid.Column="2"
+                                                Appearance="Secondary"
+                                                Command="{Binding DataContext.RestoreBackupCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"
+                                                Content="RESTORE THIS" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ui:ListView.ItemTemplate>
+                            </ui:ListView>
 
-                    <ui:InfoBar
-                        Title="Note"
-                        Grid.Row="2"
-                        Margin="0,20,0,0"
-                        IsClosable="False"
-                        IsOpen="True"
-                        Message="Backups are automatically cleaned up based on your Max Retention settings."
-                        Severity="Informational" />
-                </Grid>
-            </TabItem>
-        </TabControl>
+                            <ui:InfoBar
+                                Title="Note"
+                                Grid.Row="2"
+                                Margin="0,20,0,0"
+                                IsClosable="False"
+                                IsOpen="True"
+                                Message="Backups are automatically cleaned up based on your Max Retention settings."
+                                Severity="Informational" />
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
 
         <Grid
             x:Name="LoadingOverlay"
             Grid.RowSpan="2"
             Panel.ZIndex="10000"
-            Background="#F0000000">
+            Background="#E50B0B0B">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />

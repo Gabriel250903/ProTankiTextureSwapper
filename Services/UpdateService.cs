@@ -70,7 +70,7 @@ namespace TextureSwapper.Services
                 await EnsureFileExistsAsync(skin.PreviewImage, "Preview", skin.SourceFolder, onProgress);
 
                 List<string> prefixes = ["details"];
-                if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase))
+                if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) && !skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
                     prefixes.Add("lightmap");
                     prefixes.Add("alpha");
@@ -193,7 +193,7 @@ namespace TextureSwapper.Services
 
         public async Task DownloadAndRunInstallerAsync(string downloadUrl, Action<double>? onProgress = null)
         {
-            string tempPath = Path.Combine(Path.GetTempPath(), "ProTankiTextureSwapper_Setup.exe");
+            string tempPath = Path.Combine(Path.GetTempPath(), "TextureSwapper_Setup.exe");
 
             Log.Information("Downloading installer from {Url} to {Path}", downloadUrl, tempPath);
 

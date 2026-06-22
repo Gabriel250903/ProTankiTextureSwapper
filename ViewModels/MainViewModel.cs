@@ -31,8 +31,29 @@ namespace TextureSwapper.ViewModels
 
         public ObservableCollection<SkinModel> FilteredSkins { get; } = [];
         public ObservableCollection<string> Categories { get; } = [];
+        public ObservableCollection<string> SkinsCategories { get; } = [];
         public ObservableCollection<string> ItemNames { get; } = [];
         public ObservableCollection<BackupModel> SnapshotBackups { get; } = [];
+        public ObservableCollection<InGamePaintModel> InGamePaints { get; } = [];
+
+        private InGamePaintModel? _selectedInGamePaint;
+        public InGamePaintModel? SelectedInGamePaint
+        {
+            get => _selectedInGamePaint;
+            set
+            {
+                if (SetProperty(ref _selectedInGamePaint, value))
+                {
+                    OnPropertyChanged(nameof(ShowCustomPaints));
+                    OnPropertyChanged(nameof(ShowInGamePaints));
+                }
+            }
+        }
+
+        public bool ShowCustomPaints => SelectedInGamePaint != null;
+        public bool ShowInGamePaints => SelectedInGamePaint == null;
+
+        public ICommand GoBackToInGamePaintsCommand { get; }
 
         public AppSettings Settings { get; }
 
@@ -70,6 +91,7 @@ namespace TextureSwapper.ViewModels
                     Settings.LastSelectedCategory = value;
                     _settingsService.Save(Settings);
                     FilterItems();
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
@@ -131,13 +153,35 @@ namespace TextureSwapper.ViewModels
             CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();
 
             BrowseCommand = new RelayCommand(ExecuteBrowse);
-            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ => !IsLoading && _allSkins.Any(s => s.IsSelected));
+            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ => 
+            {
+                if (IsLoading) return false;
+                if (SelectedCategory == "Paints")
+                {
+                    return _allSkins.Any(s => s.IsSelected && s.Category == "Paints");
+                }
+                return _allSkins.Any(s => s.IsSelected && s.Category != "Paints");
+            });
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
             SelectAllAvailableCommand = new RelayCommand(ExecuteSelectAllAvailable);
             OpenSettingsCommand = new RelayCommand(_ => RequestSettings?.Invoke());
             RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !IsLoading && SelectedBackup != null);
             ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
+            GoBackToInGamePaintsCommand = new RelayCommand(_ => SelectedInGamePaint = null);
+
+            InGamePaints.Add(new InGamePaintModel
+            {
+                Name = "Tiger",
+                TargetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn",
+                PreviewImage = "Textures/Paints/InGame/Tiger.png"
+            });
+            InGamePaints.Add(new InGamePaintModel
+            {
+                Name = "Irbis",
+                TargetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTYvMzE2NDQ3NTQzMTAwMzIvaW1hZ2UuanBn",
+                PreviewImage = "Textures/Paints/InGame/Irbis.png"
+            });
 
             _ = InitializeAsync();
         }
@@ -336,10 +380,12 @@ namespace TextureSwapper.ViewModels
                 string localHullsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.HullsSkinsJson);
                 string localTurretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.TurretsSkinsJson);
                 string localSuppliesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SuppliesSkinsJson);
+                string localPaintsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
 
                 string localHullsJson = File.Exists(localHullsPath) ? await File.ReadAllTextAsync(localHullsPath) : string.Empty;
                 string localTurretsJson = File.Exists(localTurretsPath) ? await File.ReadAllTextAsync(localTurretsPath) : string.Empty;
                 string localSuppliesJson = File.Exists(localSuppliesPath) ? await File.ReadAllTextAsync(localSuppliesPath) : string.Empty;
+                string localPaintsJson = File.Exists(localPaintsPath) ? await File.ReadAllTextAsync(localPaintsPath) : string.Empty;
 
                 List<SkinModel> localSkins = [];
                 try
@@ -378,6 +424,18 @@ namespace TextureSwapper.ViewModels
                     Log.Error(ex, "Failed to deserialize local supplies skins.");
                 }
 
+                try
+                {
+                    if (!string.IsNullOrEmpty(localPaintsJson))
+                    {
+                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localPaintsJson) ?? []);
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    Log.Error(ex, "Failed to deserialize local paints skins.");
+                }
+
                 if (localSkins.Count > 0)
                 {
                     _allSkins = localSkins;
@@ -388,6 +446,7 @@ namespace TextureSwapper.ViewModels
                 (List<SkinModel>? remoteHullsSkins, string? remoteHullsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.HullsSkinsJson);
                 (List<SkinModel>? remoteTurretsSkins, string? remoteTurretsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.TurretsSkinsJson);
                 (List<SkinModel>? remoteSuppliesSkins, string? remoteSuppliesJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.SuppliesSkinsJson);
+                (List<SkinModel>? remotePaintsSkins, string? remotePaintsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.PaintsSkinsJson);
 
                 bool updated = false;
                 if (remoteHullsSkins != null && remoteHullsJson != localHullsJson)
@@ -395,6 +454,13 @@ namespace TextureSwapper.ViewModels
                     Log.Information("Remote skins_hulls.json is different from local. Updating...");
                     await File.WriteAllTextAsync(localHullsPath, remoteHullsJson!);
                     localHullsJson = remoteHullsJson!;
+                    updated = true;
+                }
+                if (remotePaintsSkins != null && remotePaintsJson != localPaintsJson)
+                {
+                    Log.Information("Remote skins_paints.json is different from local. Updating...");
+                    await File.WriteAllTextAsync(localPaintsPath, remotePaintsJson!);
+                    localPaintsJson = remotePaintsJson!;
                     updated = true;
                 }
                 if (remoteTurretsSkins != null && remoteTurretsJson != localTurretsJson)
@@ -412,7 +478,7 @@ namespace TextureSwapper.ViewModels
                     updated = true;
                 }
 
-                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null || remoteSuppliesSkins != null)))
+                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null || remoteSuppliesSkins != null || remotePaintsSkins != null)))
                 {
                     List<SkinModel> combinedSkins = [];
                     if (!string.IsNullOrEmpty(localHullsJson))
@@ -427,12 +493,16 @@ namespace TextureSwapper.ViewModels
                     {
                         combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
                     }
+                    if (!string.IsNullOrEmpty(localPaintsJson))
+                    {
+                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localPaintsJson) ?? []);
+                    }
 
                     _allSkins = combinedSkins;
                     InitializeCategories();
                     FilterItems();
                 }
-                else if (remoteHullsSkins == null && remoteTurretsSkins == null && remoteSuppliesSkins == null && _allSkins.Count == 0)
+                else if (remoteHullsSkins == null && remoteTurretsSkins == null && remoteSuppliesSkins == null && remotePaintsSkins == null && _allSkins.Count == 0)
                 {
                     Log.Warning("Could not load skins from remote or local source.");
                     IsLoading = false;
@@ -445,8 +515,11 @@ namespace TextureSwapper.ViewModels
                     int completed = 0;
                     foreach (SkinModel skin in missingSkins)
                     {
-                        UpdateStatus = $"Syncing assets ({completed}/{missingSkins.Count}): {skin.Name}...";
-                        await _updateService.EnsureAssetsExistAsync(skin);
+                        UpdateStatus = $"Syncing assets ({completed + 1}/{missingSkins.Count}): {skin.Name}...";
+                        await _updateService.EnsureAssetsExistAsync(skin, p =>
+                        {
+                            UpdateStatus = $"Syncing assets ({completed + 1}/{missingSkins.Count}): {skin.Name} - {p}";
+                        });
                         skin.NotifyPreviewChanged();
                         completed++;
                     }
@@ -528,7 +601,7 @@ namespace TextureSwapper.ViewModels
                 return true;
             }
 
-            string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
+            string[] suffixes = (skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) || skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 ? ["details"]
                 : ["details", "lightmap", "alpha"];
 
@@ -577,10 +650,15 @@ namespace TextureSwapper.ViewModels
 
             string? currentCategory = SelectedCategory;
             Categories.Clear();
+            SkinsCategories.Clear();
             List<string> uniqueCategories = [.. _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c)];
             foreach (string category in uniqueCategories)
             {
                 Categories.Add(category);
+                if (!category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+                {
+                    SkinsCategories.Add(category);
+                }
             }
 
             if (Categories.Any())
@@ -702,11 +780,28 @@ namespace TextureSwapper.ViewModels
                 IsLoading = true;
                 if (selectedSkins.Count != 0)
                 {
-                    UpdateStatus = $"Applying {selectedSkins.Count} textures...";
+                    if (SelectedCategory == "Paints")
+                    {
+                        if (SelectedInGamePaint == null)
+                        {
+                            await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
+                            IsLoading = false;
+                            return;
+                        }
+                        foreach (var skin in selectedSkins)
+                        {
+                            skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
+                        }
+                    }
+
+                    string skinMessage = selectedSkins.Count > 1 ? "skins" : "skin";
+                    string textureMessage = selectedSkins.Count > 1 ? "textures" : "texture";
+                    
+                    UpdateStatus = $"Applying {selectedSkins.Count} {textureMessage}...";
                     await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
                     LoadBackups();
                     notificationTitle = "Success";
-                    notificationMessage = $"{selectedSkins.Count} skins applied successfully!";
+                    notificationMessage = $"{selectedSkins.Count} {skinMessage} applied successfully!";
                     notificationAppearance = ControlAppearance.Success;
 
                     foreach (SkinModel skin in _allSkins)
