@@ -168,7 +168,7 @@ namespace TextureSwapper.ViewModels
             CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();
 
             BrowseCommand = new RelayCommand(ExecuteBrowse);
-            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ => 
+            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ =>
             {
                 if (IsLoading) return false;
                 if (SelectedCategory == "Paints")
@@ -470,144 +470,82 @@ namespace TextureSwapper.ViewModels
             try
             {
                 IsLoading = true;
-                UpdateStatus = "Syncing skins...";
+
                 string localHullsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.HullsSkinsJson);
                 string localTurretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.TurretsSkinsJson);
                 string localSuppliesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SuppliesSkinsJson);
                 string localPaintsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
 
-                string localHullsJson = File.Exists(localHullsPath) ? await File.ReadAllTextAsync(localHullsPath) : string.Empty;
-                string localTurretsJson = File.Exists(localTurretsPath) ? await File.ReadAllTextAsync(localTurretsPath) : string.Empty;
-                string localSuppliesJson = File.Exists(localSuppliesPath) ? await File.ReadAllTextAsync(localSuppliesPath) : string.Empty;
-                string localPaintsJson = File.Exists(localPaintsPath) ? await File.ReadAllTextAsync(localPaintsPath) : string.Empty;
+                var categories = new[]
+                {
+                    (Name: "Hulls", LocalPath: localHullsPath, RemoteFileName: Constants.HullsSkinsJson),
+                    (Name: "Turrets", LocalPath: localTurretsPath, RemoteFileName: Constants.TurretsSkinsJson),
+                    (Name: "Supplies", LocalPath: localSuppliesPath, RemoteFileName: Constants.SuppliesSkinsJson),
+                    (Name: "Paints", LocalPath: localPaintsPath, RemoteFileName: Constants.PaintsSkinsJson)
+                };
 
-                List<SkinModel> localSkins = [];
-                try
-                {
-                    if (!string.IsNullOrEmpty(localHullsJson))
-                    {
-                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
-                    }
-                }
-                catch (JsonException ex)
-                {
-                    Log.Error(ex, "Failed to deserialize local hulls skins.");
-                }
+                List<SkinModel> combinedSkins = [];
+                bool anyAssetsSynced = false;
 
-                try
+                foreach (var cat in categories)
                 {
-                    if (!string.IsNullOrEmpty(localTurretsJson))
+                    // 1. Load local copy if exists
+                    string localJson = File.Exists(cat.LocalPath) ? await File.ReadAllTextAsync(cat.LocalPath) : string.Empty;
+                    List<SkinModel> catSkins = [];
+                    if (!string.IsNullOrEmpty(localJson))
                     {
-                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
-                    }
-                }
-                catch (JsonException ex)
-                {
-                    Log.Error(ex, "Failed to deserialize local turrets skins.");
-                }
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(localSuppliesJson))
-                    {
-                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
-                    }
-                }
-                catch (JsonException ex)
-                {
-                    Log.Error(ex, "Failed to deserialize local supplies skins.");
-                }
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(localPaintsJson))
-                    {
-                        localSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localPaintsJson) ?? []);
-                    }
-                }
-                catch (JsonException ex)
-                {
-                    Log.Error(ex, "Failed to deserialize local paints skins.");
-                }
-
-                if (localSkins.Count > 0)
-                {
-                    _allSkins = localSkins;
-                    InitializeCategories();
-                    FilterItems();
-                }
-
-                (List<SkinModel>? remoteHullsSkins, string? remoteHullsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.HullsSkinsJson);
-                (List<SkinModel>? remoteTurretsSkins, string? remoteTurretsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.TurretsSkinsJson);
-                (List<SkinModel>? remoteSuppliesSkins, string? remoteSuppliesJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.SuppliesSkinsJson);
-                (List<SkinModel>? remotePaintsSkins, string? remotePaintsJson) = await _updateService.FetchRemoteSkinsFileAsync(Constants.PaintsSkinsJson);
-
-                bool updated = false;
-                if (remoteHullsSkins != null && remoteHullsJson != localHullsJson)
-                {
-                    Log.Information("Remote skins_hulls.json is different from local. Updating...");
-                    await File.WriteAllTextAsync(localHullsPath, remoteHullsJson!);
-                    localHullsJson = remoteHullsJson!;
-                    updated = true;
-                }
-                if (remotePaintsSkins != null && remotePaintsJson != localPaintsJson)
-                {
-                    Log.Information("Remote skins_paints.json is different from local. Updating...");
-                    await File.WriteAllTextAsync(localPaintsPath, remotePaintsJson!);
-                    localPaintsJson = remotePaintsJson!;
-                    updated = true;
-                }
-                if (remoteTurretsSkins != null && remoteTurretsJson != localTurretsJson)
-                {
-                    Log.Information("Remote skins_turrets.json is different from local. Updating...");
-                    await File.WriteAllTextAsync(localTurretsPath, remoteTurretsJson!);
-                    localTurretsJson = remoteTurretsJson!;
-                    updated = true;
-                }
-                if (remoteSuppliesSkins != null && remoteSuppliesJson != localSuppliesJson)
-                {
-                    Log.Information("Remote skins_supplies.json is different from local. Updating...");
-                    await File.WriteAllTextAsync(localSuppliesPath, remoteSuppliesJson!);
-                    localSuppliesJson = remoteSuppliesJson!;
-                    updated = true;
-                }
-
-                if (updated || (_allSkins.Count == 0 && (remoteHullsSkins != null || remoteTurretsSkins != null || remoteSuppliesSkins != null || remotePaintsSkins != null)))
-                {
-                    List<SkinModel> combinedSkins = [];
-                    if (!string.IsNullOrEmpty(localHullsJson))
-                    {
-                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localHullsJson) ?? []);
-                    }
-                    if (!string.IsNullOrEmpty(localTurretsJson))
-                    {
-                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localTurretsJson) ?? []);
-                    }
-                    if (!string.IsNullOrEmpty(localSuppliesJson))
-                    {
-                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localSuppliesJson) ?? []);
-                    }
-                    if (!string.IsNullOrEmpty(localPaintsJson))
-                    {
-                        combinedSkins.AddRange(JsonSerializer.Deserialize<List<SkinModel>>(localPaintsJson) ?? []);
+                        try
+                        {
+                            catSkins = JsonSerializer.Deserialize<List<SkinModel>>(localJson) ?? [];
+                        }
+                        catch (JsonException ex)
+                        {
+                            Log.Error(ex, $"Failed to deserialize local {cat.Name} skins.");
+                        }
                     }
 
-                    _allSkins = combinedSkins;
-                    InitializeCategories();
-                    FilterItems();
-                }
-                else if (remoteHullsSkins == null && remoteTurretsSkins == null && remoteSuppliesSkins == null && remotePaintsSkins == null && _allSkins.Count == 0)
-                {
-                    Log.Warning("Could not load skins from remote or local source.");
-                    IsLoading = false;
-                    return;
+                    // 2. Fetch remote DB
+                    UpdateStatus = $"Syncing {cat.Name.ToLower()} database...";
+                    (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsFileAsync(cat.RemoteFileName);
+
+                    if (remoteSkins != null && remoteJson != localJson)
+                    {
+                        Log.Information($"Remote {cat.RemoteFileName} is different from local. Updating...");
+                        await File.WriteAllTextAsync(cat.LocalPath, remoteJson!);
+                        catSkins = remoteSkins;
+                    }
+
+                    // 3. Check and sync missing assets for this category
+                    List<SkinModel> missing = catSkins.Where(IsSkinMissingAssets).ToList();
+                    if (missing.Count > 0)
+                    {
+                        anyAssetsSynced = true;
+                        int completed = 0;
+                        foreach (SkinModel skin in missing)
+                        {
+                            UpdateStatus = $"Syncing {cat.Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...";
+                            await _updateService.EnsureAssetsExistAsync(skin, p =>
+                            {
+                                UpdateStatus = $"Syncing {cat.Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}";
+                            });
+                            skin.NotifyPreviewChanged();
+                            completed++;
+                        }
+                    }
+
+                    combinedSkins.AddRange(catSkins);
                 }
 
-                // Sync ingame_paints.json
+                _allSkins = combinedSkins;
+                InitializeCategories();
+                FilterItems();
+
+                // Now sync ingame_paints.json
                 try
                 {
                     string localInGamePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.InGamePaintsJson);
                     string localInGameJson = File.Exists(localInGamePath) ? await File.ReadAllTextAsync(localInGamePath) : string.Empty;
+                    UpdateStatus = "Syncing in-game paints database...";
                     (List<InGamePaintModel>? remoteInGamePaints, string? remoteInGameJson) = await _updateService.FetchRemoteInGamePaintsFileAsync(Constants.InGamePaintsJson);
                     if (remoteInGamePaints != null && remoteInGameJson != localInGameJson)
                     {
@@ -622,47 +560,39 @@ namespace TextureSwapper.ViewModels
                 }
 
                 // Download missing in-game paint previews if needed
-                foreach (var paint in InGamePaints)
+                int missingPreviewsCount = InGamePaints.Count(p => !string.IsNullOrEmpty(p.PreviewImage) && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p.PreviewImage.Replace("\\", "/"))));
+                if (missingPreviewsCount > 0)
                 {
-                    if (!string.IsNullOrEmpty(paint.PreviewImage))
+                    anyAssetsSynced = true;
+                    int completedPreviews = 0;
+                    foreach (var paint in InGamePaints)
                     {
-                        string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
-                        if (!File.Exists(localPreview))
+                        if (!string.IsNullOrEmpty(paint.PreviewImage))
                         {
-                            string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
-                            try
+                            string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
+                            if (!File.Exists(localPreview))
                             {
-                                Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
-                                Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
-                                HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
-                                byte[] data = await res.Content.ReadAsByteArrayAsync();
-                                await File.WriteAllBytesAsync(localPreview, data);
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
+                                UpdateStatus = $"Syncing in-game paints ({completedPreviews + 1}/{missingPreviewsCount}): {paint.Name}...";
+                                string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
+                                try
+                                {
+                                    Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
+                                    Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
+                                    HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
+                                    byte[] data = await res.Content.ReadAsByteArrayAsync();
+                                    await File.WriteAllBytesAsync(localPreview, data);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
+                                }
+                                completedPreviews++;
                             }
                         }
                     }
                 }
 
-                List<SkinModel> missingSkins = [.. _allSkins.Where(IsSkinMissingAssets)];
-                if (missingSkins.Count > 0)
-                {
-                    int completed = 0;
-                    foreach (SkinModel skin in missingSkins)
-                    {
-                        UpdateStatus = $"Syncing assets ({completed + 1}/{missingSkins.Count}): {skin.Name}...";
-                        await _updateService.EnsureAssetsExistAsync(skin, p =>
-                        {
-                            UpdateStatus = $"Syncing assets ({completed + 1}/{missingSkins.Count}): {skin.Name} - {p}";
-                        });
-                        skin.NotifyPreviewChanged();
-                        completed++;
-                    }
-                }
-
-                if (missingSkins.Count > 0)
+                if (anyAssetsSynced)
                 {
                     UpdateStatus = "Sync complete!";
                     await Task.Delay(1000);
@@ -940,7 +870,7 @@ namespace TextureSwapper.ViewModels
 
                     string skinMessage = selectedSkins.Count > 1 ? "skins" : "skin";
                     string textureMessage = selectedSkins.Count > 1 ? "textures" : "texture";
-                    
+
                     UpdateStatus = $"Applying {selectedSkins.Count} {textureMessage}...";
                     await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
                     LoadBackups();

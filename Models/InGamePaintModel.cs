@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace TextureSwapper.Models
@@ -15,7 +14,7 @@ namespace TextureSwapper.Models
             {
                 if (string.IsNullOrEmpty(PreviewImage))
                     return null;
-                
+
                 try
                 {
                     string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage));
