@@ -9,9 +9,10 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="ProTanki Texture Swapper"
-    Width="1100"
+    Width="1050"
     Height="780"
-    MinWidth="1025"
+    MinWidth="1050"
+    MinHeight="780"
     d:DataContext="{d:DesignInstance vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
     Background="Transparent"
@@ -125,7 +126,8 @@
                 <TabControl
                     x:Name="MainTabControl"
                     Background="Transparent"
-                    BorderThickness="0">
+                    BorderThickness="0"
+                    SelectedIndex="0">
                     <TabControl.Template>
                         <ControlTemplate TargetType="TabControl">
                             <ContentPresenter ContentSource="SelectedContent" />
@@ -279,9 +281,11 @@
                                                                     ClipToBounds="True"
                                                                     CornerRadius="12,12,0,0">
                                                                     <Image
+                                                                        Width="150"
+                                                                        Height="150"
                                                                         Opacity="0.9"
                                                                         Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
-                                                                        Stretch="UniformToFill" />
+                                                                        Stretch="Uniform" />
                                                                 </Border>
 
                                                                 <StackPanel Grid.Row="1" Margin="12,10">
@@ -379,20 +383,28 @@
                     <!--  Page 2: PAINTS SWAP  -->
                     <TabItem Header="PAINTS">
                         <Grid Margin="0,10,0,0">
-                            <!-- STEP 1: Select In-Game Paint -->
+                            <!--  STEP 1: Select In-Game Paint  -->
                             <Grid Visibility="{Binding ShowInGamePaints, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                <StackPanel Grid.Row="0" Margin="0,0,0,15">
                                     <ui:TextBlock
                                         FontSize="32"
                                         FontTypography="Title"
                                         FontWeight="Bold"
                                         Text="Select In-Game Paint" />
-                                    <ui:TextBlock Opacity="0.6" Text="Choose the in-game paint you want to replace." />
+                                    <ui:TextBlock
+                                        Margin="0,0,0,12"
+                                        Opacity="0.6"
+                                        Text="Choose the in-game paint you want to replace." />
+                                    <ui:TextBox
+                                        ClearButtonEnabled="True"
+                                        Icon="{ui:SymbolIcon Search24}"
+                                        PlaceholderText="Search in-game paints..."
+                                        Text="{Binding InGamePaintSearchQuery, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
 
                                 <Border
@@ -401,70 +413,79 @@
                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                     BorderThickness="1"
                                     CornerRadius="12">
-                                    <ScrollViewer Margin="10">
-                                        <ListBox
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            ItemsSource="{Binding InGamePaints}"
-                                            SelectedItem="{Binding SelectedInGamePaint}">
-                                            <ListBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel />
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                    <Setter Property="Background" Value="Transparent" />
-                                                    <Setter Property="Padding" Value="0" />
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="ListBoxItem">
-                                                                <ContentPresenter />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </ListBox.ItemContainerStyle>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border
-                                                        Width="220"
-                                                        Height="170"
-                                                        Margin="5"
-                                                        ClipToBounds="True"
-                                                        CornerRadius="12"
-                                                        Background="{DynamicResource ControlFillColorDefaultBrush}"
-                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                        BorderThickness="1"
-                                                        Cursor="Hand">
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Border.Style>
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="120" />
-                                                                <RowDefinition Height="*" />
-                                                            </Grid.RowDefinitions>
-                                                            <Border Grid.Row="0" CornerRadius="12,12,0,0" ClipToBounds="True">
-                                                                <Image Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}" Stretch="UniformToFill" />
-                                                            </Border>
-                                                            <ui:TextBlock Grid.Row="1" Text="{Binding Name}" Margin="12,8" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </ScrollViewer>
+                                    <ListBox
+                                        Padding="5"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ItemsSource="{Binding InGamePaints}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        SelectedItem="{Binding SelectedInGamePaint}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border
+                                                    Width="220"
+                                                    Height="170"
+                                                    Margin="5"
+                                                    Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                                    BorderThickness="1"
+                                                    ClipToBounds="True"
+                                                    CornerRadius="12"
+                                                    Cursor="Hand">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="120" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Border
+                                                            Grid.Row="0"
+                                                            ClipToBounds="True"
+                                                            CornerRadius="12,12,0,0">
+                                                            <Image Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}" Stretch="UniformToFill" />
+                                                        </Border>
+                                                        <ui:TextBlock
+                                                            Grid.Row="1"
+                                                            Margin="12,8"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="14"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding Name}" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
                                 </Border>
                             </Grid>
 
-                            <!-- STEP 2: Select Custom Paint to Replace target -->
+                            <!--  STEP 2: Select Custom Paint to Replace target  -->
                             <Grid Visibility="{Binding ShowCustomPaints, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -481,9 +502,9 @@
                                     <ui:Button
                                         Grid.Column="0"
                                         Margin="0,0,15,0"
+                                        Appearance="Transparent"
                                         Command="{Binding GoBackToInGamePaintsCommand}"
                                         Icon="{ui:SymbolIcon ArrowLeft24}"
-                                        Appearance="Transparent"
                                         ToolTip="Go back to in-game paints" />
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <ui:TextBlock
@@ -557,7 +578,10 @@
                                                                 <RowDefinition Height="Auto" />
                                                             </Grid.RowDefinitions>
 
-                                                            <Border Grid.Row="0" CornerRadius="12,12,0,0" ClipToBounds="True">
+                                                            <Border
+                                                                Grid.Row="0"
+                                                                ClipToBounds="True"
+                                                                CornerRadius="12,12,0,0">
                                                                 <Image
                                                                     Opacity="0.9"
                                                                     Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"

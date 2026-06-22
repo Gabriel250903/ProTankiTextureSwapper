@@ -174,6 +174,26 @@ namespace TextureSwapper.Services
             await File.WriteAllBytesAsync(targetPath, data);
         }
 
+        public async Task<(List<InGamePaintModel>? Paints, string? RawJson)> FetchRemoteInGamePaintsFileAsync(string fileName)
+        {
+            try
+            {
+                Log.Information("Fetching remote {FileName} from GitHub...", fileName);
+                string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
+
+                HttpResponseMessage response = await GetWithRetryAsync(url);
+                string json = await response.Content.ReadAsStringAsync();
+                List<InGamePaintModel>? paints = JsonSerializer.Deserialize<List<InGamePaintModel>>(json);
+
+                return (paints, json);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("Network error while fetching remote in-game paints ({FileName}): {Message}", fileName, ex.Message);
+                return (null, null);
+            }
+        }
+
         public async Task<GitHubReleaseModel?> CheckForAppUpdatesAsync()
         {
             try

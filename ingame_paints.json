@@ -1,0 +1,167 @@
+[
+  {
+    "Name": "Tiger",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Tiger.png"
+  },
+  {
+    "Name": "Irbis",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTYvMzE2NDQ3NTQzMTAwMzIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Irbis.png"
+  },
+  {
+    "Name": "Africa",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy82NC8zMTY0NDc1NDMwNTc3MS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Africa.png"
+  },
+  {
+    "Name": "Chainmail",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMjAvMzE2NDQ3NTQzMTMzMDYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Chainmail.png"
+  },
+  {
+    "Name": "Clay",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8zNDYvMzE2NDQ3NTQzMDcyMTEvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Clay.png"
+  },
+  {
+    "Name": "Electra",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMTAvMzE2NDQ3NTQzMDczNzIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Electra.png"
+  },
+  {
+    "Name": "Emerald",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMTIvMzE2NDQ3NTQzMDc0MTIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Emerald.png"
+  },
+  {
+    "Name": "Forester",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMTYvMzE2NDQ3NTQzMDc0NTIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Forester.png"
+  },
+  {
+    "Name": "Grafitti",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy83NC8zMTY0NDc1NDMwNjA2NS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Grafitti.png"
+  },
+  {
+    "Name": "Hive",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMDIvMzE2NDQ3NTQzMDYxNTIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Hive.png"
+  },
+  {
+    "Name": "Hohloma",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMjQvMzE2NDQ3NTQzMDc1NDAvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Hohloma.png"
+  },
+  {
+    "Name": "Inferno",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTIvMzE2NDQ3NTQzMDc3NzYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Inferno.png"
+  },
+  {
+    "Name": "Jade",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNjAvMzE2NDQ3NTQzMTAwNTMvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Jade.png"
+  },
+  {
+    "Name": "Jaguar",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNjIvMzE2NDQ3NTQzMTAwNzIvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Jaguar.png"
+  },
+  {
+    "Name": "Lava",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zMC8zMTY0NDc1NDMxMDEyMi9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Lava.png"
+  },
+  {
+    "Name": "Lead",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zMi8zMTY0NDc1NDMxMDE0NS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Lead.png"
+  },
+  {
+    "Name": "Loam",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNC8zMTY0NDc1NDMxMDE2NS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Loam.png"
+  },
+  {
+    "Name": "Mars",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMjQvMzE2NDQ3NTQzMTMzNTEvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Mars.png"
+  },
+  {
+    "Name": "Mary",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS80MC8zMTY0NDc1NDMxMDIyNy9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Mary.png"
+  },
+  {
+    "Name": "Nano",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMjYvMzE2NDQ3NTQzMTMzNzUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Nano.png"
+  },
+  {
+    "Name": "Needle",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS80NC8zMTY0NDc1NDMxMDMxMy9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Needle.png"
+  },
+  {
+    "Name": "Picasso",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS81MC8zMTY0NDc1NDMxMDM0Ni9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Picasso.png"
+  },
+  {
+    "Name": "Prodigi",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS81NC8zMTY0NDc1NDMxMDQxNi9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Prodigi.png"
+  },
+  {
+    "Name": "Racoon",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMTIvMzE2NDQ3NTQzMDYyMzcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Racoon.png"
+  },
+  {
+    "Name": "Rock",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS82Mi8zMTY0NDc1NDMxMDQ3MS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Rock.png"
+  },
+  {
+    "Name": "Rustle",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS82Ni8zMTY0NDc1NDMxMDU0NC9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Rustle.png"
+  },
+  {
+    "Name": "Sandstone",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS83Mi8zMTY0NDc1NDMxMDYyMy9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Sandstone.png"
+  },
+  {
+    "Name": "Spark",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS83Ni8zMTY0NDc1NDMxMDY2NS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Spark.png"
+  },
+  {
+    "Name": "Taiga",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8xMDYvMzE2NDQ3NTQzMTEwMDcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Taiga.png"
+  },
+  {
+    "Name": "Urban",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNDAvMzE2NDQ3NTQzMTEwNDcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Urban.png"
+  },
+  {
+    "Name": "Winter",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNDQvMzE2NDQ3NTQzMTExMzcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Winter.png"
+  },
+  {
+    "Name": "Zebra",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS83MC8zMTY0NDc1NDMxMDU3NC9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Zebra.png"
+  },
+  {
+    "Name": "Zeus",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNDYvMzE2NDQ3NTQzMTExNTYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Zeus.png"
+  }
+]

@@ -1,6 +1,7 @@
 using Serilog;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
 using System.Windows.Input;
@@ -35,6 +36,20 @@ namespace TextureSwapper.ViewModels
         public ObservableCollection<string> ItemNames { get; } = [];
         public ObservableCollection<BackupModel> SnapshotBackups { get; } = [];
         public ObservableCollection<InGamePaintModel> InGamePaints { get; } = [];
+
+        private List<InGamePaintModel> _allInGamePaints = [];
+        private string _inGamePaintSearchQuery = string.Empty;
+        public string InGamePaintSearchQuery
+        {
+            get => _inGamePaintSearchQuery;
+            set
+            {
+                if (SetProperty(ref _inGamePaintSearchQuery, value))
+                {
+                    FilterInGamePaints();
+                }
+            }
+        }
 
         private InGamePaintModel? _selectedInGamePaint;
         public InGamePaintModel? SelectedInGamePaint
@@ -170,18 +185,7 @@ namespace TextureSwapper.ViewModels
             ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
             GoBackToInGamePaintsCommand = new RelayCommand(_ => SelectedInGamePaint = null);
 
-            InGamePaints.Add(new InGamePaintModel
-            {
-                Name = "Tiger",
-                TargetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn",
-                PreviewImage = "Textures/Paints/InGame/Tiger.png"
-            });
-            InGamePaints.Add(new InGamePaintModel
-            {
-                Name = "Irbis",
-                TargetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTYvMzE2NDQ3NTQzMTAwMzIvaW1hZ2UuanBn",
-                PreviewImage = "Textures/Paints/InGame/Irbis.png"
-            });
+            LoadInGamePaints();
 
             _ = InitializeAsync();
         }
@@ -208,6 +212,96 @@ namespace TextureSwapper.ViewModels
                 CommandManager.InvalidateRequerySuggested();
                 OnPropertyChanged(nameof(SelectAllText));
                 OnPropertyChanged(nameof(SelectAllIcon));
+            }
+        }
+
+        private void LoadInGamePaints()
+        {
+            try
+            {
+                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ingame_paints.json");
+                List<InGamePaintModel> list = [];
+
+                if (File.Exists(jsonPath))
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(jsonPath);
+                        list = JsonSerializer.Deserialize<List<InGamePaintModel>>(json) ?? [];
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to deserialize ingame_paints.json");
+                    }
+                }
+
+                // Scan directory Textures/Paints/InGame for any new paint images
+                string inGameDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Textures", "Paints", "InGame");
+                if (Directory.Exists(inGameDir))
+                {
+                    string[] files = Directory.GetFiles(inGameDir, "*.*")
+                        .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
+
+                    bool modified = false;
+                    foreach (string file in files)
+                    {
+                        string name = Path.GetFileNameWithoutExtension(file);
+                        if (!list.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            string relativePreview = Path.Combine("Textures", "Paints", "InGame", Path.GetFileName(file)).Replace("\\", "/");
+                            string targetUrl = "";
+                            if (name.Equals("Tiger", StringComparison.OrdinalIgnoreCase))
+                                targetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn";
+                            else if (name.Equals("Irbis", StringComparison.OrdinalIgnoreCase))
+                                targetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTYvMzE2NDQ3NTQzMTAwMzIvaW1hZ2UuanBn";
+
+                            list.Add(new InGamePaintModel
+                            {
+                                Name = name,
+                                PreviewImage = relativePreview,
+                                TargetUrl = targetUrl
+                            });
+                            modified = true;
+                        }
+                    }
+
+                    if (modified || !File.Exists(jsonPath))
+                    {
+                        try
+                        {
+                            string json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
+                            File.WriteAllText(jsonPath, json);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to write ingame_paints.json");
+                        }
+                    }
+                }
+
+                _allInGamePaints = list;
+                FilterInGamePaints();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load in-game paints.");
+            }
+        }
+
+        private void FilterInGamePaints()
+        {
+            InGamePaints.Clear();
+            var filtered = _allInGamePaints.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(InGamePaintSearchQuery))
+            {
+                filtered = filtered.Where(p => p.Name.Contains(InGamePaintSearchQuery, StringComparison.OrdinalIgnoreCase));
+            }
+            foreach (var paint in filtered)
+            {
+                InGamePaints.Add(paint);
             }
         }
 
@@ -509,6 +603,49 @@ namespace TextureSwapper.ViewModels
                     return;
                 }
 
+                // Sync ingame_paints.json
+                try
+                {
+                    string localInGamePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.InGamePaintsJson);
+                    string localInGameJson = File.Exists(localInGamePath) ? await File.ReadAllTextAsync(localInGamePath) : string.Empty;
+                    (List<InGamePaintModel>? remoteInGamePaints, string? remoteInGameJson) = await _updateService.FetchRemoteInGamePaintsFileAsync(Constants.InGamePaintsJson);
+                    if (remoteInGamePaints != null && remoteInGameJson != localInGameJson)
+                    {
+                        Log.Information("Remote ingame_paints.json is different from local. Updating...");
+                        await File.WriteAllTextAsync(localInGamePath, remoteInGameJson!);
+                        LoadInGamePaints();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to sync remote ingame_paints.json");
+                }
+
+                // Download missing in-game paint previews if needed
+                foreach (var paint in InGamePaints)
+                {
+                    if (!string.IsNullOrEmpty(paint.PreviewImage))
+                    {
+                        string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
+                        if (!File.Exists(localPreview))
+                        {
+                            string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
+                            try
+                            {
+                                Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
+                                Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
+                                HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
+                                byte[] data = await res.Content.ReadAsByteArrayAsync();
+                                await File.WriteAllBytesAsync(localPreview, data);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
+                            }
+                        }
+                    }
+                }
+
                 List<SkinModel> missingSkins = [.. _allSkins.Where(IsSkinMissingAssets)];
                 if (missingSkins.Count > 0)
                 {
@@ -525,8 +662,15 @@ namespace TextureSwapper.ViewModels
                     }
                 }
 
-                UpdateStatus = "Syncing skins from github...";
-                await Task.Delay(2500);
+                if (missingSkins.Count > 0)
+                {
+                    UpdateStatus = "Sync complete!";
+                    await Task.Delay(1000);
+                }
+                else
+                {
+                    UpdateStatus = string.Empty;
+                }
 
                 IsLoading = false;
             }
