@@ -67,10 +67,17 @@ namespace TextureSwapper.Services
         {
             try
             {
+                if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+                {
+                    string paintPath = Path.Combine(skin.SourceFolder, $"{skin.Name}.png").Replace("\\", "/");
+                    await EnsureFileExistsAsync(paintPath, skin.Name, skin.SourceFolder, onProgress);
+                    return;
+                }
+
                 await EnsureFileExistsAsync(skin.PreviewImage, "Preview", skin.SourceFolder, onProgress);
 
                 List<string> prefixes = ["details"];
-                if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) && !skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+                if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase))
                 {
                     prefixes.Add("lightmap");
                     prefixes.Add("alpha");
@@ -129,7 +136,11 @@ namespace TextureSwapper.Services
                 {
                     foreach (string alt in altExts)
                     {
-                        if (alt == ext) continue;
+                        if (alt == ext)
+                        {
+                            continue;
+                        }
+
                         string altPath = Path.ChangeExtension(exactLocalPath, alt);
                         if (File.Exists(altPath))
                         {

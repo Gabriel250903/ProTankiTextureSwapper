@@ -91,12 +91,20 @@ namespace TextureSwapper.Services
 
             try
             {
-                CopyAndRename(texturesDir, "details.png", cachePath, skin.DetailsTarget);
-                CopyAndRename(texturesDir, "lightmap.png", cachePath, skin.LightmapTarget);
-                CopyAndRename(texturesDir, "alpha.png", cachePath, skin.AlphaTarget);
-                if (!string.IsNullOrEmpty(skin.ModelTarget))
+                if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
-                    CopyAndRename(texturesDir, "object.3ds", cachePath, skin.ModelTarget);
+                    string paintFileName = $"{skin.Name}.png";
+                    CopyAndRename(texturesDir, paintFileName, cachePath, skin.DetailsTarget);
+                }
+                else
+                {
+                    CopyAndRename(texturesDir, "details.png", cachePath, skin.DetailsTarget);
+                    CopyAndRename(texturesDir, "lightmap.png", cachePath, skin.LightmapTarget);
+                    CopyAndRename(texturesDir, "alpha.png", cachePath, skin.AlphaTarget);
+                    if (!string.IsNullOrEmpty(skin.ModelTarget))
+                    {
+                        CopyAndRename(texturesDir, "object.3ds", cachePath, skin.ModelTarget);
+                    }
                 }
                 Log.Information("Skin {SkinName} applied successfully.", skin.Name);
             }

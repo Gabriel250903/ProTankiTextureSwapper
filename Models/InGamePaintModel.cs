@@ -13,7 +13,9 @@ namespace TextureSwapper.Models
             get
             {
                 if (string.IsNullOrEmpty(PreviewImage))
+                {
                     return null;
+                }
 
                 try
                 {

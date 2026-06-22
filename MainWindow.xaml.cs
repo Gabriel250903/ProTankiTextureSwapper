@@ -34,21 +34,20 @@ namespace TextureSwapper
 
         private void OnNavigationItemClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (sender is Wpf.Ui.Controls.NavigationViewItem selectedItem && MainTabControl != null)
+            if (sender is NavigationViewItem selectedItem && MainTabControl != null)
             {
-                // Deactivate other items
-                foreach (var item in RootNavigation.MenuItems)
+                foreach (object? item in RootNavigation.MenuItems)
                 {
-                    if (item is Wpf.Ui.Controls.NavigationViewItem navItem)
+                    if (item is NavigationViewItem navItem)
                     {
-                        navItem.IsActive = (navItem == selectedItem);
+                        navItem.IsActive = navItem == selectedItem;
                     }
                 }
-                foreach (var item in RootNavigation.FooterMenuItems)
+                foreach (object? item in RootNavigation.FooterMenuItems)
                 {
-                    if (item is Wpf.Ui.Controls.NavigationViewItem navItem)
+                    if (item is NavigationViewItem navItem)
                     {
-                        navItem.IsActive = (navItem == selectedItem);
+                        navItem.IsActive = navItem == selectedItem;
                     }
                 }
 
@@ -72,9 +71,9 @@ namespace TextureSwapper
                     case "Settings":
                         _mainViewModel.OpenSettingsCommand.Execute(null);
                         selectedItem.IsActive = false;
-                        foreach (var item in RootNavigation.MenuItems)
+                        foreach (object? item in RootNavigation.MenuItems)
                         {
-                            if (item is Wpf.Ui.Controls.NavigationViewItem navItem)
+                            if (item is NavigationViewItem navItem)
                             {
                                 int tabIndex = navItem.Tag?.ToString() switch
                                 {
@@ -83,7 +82,7 @@ namespace TextureSwapper
                                     "Backups" => 2,
                                     _ => -1
                                 };
-                                navItem.IsActive = (tabIndex == MainTabControl.SelectedIndex);
+                                navItem.IsActive = tabIndex == MainTabControl.SelectedIndex;
                             }
                         }
                         break;

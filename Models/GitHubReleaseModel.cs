@@ -1,17 +1,19 @@
+using System.Text.Json.Serialization;
+
 namespace TextureSwapper.Models
 {
     public class GitHubReleaseModel
     {
-        [System.Text.Json.Serialization.JsonPropertyName("tag_name")]
+        [JsonPropertyName("tag_name")]
         public string TagName { get; set; } = string.Empty;
 
-        [System.Text.Json.Serialization.JsonPropertyName("html_url")]
+        [JsonPropertyName("html_url")]
         public string HtmlUrl { get; set; } = string.Empty;
 
-        [System.Text.Json.Serialization.JsonPropertyName("body")]
+        [JsonPropertyName("body")]
         public string Body { get; set; } = string.Empty;
 
-        [System.Text.Json.Serialization.JsonPropertyName("assets")]
+        [JsonPropertyName("assets")]
         public List<GitHubAssetModel> Assets { get; set; } = [];
     }
 }

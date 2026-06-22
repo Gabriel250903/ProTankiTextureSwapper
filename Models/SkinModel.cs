@@ -25,17 +25,9 @@ namespace TextureSwapper.Models
         public string ItemName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
 
-        public string VersionText
-        {
-            get
-            {
-                if (Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase))
-                    return "LC";
-                if (Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase))
-                    return "XT";
-                return string.Empty;
-            }
-        }
+        public string VersionText => Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase)
+                    ? "LC"
+                    : Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase) ? "XT" : string.Empty;
         public string SourceFolder { get; set; } = string.Empty;
         public string DetailsTarget { get; set; } = string.Empty;
         public string LightmapTarget { get; set; } = string.Empty;
@@ -47,10 +39,15 @@ namespace TextureSwapper.Models
             get
             {
                 if (string.IsNullOrEmpty(PreviewImage))
+                {
                     return null;
+                }
+
                 string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
                 if (File.Exists(fullPath))
+                {
                     return fullPath;
+                }
 
                 string ext = Path.GetExtension(fullPath).ToLower();
                 string[] altExts = [".png", ".jpg", ".jpeg"];
@@ -58,10 +55,16 @@ namespace TextureSwapper.Models
                 {
                     foreach (string alt in altExts)
                     {
-                        if (alt == ext) continue;
+                        if (alt == ext)
+                        {
+                            continue;
+                        }
+
                         string altPath = Path.ChangeExtension(fullPath, alt);
                         if (File.Exists(altPath))
+                        {
                             return altPath;
+                        }
                     }
                 }
                 return null;

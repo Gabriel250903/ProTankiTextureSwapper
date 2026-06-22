@@ -170,12 +170,9 @@ namespace TextureSwapper.ViewModels
             BrowseCommand = new RelayCommand(ExecuteBrowse);
             SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ =>
             {
-                if (IsLoading) return false;
-                if (SelectedCategory == "Paints")
-                {
-                    return _allSkins.Any(s => s.IsSelected && s.Category == "Paints");
-                }
-                return _allSkins.Any(s => s.IsSelected && s.Category != "Paints");
+                return !IsLoading && (SelectedCategory == "Paints"
+                    ? _allSkins.Any(s => s.IsSelected && s.Category == "Paints")
+                    : _allSkins.Any(s => s.IsSelected && s.Category != "Paints"));
             });
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
@@ -235,15 +232,13 @@ namespace TextureSwapper.ViewModels
                     }
                 }
 
-                // Scan directory Textures/Paints/InGame for any new paint images
                 string inGameDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Textures", "Paints", "InGame");
                 if (Directory.Exists(inGameDir))
                 {
-                    string[] files = Directory.GetFiles(inGameDir, "*.*")
+                    string[] files = [.. Directory.GetFiles(inGameDir, "*.*")
                         .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
                                     f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                                    f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
-                        .ToArray();
+                                    f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))];
 
                     bool modified = false;
                     foreach (string file in files)
@@ -254,9 +249,13 @@ namespace TextureSwapper.ViewModels
                             string relativePreview = Path.Combine("Textures", "Paints", "InGame", Path.GetFileName(file)).Replace("\\", "/");
                             string targetUrl = "";
                             if (name.Equals("Tiger", StringComparison.OrdinalIgnoreCase))
+                            {
                                 targetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn";
+                            }
                             else if (name.Equals("Irbis", StringComparison.OrdinalIgnoreCase))
+                            {
                                 targetUrl = "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTYvMzE2NDQ3NTQzMTAwMzIvaW1hZ2UuanBn";
+                            }
 
                             list.Add(new InGamePaintModel
                             {
@@ -294,12 +293,12 @@ namespace TextureSwapper.ViewModels
         private void FilterInGamePaints()
         {
             InGamePaints.Clear();
-            var filtered = _allInGamePaints.AsEnumerable();
+            IEnumerable<InGamePaintModel> filtered = _allInGamePaints.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(InGamePaintSearchQuery))
             {
                 filtered = filtered.Where(p => p.Name.Contains(InGamePaintSearchQuery, StringComparison.OrdinalIgnoreCase));
             }
-            foreach (var paint in filtered)
+            foreach (InGamePaintModel? paint in filtered)
             {
                 InGamePaints.Add(paint);
             }
@@ -375,6 +374,7 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = $"Restoring from {SelectedBackup.DisplayName}...";
+                Log.Information("Restoring cache snapshot from backup: {BackupDisplayName} (Path: {BackupPath})", SelectedBackup.DisplayName, SelectedBackup.FullPath);
                 bool success = await Task.Run(() => _swapService.RestoreFromBackup(CachePath, SelectedBackup.FullPath));
                 if (success)
                 {
@@ -476,21 +476,20 @@ namespace TextureSwapper.ViewModels
                 string localSuppliesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.SuppliesSkinsJson);
                 string localPaintsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
 
-                var categories = new[]
-                {
+                (string Name, string LocalPath, string RemoteFileName)[] categories =
+                [
                     (Name: "Hulls", LocalPath: localHullsPath, RemoteFileName: Constants.HullsSkinsJson),
                     (Name: "Turrets", LocalPath: localTurretsPath, RemoteFileName: Constants.TurretsSkinsJson),
                     (Name: "Supplies", LocalPath: localSuppliesPath, RemoteFileName: Constants.SuppliesSkinsJson),
                     (Name: "Paints", LocalPath: localPaintsPath, RemoteFileName: Constants.PaintsSkinsJson)
-                };
+                ];
 
                 List<SkinModel> combinedSkins = [];
                 bool anyAssetsSynced = false;
 
-                foreach (var cat in categories)
+                foreach ((string? Name, string? LocalPath, string? RemoteFileName) in categories)
                 {
-                    // 1. Load local copy if exists
-                    string localJson = File.Exists(cat.LocalPath) ? await File.ReadAllTextAsync(cat.LocalPath) : string.Empty;
+                    string localJson = File.Exists(LocalPath) ? await File.ReadAllTextAsync(LocalPath) : string.Empty;
                     List<SkinModel> catSkins = [];
                     if (!string.IsNullOrEmpty(localJson))
                     {
@@ -500,33 +499,31 @@ namespace TextureSwapper.ViewModels
                         }
                         catch (JsonException ex)
                         {
-                            Log.Error(ex, $"Failed to deserialize local {cat.Name} skins.");
+                            Log.Error(ex, $"Failed to deserialize local {Name} skins.");
                         }
                     }
 
-                    // 2. Fetch remote DB
-                    UpdateStatus = $"Syncing {cat.Name.ToLower()} database...";
-                    (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsFileAsync(cat.RemoteFileName);
+                    UpdateStatus = $"Syncing {Name.ToLower()} database...";
+                    (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsFileAsync(RemoteFileName);
 
                     if (remoteSkins != null && remoteJson != localJson)
                     {
-                        Log.Information($"Remote {cat.RemoteFileName} is different from local. Updating...");
-                        await File.WriteAllTextAsync(cat.LocalPath, remoteJson!);
+                        Log.Information($"Remote {RemoteFileName} is different from local. Updating...");
+                        await File.WriteAllTextAsync(LocalPath, remoteJson!);
                         catSkins = remoteSkins;
                     }
 
-                    // 3. Check and sync missing assets for this category
-                    List<SkinModel> missing = catSkins.Where(IsSkinMissingAssets).ToList();
+                    List<SkinModel> missing = [.. catSkins.Where(IsSkinMissingAssets)];
                     if (missing.Count > 0)
                     {
                         anyAssetsSynced = true;
                         int completed = 0;
                         foreach (SkinModel skin in missing)
                         {
-                            UpdateStatus = $"Syncing {cat.Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...";
+                            UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...";
                             await _updateService.EnsureAssetsExistAsync(skin, p =>
                             {
-                                UpdateStatus = $"Syncing {cat.Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}";
+                                UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}";
                             });
                             skin.NotifyPreviewChanged();
                             completed++;
@@ -540,7 +537,6 @@ namespace TextureSwapper.ViewModels
                 InitializeCategories();
                 FilterItems();
 
-                // Now sync ingame_paints.json
                 try
                 {
                     string localInGamePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.InGamePaintsJson);
@@ -559,13 +555,12 @@ namespace TextureSwapper.ViewModels
                     Log.Error(ex, "Failed to sync remote ingame_paints.json");
                 }
 
-                // Download missing in-game paint previews if needed
                 int missingPreviewsCount = InGamePaints.Count(p => !string.IsNullOrEmpty(p.PreviewImage) && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p.PreviewImage.Replace("\\", "/"))));
                 if (missingPreviewsCount > 0)
                 {
                     anyAssetsSynced = true;
                     int completedPreviews = 0;
-                    foreach (var paint in InGamePaints)
+                    foreach (InGamePaintModel paint in InGamePaints)
                     {
                         if (!string.IsNullOrEmpty(paint.PreviewImage))
                         {
@@ -577,7 +572,7 @@ namespace TextureSwapper.ViewModels
                                 try
                                 {
                                     Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
-                                    Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
+                                    _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
                                     HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
                                     byte[] data = await res.Content.ReadAsByteArrayAsync();
                                     await File.WriteAllBytesAsync(localPreview, data);
@@ -675,7 +670,12 @@ namespace TextureSwapper.ViewModels
                 return true;
             }
 
-            string[] suffixes = (skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) || skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+            if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
                 ? ["details"]
                 : ["details", "lightmap", "alpha"];
 
@@ -689,7 +689,7 @@ namespace TextureSwapper.ViewModels
                     foreach (string file in matchingFiles)
                     {
                         string ext = Path.GetExtension(file).ToLower();
-                        if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                        if (ext is ".png" or ".jpg" or ".jpeg")
                         {
                             found = true;
                             break;
@@ -737,11 +737,18 @@ namespace TextureSwapper.ViewModels
 
             if (Categories.Any())
             {
-                SelectedCategory = !string.IsNullOrEmpty(currentCategory) && Categories.Contains(currentCategory)
+                string targetCategory = !string.IsNullOrEmpty(currentCategory) && Categories.Contains(currentCategory)
                     ? currentCategory
                     : (Settings.LastSelectedCategory != null && Categories.Contains(Settings.LastSelectedCategory))
                         ? Settings.LastSelectedCategory
                         : Categories.First();
+
+                if (targetCategory.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+                {
+                    targetCategory = SkinsCategories.FirstOrDefault() ?? Categories.First();
+                }
+
+                SelectedCategory = targetCategory;
             }
         }
 
@@ -854,6 +861,7 @@ namespace TextureSwapper.ViewModels
                 IsLoading = true;
                 if (selectedSkins.Count != 0)
                 {
+                    Log.Information("Starting batch texture swap for {Count} items in category '{Category}'", selectedSkins.Count, SelectedCategory);
                     if (SelectedCategory == "Paints")
                     {
                         if (SelectedInGamePaint == null)
@@ -862,7 +870,7 @@ namespace TextureSwapper.ViewModels
                             IsLoading = false;
                             return;
                         }
-                        foreach (var skin in selectedSkins)
+                        foreach (SkinModel skin in selectedSkins)
                         {
                             skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
                         }
@@ -885,7 +893,19 @@ namespace TextureSwapper.ViewModels
                 }
                 else if (SelectedSkin != null)
                 {
+                    if (SelectedCategory == "Paints")
+                    {
+                        if (SelectedInGamePaint == null)
+                        {
+                            await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
+                            IsLoading = false;
+                            return;
+                        }
+                        SelectedSkin.DetailsTarget = SelectedInGamePaint.TargetUrl;
+                    }
+
                     UpdateStatus = $"Applying {SelectedSkin.Name}...";
+                    Log.Information("Starting texture swap for single skin: {SkinName} (Category: {Category}, Item: {ItemName})", SelectedSkin.Name, SelectedSkin.Category, SelectedSkin.ItemName);
                     await Task.Run(() => _swapService.Swap(CachePath, SelectedSkin));
                     LoadBackups();
                     notificationTitle = "Success";
@@ -943,6 +963,7 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = "Restoring original textures...";
+                Log.Information("Restoring original game textures from 'Originals' backup folder to cache path: {CachePath}", CachePath);
                 bool restored = await Task.Run(() => _swapService.RestoreFullCache(CachePath));
                 if (restored)
                 {
@@ -1020,6 +1041,7 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = "Clearing ProTanki cache...";
+                Log.Information("Clearing all cache files at path: {CachePath}", CachePath);
                 await Task.Run(() => _swapService.ClearCache(CachePath));
                 notificationTitle = "Cache Cleared";
                 notificationMessage = "ProTanki cache has been emptied.";

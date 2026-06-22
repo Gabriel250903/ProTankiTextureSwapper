@@ -1,6 +1,8 @@
 using Serilog;
+using System.IO;
 using System.Reflection;
 using System.Windows.Input;
+using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 using TextureSwapper.Services;
@@ -35,9 +37,12 @@ namespace TextureSwapper.ViewModels
             {
                 if (Settings.MaxBackupRetentionDays != value)
                 {
+                    int oldVal = Settings.MaxBackupRetentionDays;
                     Settings.MaxBackupRetentionDays = value;
                     _settingsService.Save(Settings);
                     OnPropertyChanged();
+                    Log.Information("Settings changed: Max Backup Retention updated from {OldDays} to {NewDays} days.", oldVal, value);
+                    ExecuteRefreshLogs(null);
                 }
             }
         }
@@ -59,8 +64,17 @@ namespace TextureSwapper.ViewModels
             }
         }
 
+        private string _logContent = string.Empty;
+        public string LogContent
+        {
+            get => _logContent;
+            set => SetProperty(ref _logContent, value);
+        }
+
         public ICommand CheckForUpdatesCommand { get; }
         public ICommand ToggleThemeCommand { get; }
+        public ICommand RefreshLogsCommand { get; }
+        public ICommand OpenLogsFolderCommand { get; }
 
         public SettingsViewModel(AppSettings settings, SettingsService settingsService, MainViewModel mainViewModel)
         {
@@ -70,6 +84,50 @@ namespace TextureSwapper.ViewModels
 
             CheckForUpdatesCommand = new AsyncRelayCommand(ExecuteCheckForUpdates, _ => !IsLoading);
             ToggleThemeCommand = new RelayCommand(ExecuteToggleTheme);
+            RefreshLogsCommand = new RelayCommand(ExecuteRefreshLogs);
+            OpenLogsFolderCommand = new RelayCommand(ExecuteOpenLogsFolder);
+
+            ExecuteRefreshLogs(null);
+        }
+
+        private void ExecuteRefreshLogs(object? parameter)
+        {
+            try
+            {
+                string logFile = App.CurrentLogFilePath;
+                if (!string.IsNullOrEmpty(logFile) && File.Exists(logFile))
+                {
+                    using FileStream stream = new(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using StreamReader reader = new(stream);
+                    LogContent = reader.ReadToEnd();
+                    return;
+                }
+                LogContent = "No log file found.";
+            }
+            catch (Exception ex)
+            {
+                LogContent = $"Error reading log file: {ex.Message}";
+            }
+        }
+
+        private void ExecuteOpenLogsFolder(object? parameter)
+        {
+            try
+            {
+                string logFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.LogsDir);
+                if (Directory.Exists(logFolder))
+                {
+                    _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = logFolder,
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to open logs directory.");
+            }
         }
 
         private async Task ExecuteCheckForUpdates(object? parameter)
@@ -79,12 +137,18 @@ namespace TextureSwapper.ViewModels
                 IsLoading = true;
                 UpdateStatus = "Connecting to GitHub...";
                 LastCheckedTime = DateTime.Now.ToString("g");
+                Log.Information("User initiated manual app update check. Querying API...");
 
                 await _mainViewModel.PerformUpdateCheckAsync(p => UpdateStatus = p);
 
                 if (UpdateStatus == "Checking for updates...")
                 {
                     UpdateStatus = "You are up to date!";
+                    Log.Information("Manual app update check complete. App is already up to date.");
+                }
+                else
+                {
+                    Log.Information("Manual app update check complete. Status: {Status}", UpdateStatus);
                 }
             }
             catch (Exception ex)
@@ -97,6 +161,7 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = false;
                 _settingsService.Save(Settings);
+                ExecuteRefreshLogs(null);
             }
         }
 
@@ -108,6 +173,8 @@ namespace TextureSwapper.ViewModels
             ApplicationThemeManager.Apply(newTheme);
             Settings.Theme = newTheme;
             _settingsService.Save(Settings);
+            Log.Information("User toggled application theme from {OldTheme} to {NewTheme}.", currentTheme, newTheme);
+            ExecuteRefreshLogs(null);
         }
     }
 }

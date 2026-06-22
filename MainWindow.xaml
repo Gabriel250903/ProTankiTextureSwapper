@@ -104,7 +104,7 @@
                         Tag="Skins" />
                     <ui:NavigationViewItem
                         Click="OnNavigationItemClick"
-                        Content="Paints Swap"
+                        Content="Paints"
                         Icon="{ui:SymbolIcon PaintBrush24}"
                         Tag="Paints" />
                     <ui:NavigationViewItem
