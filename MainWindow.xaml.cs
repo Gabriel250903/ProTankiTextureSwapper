@@ -108,5 +108,18 @@ namespace TextureSwapper
             await Task.Delay(3000);
             ToastInfoBar.IsOpen = false;
         }
+
+        private void OnListSizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            if (e.WidthChanged && _mainViewModel != null)
+            {
+                double width = e.NewSize.Width;
+                int cols = (int)((width - 25) / 230);
+                if (cols < 1) cols = 1;
+                if (cols > 4) cols = 4;
+
+                _mainViewModel.UpdateColumns(cols);
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace TextureSwapper.ViewModels
         private BackupModel? _selectedBackup;
 
         public ObservableCollection<SkinModel> FilteredSkins { get; } = [];
+        public ObservableCollection<List<SkinModel>> FilteredSkinsRows { get; } = [];
         public ObservableCollection<string> Categories { get; } = [];
         public ObservableCollection<string> SkinsCategories { get; } = [];
         public ObservableCollection<string> ItemNames { get; } = [];
@@ -794,6 +795,35 @@ namespace TextureSwapper.ViewModels
             if (FilteredSkins.Any())
             {
                 SelectedSkin = FilteredSkins.First();
+            }
+
+            UpdateFilteredSkinsRows();
+        }
+
+        private int _currentColumns = 4;
+
+        public void UpdateColumns(int cols)
+        {
+            if (_currentColumns != cols)
+            {
+                _currentColumns = cols;
+                UpdateFilteredSkinsRows();
+            }
+        }
+
+        private void UpdateFilteredSkinsRows()
+        {
+            FilteredSkinsRows.Clear();
+            List<SkinModel>? currentChunk = null;
+            int chunkSize = _currentColumns;
+            for (int i = 0; i < FilteredSkins.Count; i++)
+            {
+                if (i % chunkSize == 0)
+                {
+                    currentChunk = [];
+                    FilteredSkinsRows.Add(currentChunk);
+                }
+                currentChunk?.Add(FilteredSkins[i]);
             }
         }
 

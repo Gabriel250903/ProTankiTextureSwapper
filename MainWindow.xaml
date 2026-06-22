@@ -24,6 +24,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <helpers:ImageThumbnailConverter x:Key="ImageThumbnailConverter" />
 
         <Style x:Key="StandardButtonStyle" TargetType="ui:Button">
             <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
@@ -233,77 +234,104 @@
                                                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                         </Grid>
 
-                                        <ScrollViewer Grid.Row="1" Margin="10,0,10,10">
-                                            <ItemsControl ItemsSource="{Binding FilteredSkins}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <WrapPanel />
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border
-                                                            Width="220"
-                                                            Margin="5"
-                                                            ClipToBounds="True"
-                                                            CornerRadius="12"
-                                                            Cursor="Hand">
-                                                            <Border.InputBindings>
-                                                                <MouseBinding
-                                                                    Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                    CommandParameter="{Binding}"
-                                                                    MouseAction="LeftClick" />
-                                                            </Border.InputBindings>
-                                                            <Border.Style>
-                                                                <Style TargetType="Border">
-                                                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-                                                                    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-                                                                    <Setter Property="BorderThickness" Value="1" />
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
-                                                                            <Setter Property="BorderThickness" Value="2" />
-                                                                        </DataTrigger>
-                                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                                            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-                                                                        </Trigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Border.Style>
-                                                            <Grid>
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="120" />
-                                                                    <RowDefinition Height="Auto" />
-                                                                </Grid.RowDefinitions>
-
+                                        <ListBox
+                                            Grid.Row="1"
+                                            Margin="10,0,10,10"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            ItemsSource="{Binding FilteredSkinsRows}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            SizeChanged="OnListSizeChanged"
+                                            VirtualizingStackPanel.IsVirtualizing="True"
+                                            VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                            <ListBox.ItemContainerStyle>
+                                                <Style TargetType="ListBoxItem">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Focusable" Value="False" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ItemsControl ItemsSource="{Binding}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
                                                                 <Border
-                                                                    Grid.Row="0"
+                                                                    Width="220"
+                                                                    Margin="5"
                                                                     ClipToBounds="True"
-                                                                    CornerRadius="12,12,0,0">
-                                                                    <Image
-                                                                        Width="150"
-                                                                        Height="150"
-                                                                        Opacity="0.9"
-                                                                        Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
-                                                                        Stretch="Uniform" />
-                                                                </Border>
+                                                                    CornerRadius="12"
+                                                                    Cursor="Hand">
+                                                                    <Border.InputBindings>
+                                                                        <MouseBinding
+                                                                            Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            CommandParameter="{Binding}"
+                                                                            MouseAction="LeftClick" />
+                                                                    </Border.InputBindings>
+                                                                    <Border.Style>
+                                                                        <Style TargetType="Border">
+                                                                            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                                            <Setter Property="BorderThickness" Value="1" />
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                                    <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                                                                                    <Setter Property="BorderThickness" Value="2" />
+                                                                                </DataTrigger>
+                                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                                </Trigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </Border.Style>
+                                                                    <Grid>
+                                                                        <Grid.RowDefinitions>
+                                                                            <RowDefinition Height="120" />
+                                                                            <RowDefinition Height="Auto" />
+                                                                        </Grid.RowDefinitions>
 
-                                                                <StackPanel Grid.Row="1" Margin="12,10">
-                                                                    <ui:TextBlock
-                                                                        FontSize="14"
-                                                                        FontWeight="SemiBold"
-                                                                        Text="{Binding Name}" />
-                                                                    <ui:TextBlock
-                                                                        FontTypography="Caption"
-                                                                        Opacity="0.6"
-                                                                        Text="{Binding VersionText}" />
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </ScrollViewer>
+                                                                        <Border
+                                                                            Grid.Row="0"
+                                                                            ClipToBounds="True"
+                                                                            CornerRadius="12,12,0,0">
+                                                                            <Image
+                                                                                Width="150"
+                                                                                Height="150"
+                                                                                Opacity="0.9"
+                                                                                Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}"
+                                                                                Stretch="Uniform" />
+                                                                        </Border>
+
+                                                                        <StackPanel Grid.Row="1" Margin="12,10">
+                                                                            <ui:TextBlock
+                                                                                FontSize="14"
+                                                                                FontWeight="SemiBold"
+                                                                                Text="{Binding Name}" />
+                                                                            <ui:TextBlock
+                                                                                FontTypography="Caption"
+                                                                                Opacity="0.6"
+                                                                                Text="{Binding VersionText}" />
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
                                     </Grid>
                                 </Border>
                             </Grid>
@@ -468,7 +496,7 @@
                                                             Grid.Row="0"
                                                             ClipToBounds="True"
                                                             CornerRadius="12,12,0,0">
-                                                            <Image Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}" Stretch="UniformToFill" />
+                                                            <Image Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}" Stretch="UniformToFill" />
                                                         </Border>
                                                         <ui:TextBlock
                                                             Grid.Row="1"
@@ -512,7 +540,7 @@
                                             FontTypography="Title"
                                             FontWeight="Bold"
                                             Text="{Binding SelectedInGamePaint.Name, StringFormat='Replace {0}'}" />
-                                        <ui:TextBlock Opacity="0.6" Text="Choose a custom texture to swap onto this paint." />
+                                        <ui:TextBlock Opacity="0.6" Text="Choose a custom paint to swap onto this paint. (NON-ANIMATED PAINTS)" />
                                     </StackPanel>
                                 </Grid>
 
@@ -535,75 +563,101 @@
                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                     BorderThickness="1"
                                     CornerRadius="12">
-                                    <ScrollViewer Margin="10">
-                                        <ItemsControl ItemsSource="{Binding FilteredSkins}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border
-                                                        Width="220"
-                                                        Margin="5"
-                                                        ClipToBounds="True"
-                                                        CornerRadius="12"
-                                                        Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding
-                                                                Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                CommandParameter="{Binding}"
-                                                                MouseAction="LeftClick" />
-                                                        </Border.InputBindings>
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-                                                                <Setter Property="BorderThickness" Value="1" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                        <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
-                                                                        <Setter Property="BorderThickness" Value="2" />
-                                                                    </DataTrigger>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Border.Style>
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="120" />
-                                                                <RowDefinition Height="Auto" />
-                                                            </Grid.RowDefinitions>
-
+                                    <ListBox
+                                        Margin="10"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ItemsSource="{Binding FilteredSkinsRows}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        SizeChanged="OnListSizeChanged"
+                                        VirtualizingStackPanel.IsVirtualizing="True"
+                                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Focusable" Value="False" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ItemsControl ItemsSource="{Binding}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
                                                             <Border
-                                                                Grid.Row="0"
+                                                                Width="220"
+                                                                Margin="5"
                                                                 ClipToBounds="True"
-                                                                CornerRadius="12,12,0,0">
-                                                                <Image
-                                                                    Opacity="0.9"
-                                                                    Source="{Binding FullPreviewPath, TargetNullValue={x:Null}, FallbackValue={x:Null}}"
-                                                                    Stretch="UniformToFill" />
-                                                            </Border>
+                                                                CornerRadius="12"
+                                                                Cursor="Hand">
+                                                                <Border.InputBindings>
+                                                                    <MouseBinding
+                                                                        Command="{Binding DataContext.ToggleSkinSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        MouseAction="LeftClick" />
+                                                                </Border.InputBindings>
+                                                                <Border.Style>
+                                                                    <Style TargetType="Border">
+                                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                                        <Setter Property="BorderThickness" Value="1" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                                                                                <Setter Property="BorderThickness" Value="2" />
+                                                                            </DataTrigger>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <Grid>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition Height="120" />
+                                                                        <RowDefinition Height="Auto" />
+                                                                    </Grid.RowDefinitions>
 
-                                                            <StackPanel Grid.Row="1" Margin="12,10">
-                                                                <ui:TextBlock
-                                                                    FontSize="14"
-                                                                    FontWeight="SemiBold"
-                                                                    Text="{Binding Name}" />
-                                                                <ui:TextBlock
-                                                                    FontTypography="Caption"
-                                                                    Opacity="0.6"
-                                                                    Text="Paint Texture" />
-                                                            </StackPanel>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </ScrollViewer>
+                                                                    <Border
+                                                                        Grid.Row="0"
+                                                                        ClipToBounds="True"
+                                                                        CornerRadius="12,12,0,0">
+                                                                        <Image
+                                                                            Opacity="0.9"
+                                                                            Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}"
+                                                                            Stretch="UniformToFill" />
+                                                                    </Border>
+
+                                                                    <StackPanel Grid.Row="1" Margin="12,10">
+                                                                        <ui:TextBlock
+                                                                            FontSize="14"
+                                                                            FontWeight="SemiBold"
+                                                                            Text="{Binding Name}" />
+                                                                        <ui:TextBlock
+                                                                            FontTypography="Caption"
+                                                                            Opacity="0.6"
+                                                                            Text="Paint Texture" />
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
                                 </Border>
 
                                 <Border
