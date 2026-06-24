@@ -5,7 +5,7 @@
     "Name": "Repair Kit New",
     "SourceFolder": "Textures/Supplies/RepairKit/New",
     "PreviewImage": "Textures/Supplies/RepairKit/New/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMTY1NDUxMjEzNTQxMi9ib3hfbWVkLmpwZw=="
   },
   {
     "Category": "Supplies",
@@ -21,7 +21,23 @@
     "Name": "Double Armor New",
     "SourceFolder": "Textures/Supplies/DoubleArmor/New",
     "PreviewImage": "Textures/Supplies/DoubleArmor/New/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTY1NDUxMjEzNTMzMS9ib3hfYXJtci5qcGc="
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage NY2013",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/NY2013",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/NY2013/details.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Armor",
+    "Name": "Double Armor NY2013",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/NY2013",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/NY2013/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTY1NDUxMjEzNTMzMS9ib3hfYXJtci5qcGc="
   },
   {
     "Category": "Supplies",
@@ -29,7 +45,15 @@
     "Name": "Speed Boost New",
     "SourceFolder": "Textures/Supplies/SpeedBoost/New",
     "PreviewImage": "Textures/Supplies/SpeedBoost/New/details.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTY1NDUxMjEzNTMyMi9ib3hfc2hvdC5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMTY1NDUxMjEzNTMzNy9ib3hfbm9zLmpwZw=="
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost NY2013",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/NY2013",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/NY2013/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMTY1NDUxMjEzNTMzNy9ib3hfbm9zLmpwZw=="
   },
   {
     "Category": "Supplies",
@@ -39,5 +63,21 @@
     "PreviewImage": "Textures/Supplies/GoldBox/New/details.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTczMjI1NzQ3NjcwNi9ib3guanBn",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTY1NDUxMjEzNTMzMS9vYmplY3QuM2Rz"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box NY2013",
+    "SourceFolder": "Textures/Supplies/GoldBox/NY2013",
+    "PreviewImage": "Textures/Supplies/GoldBox/NY2013/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTczMjI1NzQ3NjcwNi9ib3guanBn"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box NY2013",
+    "SourceFolder": "Textures/Supplies/CrystalBox/NY2013",
+    "PreviewImage": "Textures/Supplies/CrystalBox/NY2013/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMTY1NDUxMjEzNTM3NC9ib3guanBn"
   }
 ]
