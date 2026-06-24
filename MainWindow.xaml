@@ -554,7 +554,7 @@
                                         Width="300"
                                         Icon="{ui:SymbolIcon Search24}"
                                         PlaceholderText="Search custom paints..."
-                                        Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding CustomPaintSearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
                                 <Border

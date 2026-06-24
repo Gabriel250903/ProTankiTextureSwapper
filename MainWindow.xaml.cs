@@ -115,8 +115,15 @@ namespace TextureSwapper
             {
                 double width = e.NewSize.Width;
                 int cols = (int)((width - 25) / 230);
-                if (cols < 1) cols = 1;
-                if (cols > 4) cols = 4;
+                if (cols < 1)
+                {
+                    cols = 1;
+                }
+
+                if (cols > 4)
+                {
+                    cols = 4;
+                }
 
                 _mainViewModel.UpdateColumns(cols);
             }

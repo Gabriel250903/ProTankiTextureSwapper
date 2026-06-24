@@ -27,7 +27,7 @@ namespace TextureSwapper.ViewModels
         private SkinModel? _selectedSkin;
         private bool _isLoading;
         private string _updateStatus = string.Empty;
-        private readonly string _searchQuery = string.Empty;
+        private string _searchQuery = string.Empty;
         private BackupModel? _selectedBackup;
 
         public ObservableCollection<SkinModel> FilteredSkins { get; } = [];
@@ -81,13 +81,26 @@ namespace TextureSwapper.ViewModels
 
         public string SearchQuery
         {
-            get => Settings.LastSearchQuery ?? string.Empty;
+            get => _searchQuery;
             set
             {
-                Settings.LastSearchQuery = value;
-                _settingsService.Save(Settings);
-                OnPropertyChanged();
-                FilterSkins();
+                if (SetProperty(ref _searchQuery, value))
+                {
+                    FilterSkins();
+                }
+            }
+        }
+
+        private string _customPaintSearchQuery = string.Empty;
+        public string CustomPaintSearchQuery
+        {
+            get => _customPaintSearchQuery;
+            set
+            {
+                if (SetProperty(ref _customPaintSearchQuery, value))
+                {
+                    FilterSkins();
+                }
             }
         }
 
@@ -780,12 +793,14 @@ namespace TextureSwapper.ViewModels
         private void FilterSkins()
         {
             FilteredSkins.Clear();
+            string currentQuery = SelectedCategory == "Paints" ? CustomPaintSearchQuery : SearchQuery;
+
             IEnumerable<SkinModel> matchingSkins = _allSkins.Where(s =>
                 s.Category == SelectedCategory &&
                 (SelectedItemName == "All models" || s.ItemName == SelectedItemName) &&
-                (string.IsNullOrWhiteSpace(SearchQuery) ||
-                 s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                 s.ItemName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)));
+                (string.IsNullOrWhiteSpace(currentQuery) ||
+                 s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase) ||
+                 s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)));
 
             foreach (SkinModel skin in matchingSkins)
             {
@@ -863,11 +878,6 @@ namespace TextureSwapper.ViewModels
 
         private async Task ExecuteSwap(object? parameter)
         {
-            if (!await EnsureSafeToOperate())
-            {
-                return;
-            }
-
             List<SkinModel> selectedSkins = [.. _allSkins.Where(s => s.IsSelected)];
 
             if (selectedSkins.Count == 0 && SelectedSkin == null)
@@ -875,13 +885,6 @@ namespace TextureSwapper.ViewModels
                 await _notificationService.ShowAsync("Error", "Please select at least one skin first.", ControlAppearance.Danger);
                 return;
             }
-
-            if (string.IsNullOrEmpty(CachePath) || !Directory.Exists(CachePath))
-            {
-                await _notificationService.ShowAsync("Error", "Invalid cache path.", ControlAppearance.Danger);
-                return;
-            }
-
             string notificationTitle = string.Empty;
             string notificationMessage = string.Empty;
             ControlAppearance notificationAppearance = ControlAppearance.Info;
@@ -889,65 +892,55 @@ namespace TextureSwapper.ViewModels
             try
             {
                 IsLoading = true;
+
+                List<SkinModel> skinsToApply = [];
                 if (selectedSkins.Count != 0)
                 {
-                    Log.Information("Starting batch texture swap for {Count} items in category '{Category}'", selectedSkins.Count, SelectedCategory);
-                    if (SelectedCategory == "Paints")
-                    {
-                        if (SelectedInGamePaint == null)
-                        {
-                            await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
-                            IsLoading = false;
-                            return;
-                        }
-                        foreach (SkinModel skin in selectedSkins)
-                        {
-                            skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
-                        }
-                    }
-
-                    string skinMessage = selectedSkins.Count > 1 ? "skins" : "skin";
-                    string textureMessage = selectedSkins.Count > 1 ? "textures" : "texture";
-
-                    UpdateStatus = $"Applying {selectedSkins.Count} {textureMessage}...";
-                    await Task.Run(() => _swapService.SwapBatch(CachePath, selectedSkins));
-                    LoadBackups();
-                    notificationTitle = "Success";
-                    notificationMessage = $"{selectedSkins.Count} {skinMessage} applied successfully!";
-                    notificationAppearance = ControlAppearance.Success;
-
-                    foreach (SkinModel skin in _allSkins)
-                    {
-                        skin.IsSelected = false;
-                    }
+                    skinsToApply.AddRange(selectedSkins);
                 }
                 else if (SelectedSkin != null)
                 {
-                    if (SelectedCategory == "Paints")
-                    {
-                        if (SelectedInGamePaint == null)
-                        {
-                            await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
-                            IsLoading = false;
-                            return;
-                        }
-                        SelectedSkin.DetailsTarget = SelectedInGamePaint.TargetUrl;
-                    }
-
-                    UpdateStatus = $"Applying {SelectedSkin.Name}...";
-                    Log.Information("Starting texture swap for single skin: {SkinName} (Category: {Category}, Item: {ItemName})", SelectedSkin.Name, SelectedSkin.Category, SelectedSkin.ItemName);
-                    await Task.Run(() => _swapService.Swap(CachePath, SelectedSkin));
-                    LoadBackups();
-                    notificationTitle = "Success";
-                    notificationMessage = $"{SelectedSkin.Name} applied successfully!";
-                    notificationAppearance = ControlAppearance.Success;
+                    skinsToApply.Add(SelectedSkin);
                 }
 
-                string countSkins = selectedSkins.Count < 2 ? "skin" : "skins";
+                if (SelectedCategory == "Paints")
+                {
+                    if (SelectedInGamePaint == null)
+                    {
+                        await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
+                        IsLoading = false;
+                        return;
+                    }
+                    foreach (SkinModel skin in skinsToApply)
+                    {
+                        skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
+                    }
+                }
+
+                string skinMessage = skinsToApply.Count > 1 ? "skins" : "skin";
+                string textureMessage = skinsToApply.Count > 1 ? "textures" : "texture";
+
+
+                UpdateStatus = $"Applying {skinsToApply.Count} {textureMessage} to cache...";
+                Log.Information("Writing {Count} skins directly to cache disk path: {Path}", skinsToApply.Count, CachePath);
+
+                await Task.Run(() => _swapService.SwapBatch(CachePath, skinsToApply));
+                LoadBackups();
+
+                notificationTitle = "Success";
+                notificationMessage = $"{skinsToApply.Count} {skinMessage} applied successfully!";
+                notificationAppearance = ControlAppearance.Success;
+
+
+                foreach (SkinModel skin in _allSkins)
+                {
+                    skin.IsSelected = false;
+                }
+
                 if (!string.IsNullOrEmpty(notificationTitle) && notificationAppearance == ControlAppearance.Success)
                 {
-                    UpdateStatus = $"Finalizing applying {selectedSkins.Count} {countSkins}...";
-                    await Task.Delay(2500);
+                    UpdateStatus = $"Finalizing applying {skinsToApply.Count} {skinMessage}...";
+                    await Task.Delay(1500);
                 }
             }
             catch (Exception ex)
@@ -974,17 +967,6 @@ namespace TextureSwapper.ViewModels
 
         private async Task ExecuteRestore(object? parameter)
         {
-            if (!await EnsureSafeToOperate())
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(CachePath) || !Directory.Exists(CachePath))
-            {
-                await _notificationService.ShowAsync("Error", "Invalid cache path.", ControlAppearance.Danger);
-                return;
-            }
-
             string notificationTitle = string.Empty;
             string notificationMessage = string.Empty;
             ControlAppearance notificationAppearance = ControlAppearance.Info;
@@ -992,6 +974,7 @@ namespace TextureSwapper.ViewModels
             try
             {
                 IsLoading = true;
+
                 UpdateStatus = "Restoring original textures...";
                 Log.Information("Restoring original game textures from 'Originals' backup folder to cache path: {CachePath}", CachePath);
                 bool restored = await Task.Run(() => _swapService.RestoreFullCache(CachePath));
@@ -1008,11 +991,8 @@ namespace TextureSwapper.ViewModels
                     notificationAppearance = ControlAppearance.Info;
                 }
 
-                if (!string.IsNullOrEmpty(notificationTitle))
-                {
-                    UpdateStatus = "Original textures are being restored...";
-                    await Task.Delay(2500);
-                }
+
+
             }
             catch (Exception ex)
             {
