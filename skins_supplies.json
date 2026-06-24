@@ -9,6 +9,14 @@
   },
   {
     "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit NY2013",
+    "SourceFolder": "Textures/Supplies/RepairKit/NY2013",
+    "PreviewImage": "Textures/Supplies/RepairKit/NY2013/details.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMTY1NDUxMjEzNTQxMi9ib3hfbWVkLmpwZw=="
+  },
+  {
+    "Category": "Supplies",
     "ItemName": "Double Damage",
     "Name": "Double Damage New",
     "SourceFolder": "Textures/Supplies/DoubleDamage/New",
