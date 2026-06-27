@@ -461,7 +461,7 @@ namespace TextureSwapper.ViewModels
                     };
 
                     MessageBoxResult result = await messageBox.ShowDialogAsync();
-                    if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                    if (result == MessageBoxResult.Primary)
                     {
                         GitHubAssetModel? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
                         if (asset != null)
@@ -565,7 +565,7 @@ namespace TextureSwapper.ViewModels
                                     {
                                         UpdateStatus = $"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})...";
                                     }
-                                    semaphore.Release();
+                                    _ = semaphore.Release();
                                 }
                             }));
                         }
@@ -648,7 +648,7 @@ namespace TextureSwapper.ViewModels
                                 {
                                     UpdateStatus = $"Syncing in-game paints ({currentCompleted}/{missingPreviewsCount})...";
                                 }
-                                semaphore.Release();
+                                _ = semaphore.Release();
                             }
                         }));
                     }
@@ -994,11 +994,11 @@ namespace TextureSwapper.ViewModels
                     notificationTitle = "Success";
                     notificationMessage = $"{skinsToApply.Count} {skinMessage} applied successfully!";
                     notificationAppearance = ControlAppearance.Success;
-                }
 
-                foreach (SkinModel skin in _allSkins)
-                {
-                    skin.IsSelected = false;
+                    foreach (SkinModel skin in _allSkins)
+                    {
+                        skin.IsSelected = false;
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(notificationTitle) && notificationAppearance == ControlAppearance.Success)

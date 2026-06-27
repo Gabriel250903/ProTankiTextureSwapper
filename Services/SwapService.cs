@@ -123,15 +123,9 @@ namespace TextureSwapper.Services
             if (missingTargets.Count != 0)
             {
                 Log.Error("Missing target files in cache for {SkinName}", skin.Name);
-                if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName))
-                {
-                    return $"Paint:{inGamePaintName}";
-                }
-                if (skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase))
-                {
-                    return "NotCachedSupplies";
-                }
-                return "NotCached";
+                return skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName)
+                    ? $"Paint:{inGamePaintName}"
+                    : skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) ? "NotCachedSupplies" : "NotCached";
             }
 
             try

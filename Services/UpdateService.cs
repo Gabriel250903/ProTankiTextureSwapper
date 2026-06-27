@@ -159,11 +159,12 @@ namespace TextureSwapper.Services
                 }
             }
 
-            string fileNameWithDefaultExtension = string.Empty;
-            string normalizedRelativePath = string.Empty;
             string downloadLocalPath = string.Empty;
             byte[]? data = null;
 
+
+            string fileNameWithDefaultExtension;
+            string normalizedRelativePath;
             if (!string.IsNullOrEmpty(exactRelativePath))
             {
                 fileNameWithDefaultExtension = Path.GetFileName(exactRelativePath);
