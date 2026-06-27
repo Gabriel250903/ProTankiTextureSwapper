@@ -74,23 +74,67 @@ namespace TextureSwapper.Services
             }
         }
 
-        public void Swap(string cachePath, SkinModel skin)
+        public string? Swap(string cachePath, SkinModel skin, string? inGamePaintName = null)
         {
             Log.Information("Applying skin: {SkinName}", skin.Name);
 
             if (!Directory.Exists(cachePath))
             {
                 Log.Error("Cache directory not found: {CachePath}", cachePath);
-                throw new DirectoryNotFoundException("Cache directory not found.");
+                return "Cache directory not found.";
             }
 
-            EnsureOriginalsBackup(cachePath, skin);
-            SelectiveBackup(cachePath, skin);
+            List<string> missingTargets = [];
+            if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrEmpty(skin.DetailsTarget))
+                {
+                    string path = FileHelper.GetSafePath(cachePath, skin.DetailsTarget);
+                    if (!File.Exists(path))
+                    {
+                        missingTargets.Add(skin.DetailsTarget);
+                    }
+                }
+            }
+            else
+            {
+                string[] requiredTargets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+                foreach (string target in requiredTargets)
+                {
+                    if (!string.IsNullOrEmpty(target))
+                    {
+                        string path = FileHelper.GetSafePath(cachePath, target);
+                        if (!File.Exists(path))
+                        {
+                            missingTargets.Add(target);
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(skin.ModelTarget))
+                {
+                    string path = FileHelper.GetSafePath(cachePath, skin.ModelTarget);
+                    if (!File.Exists(path))
+                    {
+                        missingTargets.Add(skin.ModelTarget);
+                    }
+                }
+            }
 
-            string texturesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, skin.SourceFolder);
+            if (missingTargets.Count != 0)
+            {
+                Log.Error("Missing target files in cache for {SkinName}", skin.Name);
+                return skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName)
+                    ? $"Paint:{inGamePaintName}"
+                    : "NotCached";
+            }
 
             try
             {
+                EnsureOriginalsBackup(cachePath, skin);
+                SelectiveBackup(cachePath, skin);
+
+                string texturesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, skin.SourceFolder);
+
                 if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
                     string paintFileName = $"{skin.Name}.png";
@@ -107,36 +151,74 @@ namespace TextureSwapper.Services
                     }
                 }
                 Log.Information("Skin {SkinName} applied successfully.", skin.Name);
+                return null;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred during skin swap for {SkinName}.", skin.Name);
-                throw;
+                return $"Error: {ex.Message}";
             }
         }
 
-        public void SwapBatch(string cachePath, IEnumerable<SkinModel> skins)
+        public string? SwapBatch(string cachePath, IEnumerable<SkinModel> skins, string? inGamePaintName = null)
         {
             Log.Information("Starting batch swap for {Count} skins.", skins.Count());
 
             if (!Directory.Exists(cachePath))
             {
                 Log.Error("Cache directory not found: {CachePath}", cachePath);
-                throw new DirectoryNotFoundException("Cache directory not found.");
+                return "Cache directory not found.";
             }
+
+            List<string> notCachedSkins = [];
+            List<string> notCachedPaints = [];
+            List<string> otherFailures = [];
 
             foreach (SkinModel skin in skins)
             {
-                try
+                string? result = Swap(cachePath, skin, inGamePaintName);
+                if (result != null)
                 {
-                    Swap(cachePath, skin);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to apply skin {SkinName} during batch process.", skin.Name);
+                    if (result == "NotCached")
+                    {
+                        notCachedSkins.Add(skin.Name);
+                    }
+                    else if (result.StartsWith("Paint:"))
+                    {
+                        string paintName = result[6..];
+                        if (!notCachedPaints.Contains(paintName))
+                        {
+                            notCachedPaints.Add(paintName);
+                        }
+                    }
+                    else
+                    {
+                        otherFailures.Add($"{skin.Name} ({result})");
+                    }
                 }
             }
+
+            List<string> errorMessages = [];
+            List<string> itemsToEquip = [.. notCachedSkins, .. notCachedPaints.Select(p => $"Paint '{p}'")];
+
+            if (itemsToEquip.Count != 0)
+            {
+                string list = string.Join("\n", itemsToEquip.Select(item => $"- {item}"));
+                errorMessages.Add($"Please open ProTanki and equip the following item(s) first to cache them:\n{list}");
+            }
+
+            if (otherFailures.Count != 0)
+            {
+                errorMessages.Add("Unexpected failures:\n" + string.Join("\n", otherFailures.Select(f => $"- {f}")));
+            }
+
+            if (errorMessages.Count != 0)
+            {
+                return string.Join("\n\n", errorMessages);
+            }
+
             Log.Information("Batch swap completed.");
+            return null;
         }
 
         public bool RestoreFullCache(string cachePath)

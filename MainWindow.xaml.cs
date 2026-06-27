@@ -1,5 +1,7 @@
+using System.Windows;
 using TextureSwapper.Services;
 using TextureSwapper.ViewModels;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper
@@ -17,7 +19,7 @@ namespace TextureSwapper
 
             DataContext = _mainViewModel;
 
-            Wpf.Ui.Appearance.ApplicationThemeManager.Apply(_mainViewModel.Settings.Theme);
+            ApplicationThemeManager.Apply(_mainViewModel.Settings.Theme);
 
             InitializeComponent();
         }
@@ -92,24 +94,32 @@ namespace TextureSwapper
 
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {
-            ToastInfoBar.Title = title;
-            ToastInfoBar.Message = message;
-            ToastInfoBar.Severity = appearance switch
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                ControlAppearance.Primary => InfoBarSeverity.Informational,
-                ControlAppearance.Success => InfoBarSeverity.Success,
-                ControlAppearance.Danger => InfoBarSeverity.Error,
-                ControlAppearance.Caution => InfoBarSeverity.Warning,
-                ControlAppearance.Info => InfoBarSeverity.Informational,
-                _ => InfoBarSeverity.Informational
-            };
+                ToastInfoBar.Title = title;
+                ToastInfoBar.Message = message;
+                ToastInfoBar.Severity = appearance switch
+                {
+                    ControlAppearance.Primary => InfoBarSeverity.Informational,
+                    ControlAppearance.Success => InfoBarSeverity.Success,
+                    ControlAppearance.Danger => InfoBarSeverity.Error,
+                    ControlAppearance.Caution => InfoBarSeverity.Warning,
+                    ControlAppearance.Info => InfoBarSeverity.Informational,
+                    _ => InfoBarSeverity.Informational
+                };
 
-            ToastInfoBar.IsOpen = true;
+                ToastInfoBar.IsOpen = true;
+            });
+
             await Task.Delay(3000);
-            ToastInfoBar.IsOpen = false;
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ToastInfoBar.IsOpen = false;
+            });
         }
 
-        private void OnListSizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        private void OnListSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.WidthChanged && _mainViewModel != null)
             {

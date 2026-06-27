@@ -924,13 +924,21 @@ namespace TextureSwapper.ViewModels
                 UpdateStatus = $"Applying {skinsToApply.Count} {textureMessage} to cache...";
                 Log.Information("Writing {Count} skins directly to cache disk path: {Path}", skinsToApply.Count, CachePath);
 
-                await Task.Run(() => _swapService.SwapBatch(CachePath, skinsToApply));
-                LoadBackups();
-
-                notificationTitle = "Success";
-                notificationMessage = $"{skinsToApply.Count} {skinMessage} applied successfully!";
-                notificationAppearance = ControlAppearance.Success;
-
+                string? inGamePaintName = SelectedCategory == "Paints" ? SelectedInGamePaint?.Name : null;
+                string? error = await Task.Run(() => _swapService.SwapBatch(CachePath, skinsToApply, inGamePaintName));
+                if (error != null)
+                {
+                    notificationTitle = "Error";
+                    notificationMessage = error;
+                    notificationAppearance = ControlAppearance.Danger;
+                }
+                else
+                {
+                    LoadBackups();
+                    notificationTitle = "Success";
+                    notificationMessage = $"{skinsToApply.Count} {skinMessage} applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+                }
 
                 foreach (SkinModel skin in _allSkins)
                 {
