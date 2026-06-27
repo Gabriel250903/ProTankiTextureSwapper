@@ -532,16 +532,45 @@ namespace TextureSwapper.ViewModels
                     {
                         anyAssetsSynced = true;
                         int completed = 0;
+                        object progressLock = new();
+                        using SemaphoreSlim semaphore = new(5);
+                        List<Task> downloadTasks = [];
+
                         foreach (SkinModel skin in missing)
                         {
-                            UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...";
-                            await _updateService.EnsureAssetsExistAsync(skin, p =>
+                            downloadTasks.Add(Task.Run(async () =>
                             {
-                                UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}";
-                            });
-                            skin.NotifyPreviewChanged();
-                            completed++;
+                                await semaphore.WaitAsync();
+                                try
+                                {
+                                    lock (progressLock)
+                                    {
+                                        UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...";
+                                    }
+
+                                    await _updateService.EnsureAssetsExistAsync(skin, p =>
+                                    {
+                                        lock (progressLock)
+                                        {
+                                            UpdateStatus = $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}";
+                                        }
+                                    });
+
+                                    skin.NotifyPreviewChanged();
+                                }
+                                finally
+                                {
+                                    int currentCompleted = Interlocked.Increment(ref completed);
+                                    lock (progressLock)
+                                    {
+                                        UpdateStatus = $"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})...";
+                                    }
+                                    semaphore.Release();
+                                }
+                            }));
                         }
+
+                        await Task.WhenAll(downloadTasks);
                     }
 
                     combinedSkins.AddRange(catSkins);
@@ -574,31 +603,57 @@ namespace TextureSwapper.ViewModels
                 {
                     anyAssetsSynced = true;
                     int completedPreviews = 0;
+                    object progressLock = new();
+                    using SemaphoreSlim semaphore = new(10);
+                    List<Task> downloadTasks = [];
+
                     foreach (InGamePaintModel paint in InGamePaints)
                     {
-                        if (!string.IsNullOrEmpty(paint.PreviewImage))
+                        if (string.IsNullOrEmpty(paint.PreviewImage))
                         {
-                            string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
-                            if (!File.Exists(localPreview))
-                            {
-                                UpdateStatus = $"Syncing in-game paints ({completedPreviews + 1}/{missingPreviewsCount}): {paint.Name}...";
-                                string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
-                                try
-                                {
-                                    Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
-                                    _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
-                                    HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
-                                    byte[] data = await res.Content.ReadAsByteArrayAsync();
-                                    await File.WriteAllBytesAsync(localPreview, data);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
-                                }
-                                completedPreviews++;
-                            }
+                            continue;
                         }
+
+                        string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
+                        if (File.Exists(localPreview))
+                        {
+                            continue;
+                        }
+
+                        string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
+                        downloadTasks.Add(Task.Run(async () =>
+                        {
+                            await semaphore.WaitAsync();
+                            try
+                            {
+                                lock (progressLock)
+                                {
+                                    UpdateStatus = $"Syncing in-game paints ({completedPreviews + 1}/{missingPreviewsCount}): {paint.Name}...";
+                                }
+
+                                Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
+                                _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
+                                HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
+                                byte[] data = await res.Content.ReadAsByteArrayAsync();
+                                await File.WriteAllBytesAsync(localPreview, data);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
+                            }
+                            finally
+                            {
+                                int currentCompleted = Interlocked.Increment(ref completedPreviews);
+                                lock (progressLock)
+                                {
+                                    UpdateStatus = $"Syncing in-game paints ({currentCompleted}/{missingPreviewsCount})...";
+                                }
+                                semaphore.Release();
+                            }
+                        }));
                     }
+
+                    await Task.WhenAll(downloadTasks);
                 }
 
                 if (anyAssetsSynced)
@@ -686,7 +741,8 @@ namespace TextureSwapper.ViewModels
 
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
             {
-                return false;
+                string paintFile = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"), $"{skin.Name}.png");
+                return !File.Exists(paintFile);
             }
 
             string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)

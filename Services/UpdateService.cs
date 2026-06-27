@@ -1,5 +1,6 @@
 using Serilog;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
@@ -31,8 +32,16 @@ namespace TextureSwapper.Services
                 try
                 {
                     HttpResponseMessage response = await _httpClient.GetAsync(url);
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new HttpRequestException($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
+                    }
                     _ = response.EnsureSuccessStatusCode();
                     return response;
+                }
+                catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    Log.Warning($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
                 }
                 catch (HttpRequestException ex) when (i < maxRetries - 1)
                 {
@@ -69,8 +78,7 @@ namespace TextureSwapper.Services
             {
                 if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
-                    string paintPath = Path.Combine(skin.SourceFolder, $"{skin.Name}.png").Replace("\\", "/");
-                    await EnsureFileExistsAsync(paintPath, skin.Name, skin.SourceFolder, onProgress);
+                    await EnsureFileExistsAsync(string.Empty, skin.Name, skin.SourceFolder, onProgress);
                     return;
                 }
 
@@ -151,22 +159,62 @@ namespace TextureSwapper.Services
                 }
             }
 
-            string fileNameWithDefaultExtension = !string.IsNullOrEmpty(exactRelativePath)
-                ? Path.GetFileName(exactRelativePath)
-                : $"{filePrefix}.png";
+            string fileNameWithDefaultExtension = string.Empty;
+            string normalizedRelativePath = string.Empty;
+            string downloadLocalPath = string.Empty;
+            byte[]? data = null;
 
-            string normalizedRelativePath = Path.Combine(sourceFolder, fileNameWithDefaultExtension).Replace("\\", "/");
-            string downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
+            if (!string.IsNullOrEmpty(exactRelativePath))
+            {
+                fileNameWithDefaultExtension = Path.GetFileName(exactRelativePath);
+                normalizedRelativePath = exactRelativePath.Replace("\\", "/");
+                downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
 
-            Log.Information("Asset missing. Starting download: {Path}", downloadLocalPath);
-            string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
-            onProgress?.Invoke($"Downloading {fileNameWithDefaultExtension}...");
+                Log.Information("Asset missing. Starting download: {Path}", downloadLocalPath);
+                string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
+                onProgress?.Invoke($"Downloading {fileNameWithDefaultExtension}...");
+
+                _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
+                HttpResponseMessage response = await GetWithRetryAsync(url);
+                data = await response.Content.ReadAsByteArrayAsync();
+            }
+            else
+            {
+                string[] extensionsToTry = [".png", ".jpg", ".jpeg"];
+                foreach (string ext in extensionsToTry)
+                {
+                    fileNameWithDefaultExtension = $"{filePrefix}{ext}";
+                    normalizedRelativePath = Path.Combine(sourceFolder, fileNameWithDefaultExtension).Replace("\\", "/");
+                    downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
+                    string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
+
+                    try
+                    {
+                        Log.Information("Trying download: {Path}", downloadLocalPath);
+                        HttpResponseMessage response = await GetWithRetryAsync(url);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            data = await response.Content.ReadAsByteArrayAsync();
+                            break;
+                        }
+                    }
+                    catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        Log.Warning($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning("Non-404 error trying to download {Path}: {Message}", downloadLocalPath, ex.Message);
+                    }
+                }
+
+                if (data == null)
+                {
+                    throw new FileNotFoundException($"Could not find remote asset with prefix '{filePrefix}' in folder '{sourceFolder}' on GitHub.");
+                }
+            }
 
             _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
-
-            HttpResponseMessage response = await GetWithRetryAsync(url);
-            byte[] data = await response.Content.ReadAsByteArrayAsync();
-
             await VerifyAndSaveFileAsync(data, downloadLocalPath);
             Log.Information("Asset downloaded and saved: {Path}", downloadLocalPath);
         }

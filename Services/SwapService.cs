@@ -123,9 +123,15 @@ namespace TextureSwapper.Services
             if (missingTargets.Count != 0)
             {
                 Log.Error("Missing target files in cache for {SkinName}", skin.Name);
-                return skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName)
-                    ? $"Paint:{inGamePaintName}"
-                    : "NotCached";
+                if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName))
+                {
+                    return $"Paint:{inGamePaintName}";
+                }
+                if (skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase))
+                {
+                    return "NotCachedSupplies";
+                }
+                return "NotCached";
             }
 
             try
@@ -172,6 +178,7 @@ namespace TextureSwapper.Services
 
             List<string> notCachedSkins = [];
             List<string> notCachedPaints = [];
+            List<string> notCachedSupplies = [];
             List<string> otherFailures = [];
 
             foreach (SkinModel skin in skins)
@@ -182,6 +189,10 @@ namespace TextureSwapper.Services
                     if (result == "NotCached")
                     {
                         notCachedSkins.Add(skin.Name);
+                    }
+                    else if (result == "NotCachedSupplies")
+                    {
+                        notCachedSupplies.Add(skin.ItemName);
                     }
                     else if (result.StartsWith("Paint:"))
                     {
@@ -205,6 +216,12 @@ namespace TextureSwapper.Services
             {
                 string list = string.Join("\n", itemsToEquip.Select(item => $"- {item}"));
                 errorMessages.Add($"Please open ProTanki and equip the following item(s) first to cache them:\n{list}");
+            }
+
+            if (notCachedSupplies.Count != 0)
+            {
+                string list = string.Join("\n", notCachedSupplies.Select(item => $"- {item}"));
+                errorMessages.Add($"Please open ProTanki and load into a game first to cache the following supply item(s):\n{list}");
             }
 
             if (otherFailures.Count != 0)
