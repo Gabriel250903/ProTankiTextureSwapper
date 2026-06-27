@@ -2,13 +2,6 @@
   {
     "Category": "Paints",
     "ItemName": "Custom Paints",
-    "Name": "Galaxy",
-    "SourceFolder": "Textures/Paints",
-    "PreviewImage": "Textures/Paints/galaxy.png"
-  },
-  {
-    "Category": "Paints",
-    "ItemName": "Custom Paints",
     "Name": "Fire_Print",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/fire_print.png"
