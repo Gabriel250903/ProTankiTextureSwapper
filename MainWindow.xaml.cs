@@ -1,5 +1,6 @@
 using System.Windows;
 using TextureSwapper.Services;
+using TextureSwapper.Services.Interfaces;
 using TextureSwapper.ViewModels;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -119,24 +120,36 @@ namespace TextureSwapper
             });
         }
 
-        private void OnListSizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnAdminNavItemClick(object sender, RoutedEventArgs e)
         {
-            if (e.WidthChanged && _mainViewModel != null)
+            if (sender is NavigationViewItem navItem)
             {
-                double width = e.NewSize.Width;
-                int cols = (int)((width - 25) / 230);
-                if (cols < 1)
-                {
-                    cols = 1;
-                }
-
-                if (cols > 4)
-                {
-                    cols = 4;
-                }
-
-                _mainViewModel.UpdateColumns(cols);
+                navItem.IsActive = false;
             }
+            OpenAdminPanel();
+        }
+
+        private void OpenAdminPanel()
+        {
+            AdminOverlay.Visibility = Visibility.Visible;
+            _mainViewModel.AdminVM.IsAuthenticated = false;
+            _mainViewModel.AdminVM.CloseRequested += OnAdminCloseRequested;
+            AdminOverlay.ClearPassword();
+            AdminOverlay.FocusPasswordBox();
+        }
+
+        private void OnLogoMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                OpenAdminPanel();
+            }
+        }
+
+        private void OnAdminCloseRequested()
+        {
+            _mainViewModel.AdminVM.CloseRequested -= OnAdminCloseRequested;
+            AdminOverlay.Visibility = Visibility.Collapsed;
         }
     }
 }

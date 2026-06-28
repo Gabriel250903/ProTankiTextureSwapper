@@ -1,21 +1,14 @@
 [
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
-    "Name": "Fire_Print",
-    "SourceFolder": "Textures/Paints",
-    "PreviewImage": "Textures/Paints/fire_print.png"
-  },
-  {
-    "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "_Destroyed_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/_Destroyed_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "_Destroyed",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/_Destroyed.png"
@@ -36,7 +29,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Acid",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Acid.jpg"
@@ -64,7 +57,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Aero",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aero.jpg"
@@ -99,7 +92,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Alligator",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alligator.jpg"
@@ -134,14 +127,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Aramid_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aramid_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Aramid",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aramid.jpg"
@@ -232,77 +225,77 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_helper_2016",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_helper_2016.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_helper_2017",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_helper_2017.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2020",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2020.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2021",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2021.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2022",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2022.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2023",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2023.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2024",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2024.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2025_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2025_old.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_Helper_of_2025",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2025.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_helper_of_the_Year_18",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_helper_of_the_Year_18.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Best_helper_of_the_Year_19",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_helper_of_the_Year_19.jpg"
@@ -323,7 +316,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Blaze",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Blaze.jpg"
@@ -365,14 +358,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Bronze_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bronze_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Bronze",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bronze.jpg"
@@ -435,14 +428,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Champion_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Champion_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Champion",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Champion.jpg"
@@ -477,7 +470,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Cobalt",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cobalt.jpg"
@@ -540,7 +533,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Dead",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Dead.jpg"
@@ -554,14 +547,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Admin",
     "Name": "Demon_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Demon_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Admin",
     "Name": "Demon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Demon.jpg"
@@ -645,7 +638,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Engineer",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Engineer.jpg"
@@ -687,14 +680,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Admin",
     "Name": "Flame_2.0",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Flame_2.0.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Admin",
     "Name": "Flame",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Flame.jpg"
@@ -778,7 +771,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Gladiator",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gladiator.jpg"
@@ -792,7 +785,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Glide",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Glide.jpg"
@@ -869,14 +862,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Helios",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Helios.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Helper",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Helper.jpg"
@@ -904,7 +897,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Impulse",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Impulse.jpg"
@@ -988,7 +981,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Lord",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lord.jpg"
@@ -1002,7 +995,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Lucky_7",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lucky_7.jpg"
@@ -1030,56 +1023,56 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Master_of_Parkour_14",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_14.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Master_of_Parkour_15",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_15.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Master_of_Parkour_2016",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2016.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Master_of_Parkour_2017",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2017.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Master_of_Parkour_2019",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2019.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Masters_of_Parkour_2020",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2020.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Masters_of_Parkour_2023_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2023_old.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Parkour",
     "Name": "Masters_of_Parkour_2023",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2023.jpg"
@@ -1233,7 +1226,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Neon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Neon.jpg"
@@ -1247,14 +1240,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Newspaper_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Newspaper_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Newspaper",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Newspaper.jpg"
@@ -1296,7 +1289,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Moderator",
     "Name": "Obsidian",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Obsidian.jpg"
@@ -1415,7 +1408,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "Premium_paint",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Premium_paint.jpg"
@@ -1506,14 +1499,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "Sapphire_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sapphire_old.png"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "Sapphire",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sapphire.png"
@@ -1555,14 +1548,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Silver_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver_old.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Silver",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver.jpg"
@@ -1639,7 +1632,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Spectator",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spectator.jpg"
@@ -1688,7 +1681,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Star",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Star.jpg"
@@ -1702,7 +1695,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Special",
     "Name": "Storm",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Storm.jpg"
@@ -1744,7 +1737,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "Tankoin_Tank",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tankoin_Tank.jpg"
@@ -1779,7 +1772,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "Thankos'_Armor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Thankos'_Armor.jpg"
@@ -1793,7 +1786,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "The_Winner",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/The_Winner.jpg"
@@ -1863,7 +1856,7 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports",
     "Name": "Veteran",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Veteran.jpg"
@@ -1905,14 +1898,14 @@
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "War_Winner",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/War_Winner.jpg"
   },
   {
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Premium",
     "Name": "War._The_Winner",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/War._The_Winner.jpg"
@@ -1958,5 +1951,12 @@
     "Name": "X_Noir",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/X_Noir.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Custom Paints",
+    "Name": "Fire_Print",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/fire_print.png"
   }
 ]

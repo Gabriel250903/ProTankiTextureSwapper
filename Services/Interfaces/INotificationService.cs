@@ -1,6 +1,6 @@
 using Wpf.Ui.Controls;
 
-namespace TextureSwapper.Services
+namespace TextureSwapper.Services.Interfaces
 {
     public interface INotificationService
     {

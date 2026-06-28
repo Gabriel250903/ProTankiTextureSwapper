@@ -1,0 +1,286 @@
+<UserControl
+    x:Class="TextureSwapper.Views.SkinsTabContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:TextureSwapper.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
+    d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <helpers:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+    </UserControl.Resources>
+
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <ui:TextBlock
+                FontSize="32"
+                FontTypography="Title"
+                FontWeight="Bold"
+                Text="Texture Swapper" />
+        </StackPanel>
+
+        <ListBox
+            Grid.Row="1"
+            Margin="0,0,0,20"
+            Background="Transparent"
+            BorderThickness="0"
+            ItemContainerStyle="{StaticResource CategoryButtonStyle}"
+            ItemsSource="{Binding SkinsCategories}"
+            SelectedItem="{Binding SelectedCategory}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Column="0"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1,1,0,1"
+                CornerRadius="12,0,0,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ui:TextBlock
+                        Margin="15,15,15,10"
+                        FontTypography="Caption"
+                        FontWeight="SemiBold"
+                        Opacity="0.5"
+                        Text="MODELS" />
+                    <ui:ListView
+                        Grid.Row="1"
+                        Padding="5,0,5,10"
+                        ItemsSource="{Binding ItemNames}"
+                        SelectedItem="{Binding SelectedItemName}" />
+                </Grid>
+            </Border>
+
+            <Border
+                Grid.Column="1"
+                Background="{DynamicResource ControlFillColorTertiaryBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="0,1,1,1"
+                CornerRadius="0,12,12,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Margin="20,15,20,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontTypography="Caption"
+                            FontWeight="SemiBold"
+                            Opacity="0.5"
+                            Text="AVAILABLE SKINS" />
+
+                        <ui:TextBox
+                            Grid.Column="2"
+                            Width="250"
+                            HorizontalAlignment="Right"
+                            Icon="{ui:SymbolIcon Search24}"
+                            PlaceholderText="Search skins..."
+                            Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </Grid>
+
+                    <ListBox
+                        Grid.Row="1"
+                        Margin="10,0,10,10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemsSource="{Binding FilteredSkinsRows}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SizeChanged="OnListSizeChanged"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Focusable" Value="False" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Width="220"
+                                                Margin="5"
+                                                ClipToBounds="True"
+                                                CornerRadius="12"
+                                                Cursor="Hand">
+                                                <Border.InputBindings>
+                                                    <MouseBinding
+                                                        Command="{Binding Data.ToggleSkinSelectionCommand, Source={StaticResource DataContextProxy}}"
+                                                        CommandParameter="{Binding}"
+                                                        MouseAction="LeftClick" />
+                                                </Border.InputBindings>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                        <Setter Property="BorderThickness" Value="1" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                                                                <Setter Property="BorderThickness" Value="2" />
+                                                            </DataTrigger>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="120" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Border
+                                                        Grid.Row="0"
+                                                        ClipToBounds="True"
+                                                        CornerRadius="12,12,0,0">
+                                                        <Image
+                                                            Width="150"
+                                                            Height="150"
+                                                            Opacity="0.9"
+                                                            Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}"
+                                                            Stretch="Uniform" />
+                                                    </Border>
+
+                                                    <StackPanel Grid.Row="1" Margin="12,10">
+                                                        <ui:TextBlock
+                                                            FontSize="14"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding Name}" />
+                                                        <ui:TextBlock
+                                                            FontTypography="Caption"
+                                                            Opacity="0.6"
+                                                            Text="{Binding VersionText}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border
+            Grid.Row="3"
+            Margin="0,20,0,0"
+            Background="{DynamicResource ControlFillColorDefaultBrush}"
+            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="12">
+            <Grid Margin="15,10">
+                <WrapPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Secondary"
+                        Command="{Binding SelectAllAvailableCommand}"
+                        CommandParameter="XT"
+                        Content="Select All XT"
+                        ToolTip="Selects XT version for all items.">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="CheckmarkCircle24" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Secondary"
+                        Command="{Binding SelectAllAvailableCommand}"
+                        CommandParameter="Legacy"
+                        Content="Select All Legacy"
+                        ToolTip="Selects Legacy/LC version for all items where available.">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="History24" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Secondary"
+                        Command="{Binding SelectAllAvailableCommand}"
+                        CommandParameter="Deselect"
+                        Content="Deselect All"
+                        ToolTip="Clear all selected textures.">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="DismissCircle24" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Danger"
+                        Command="{Binding ClearCacheCommand}"
+                        Content="Clear Cache"
+                        Icon="{ui:SymbolIcon Delete24}" />
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Primary"
+                        Command="{Binding RestoreCommand}"
+                        Content="Restore Originals"
+                        Icon="{ui:SymbolIcon ArrowUndo24}" />
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Success"
+                        Command="{Binding SwapCommand}"
+                        Content="APPLY SELECTED"
+                        FontWeight="Bold"
+                        Icon="{ui:SymbolIcon Flash24}" />
+                </WrapPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
