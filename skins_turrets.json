@@ -31,6 +31,16 @@
   },
   {
     "Category": "Turrets",
+    "ItemName": "Firebird",
+    "Name": "Firebird LC",
+    "SourceFolder": "Textures/Turrets/Firebird/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Firebird/Legacy/M3/Firebird_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8zNC8zMTQ2NDE0MzA3NzE1NC9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
     "ItemName": "Thunder",
     "Name": "Thunder XT",
     "SourceFolder": "Textures/Turrets/Thunder/XT/M3",
@@ -92,6 +102,16 @@
   {
     "Category": "Turrets",
     "ItemName": "Smoky",
+    "Name": "Smoky XT (Old)",
+    "SourceFolder": "Textures/Turrets/Smoky/XT_Old/M3",
+    "PreviewImage": "Textures/Turrets/Smoky/XT_Old/M3/Smoky_XT_Old.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzE0NjQxNDMxMDY0NzcvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Smoky",
     "Name": "Smoky LC",
     "SourceFolder": "Textures/Turrets/Smoky/Legacy/M3",
     "PreviewImage": "Textures/Turrets/Smoky/Legacy/M3/Smoky_LC.png",
@@ -111,10 +131,30 @@
   },
   {
     "Category": "Turrets",
+    "ItemName": "Isida",
+    "Name": "Isida LC",
+    "SourceFolder": "Textures/Turrets/Isida/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Isida/Legacy/M3/Isida_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMTczMTU1MTIwNDM2MC9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
     "ItemName": "Freeze",
     "Name": "Freeze XT",
     "SourceFolder": "Textures/Turrets/Freeze/XT/M3",
     "PreviewImage": "Textures/Turrets/Freeze/XT/M3/Freeze_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzX2FscGhhLmpwZw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Freeze",
+    "Name": "Freeze LC",
+    "SourceFolder": "Textures/Turrets/Freeze/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Freeze/Legacy/M3/Freeze_LC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzLmpwZw==",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9saWdodG1hcC5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80NC8zMTQ2NDE0MzEwMDAzNy9kZXRhaWxzX2FscGhhLmpwZw=="

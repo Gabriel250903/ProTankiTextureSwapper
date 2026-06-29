@@ -19,6 +19,7 @@ settings.json
 installer.iss
 CodeDependencies.iss
 cache_preview/
+AlphaGenerator.py
 
 Thumbs.db
 ehthumbs.db

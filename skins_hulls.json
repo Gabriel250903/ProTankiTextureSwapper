@@ -41,6 +41,16 @@
   },
   {
     "Category": "Hulls",
+    "ItemName": "Hornet",
+    "Name": "Hornet LC (Old)",
+    "SourceFolder": "Textures/Hulls/Hornet/Legacy_Old/M0",
+    "PreviewImage": "Textures/Hulls/Hornet/Legacy_Old/M0/Hornet_LC_Old.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMxNDY0MTQzMDYzMzM2L2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMxNDY0MTQzMDYzMzM2L2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMxNDY0MTQzMDYzMzM2L2RldGFpbHNfYWxwaGEuanBn"
+  },
+  {
+    "Category": "Hulls",
     "ItemName": "Wasp",
     "Name": "Wasp XT",
     "SourceFolder": "Textures/Hulls/Wasp/XT/M3",
