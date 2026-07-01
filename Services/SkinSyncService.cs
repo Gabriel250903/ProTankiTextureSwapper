@@ -7,9 +7,9 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class SkinSyncService(UpdateService updateService) : ISkinSyncService
+    public class SkinSyncService(IUpdateService updateService) : ISkinSyncService
     {
-        private readonly UpdateService _updateService = updateService;
+        private readonly IUpdateService _updateService = updateService;
         public event Action<string>? ProgressChanged;
         private readonly JsonSerializerOptions options = new() { WriteIndented = true };
 
@@ -46,6 +46,12 @@ namespace TextureSwapper.Services
                     {
                         Log.Error(ex, $"Failed to deserialize local {Name} skins.");
                     }
+                }
+
+                if (_updateService.IsOffline)
+                {
+                    combinedSkins.AddRange(catSkins);
+                    continue;
                 }
 
                 ProgressChanged?.Invoke($"Syncing {Name.ToLower()} database...");
@@ -98,7 +104,7 @@ namespace TextureSwapper.Services
                 }
 
                 List<SkinModel> missing = [.. catSkins.Where(IsSkinMissingAssets)];
-                if (missing.Count > 0)
+                if (missing.Count > 0 && !_updateService.IsOffline)
                 {
                     int completed = 0;
                     object progressLock = new();
@@ -169,19 +175,28 @@ namespace TextureSwapper.Services
         public List<BackupModel> LoadBackups()
         {
             string backupsRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
-            return !Directory.Exists(backupsRoot)
-                ? []
-                : [.. Directory.GetDirectories(backupsRoot)
-                .Select(d => new DirectoryInfo(d))
-                .Where(di => !di.Name.Equals(Constants.OriginalsDir, StringComparison.OrdinalIgnoreCase))
-                .OrderByDescending(di => di.CreationTime)
-                .Select(di => new BackupModel
+            if (!Directory.Exists(backupsRoot))
+            {
+                return [];
+            }
+
+            List<BackupModel> backups = [];
+
+            string[] zipFiles = Directory.GetFiles(backupsRoot, "*.zip");
+            foreach (string file in zipFiles)
+            {
+                FileInfo fi = new(file);
+                string nameWithoutExt = Path.GetFileNameWithoutExtension(file);
+                backups.Add(new BackupModel
                 {
-                    FolderName = di.Name,
-                    DisplayName = di.Name.Replace("_", " "),
-                    CreationDate = di.CreationTime,
-                    FullPath = di.FullName
-                })];
+                    FolderName = fi.Name,
+                    DisplayName = nameWithoutExt.Replace("_", " "),
+                    CreationDate = fi.CreationTime,
+                    FullPath = fi.FullName
+                });
+            }
+
+            return [.. backups.OrderByDescending(b => b.CreationDate)];
         }
 
         public List<InGamePaintModel> LoadInGamePaints()
@@ -284,15 +299,6 @@ namespace TextureSwapper.Services
                     }
                 }
                 if (!found)
-                {
-                    return true;
-                }
-            }
-
-            if (!skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(skin.ModelTarget))
-            {
-                string modelPath = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"), "model.uf");
-                if (!File.Exists(modelPath))
                 {
                     return true;
                 }

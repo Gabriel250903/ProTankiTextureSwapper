@@ -99,7 +99,7 @@
                                         Grid.Row="0"
                                         ClipToBounds="True"
                                         CornerRadius="12,12,0,0">
-                                        <Image Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}" Stretch="UniformToFill" />
+                                        <Image Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}, IsAsync=True, TargetNullValue={x:Null}}" Stretch="UniformToFill" />
                                     </Border>
                                     <ui:TextBlock
                                         Grid.Row="1"
@@ -279,7 +279,7 @@
                                                          CornerRadius="11,11,0,0">
                                                          <Border.Background>
                                                              <ImageBrush 
-                                                                 ImageSource="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}}" 
+                                                                 ImageSource="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}, IsAsync=True, TargetNullValue={x:Null}}" 
                                                                  Stretch="UniformToFill"
                                                                  Opacity="0.9" />
                                                          </Border.Background>

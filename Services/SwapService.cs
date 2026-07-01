@@ -1,19 +1,21 @@
 using Serilog;
 using System.IO;
+using System.IO.Compression;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
+using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class SwapService
+    public class SwapService : ISwapService
     {
         public string DetectCachePath()
         {
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fullPath = Path.Combine(appData, Constants.StandaloneLoaderDir, Constants.LocalStoreDir, Constants.CacheDirName);
 
-            Log.Debug("Detecting cache path. Suggested: {Path}", fullPath);
+            Log.Debug($"Detecting cache path. Suggested: {fullPath}");
             return Directory.Exists(fullPath) ? fullPath : string.Empty;
         }
 
@@ -23,7 +25,7 @@ namespace TextureSwapper.Services
             string originalsDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, Constants.OriginalsDir));
             _ = Directory.CreateDirectory(originalsDir);
 
-            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
+            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
             foreach (string target in targets)
             {
                 if (string.IsNullOrEmpty(target))
@@ -36,7 +38,7 @@ namespace TextureSwapper.Services
 
                 if (File.Exists(sourceFile) && !File.Exists(backupFile))
                 {
-                    Log.Information("First time seeing {Target}. Saving original version to {BackupDir}", target, originalsDir);
+                    Log.Information($"First time seeing {target}. Saving original version to {originalsDir}");
                     File.Copy(sourceFile, backupFile);
                 }
             }
@@ -46,14 +48,21 @@ namespace TextureSwapper.Services
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string backupDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, $"{skin.Name}_{timestamp}"));
+            string backupZipPath = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, $"{skin.Name}_{timestamp}.zip"));
 
             try
             {
-                Log.Information("Creating selective backup for {SkinName} at {BackupDir}", skin.Name, backupDir);
-                _ = Directory.CreateDirectory(backupDir);
+                Log.Information($"Creating selective compressed backup for {skin.Name} at {backupZipPath}");
 
-                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
+                string? dir = Path.GetDirectoryName(backupZipPath);
+                if (dir != null)
+                {
+                    _ = Directory.CreateDirectory(dir);
+                }
+
+                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+
+                using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
                 foreach (string target in targets)
                 {
                     if (string.IsNullOrEmpty(target))
@@ -64,23 +73,23 @@ namespace TextureSwapper.Services
                     string sourceFile = FileHelper.GetSafePath(cachePath, target);
                     if (File.Exists(sourceFile))
                     {
-                        File.Copy(sourceFile, FileHelper.GetSafePath(backupDir, target), true);
+                        _ = archive.CreateEntryFromFile(sourceFile, target);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to create selective backup for {SkinName}.", skin.Name);
+                Log.Error(ex, $"Failed to create selective backup for {skin.Name}.");
             }
         }
 
         public string? Swap(string cachePath, SkinModel skin, string? inGamePaintName = null)
         {
-            Log.Information("Applying skin: {SkinName}", skin.Name);
+            Log.Information($"Applying skin: {skin.Name}");
 
             if (!Directory.Exists(cachePath))
             {
-                Log.Error("Cache directory not found: {CachePath}", cachePath);
+                Log.Error($"Cache directory not found: {cachePath}");
                 return "Cache directory not found.";
             }
 
@@ -110,19 +119,11 @@ namespace TextureSwapper.Services
                         }
                     }
                 }
-                if (!string.IsNullOrEmpty(skin.ModelTarget))
-                {
-                    string path = FileHelper.GetSafePath(cachePath, skin.ModelTarget);
-                    if (!File.Exists(path))
-                    {
-                        missingTargets.Add(skin.ModelTarget);
-                    }
-                }
             }
 
             if (missingTargets.Count != 0)
             {
-                Log.Error("Missing target files in cache for {SkinName}", skin.Name);
+                Log.Error($"Missing target files in cache for {skin.Name}");
                 return skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName)
                     ? $"Paint:{inGamePaintName}"
                     : skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase) ? "NotCachedSupplies" : "NotCached";
@@ -142,31 +143,27 @@ namespace TextureSwapper.Services
                 }
                 else
                 {
-                    CopyAndRename(texturesDir, "details.png", cachePath, skin.DetailsTarget);
-                    CopyAndRename(texturesDir, "lightmap.png", cachePath, skin.LightmapTarget);
-                    CopyAndRename(texturesDir, "alpha.png", cachePath, skin.AlphaTarget);
-                    if (!string.IsNullOrEmpty(skin.ModelTarget))
-                    {
-                        CopyAndRename(texturesDir, "object.3ds", cachePath, skin.ModelTarget);
-                    }
+                    CopyAndRename(texturesDir, "details.jpg", cachePath, skin.DetailsTarget);
+                    CopyAndRename(texturesDir, "lightmap.jpg", cachePath, skin.LightmapTarget);
+                    CopyAndRename(texturesDir, "alpha.jpg", cachePath, skin.AlphaTarget);
                 }
-                Log.Information("Skin {SkinName} applied successfully.", skin.Name);
+                Log.Information($"Skin {skin.Name} applied successfully.");
                 return null;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred during skin swap for {SkinName}.", skin.Name);
+                Log.Error(ex, $"Error occurred during skin swap for {skin.Name}.");
                 return $"Error: {ex.Message}";
             }
         }
 
         public string? SwapBatch(string cachePath, IEnumerable<SkinModel> skins, string? inGamePaintName = null)
         {
-            Log.Information("Starting batch swap for {Count} skins.", skins.Count());
+            Log.Information($"Starting batch swap for {skins.Count()} skins.");
 
             if (!Directory.Exists(cachePath))
             {
-                Log.Error("Cache directory not found: {CachePath}", cachePath);
+                Log.Error($"Cache directory not found: {cachePath}");
                 return "Cache directory not found.";
             }
 
@@ -240,32 +237,60 @@ namespace TextureSwapper.Services
             return RestoreFromBackup(cachePath, originalsDir);
         }
 
-        public bool RestoreFromBackup(string cachePath, string backupDir)
+        public bool RestoreFromBackup(string cachePath, string backupPath)
         {
-            if (!Directory.Exists(backupDir) || Directory.GetFiles(backupDir).Length == 0)
+            if (Directory.Exists(backupPath))
             {
-                Log.Warning("Restore skipped: Backup directory {BackupDir} is empty or does not exist.", backupDir);
-                return false;
+                if (Directory.GetFiles(backupPath).Length == 0)
+                {
+                    Log.Warning($"Restore skipped: Backup directory {backupPath} is empty.");
+                    return false;
+                }
+
+                try
+                {
+                    int restoreCount = 0;
+                    foreach (string file in Directory.GetFiles(backupPath))
+                    {
+                        string targetName = Path.GetFileName(file);
+                        string destFile = FileHelper.GetSafePath(cachePath, targetName);
+                        File.Copy(file, destFile, true);
+                        restoreCount++;
+                    }
+
+                    Log.Information($"Successfully restored {restoreCount} {(restoreCount == 1 ? "file" : "files")} from directory {backupPath}.");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"Failed to restore textures from directory {backupPath}.");
+                    throw;
+                }
+            }
+            else if (File.Exists(backupPath) && backupPath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    using ZipArchive archive = ZipFile.OpenRead(backupPath);
+                    int restoreCount = 0;
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        string destFile = FileHelper.GetSafePath(cachePath, entry.FullName);
+                        entry.ExtractToFile(destFile, true);
+                        restoreCount++;
+                    }
+                    Log.Information($"Successfully restored {restoreCount} {(restoreCount == 1 ? "file" : "files")} from zip backup {backupPath}.");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"Failed to restore textures from zip backup {backupPath}.");
+                    throw;
+                }
             }
 
-            try
-            {
-                int restoreCount = 0;
-                foreach (string file in Directory.GetFiles(backupDir))
-                {
-                    string targetName = Path.GetFileName(file);
-                    string destFile = FileHelper.GetSafePath(cachePath, targetName);
-                    File.Copy(file, destFile, true);
-                    restoreCount++;
-                }
-                Log.Information("Successfully restored {Count} files from {BackupDir}.", restoreCount, backupDir);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to restore textures from {BackupDir}.", backupDir);
-                throw;
-            }
+            Log.Warning($"Restore skipped: Backup path {backupPath} does not exist.");
+            return false;
         }
 
         public void PurgeOldBackups(int maxDays)
@@ -291,15 +316,26 @@ namespace TextureSwapper.Services
                     DirectoryInfo di = new(dir);
                     if (di.CreationTime < threshold)
                     {
-                        Log.Information("Purging old backup: {DirName} (Created: {Date})", di.Name, di.CreationTime);
+                        Log.Information($"Purging old backup directory: {di.Name} (Created: {di.CreationTime})");
                         di.Delete(true);
+                        purgeCount++;
+                    }
+                }
+
+                foreach (string file in Directory.GetFiles(backupsRoot, "*.zip"))
+                {
+                    FileInfo fi = new(file);
+                    if (fi.CreationTime < threshold)
+                    {
+                        Log.Information($"Purging old zip backup: {fi.Name} (Created: {fi.CreationTime})");
+                        fi.Delete();
                         purgeCount++;
                     }
                 }
 
                 if (purgeCount > 0)
                 {
-                    Log.Information("Purged {Count} old backups.", purgeCount);
+                    Log.Information($"Purged {purgeCount} old {(purgeCount == 1 ? "backup" : "backups")}.");
                 }
             }
             catch (Exception ex)
@@ -310,11 +346,11 @@ namespace TextureSwapper.Services
 
         public void ClearCache(string cachePath)
         {
-            Log.Information("Clearing ProTanki cache at {CachePath}...", cachePath);
+            Log.Information($"Clearing ProTanki cache at {cachePath}...");
 
             if (!Directory.Exists(cachePath))
             {
-                Log.Warning("ClearCache called but directory does not exist: {CachePath}", cachePath);
+                Log.Warning($"ClearCache called but directory does not exist: {cachePath}");
                 return;
             }
 
@@ -326,7 +362,7 @@ namespace TextureSwapper.Services
                     File.Delete(file);
                     fileCount++;
                 }
-                Log.Information("Successfully deleted {Count} files from cache.", fileCount);
+                Log.Information($"Successfully deleted {fileCount} {(fileCount == 1 ? "file" : "files")} from cache.");
             }
             catch (Exception ex)
             {
@@ -345,7 +381,7 @@ namespace TextureSwapper.Services
             string fullSourcePath = FileHelper.GetSafePath(sourceDir, sourceFile);
             string fullTargetPath = FileHelper.GetSafePath(targetDir, targetName);
 
-            Log.Debug("Copying {Source} to {Target}", fullSourcePath, fullTargetPath);
+            Log.Debug($"Copying {fullSourcePath} to {fullTargetPath}");
 
             if (File.Exists(fullSourcePath))
             {
@@ -356,12 +392,12 @@ namespace TextureSwapper.Services
                 string altSourcePath = Path.ChangeExtension(fullSourcePath, ".jpg");
                 if (File.Exists(altSourcePath))
                 {
-                    Log.Debug("Source PNG not found, using JPG: {AltSource}", altSourcePath);
+                    Log.Debug($"Source PNG not found, using JPG: {altSourcePath}");
                     File.Copy(altSourcePath, fullTargetPath, true);
                 }
                 else
                 {
-                    Log.Warning("Source file not found: {SourcePath}", fullSourcePath);
+                    Log.Warning($"Source file not found: {fullSourcePath}");
                 }
             }
         }

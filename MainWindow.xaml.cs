@@ -1,5 +1,4 @@
 using System.Windows;
-using TextureSwapper.Services;
 using TextureSwapper.Services.Interfaces;
 using TextureSwapper.ViewModels;
 using Wpf.Ui.Appearance;
@@ -10,29 +9,16 @@ namespace TextureSwapper
     public partial class MainWindow : FluentWindow, INotificationService
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly UpdateService _updateService;
+        private int _currentNotificationId = 0;
 
-        public MainWindow()
+        public MainWindow(MainViewModel mainViewModel)
         {
-            _updateService = new UpdateService();
-            _mainViewModel = new MainViewModel(this, _updateService);
-            _mainViewModel.RequestSettings += OnRequestSettings;
-
+            _mainViewModel = mainViewModel;
             DataContext = _mainViewModel;
 
-            ApplicationThemeManager.Apply(_mainViewModel.Settings.Theme);
-
             InitializeComponent();
-        }
 
-        private void OnRequestSettings()
-        {
-            SettingsViewModel settingsViewModel = new(_mainViewModel.Settings, _mainViewModel._settingsService, _mainViewModel);
-            SettingsWindow settingsWindow = new(settingsViewModel)
-            {
-                Owner = this
-            };
-            _ = settingsWindow.ShowDialog();
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark);
         }
 
         private void OnNavigationItemClick(object sender, System.Windows.RoutedEventArgs e)
@@ -95,8 +81,12 @@ namespace TextureSwapper
 
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {
+            int notificationId = 0;
             Application.Current.Dispatcher.Invoke(() =>
             {
+                _currentNotificationId++;
+                notificationId = _currentNotificationId;
+
                 ToastInfoBar.Title = title;
                 ToastInfoBar.Message = message;
                 ToastInfoBar.Severity = appearance switch
@@ -116,7 +106,10 @@ namespace TextureSwapper
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                ToastInfoBar.IsOpen = false;
+                if (_currentNotificationId == notificationId)
+                {
+                    ToastInfoBar.IsOpen = false;
+                }
             });
         }
 

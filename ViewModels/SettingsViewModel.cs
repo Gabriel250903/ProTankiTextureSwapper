@@ -5,15 +5,14 @@ using System.Windows.Input;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
-using TextureSwapper.Services;
-using Wpf.Ui.Appearance;
+using TextureSwapper.Services.Interfaces;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly SettingsService _settingsService;
+        private readonly ISettingsService _settingsService;
         private readonly MainViewModel _mainViewModel;
 
         public AppSettings Settings { get; }
@@ -72,18 +71,16 @@ namespace TextureSwapper.ViewModels
         }
 
         public ICommand CheckForUpdatesCommand { get; }
-        public ICommand ToggleThemeCommand { get; }
         public ICommand RefreshLogsCommand { get; }
         public ICommand OpenLogsFolderCommand { get; }
 
-        public SettingsViewModel(AppSettings settings, SettingsService settingsService, MainViewModel mainViewModel)
+        public SettingsViewModel(ISettingsService settingsService, MainViewModel mainViewModel)
         {
-            Settings = settings;
             _settingsService = settingsService;
             _mainViewModel = mainViewModel;
+            Settings = mainViewModel.Settings;
 
             CheckForUpdatesCommand = new AsyncRelayCommand(ExecuteCheckForUpdates, _ => !IsLoading);
-            ToggleThemeCommand = new RelayCommand(ExecuteToggleTheme);
             RefreshLogsCommand = new RelayCommand(ExecuteRefreshLogs);
             OpenLogsFolderCommand = new RelayCommand(ExecuteOpenLogsFolder);
 
@@ -163,18 +160,6 @@ namespace TextureSwapper.ViewModels
                 _settingsService.Save(Settings);
                 ExecuteRefreshLogs(null);
             }
-        }
-
-        private void ExecuteToggleTheme(object? parameter)
-        {
-            ApplicationTheme currentTheme = ApplicationThemeManager.GetAppTheme();
-            ApplicationTheme newTheme = currentTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
-
-            ApplicationThemeManager.Apply(newTheme);
-            Settings.Theme = newTheme;
-            _settingsService.Save(Settings);
-            Log.Information("User toggled application theme from {OldTheme} to {NewTheme}.", currentTheme, newTheme);
-            ExecuteRefreshLogs(null);
         }
     }
 }

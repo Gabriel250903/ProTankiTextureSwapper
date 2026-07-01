@@ -7,10 +7,10 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="Settings"
-    Width="700"
-    Height="700"
+    Width="750"
+    Height="830"
     d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
-    Background="#0F0F0F"
+    Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterOwner"
@@ -36,31 +36,6 @@
             <StackPanel Margin="20">
                 <ui:TextBlock
                     Margin="0,0,0,10"
-                    FontTypography="Subtitle"
-                    Text="Appearance" />
-                <ui:Card Margin="0,0,0,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel VerticalAlignment="Center">
-                            <ui:TextBlock FontWeight="SemiBold" Text="Application Theme" />
-                            <ui:TextBlock
-                                FontTypography="Caption"
-                                Opacity="0.6"
-                                Text="Switch between light and dark mode" />
-                        </StackPanel>
-                        <ui:Button
-                            Grid.Column="1"
-                            Command="{Binding ToggleThemeCommand}"
-                            Content="Toggle Theme"
-                            Icon="{ui:SymbolIcon WeatherMoon24}" />
-                    </Grid>
-                </ui:Card>
-
-                <ui:TextBlock
-                    Margin="0,10,0,10"
                     FontTypography="Subtitle"
                     Text="Backups" />
                 <ui:Card Margin="0,0,0,20">

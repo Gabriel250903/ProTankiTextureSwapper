@@ -8,12 +8,15 @@ using System.Text.Json;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
+using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class UpdateService
+    public class UpdateService : IUpdateService
     {
         private static readonly HttpClient _httpClient;
+
+        public bool IsOffline { get; private set; }
 
         static UpdateService()
         {
@@ -37,18 +40,32 @@ namespace TextureSwapper.Services
                         throw new HttpRequestException($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
                     }
                     _ = response.EnsureSuccessStatusCode();
+                    IsOffline = false;
                     return response;
                 }
                 catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    Log.Warning($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
+                    Log.Warning($"Resource not found (404): {url}");
+                    throw;
                 }
                 catch (HttpRequestException ex) when (i < maxRetries - 1)
                 {
-                    Log.Warning("Request failed, retrying in {Delay}s. Error: {Message}", Math.Pow(2, i), ex.Message);
+                    if (ex.InnerException is System.Net.Sockets.SocketException socketEx &&
+                        (socketEx.SocketErrorCode == System.Net.Sockets.SocketError.HostNotFound ||
+                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.NetworkUnreachable ||
+                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionRefused ||
+                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionAborted ||
+                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.TimedOut))
+                    {
+                        Log.Warning("Network connection error. Switching to Offline Mode.");
+                        IsOffline = true;
+                        throw;
+                    }
+                    Log.Warning($"Request failed, retrying in {Math.Pow(2, i)}s. Error: {ex.Message}");
                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
                 }
             }
+            IsOffline = true;
             throw new HttpRequestException("Max retries exceeded.");
         }
 
@@ -56,7 +73,7 @@ namespace TextureSwapper.Services
         {
             try
             {
-                Log.Information("Fetching remote {FileName} from GitHub...", fileName);
+                Log.Information($"Fetching remote {fileName} from GitHub...");
                 string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
 
                 HttpResponseMessage response = await GetWithRetryAsync(url);
@@ -67,7 +84,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Warning("Network error while fetching remote skins ({FileName}): {Message}", fileName, ex.Message);
+                IsOffline = true;
+                Log.Warning($"Network error while fetching remote skins ({fileName}): {ex.Message}");
                 return (null, null);
             }
         }
@@ -95,16 +113,10 @@ namespace TextureSwapper.Services
                 {
                     await EnsureFileExistsAsync(string.Empty, prefix, skin.SourceFolder, onProgress);
                 }
-
-                if (!string.IsNullOrEmpty(skin.ModelTarget))
-                {
-                    string modelPath = Path.Combine(skin.SourceFolder, "object.3ds").Replace("\\", "/");
-                    await EnsureFileExistsAsync(modelPath, "object", skin.SourceFolder, onProgress);
-                }
             }
             catch (Exception ex)
             {
-                Log.Error("Failed to ensure assets exist for {SkinName}: {Message}", skin.Name, ex.Message);
+                Log.Error($"Failed to ensure assets exist for {skin.Name}: {ex.Message}");
             }
         }
 
@@ -123,7 +135,7 @@ namespace TextureSwapper.Services
                     string ext = Path.GetExtension(file).ToLower();
                     if (validExtensions.Contains(ext))
                     {
-                        Log.Debug("Asset already exists locally: {Path}", file);
+                        Log.Debug($"Asset already exists locally: {file}");
                         return;
                     }
                 }
@@ -134,7 +146,7 @@ namespace TextureSwapper.Services
                 string exactLocalPath = FileHelper.GetSafePath(baseDir, exactRelativePath.Replace("\\", "/"));
                 if (File.Exists(exactLocalPath))
                 {
-                    Log.Debug("Asset already exists locally: {Path}", exactLocalPath);
+                    Log.Debug($"Asset already exists locally: {exactLocalPath}");
                     return;
                 }
 
@@ -152,7 +164,7 @@ namespace TextureSwapper.Services
                         string altPath = Path.ChangeExtension(exactLocalPath, alt);
                         if (File.Exists(altPath))
                         {
-                            Log.Debug("Asset already exists locally with alternative extension: {Path}", altPath);
+                            Log.Debug($"Asset already exists locally with alternative extension: {altPath}");
                             return;
                         }
                     }
@@ -191,7 +203,7 @@ namespace TextureSwapper.Services
 
                     try
                     {
-                        Log.Information("Trying download: {Path}", downloadLocalPath);
+                        Log.Information($"Trying download: {downloadLocalPath}");
                         HttpResponseMessage response = await GetWithRetryAsync(url);
                         if (response.IsSuccessStatusCode)
                         {
@@ -205,7 +217,7 @@ namespace TextureSwapper.Services
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning("Non-404 error trying to download {Path}: {Message}", downloadLocalPath, ex.Message);
+                        Log.Warning($"Non-404 error trying to download {downloadLocalPath}: {ex.Message}");
                     }
                 }
 
@@ -217,7 +229,7 @@ namespace TextureSwapper.Services
 
             _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
             await VerifyAndSaveFileAsync(data, downloadLocalPath);
-            Log.Information("Asset downloaded and saved: {Path}", downloadLocalPath);
+            Log.Information($"Asset downloaded and saved: {downloadLocalPath}");
         }
 
         private async Task VerifyAndSaveFileAsync(byte[] data, string targetPath, string? expectedSha256 = null)
@@ -227,7 +239,7 @@ namespace TextureSwapper.Services
 
             if (!string.IsNullOrEmpty(expectedSha256) && !computedHash.Equals(expectedSha256, StringComparison.InvariantCultureIgnoreCase))
             {
-                Log.Error("Hash mismatch for {Path}. Expected: {Expected}, Computed: {Computed}", targetPath, expectedSha256, computedHash);
+                Log.Error($"Hash mismatch for {targetPath}. Expected: {expectedSha256}, Computed: {computedHash}");
                 throw new CryptographicException($"Hash mismatch for {targetPath}. File compromised.");
             }
 
@@ -249,7 +261,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Warning("Network error while fetching remote in-game paints ({FileName}): {Message}", fileName, ex.Message);
+                IsOffline = true;
+                Log.Warning($"Network error while fetching remote in-game paints ({fileName}): {ex.Message}");
                 return (null, null);
             }
         }
@@ -266,7 +279,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Error("Network error while checking for app updates: {Message}", ex.Message);
+                IsOffline = true;
+                Log.Error($"Network error while checking for app updates: {ex.Message}");
                 return null;
             }
         }
@@ -275,7 +289,7 @@ namespace TextureSwapper.Services
         {
             string tempPath = Path.Combine(Path.GetTempPath(), "TextureSwapper_Setup.exe");
 
-            Log.Information("Downloading installer from {Url} to {Path}", downloadUrl, tempPath);
+            Log.Information($"Downloading installer from {downloadUrl} to {tempPath}");
 
             using (HttpResponseMessage response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead))
             {
@@ -300,7 +314,7 @@ namespace TextureSwapper.Services
                 }
             }
 
-            Log.Information("Launching installer: {Path}", tempPath);
+            Log.Information($"Launching installer: {tempPath}");
             _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
             Environment.Exit(0);
         }

@@ -2,10 +2,11 @@ using Serilog;
 using System.IO;
 using System.Text.Json;
 using TextureSwapper.Models;
+using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class SettingsService
+    public class SettingsService : ISettingsService
     {
         private static readonly string SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
         private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };

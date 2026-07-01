@@ -1951,12 +1951,5 @@
     "Name": "X_Noir",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/X_Noir.jpg"
-  },
-  {
-    "Category": "Paints",
-    "ItemName": "Custom Paints",
-    "Name": "Fire_Print",
-    "SourceFolder": "Textures/Paints",
-    "PreviewImage": "Textures/Paints/fire_print.png"
   }
 ]

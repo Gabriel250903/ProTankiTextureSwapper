@@ -7,20 +7,21 @@ using System.Windows.Input;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
-using TextureSwapper.Services;
 using TextureSwapper.Services.Interfaces;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly SwapService _swapService;
-        private readonly UpdateService _updateService;
-        private readonly SkinSyncService _skinSyncService;
-        private readonly CacheService _cacheService;
+        private readonly ISwapService _swapService;
+        private readonly IUpdateService _updateService;
+        private readonly ISkinSyncService _skinSyncService;
+        private readonly ICacheService _cacheService;
+        internal readonly ISettingsService _settingsService;
+        private readonly IWindowService _windowService;
         internal readonly INotificationService _notificationService;
-        internal readonly SettingsService _settingsService;
         private List<SkinModel> _allSkins = [];
 
         private string _cachePath = string.Empty;
@@ -178,19 +179,27 @@ namespace TextureSwapper.ViewModels
         public string SelectAllText => _allSkins.Any(s => s.IsSelected) ? "Deselect all textures" : "Select all available textures";
         public string SelectAllIcon => _allSkins.Any(s => s.IsSelected) ? "DismissCircle24" : "CheckmarkCircle24";
 
-        public event Action? RequestSettings;
-
         public AdminViewModel AdminVM { get; }
 
-        public MainViewModel(INotificationService notificationService, UpdateService updateService)
+        public MainViewModel(
+            INotificationService notificationService,
+            IUpdateService updateService,
+            ISwapService swapService,
+            ISettingsService settingsService,
+            ICacheService cacheService,
+            ISkinSyncService skinSyncService,
+            IWindowService windowService)
         {
             _notificationService = notificationService;
             _updateService = updateService;
-            _swapService = new SwapService();
-            _settingsService = new SettingsService();
-            _cacheService = new CacheService();
-            _skinSyncService = new SkinSyncService(updateService);
+            _swapService = swapService;
+            _settingsService = settingsService;
+            _cacheService = cacheService;
+            _skinSyncService = skinSyncService;
+            _windowService = windowService;
+
             Settings = _settingsService.Load();
+            Settings.Theme = ApplicationTheme.Dark;
             AdminVM = new AdminViewModel(this, notificationService);
 
             CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();
@@ -205,12 +214,10 @@ namespace TextureSwapper.ViewModels
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
             SelectAllAvailableCommand = new RelayCommand(ExecuteSelectAllAvailable);
-            OpenSettingsCommand = new RelayCommand(_ => RequestSettings?.Invoke());
+            OpenSettingsCommand = new RelayCommand(_ => _windowService.ShowSettingsDialog());
             RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !IsLoading && SelectedBackup != null);
             ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
             GoBackToInGamePaintsCommand = new RelayCommand(_ => SelectedInGamePaint = null);
-
-            LoadInGamePaints();
 
             _ = InitializeAsync();
         }
@@ -240,11 +247,12 @@ namespace TextureSwapper.ViewModels
             }
         }
 
-        private void LoadInGamePaints()
+        private async Task LoadInGamePaintsAsync()
         {
             try
             {
-                _allInGamePaints = _skinSyncService.LoadInGamePaints();
+                List<InGamePaintModel> paints = await Task.Run(() => _skinSyncService.LoadInGamePaints());
+                _allInGamePaints = paints;
                 FilterInGamePaints();
             }
             catch (Exception ex)
@@ -281,6 +289,8 @@ namespace TextureSwapper.ViewModels
             {
                 Log.Warning(ex, "Failed to purge or load backups.");
             }
+
+            await LoadInGamePaintsAsync();
 
             UpdateStatus = "Checking for updates...";
 
@@ -441,17 +451,22 @@ namespace TextureSwapper.ViewModels
 
                 _skinSyncService.ProgressChanged -= HandleProgressChanged;
 
+                if (_updateService.IsOffline)
+                {
+                    await _notificationService.ShowAsync("Offline Mode", "Running in offline mode. Local databases and cached textures will be used.", ControlAppearance.Info);
+                }
+
                 _allSkins = skins;
                 InitializeCategories();
                 FilterItems();
 
                 if (remoteInGamePaints != null)
                 {
-                    LoadInGamePaints();
+                    await LoadInGamePaintsAsync();
                 }
 
                 int missingPreviewsCount = InGamePaints.Count(p => !string.IsNullOrEmpty(p.PreviewImage) && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p.PreviewImage.Replace("\\", "/"))));
-                if (missingPreviewsCount > 0)
+                if (missingPreviewsCount > 0 && !_updateService.IsOffline)
                 {
                     int completedPreviews = 0;
                     object progressLock = new();
