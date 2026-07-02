@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
-    d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance vm:MainViewModel,
+                                     IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -60,6 +61,8 @@
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Padding" Value="0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ListBoxItem">
@@ -122,33 +125,34 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Left Pane: Folder Selector -->
-            <Border Grid.Column="0" 
-                    Width="200"
-                    Visibility="{Binding IsFoldersPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1,1,0,1"
-                    CornerRadius="12,0,0,12"
-                    Margin="0,0,0,0">
+            <Border
+                Grid.Column="0"
+                Width="200"
+                Margin="0,0,0,0"
+                Background="{DynamicResource ControlFillColorTertiaryBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1,1,0,1"
+                CornerRadius="12,0,0,12"
+                Visibility="{Binding IsFoldersPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ui:TextBlock Margin="15,15,15,10"
-                                  FontTypography="Caption"
-                                  FontWeight="SemiBold"
-                                  Opacity="0.5"
-                                  Text="FOLDERS" />
-                    <ui:ListView Grid.Row="1"
-                                 Padding="5,0,5,10"
-                                 ItemsSource="{Binding ItemNames}"
-                                 SelectedItem="{Binding SelectedItemName}" />
+                    <ui:TextBlock
+                        Margin="15,15,15,10"
+                        FontTypography="Caption"
+                        FontWeight="SemiBold"
+                        Opacity="0.5"
+                        Text="FOLDERS" />
+                    <ui:ListView
+                        Grid.Row="1"
+                        Padding="5,0,5,10"
+                        ItemsSource="{Binding ItemNames}"
+                        SelectedItem="{Binding SelectedItemName}" />
                 </Grid>
             </Border>
 
-            <!-- Right Pane: Paints List & Header -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -202,11 +206,11 @@
 
                 <Border
                     Grid.Row="2"
+                    Margin="20,0,0,0"
                     Background="{DynamicResource ControlFillColorTertiaryBrush}"
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="0,1,1,1"
-                    CornerRadius="0,12,12,0"
-                    Margin="20,0,0,0">
+                    CornerRadius="0,12,12,0">
                     <ListBox
                         Margin="10"
                         Background="Transparent"
@@ -221,6 +225,8 @@
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="Padding" Value="0" />
                                 <Setter Property="Focusable" Value="False" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
@@ -274,16 +280,14 @@
                                                         <RowDefinition Height="Auto" />
                                                     </Grid.RowDefinitions>
 
-                                                     <Border
-                                                         Grid.Row="0"
-                                                         CornerRadius="11,11,0,0">
-                                                         <Border.Background>
-                                                             <ImageBrush 
-                                                                 ImageSource="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}, IsAsync=True, TargetNullValue={x:Null}}" 
-                                                                 Stretch="UniformToFill"
-                                                                 Opacity="0.9" />
-                                                         </Border.Background>
-                                                     </Border>
+                                                    <Border Grid.Row="0" CornerRadius="11,11,0,0">
+                                                        <Border.Background>
+                                                            <ImageBrush
+                                                                ImageSource="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}, IsAsync=True, TargetNullValue={x:Null}}"
+                                                                Opacity="0.9"
+                                                                Stretch="UniformToFill" />
+                                                        </Border.Background>
+                                                    </Border>
 
                                                     <StackPanel Grid.Row="1" Margin="12,10">
                                                         <ui:TextBlock

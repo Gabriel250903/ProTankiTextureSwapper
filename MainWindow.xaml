@@ -14,6 +14,7 @@
     Height="780"
     MinWidth="1050"
     MinHeight="780"
+    MaxWidth="1280"
     d:DataContext="{d:DesignInstance vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
     Background="Transparent"
@@ -75,6 +76,11 @@
                         Content="Backup History"
                         Icon="{ui:SymbolIcon History24}"
                         Tag="Backups" />
+                    <ui:NavigationViewItem
+                        Click="OnNavigationItemClick"
+                        Content="Shot Effects"
+                        Icon="{ui:SymbolIcon Flash24}"
+                        Tag="ShotEffects" />
                 </ui:NavigationView.MenuItems>
                 <ui:NavigationView.FooterMenuItems>
                     <ui:NavigationViewItem
@@ -112,6 +118,10 @@
 
                     <TabItem Header="BACKUP HISTORY">
                         <views:BackupsTabContent />
+                    </TabItem>
+
+                    <TabItem Header="SHOT EFFECTS">
+                        <views:ShotEffectsTabContent />
                     </TabItem>
                 </TabControl>
             </Grid>

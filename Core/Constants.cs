@@ -9,6 +9,7 @@ namespace TextureSwapper.Core
         public const string SuppliesSkinsJson = "skins_supplies.json";
         public const string PaintsSkinsJson = "skins_paints.json";
         public const string InGamePaintsJson = "ingame_paints.json";
+        public const string ShotEffectsJson = "shot_effects.json";
         public const string BackupsDir = "Backups";
         public const string OriginalsDir = "Originals";
         public const string LogsDir = "Logs";

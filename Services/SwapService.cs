@@ -401,5 +401,126 @@ namespace TextureSwapper.Services
                 }
             }
         }
+
+        private void EnsureOriginalsBackup(string cachePath, ShotEffectModel shotEffect)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string originalsDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, Constants.OriginalsDir));
+            _ = Directory.CreateDirectory(originalsDir);
+
+            foreach (string target in shotEffect.Targets)
+            {
+                if (string.IsNullOrEmpty(target))
+                {
+                    continue;
+                }
+
+                string sourceFile = FileHelper.GetSafePath(cachePath, target);
+                string backupFile = FileHelper.GetSafePath(originalsDir, target);
+
+                if (File.Exists(sourceFile) && !File.Exists(backupFile))
+                {
+                    Log.Information($"First time seeing {target}. Saving original version to {originalsDir}");
+                    File.Copy(sourceFile, backupFile);
+                }
+            }
+        }
+
+        public void SelectiveBackup(string cachePath, ShotEffectModel shotEffect)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string backupZipPath = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, $"{shotEffect.Turret}_{shotEffect.Name}_{timestamp}.zip"));
+
+            try
+            {
+                Log.Information($"Creating selective compressed backup for shot effect {shotEffect.Turret} {shotEffect.Name} at {backupZipPath}");
+
+                string? dir = Path.GetDirectoryName(backupZipPath);
+                if (dir != null)
+                {
+                    _ = Directory.CreateDirectory(dir);
+                }
+
+                using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
+                foreach (string target in shotEffect.Targets)
+                {
+                    if (string.IsNullOrEmpty(target))
+                    {
+                        continue;
+                    }
+
+                    string sourceFile = FileHelper.GetSafePath(cachePath, target);
+                    if (File.Exists(sourceFile))
+                    {
+                        _ = archive.CreateEntryFromFile(sourceFile, target);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to create selective backup for shot effect {shotEffect.Name}.");
+            }
+        }
+
+        public string? SwapShotEffect(string cachePath, ShotEffectModel shotEffect)
+        {
+            Log.Information($"Applying shot effect: {shotEffect.Turret} {shotEffect.Name}");
+
+            if (!Directory.Exists(cachePath))
+            {
+                Log.Error($"Cache directory not found: {cachePath}");
+                return "Cache directory not found.";
+            }
+
+            List<string> missingTargets = [];
+            foreach (string target in shotEffect.Targets)
+            {
+                if (!string.IsNullOrEmpty(target))
+                {
+                    string path = FileHelper.GetSafePath(cachePath, target);
+                    if (!File.Exists(path))
+                    {
+                        missingTargets.Add(target);
+                    }
+                }
+            }
+
+            if (missingTargets.Count != 0)
+            {
+                Log.Error($"Missing target files in cache for shot effect {shotEffect.Turret} {shotEffect.Name}");
+                return "NotCached";
+            }
+
+            try
+            {
+                EnsureOriginalsBackup(cachePath, shotEffect);
+                SelectiveBackup(cachePath, shotEffect);
+
+                string texturesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, shotEffect.SourceFolder);
+
+                foreach (string target in shotEffect.Targets)
+                {
+                    string sourceFilePath = Path.Combine(texturesDir, target);
+                    if (File.Exists(sourceFilePath))
+                    {
+                        string destFilePath = FileHelper.GetSafePath(cachePath, target);
+                        File.Copy(sourceFilePath, destFilePath, true);
+                    }
+                    else
+                    {
+                        Log.Warning($"Source asset file not found locally: {sourceFilePath}");
+                    }
+                }
+
+                Log.Information($"Shot effect {shotEffect.Turret} {shotEffect.Name} applied successfully.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Error occurred during shot effect swap for {shotEffect.Name}.");
+                return $"Error: {ex.Message}";
+            }
+        }
     }
 }

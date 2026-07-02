@@ -57,6 +57,9 @@ namespace TextureSwapper
                     case "Backups":
                         MainTabControl.SelectedIndex = 2;
                         break;
+                    case "ShotEffects":
+                        MainTabControl.SelectedIndex = 3;
+                        break;
                     case "Settings":
                         _mainViewModel.OpenSettingsCommand.Execute(null);
                         selectedItem.IsActive = false;
@@ -69,6 +72,7 @@ namespace TextureSwapper
                                     "Skins" => 0,
                                     "Paints" => 1,
                                     "Backups" => 2,
+                                    "ShotEffects" => 3,
                                     _ => -1
                                 };
                                 navItem.IsActive = tabIndex == MainTabControl.SelectedIndex;

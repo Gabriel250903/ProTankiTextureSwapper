@@ -90,6 +90,27 @@ namespace TextureSwapper.Services
             }
         }
 
+        public async Task<(List<ShotEffectModel>? ShotEffects, string? RawJson)> FetchRemoteShotEffectsFileAsync(string fileName)
+        {
+            try
+            {
+                Log.Information($"Fetching remote {fileName} from GitHub...");
+                string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
+
+                HttpResponseMessage response = await GetWithRetryAsync(url);
+                string json = await response.Content.ReadAsStringAsync();
+                List<ShotEffectModel>? shotEffects = JsonSerializer.Deserialize<List<ShotEffectModel>>(json);
+
+                return (shotEffects, json);
+            }
+            catch (Exception ex)
+            {
+                IsOffline = true;
+                Log.Warning($"Network error while fetching remote shot effects ({fileName}): {ex.Message}");
+                return (null, null);
+            }
+        }
+
         public async Task EnsureAssetsExistAsync(SkinModel skin, Action<string>? onProgress = null)
         {
             try

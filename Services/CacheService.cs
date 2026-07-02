@@ -12,7 +12,7 @@ namespace TextureSwapper.Services
         {
             if (Process.GetProcessesByName(Constants.GameProcessName).Length != 0)
             {
-                Log.Warning("Detected running process: {ProcessName}", Constants.GameProcessName);
+                Log.Warning($"Detected running process: {Constants.GameProcessName}");
                 return true;
             }
             return false;
@@ -36,7 +36,7 @@ namespace TextureSwapper.Services
                     }
                     catch (IOException)
                     {
-                        Log.Warning("Cache file is locked by another process: {FilePath}", file);
+                        Log.Warning($"Cache file is locked by another process: {file}");
                         return true;
                     }
                 }

@@ -7,6 +7,7 @@ using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 using TextureSwapper.Services.Interfaces;
+using Wpf.Ui.Controls;
 
 namespace TextureSwapper.ViewModels
 {
@@ -137,13 +138,13 @@ namespace TextureSwapper.ViewModels
             string[] defaults = ["Custom Paints", "Special", "Moderator", "Admin", "Premium"];
             if (defaults.Contains(oldName))
             {
-                _ = _notificationService.ShowAsync("Access Denied", $"Cannot rename system category '{oldName}'.", Wpf.Ui.Controls.ControlAppearance.Danger);
+                _ = _notificationService.ShowAsync("Access Denied", $"Cannot rename system category '{oldName}'.", ControlAppearance.Danger);
                 return;
             }
 
             if (ExistingItemNames.Contains(newName))
             {
-                _ = _notificationService.ShowAsync("Info", "A folder category with that name already exists.", Wpf.Ui.Controls.ControlAppearance.Caution);
+                _ = _notificationService.ShowAsync("Info", "A folder category with that name already exists.", ControlAppearance.Caution);
                 return;
             }
 
@@ -170,8 +171,9 @@ namespace TextureSwapper.ViewModels
                 RenameCategoryNewName = string.Empty;
                 FilterPaints();
 
-                Log.Information("Renamed category '{Old}' to '{New}'. Updated {Count} paints.", oldName, newName, count);
-                _ = _notificationService.ShowAsync("Success", $"Renamed '{oldName}' to '{newName}'. {count} paints updated.", Wpf.Ui.Controls.ControlAppearance.Success);
+                string countPaints = count > 1 ? "paints" : "paint";
+                Log.Information($"Renamed category '{oldName}' to '{newName}'. Updated {count} {countPaints}.");
+                _ = _notificationService.ShowAsync("Success", $"Renamed '{oldName}' to '{newName}'. {count} paints updated.", ControlAppearance.Success);
             }
         }
 
@@ -199,13 +201,13 @@ namespace TextureSwapper.ViewModels
             {
                 ExistingItemNames.Add(name);
                 RebuildFilterCategories();
-                Log.Information("Added new paint category option: {Name}", name);
-                _ = _notificationService.ShowAsync("Success", $"Category folder '{name}' added to choices.", Wpf.Ui.Controls.ControlAppearance.Success);
+                Log.Information($"Added new paint category option: {name}");
+                _ = _notificationService.ShowAsync("Success", $"Category folder '{name}' added to choices.", ControlAppearance.Success);
                 NewCategoryName = string.Empty;
             }
             else
             {
-                _ = _notificationService.ShowAsync("Info", "This folder category choice already exists.", Wpf.Ui.Controls.ControlAppearance.Caution);
+                _ = _notificationService.ShowAsync("Info", "This folder category choice already exists.", ControlAppearance.Caution);
             }
         }
 
@@ -220,7 +222,7 @@ namespace TextureSwapper.ViewModels
             string[] defaults = ["Custom Paints", "Special", "Moderator", "Admin", "Premium"];
             if (defaults.Contains(cat))
             {
-                _ = _notificationService.ShowAsync("Access Denied", $"Cannot delete system category '{cat}'.", Wpf.Ui.Controls.ControlAppearance.Danger);
+                _ = _notificationService.ShowAsync("Access Denied", $"Cannot delete system category '{cat}'.", ControlAppearance.Danger);
                 return;
             }
 
@@ -241,8 +243,9 @@ namespace TextureSwapper.ViewModels
                 SelectedCategoryToRemove = string.Empty;
                 FilterPaints();
 
-                Log.Information("Removed paint category option: {Name}. Reassigned {Count} paints to 'Custom Paints'.", cat, count);
-                _ = _notificationService.ShowAsync("Success", $"Deleted '{cat}'. {count} paints reassigned to 'Custom Paints'.", Wpf.Ui.Controls.ControlAppearance.Success);
+                string countPaints = count > 1 ? "paints" : "paint";
+                Log.Information($"Removed paint category option: {cat}. Reassigned {count} {countPaints} to 'Custom Paints'.");
+                _ = _notificationService.ShowAsync("Success", $"Deleted '{cat}'. {count} paints reassigned to 'Custom Paints'.", ControlAppearance.Success);
             }
         }
 
@@ -280,7 +283,7 @@ namespace TextureSwapper.ViewModels
             else
             {
                 IsAuthenticated = false;
-                _ = _notificationService.ShowAsync("Authentication Failed", "Incorrect admin password.", Wpf.Ui.Controls.ControlAppearance.Danger);
+                _ = _notificationService.ShowAsync("Authentication Failed", "Incorrect admin password.", ControlAppearance.Danger);
                 Log.Warning("Failed admin authentication attempt.");
             }
         }
@@ -328,7 +331,7 @@ namespace TextureSwapper.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load paints in Admin View.");
-                _ = _notificationService.ShowAsync("Error", "Failed to load custom paints.", Wpf.Ui.Controls.ControlAppearance.Danger);
+                _ = _notificationService.ShowAsync("Error", "Failed to load custom paints.", ControlAppearance.Danger);
             }
         }
 
@@ -360,7 +363,7 @@ namespace TextureSwapper.ViewModels
             try
             {
                 string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
-                Log.Information("Saving admin category reassignments back to disk: {JsonPath}", jsonPath);
+                Log.Information($"Saving admin category reassignments back to disk: {jsonPath}");
 
                 string json = JsonSerializer.Serialize(_allPaints, options);
 
@@ -373,7 +376,7 @@ namespace TextureSwapper.ViewModels
                     string sourceJsonPath = Path.Combine(sourceDir, Constants.PaintsSkinsJson);
                     if (File.Exists(sourceJsonPath))
                     {
-                        Log.Information("Project source directory detected. Saving update to project source: {SourceJsonPath}", sourceJsonPath);
+                        Log.Information($"Project source directory detected. Saving update to project source: {sourceJsonPath}");
                         await File.WriteAllTextAsync(sourceJsonPath, json);
                     }
                 }
@@ -382,7 +385,7 @@ namespace TextureSwapper.ViewModels
                     Log.Debug(ex, "Could not write back to source path (normal for release runs).");
                 }
 
-                await _notificationService.ShowAsync("Success", "Category assignments saved successfully.", Wpf.Ui.Controls.ControlAppearance.Success);
+                await _notificationService.ShowAsync("Success", "Category assignments saved successfully.", ControlAppearance.Success);
 
                 if (_mainViewModel != null)
                 {
@@ -394,7 +397,7 @@ namespace TextureSwapper.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to save paint category changes to disk.");
-                await _notificationService.ShowAsync("Error", $"Failed to save changes: {ex.Message}", Wpf.Ui.Controls.ControlAppearance.Danger);
+                await _notificationService.ShowAsync("Error", $"Failed to save changes: {ex.Message}", ControlAppearance.Danger);
             }
         }
     }

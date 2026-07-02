@@ -3,13 +3,18 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 using TextureSwapper.Services.Interfaces;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace TextureSwapper.ViewModels
 {
@@ -40,8 +45,31 @@ namespace TextureSwapper.ViewModels
         public ObservableCollection<string> ItemNames { get; } = [];
         public ObservableCollection<BackupModel> SnapshotBackups { get; } = [];
         public ObservableCollection<InGamePaintModel> InGamePaints { get; } = [];
+        public ObservableCollection<ShotEffectModel> FilteredShotEffects { get; } = [];
+        public ObservableCollection<string> ShotEffectTurrets { get; } = [];
 
         private List<InGamePaintModel> _allInGamePaints = [];
+        private List<ShotEffectModel> _allShotEffects = [];
+
+        private string _selectedShotEffectTurret = string.Empty;
+        public string SelectedShotEffectTurret
+        {
+            get => _selectedShotEffectTurret;
+            set
+            {
+                if (SetProperty(ref _selectedShotEffectTurret, value))
+                {
+                    FilterShotEffects();
+                }
+            }
+        }
+
+        private ShotEffectModel? _selectedShotEffect;
+        public ShotEffectModel? SelectedShotEffect
+        {
+            get => _selectedShotEffect;
+            set => SetProperty(ref _selectedShotEffect, value);
+        }
         private string _inGamePaintSearchQuery = string.Empty;
         public string InGamePaintSearchQuery
         {
@@ -175,6 +203,8 @@ namespace TextureSwapper.ViewModels
         public ICommand OpenSettingsCommand { get; }
         public ICommand RestoreBackupCommand { get; }
         public ICommand ToggleSkinSelectionCommand { get; }
+        public ICommand SwapShotEffectCommand { get; }
+        public ICommand ToggleShotEffectSelectionCommand { get; }
 
         public string SelectAllText => _allSkins.Any(s => s.IsSelected) ? "Deselect all textures" : "Select all available textures";
         public string SelectAllIcon => _allSkins.Any(s => s.IsSelected) ? "DismissCircle24" : "CheckmarkCircle24";
@@ -218,6 +248,8 @@ namespace TextureSwapper.ViewModels
             RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !IsLoading && SelectedBackup != null);
             ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
             GoBackToInGamePaintsCommand = new RelayCommand(_ => SelectedInGamePaint = null);
+            SwapShotEffectCommand = new AsyncRelayCommand(ExecuteSwapShotEffect, _ => !IsLoading && _allShotEffects.Any(e => e.IsSelected));
+            ToggleShotEffectSelectionCommand = new RelayCommand(ExecuteToggleShotEffectSelection);
 
             _ = InitializeAsync();
         }
@@ -227,7 +259,7 @@ namespace TextureSwapper.ViewModels
             if (parameter is SkinModel skin)
             {
                 skin.IsSelected = !skin.IsSelected;
-                Log.Information("Toggled selection for skin: {SkinName}. New state: {IsSelected}", skin.Name, skin.IsSelected);
+                Log.Information($"Toggled selection for skin: {skin.Name}. New state: {skin.IsSelected}");
 
                 if (skin.IsSelected)
                 {
@@ -236,7 +268,7 @@ namespace TextureSwapper.ViewModels
                         if (otherSkin != skin && otherSkin.Category == skin.Category && otherSkin.ItemName == skin.ItemName && otherSkin.IsSelected)
                         {
                             otherSkin.IsSelected = false;
-                            Log.Information("Deselected conflicting skin {OtherSkinName} because {SkinName} was selected.", otherSkin.Name, skin.Name);
+                            Log.Information($"Deselected conflicting skin {otherSkin.Name} because {skin.Name} was selected.");
                         }
                     }
                 }
@@ -291,6 +323,7 @@ namespace TextureSwapper.ViewModels
             }
 
             await LoadInGamePaintsAsync();
+            await LoadShotEffectsAsync();
 
             UpdateStatus = "Checking for updates...";
 
@@ -318,6 +351,135 @@ namespace TextureSwapper.ViewModels
             }
         }
 
+        private async Task LoadShotEffectsAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                void HandleProgressChanged(string status)
+                {
+                    UpdateStatus = status;
+                }
+
+                _skinSyncService.ProgressChanged += HandleProgressChanged;
+                List<ShotEffectModel> effects = await _skinSyncService.SyncAndLoadShotEffectsAsync();
+                _skinSyncService.ProgressChanged -= HandleProgressChanged;
+
+                _allShotEffects = effects;
+
+                IOrderedEnumerable<string> turrets = _allShotEffects.Select(e => e.Turret).Distinct().OrderBy(t => t);
+                ShotEffectTurrets.Clear();
+                foreach (string turret in turrets)
+                {
+                    ShotEffectTurrets.Add(turret);
+                }
+
+                SelectedShotEffectTurret = ShotEffectTurrets.FirstOrDefault(t => t.Equals("Railgun", StringComparison.OrdinalIgnoreCase)) ?? ShotEffectTurrets.FirstOrDefault() ?? string.Empty;
+                FilterShotEffects();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load shot effects.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private void FilterShotEffects()
+        {
+            FilteredShotEffects.Clear();
+            IEnumerable<ShotEffectModel> filtered = _allShotEffects.Where(e => e.Turret.Equals(SelectedShotEffectTurret, StringComparison.OrdinalIgnoreCase));
+            foreach (ShotEffectModel? effect in filtered)
+            {
+                FilteredShotEffects.Add(effect);
+            }
+        }
+
+        private void ExecuteToggleShotEffectSelection(object? parameter)
+        {
+            if (parameter is ShotEffectModel effect)
+            {
+                effect.IsSelected = !effect.IsSelected;
+                Log.Information($"Toggled selection for shot effect: {effect.Name}. New state: {effect.IsSelected}");
+
+                if (effect.IsSelected)
+                {
+                    foreach (ShotEffectModel otherEffect in _allShotEffects)
+                    {
+                        if (otherEffect != effect && otherEffect.Turret == effect.Turret && otherEffect.IsSelected)
+                        {
+                            otherEffect.IsSelected = false;
+                            Log.Information($"Deselected conflicting shot effect {otherEffect.Name} because {effect.Name} was selected.");
+                        }
+                    }
+                }
+
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        private async Task ExecuteSwapShotEffect(object? parameter)
+        {
+            if (!await EnsureSafeToOperate())
+            {
+                return;
+            }
+
+            ShotEffectModel? selectedEffect = _allShotEffects.FirstOrDefault(e => e.IsSelected);
+            if (selectedEffect == null)
+            {
+                await _notificationService.ShowAsync("Error", "Please select a shot effect first.", ControlAppearance.Danger);
+                return;
+            }
+
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
+            try
+            {
+                IsLoading = true;
+                UpdateStatus = $"Applying shot effect: {selectedEffect.Turret} {selectedEffect.Name}...";
+
+                string? result = await Task.Run(() => _swapService.SwapShotEffect(CachePath, selectedEffect));
+                await Task.Delay(2000);
+                if (result == null)
+                {
+                    notificationTitle = "Success";
+                    notificationMessage = $"{selectedEffect.Turret} {selectedEffect.Name} shot effect applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+                    LoadBackups();
+                }
+                else if (result == "NotCached")
+                {
+                    notificationTitle = "Notice";
+                    notificationMessage = $"The shot effect assets for {selectedEffect.Turret} are not cached by the loader yet. Please launch the game with this turret equipped first.";
+                    notificationAppearance = ControlAppearance.Caution;
+                }
+                else
+                {
+                    notificationTitle = "Error";
+                    notificationMessage = $"Failed to apply shot effect: {result}";
+                    notificationAppearance = ControlAppearance.Danger;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to swap shot effect.");
+                notificationTitle = "Error";
+                notificationMessage = $"Swap error: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
+            }
+            finally
+            {
+                IsLoading = false;
+                UpdateStatus = string.Empty;
+                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
+            }
+        }
+
         private async Task ExecuteRestoreBackup(object? parameter)
         {
             if (SelectedBackup == null)
@@ -338,7 +500,7 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = $"Restoring from {SelectedBackup.DisplayName}...";
-                Log.Information("Restoring cache snapshot from backup: {BackupDisplayName} (Path: {BackupPath})", SelectedBackup.DisplayName, SelectedBackup.FullPath);
+                Log.Information($"Restoring cache snapshot from backup: {SelectedBackup.DisplayName} (Path: {SelectedBackup.FullPath})");
                 bool success = await Task.Run(() => _swapService.RestoreFromBackup(CachePath, SelectedBackup.FullPath));
                 if (success)
                 {
@@ -383,7 +545,7 @@ namespace TextureSwapper.ViewModels
             await CheckForAppUpdatesAsync(onProgress);
         }
 
-        public void SaveTheme(Wpf.Ui.Appearance.ApplicationTheme theme)
+        public void SaveTheme(ApplicationTheme theme)
         {
             Settings.Theme = theme;
             _settingsService.Save(Settings);
@@ -396,18 +558,37 @@ namespace TextureSwapper.ViewModels
             GitHubReleaseModel? release = await _updateService.CheckForAppUpdatesAsync();
             if (release != null)
             {
-                string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
+                string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "Unknown";
                 string latestVersion = release.TagName.TrimStart('v');
+
+                Log.Information($"Current local version = {currentVersion}, Latest GitHub version = {latestVersion}");
 
                 if (IsNewerVersion(currentVersion, latestVersion))
                 {
+                    onProgress?.Invoke($"Update available: {release.TagName}");
+
+                    string updateContent = $"A new version ({release.TagName}) is available. Download and install it now?";
+                    if (!string.IsNullOrWhiteSpace(release.Body))
+                    {
+                        updateContent += $"\n\nRelease notes:\n\n{release.Body}";
+                    }
+
+                    FlowDocumentScrollViewer docViewer = new()
+                    {
+                        MaxHeight = 350,
+                        VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                        Document = MarkdownParser.ParseToFlowDocument(updateContent),
+                        Background = Brushes.Transparent,
+                        BorderThickness = new Thickness(0)
+                    };
+
                     MessageBox messageBox = new()
                     {
                         Title = "Update Available",
-                        Content = $"A new version ({release.TagName}) is available. Would you like to download and install it now?",
+                        Content = docViewer,
                         PrimaryButtonText = "Update Now",
                         SecondaryButtonText = "Later",
-                        MaxWidth = 450
+                        MaxWidth = 580
                     };
 
                     MessageBoxResult result = await messageBox.ShowDialogAsync();
@@ -915,7 +1096,7 @@ namespace TextureSwapper.ViewModels
             };
 
             MessageBoxResult result = await messageBox.ShowDialogAsync();
-            if (result != Wpf.Ui.Controls.MessageBoxResult.Primary)
+            if (result != MessageBoxResult.Primary)
             {
                 return;
             }

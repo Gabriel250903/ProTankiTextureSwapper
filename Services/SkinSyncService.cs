@@ -172,6 +172,83 @@ namespace TextureSwapper.Services
             return (combinedSkins, remoteInGamePaints);
         }
 
+        public async Task<List<ShotEffectModel>> SyncAndLoadShotEffectsAsync()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string localPath = Path.Combine(baseDir, Constants.ShotEffectsJson);
+
+            string localJson = File.Exists(localPath) ? await File.ReadAllTextAsync(localPath) : string.Empty;
+            List<ShotEffectModel> shotEffects = [];
+            if (!string.IsNullOrEmpty(localJson))
+            {
+                try
+                {
+                    shotEffects = JsonSerializer.Deserialize<List<ShotEffectModel>>(localJson) ?? [];
+                }
+                catch (JsonException ex)
+                {
+                    Log.Error(ex, "Failed to deserialize local shot effects.");
+                }
+            }
+
+            if (_updateService.IsOffline)
+            {
+                return shotEffects;
+            }
+
+            try
+            {
+                ProgressChanged?.Invoke("Syncing shot effects database...");
+                (List<ShotEffectModel>? remoteEffects, string? remoteJson) = await _updateService.FetchRemoteShotEffectsFileAsync(Constants.ShotEffectsJson);
+
+                if (remoteEffects != null && remoteJson != localJson)
+                {
+                    Log.Information("Remote shot_effects.json is different from local. Merging changes...");
+                    bool merged = false;
+                    foreach (ShotEffectModel remoteEffect in remoteEffects)
+                    {
+                        ShotEffectModel? localEffect = shotEffects.FirstOrDefault(s => s.Turret.Equals(remoteEffect.Turret, StringComparison.OrdinalIgnoreCase) && s.Name.Equals(remoteEffect.Name, StringComparison.OrdinalIgnoreCase));
+                        if (localEffect != null)
+                        {
+                            if (!localEffect.SourceFolder.Equals(remoteEffect.SourceFolder, StringComparison.OrdinalIgnoreCase) ||
+                                !localEffect.PreviewImage.Equals(remoteEffect.PreviewImage, StringComparison.OrdinalIgnoreCase) ||
+                                string.Join(",", localEffect.Targets) != string.Join(",", remoteEffect.Targets))
+                            {
+                                localEffect.SourceFolder = remoteEffect.SourceFolder;
+                                localEffect.PreviewImage = remoteEffect.PreviewImage;
+                                localEffect.Targets = remoteEffect.Targets;
+                                merged = true;
+                            }
+                        }
+                        else
+                        {
+                            shotEffects.Add(remoteEffect);
+                            merged = true;
+                        }
+                    }
+
+                    HashSet<string> remoteKeys = new(remoteEffects.Select(s => $"{s.Turret}:{s.Name}"), StringComparer.OrdinalIgnoreCase);
+                    int removed = shotEffects.RemoveAll(s => !remoteKeys.Contains($"{s.Turret}:{s.Name}"));
+                    if (removed > 0)
+                    {
+                        merged = true;
+                    }
+
+                    if (merged)
+                    {
+                        string mergedJson = JsonSerializer.Serialize(shotEffects, options);
+                        await File.WriteAllTextAsync(localPath, mergedJson);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to sync remote shot_effects.json");
+            }
+
+            return shotEffects;
+        }
+
         public List<BackupModel> LoadBackups()
         {
             string backupsRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
