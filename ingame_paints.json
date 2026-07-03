@@ -40,9 +40,9 @@
     "PreviewImage": "Textures/Paints/InGame/Forester.png"
   },
   {
-    "Name": "Grafitti",
+    "Name": "Graffiti",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy83NC8zMTY0NDc1NDMwNjA2NS9pbWFnZS5qcGc=",
-    "PreviewImage": "Textures/Paints/InGame/Grafitti.png"
+    "PreviewImage": "Textures/Paints/InGame/Graffiti.png"
   },
   {
     "Name": "Hive",
@@ -115,9 +115,9 @@
     "PreviewImage": "Textures/Paints/InGame/Prodigi.png"
   },
   {
-    "Name": "Racoon",
+    "Name": "Raccoon",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMTIvMzE2NDQ3NTQzMDYyMzcvaW1hZ2UuanBn",
-    "PreviewImage": "Textures/Paints/InGame/Racoon.png"
+    "PreviewImage": "Textures/Paints/InGame/Raccoon.png"
   },
   {
     "Name": "Rock",

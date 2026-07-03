@@ -1,6 +1,13 @@
 [
   {
     "Category": "Paints",
+    "ItemName": "Custom Paints",
+    "Name": "Gurt",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage":  "Textures/Paints/Gurt.jpg"
+  },
+  {
+    "Category": "Paints",
     "ItemName": "Special",
     "Name": "_Destroyed_old",
     "SourceFolder": "Textures/Paints",
