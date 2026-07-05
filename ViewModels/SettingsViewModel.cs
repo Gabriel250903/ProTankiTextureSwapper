@@ -6,6 +6,7 @@ using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
 using TextureSwapper.Services.Interfaces;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper.ViewModels
@@ -41,6 +42,40 @@ namespace TextureSwapper.ViewModels
                     _settingsService.Save(Settings);
                     OnPropertyChanged();
                     Log.Information("Settings changed: Max Backup Retention updated from {OldDays} to {NewDays} days.", oldVal, value);
+                    ExecuteRefreshLogs(null);
+                }
+            }
+        }
+
+        public ApplicationTheme SelectedTheme
+        {
+            get => Settings.Theme;
+            set
+            {
+                if (Settings.Theme != value)
+                {
+                    Settings.Theme = value;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged();
+                    ApplicationThemeManager.Apply(value);
+                    Log.Information("Theme changed to {Theme}.", value);
+                    ExecuteRefreshLogs(null);
+                }
+            }
+        }
+
+        public IEnumerable<ApplicationTheme> AvailableThemes => Enum.GetValues(typeof(ApplicationTheme)).Cast<ApplicationTheme>().Where(t => t != ApplicationTheme.Unknown);
+
+        public double UIScale
+        {
+            get => Settings.UIScale;
+            set
+            {
+                if (Settings.UIScale != value)
+                {
+                    _mainViewModel.UIScale = value;
+                    OnPropertyChanged();
+                    Log.Information("UI Scale changed to {Scale}.", value);
                     ExecuteRefreshLogs(null);
                 }
             }

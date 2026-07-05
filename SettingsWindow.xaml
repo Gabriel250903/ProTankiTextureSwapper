@@ -8,7 +8,7 @@
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="Settings"
     Width="750"
-    Height="830"
+    Height="650"
     d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
     Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
     ExtendsContentIntoTitleBar="True"
@@ -21,6 +21,9 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding UIScale}" ScaleY="{Binding UIScale}" />
+        </Grid.LayoutTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -66,6 +69,66 @@
                             Minimum="1"
                             TickFrequency="1"
                             Value="{Binding BackupRetentionDays, Mode=TwoWay}" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:TextBlock
+                    Margin="0,15,0,10"
+                    FontTypography="Subtitle"
+                    Text="Appearance &amp; Display" />
+                <ui:Card Margin="0,0,0,20" Padding="15">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="Application Theme" />
+                                <ui:TextBlock
+                                    FontTypography="Caption"
+                                    Opacity="0.6"
+                                    Text="Select the application's theme" />
+                            </StackPanel>
+                            <ComboBox
+                                Grid.Column="1"
+                                MinWidth="150"
+                                ItemsSource="{Binding AvailableThemes}"
+                                SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="UI Scaling / Zoom" />
+                                <ui:TextBlock
+                                    FontTypography="Caption"
+                                    Opacity="0.6"
+                                    Text="Adjust the size of application interface elements" />
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Slider
+                                    Width="120"
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="1.3"
+                                    Minimum="0.7"
+                                    TickFrequency="0.05"
+                                    Value="{Binding UIScale, Mode=TwoWay}" />
+                                <ui:TextBlock
+                                    Width="40"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding UIScale, StringFormat={}{0:P0}}"
+                                    TextAlignment="Right" />
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </ui:Card>
 

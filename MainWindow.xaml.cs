@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 using TextureSwapper.Services.Interfaces;
 using TextureSwapper.ViewModels;
 using Wpf.Ui.Appearance;
@@ -8,7 +10,7 @@ namespace TextureSwapper
 {
     public partial class MainWindow : FluentWindow, INotificationService
     {
-        private readonly MainViewModel _mainViewModel;
+        private MainViewModel _mainViewModel;
         private int _currentNotificationId = 0;
 
         public MainWindow(MainViewModel mainViewModel)
@@ -18,10 +20,25 @@ namespace TextureSwapper
 
             InitializeComponent();
 
-            ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+            ApplicationThemeManager.Apply(_mainViewModel.Settings.Theme);
+            ApplicationThemeManager.Changed += OnAppThemeChanged;
+            Closed += (_, _) => ApplicationThemeManager.Changed -= OnAppThemeChanged;
         }
 
-        private void OnNavigationItemClick(object sender, System.Windows.RoutedEventArgs e)
+        private void OnAppThemeChanged(ApplicationTheme currentTheme, Color systemAccent)
+        {
+            _ = Dispatcher.InvokeAsync(() =>
+            {
+                ApplicationThemeManager.Apply(this);
+                ApplicationThemeManager.Apply(RootNavigation);
+
+                WindowBackdropType savedBackdrop = WindowBackdropType;
+                WindowBackdropType = WindowBackdropType.None;
+                WindowBackdropType = savedBackdrop;
+            }, DispatcherPriority.Background);
+        }
+
+        private void OnNavigationItemClick(object sender, RoutedEventArgs e)
         {
             if (sender is NavigationViewItem selectedItem && MainTabControl != null)
             {

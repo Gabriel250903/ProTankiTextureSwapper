@@ -104,6 +104,20 @@ namespace TextureSwapper.ViewModels
 
         public AppSettings Settings { get; }
 
+        public double UIScale
+        {
+            get => Settings.UIScale;
+            set
+            {
+                if (Settings.UIScale != value)
+                {
+                    Settings.UIScale = value;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public BackupModel? SelectedBackup
         {
             get => _selectedBackup;
@@ -229,7 +243,10 @@ namespace TextureSwapper.ViewModels
             _windowService = windowService;
 
             Settings = _settingsService.Load();
-            Settings.Theme = ApplicationTheme.Dark;
+            if (Settings.Theme == ApplicationTheme.Unknown)
+            {
+                Settings.Theme = ApplicationTheme.Dark;
+            }
             AdminVM = new AdminViewModel(this, notificationService);
 
             CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();

@@ -11,13 +11,12 @@
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="ProTanki Texture Swapper"
     Width="1050"
-    Height="780"
-    MinWidth="1050"
-    MinHeight="780"
-    MaxWidth="1280"
+    Height="700"
+    MinWidth="900"
+    MinHeight="580"
     d:DataContext="{d:DesignInstance vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
-    Background="Transparent"
+    Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterScreen"
@@ -26,6 +25,9 @@
     <Window.Resources />
 
     <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding UIScale}" ScaleY="{Binding UIScale}" />
+        </Grid.LayoutTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
