@@ -171,9 +171,9 @@ namespace TextureSwapper.ViewModels
                 LastCheckedTime = DateTime.Now.ToString("g");
                 Log.Information("User initiated manual app update check. Querying API...");
 
-                await _mainViewModel.PerformUpdateCheckAsync(p => UpdateStatus = p);
+                bool updateAvailable = await _mainViewModel.PerformUpdateCheckAsync(p => UpdateStatus = p);
 
-                if (UpdateStatus == "Checking for updates...")
+                if (!updateAvailable)
                 {
                     UpdateStatus = "You are up to date!";
                     Log.Information("Manual app update check complete. App is already up to date.");
@@ -187,7 +187,7 @@ namespace TextureSwapper.ViewModels
             {
                 Log.Error(ex, "Update check failed.");
                 UpdateStatus = "Error: Check connection.";
-                await _mainViewModel._notificationService.ShowAsync("Update Error", "Failed to reach GitHub API. Please check your internet connection.", ControlAppearance.Danger);
+                await _mainViewModel.ShowNotificationAsync("Update Error", "Failed to reach GitHub API. Please check your internet connection.", ControlAppearance.Danger);
             }
             finally
             {

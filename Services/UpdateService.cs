@@ -37,6 +37,7 @@ namespace TextureSwapper.Services
                     HttpResponseMessage response = await _httpClient.GetAsync(url);
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
+                        response.Dispose();
                         throw new HttpRequestException($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
                     }
                     _ = response.EnsureSuccessStatusCode();
@@ -48,7 +49,7 @@ namespace TextureSwapper.Services
                     Log.Warning($"Resource not found (404): {url}");
                     throw;
                 }
-                catch (HttpRequestException ex) when (i < maxRetries - 1)
+                catch (HttpRequestException ex)
                 {
                     if (ex.InnerException is System.Net.Sockets.SocketException socketEx &&
                         (socketEx.SocketErrorCode == System.Net.Sockets.SocketError.HostNotFound ||
@@ -61,8 +62,17 @@ namespace TextureSwapper.Services
                         IsOffline = true;
                         throw;
                     }
-                    Log.Warning($"Request failed, retrying in {Math.Pow(2, i)}s. Error: {ex.Message}");
-                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+
+                    if (i < maxRetries - 1)
+                    {
+                        Log.Warning($"Request failed, retrying in {Math.Pow(2, i)}s. Error: {ex.Message}");
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                    }
+                    else
+                    {
+                        IsOffline = true;
+                        throw new HttpRequestException("Max retries exceeded.", ex);
+                    }
                 }
             }
             IsOffline = true;
@@ -76,7 +86,7 @@ namespace TextureSwapper.Services
                 Log.Information($"Fetching remote {fileName} from GitHub...");
                 string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
 
-                HttpResponseMessage response = await GetWithRetryAsync(url);
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
                 string json = await response.Content.ReadAsStringAsync();
                 List<SkinModel>? skins = JsonSerializer.Deserialize<List<SkinModel>>(json);
 
@@ -97,7 +107,7 @@ namespace TextureSwapper.Services
                 Log.Information($"Fetching remote {fileName} from GitHub...");
                 string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
 
-                HttpResponseMessage response = await GetWithRetryAsync(url);
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
                 string json = await response.Content.ReadAsStringAsync();
                 List<ShotEffectModel>? shotEffects = JsonSerializer.Deserialize<List<ShotEffectModel>>(json);
 
@@ -209,7 +219,7 @@ namespace TextureSwapper.Services
                 onProgress?.Invoke($"Downloading {fileNameWithDefaultExtension}...");
 
                 _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
-                HttpResponseMessage response = await GetWithRetryAsync(url);
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
                 data = await response.Content.ReadAsByteArrayAsync();
             }
             else
@@ -225,7 +235,7 @@ namespace TextureSwapper.Services
                     try
                     {
                         Log.Information($"Trying download: {downloadLocalPath}");
-                        HttpResponseMessage response = await GetWithRetryAsync(url);
+                        using HttpResponseMessage response = await GetWithRetryAsync(url);
                         if (response.IsSuccessStatusCode)
                         {
                             data = await response.Content.ReadAsByteArrayAsync();
@@ -234,7 +244,7 @@ namespace TextureSwapper.Services
                     }
                     catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
                     {
-                        Log.Warning($"Resource not found (404): {url}", null, HttpStatusCode.NotFound);
+                        Log.Warning($"Resource not found (404): {url}. Status: {HttpStatusCode.NotFound}.");
                     }
                     catch (Exception ex)
                     {
@@ -274,7 +284,7 @@ namespace TextureSwapper.Services
                 Log.Information("Fetching remote {FileName} from GitHub...", fileName);
                 string url = $"{Constants.GitHubRawUrl}/{fileName}?t={DateTime.Now.Ticks}";
 
-                HttpResponseMessage response = await GetWithRetryAsync(url);
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
                 string json = await response.Content.ReadAsStringAsync();
                 List<InGamePaintModel>? paints = JsonSerializer.Deserialize<List<InGamePaintModel>>(json);
 
@@ -295,7 +305,7 @@ namespace TextureSwapper.Services
                 Log.Information("Checking for app updates on GitHub...");
                 string url = $"{Constants.GitHubApiUrl}/releases/latest";
 
-                HttpResponseMessage response = await GetWithRetryAsync(url);
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
                 return await response.Content.ReadFromJsonAsync<GitHubReleaseModel>();
             }
             catch (Exception ex)
@@ -311,6 +321,24 @@ namespace TextureSwapper.Services
             string tempPath = Path.Combine(Path.GetTempPath(), "TextureSwapper_Setup.exe");
 
             Log.Information($"Downloading installer from {downloadUrl} to {tempPath}");
+
+            string? expectedHash = null;
+            try
+            {
+                using HttpResponseMessage hashResponse = await _httpClient.GetAsync(downloadUrl + ".sha256");
+                if (hashResponse.IsSuccessStatusCode)
+                {
+                    string hashText = await hashResponse.Content.ReadAsStringAsync();
+                    expectedHash = hashText.Split([' ', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+                                           .FirstOrDefault()?
+                                           .Trim();
+                    Log.Information($"Found expected SHA256 hash for installer: {expectedHash}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning($"Could not fetch companion installer SHA256: {ex.Message}");
+            }
 
             using (HttpResponseMessage response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead))
             {
@@ -333,6 +361,36 @@ namespace TextureSwapper.Services
                         onProgress?.Invoke((double)totalRead / totalBytes * 100);
                     }
                 }
+            }
+
+            using (FileStream fs = new(tempPath, FileMode.Open, FileAccess.Read))
+            {
+                if (fs.Length < 2)
+                {
+                    throw new InvalidDataException("Downloaded installer is too small to be valid.");
+                }
+                int b1 = fs.ReadByte();
+                int b2 = fs.ReadByte();
+                if (b1 != 0x4D || b2 != 0x5A)
+                {
+                    throw new InvalidDataException("Downloaded installer is not a valid executable file.");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(expectedHash))
+            {
+                byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
+                byte[] hashBytes = SHA256.HashData(fileBytes);
+                string computedHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                if (!computedHash.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new CryptographicException($"Installer hash mismatch! Expected: {expectedHash}, Computed: {computedHash}");
+                }
+                Log.Information("Installer integrity check passed successfully.");
+            }
+            else
+            {
+                Log.Warning("Installer downloaded but no companion SHA256 file was found to verify integrity.");
             }
 
             Log.Information($"Launching installer: {tempPath}");

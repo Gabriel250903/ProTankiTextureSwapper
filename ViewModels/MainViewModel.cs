@@ -24,9 +24,9 @@ namespace TextureSwapper.ViewModels
         private readonly IUpdateService _updateService;
         private readonly ISkinSyncService _skinSyncService;
         private readonly ICacheService _cacheService;
-        internal readonly ISettingsService _settingsService;
+        private readonly ISettingsService _settingsService;
         private readonly IWindowService _windowService;
-        internal readonly INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private List<SkinModel> _allSkins = [];
 
         private string _cachePath = string.Empty;
@@ -163,7 +163,10 @@ namespace TextureSwapper.ViewModels
                 if (SetProperty(ref _selectedCategory, value))
                 {
                     Settings.LastSelectedCategory = value;
-                    _settingsService.Save(Settings);
+                    if (!IsLoading)
+                    {
+                        SaveSettings();
+                    }
                     FilterItems();
                     CommandManager.InvalidateRequerySuggested();
                 }
@@ -178,7 +181,10 @@ namespace TextureSwapper.ViewModels
                 if (SetProperty(ref _selectedItemName, value))
                 {
                     Settings.LastSelectedItemName = value;
-                    _settingsService.Save(Settings);
+                    if (!IsLoading)
+                    {
+                        SaveSettings();
+                    }
                     FilterSkins();
                 }
             }
@@ -331,28 +337,38 @@ namespace TextureSwapper.ViewModels
 
             try
             {
-                await Task.Run(() => _swapService.PurgeOldBackups(Settings.MaxBackupRetentionDays));
-                LoadBackups();
+                try
+                {
+                    await Task.Run(() => _swapService.PurgeOldBackups(Settings.MaxBackupRetentionDays));
+                    LoadBackups();
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to purge or load backups.");
+                }
+
+                await LoadInGamePaintsAsync();
+                await LoadShotEffectsAsync();
+
+                UpdateStatus = "Checking for updates...";
+
+                await LoadSkinsAsync();
+                _ = await CheckForAppUpdatesAsync();
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to purge or load backups.");
+                Log.Error(ex, "Unhandled exception during initialization.");
             }
-
-            await LoadInGamePaintsAsync();
-            await LoadShotEffectsAsync();
-
-            UpdateStatus = "Checking for updates...";
-
-            await LoadSkinsAsync();
-            await CheckForAppUpdatesAsync();
-
-            IsLoading = false;
-            UpdateStatus = string.Empty;
+            finally
+            {
+                IsLoading = false;
+                UpdateStatus = string.Empty;
+            }
         }
 
         private void LoadBackups()
         {
+            SelectedBackup = null;
             SnapshotBackups.Clear();
             try
             {
@@ -375,7 +391,7 @@ namespace TextureSwapper.ViewModels
                 IsLoading = true;
                 void HandleProgressChanged(string status)
                 {
-                    UpdateStatus = status;
+                    System.Windows.Application.Current?.Dispatcher.Invoke(() => UpdateStatus = status);
                 }
 
                 _skinSyncService.ProgressChanged += HandleProgressChanged;
@@ -475,6 +491,12 @@ namespace TextureSwapper.ViewModels
                     notificationMessage = $"The shot effect assets for {selectedEffect.Turret} are not cached by the loader yet. Please launch the game with this turret equipped first.";
                     notificationAppearance = ControlAppearance.Caution;
                 }
+                else if (result == "CacheWithExtensions")
+                {
+                    notificationTitle = "Notice";
+                    notificationMessage = "The cache files seem to have extensions added to them (e.g. .png, .jpg). Please rename them back to plain files without extensions (e.g. by running 'ren *.png *' inside the cache folder) so the app can recognize and swap them.";
+                    notificationAppearance = ControlAppearance.Caution;
+                }
                 else
                 {
                     notificationTitle = "Error";
@@ -552,23 +574,33 @@ namespace TextureSwapper.ViewModels
         {
             IsLoading = true;
             UpdateStatus = "Checking for updates...";
-            await CheckForAppUpdatesAsync(p => UpdateStatus = p);
+            _ = await CheckForAppUpdatesAsync(p => UpdateStatus = p);
             IsLoading = false;
             UpdateStatus = string.Empty;
         }
 
-        internal async Task PerformUpdateCheckAsync(Action<string> onProgress)
+        internal async Task<bool> PerformUpdateCheckAsync(Action<string> onProgress)
         {
-            await CheckForAppUpdatesAsync(onProgress);
+            return await CheckForAppUpdatesAsync(onProgress);
+        }
+
+        public async Task ShowNotificationAsync(string title, string message, ControlAppearance appearance)
+        {
+            await _notificationService.ShowAsync(title, message, appearance);
         }
 
         public void SaveTheme(ApplicationTheme theme)
         {
             Settings.Theme = theme;
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
             _settingsService.Save(Settings);
         }
 
-        private async Task CheckForAppUpdatesAsync(Action<string>? onProgress = null)
+        private async Task<bool> CheckForAppUpdatesAsync(Action<string>? onProgress = null)
         {
             onProgress?.Invoke("Checking for updates...");
 
@@ -618,8 +650,10 @@ namespace TextureSwapper.ViewModels
                             await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => onProgress?.Invoke($"Downloading update ({p:F0}%)..."));
                         }
                     }
+                    return true;
                 }
             }
+            return false;
         }
 
         private bool IsNewerVersion(string current, string latest)
@@ -640,7 +674,7 @@ namespace TextureSwapper.ViewModels
 
                 void HandleProgressChanged(string status)
                 {
-                    UpdateStatus = status;
+                    System.Windows.Application.Current?.Dispatcher.Invoke(() => UpdateStatus = status);
                 }
 
                 _skinSyncService.ProgressChanged += HandleProgressChanged;
@@ -654,7 +688,7 @@ namespace TextureSwapper.ViewModels
                     await _notificationService.ShowAsync("Offline Mode", "Running in offline mode. Local databases and cached textures will be used.", ControlAppearance.Info);
                 }
 
-                _allSkins = skins;
+                _allSkins = skins ?? [];
                 InitializeCategories();
                 FilterItems();
 
@@ -697,7 +731,7 @@ namespace TextureSwapper.ViewModels
 
                                 Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
                                 _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
-                                HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
+                                using HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
                                 byte[] data = await res.Content.ReadAsByteArrayAsync();
                                 await File.WriteAllBytesAsync(localPreview, data);
                             }

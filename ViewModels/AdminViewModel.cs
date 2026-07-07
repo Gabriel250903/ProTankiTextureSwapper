@@ -1,6 +1,8 @@
 using Serilog;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Windows.Input;
 using TextureSwapper.Core;
@@ -138,13 +140,13 @@ namespace TextureSwapper.ViewModels
             string[] defaults = ["Custom Paints", "Special", "Moderator", "Admin", "Premium"];
             if (defaults.Contains(oldName))
             {
-                _ = _notificationService.ShowAsync("Access Denied", $"Cannot rename system category '{oldName}'.", ControlAppearance.Danger);
+                ShowNotificationSafe("Access Denied", $"Cannot rename system category '{oldName}'.", ControlAppearance.Danger);
                 return;
             }
 
             if (ExistingItemNames.Contains(newName))
             {
-                _ = _notificationService.ShowAsync("Info", "A folder category with that name already exists.", ControlAppearance.Caution);
+                ShowNotificationSafe("Info", "A folder category with that name already exists.", ControlAppearance.Caution);
                 return;
             }
 
@@ -172,8 +174,8 @@ namespace TextureSwapper.ViewModels
                 FilterPaints();
 
                 string countPaints = count > 1 ? "paints" : "paint";
-                Log.Information($"Renamed category '{oldName}' to '{newName}'. Updated {count} {countPaints}.");
-                _ = _notificationService.ShowAsync("Success", $"Renamed '{oldName}' to '{newName}'. {count} paints updated.", ControlAppearance.Success);
+                Log.Information($"Renamed category {oldName} to {newName}. Updated {count} {countPaints}.");
+                ShowNotificationSafe("Success", $"Renamed '{oldName}' to '{newName}'. {count} paints updated.", ControlAppearance.Success);
             }
         }
 
@@ -202,12 +204,12 @@ namespace TextureSwapper.ViewModels
                 ExistingItemNames.Add(name);
                 RebuildFilterCategories();
                 Log.Information($"Added new paint category option: {name}");
-                _ = _notificationService.ShowAsync("Success", $"Category folder '{name}' added to choices.", ControlAppearance.Success);
+                ShowNotificationSafe("Success", $"Category folder '{name}' added to choices.", ControlAppearance.Success);
                 NewCategoryName = string.Empty;
             }
             else
             {
-                _ = _notificationService.ShowAsync("Info", "This folder category choice already exists.", ControlAppearance.Caution);
+                ShowNotificationSafe("Info", "This folder category choice already exists.", ControlAppearance.Caution);
             }
         }
 
@@ -222,7 +224,7 @@ namespace TextureSwapper.ViewModels
             string[] defaults = ["Custom Paints", "Special", "Moderator", "Admin", "Premium"];
             if (defaults.Contains(cat))
             {
-                _ = _notificationService.ShowAsync("Access Denied", $"Cannot delete system category '{cat}'.", ControlAppearance.Danger);
+                ShowNotificationSafe("Access Denied", $"Cannot delete system category '{cat}'.", ControlAppearance.Danger);
                 return;
             }
 
@@ -245,34 +247,38 @@ namespace TextureSwapper.ViewModels
 
                 string countPaints = count > 1 ? "paints" : "paint";
                 Log.Information($"Removed paint category option: {cat}. Reassigned {count} {countPaints} to 'Custom Paints'.");
-                _ = _notificationService.ShowAsync("Success", $"Deleted '{cat}'. {count} paints reassigned to 'Custom Paints'.", ControlAppearance.Success);
+                ShowNotificationSafe("Success", $"Deleted '{cat}'. {count} paints reassigned to 'Custom Paints'.", ControlAppearance.Success);
             }
         }
 
         private void ExecuteLogin(object? parameter)
         {
             string trimmedInput = PasswordInput?.Trim() ?? string.Empty;
-            Log.Information("ExecuteLogin called. Input length: {InputLength}, Trimmed length: {TrimmedLength}", PasswordInput?.Length ?? 0, trimmedInput.Length);
+            Log.Information("ExecuteLogin called.");
 
             string expectedHash = _mainViewModel.Settings.AdminPasswordHash;
             string salt = _mainViewModel.Settings.AdminPasswordSalt;
 
-            if (string.IsNullOrEmpty(salt) || string.IsNullOrEmpty(expectedHash)
-                || expectedHash.Equals("240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9", StringComparison.OrdinalIgnoreCase)
-                || expectedHash.Equals("240751AF9EDC645A95A85A4815F54C546FF871D7374BE403E5D4665476718BD8", StringComparison.OrdinalIgnoreCase)
-                || expectedHash.Equals("01B307ACBA4F54F55AAFC33BB06BBBF6CA803E9A37C083E4672B1BBA4CAE54E4", StringComparison.OrdinalIgnoreCase)
-                || expectedHash.Equals("A3CB853E34B95F19DB1D3F9B2D354B679A9F24B22F01F09BBCB04EB921C57EA1", StringComparison.OrdinalIgnoreCase))
+            if (IsLegacyHash(salt, expectedHash))
             {
-                salt = "DEFAULT_SALT_123";
-                expectedHash = "19FFFAF056A656FB4A13BAB7F8829D8C6B35C7C197C9629C42E07A3F7981CB68";
+                string legacyHash = LegacyHashPassword(trimmedInput.ToLower(), "DEFAULT_SALT_123");
+                if (legacyHash.Equals("19FFFAF056A656FB4A13BAB7F8829D8C6B35C7C197C9629C42E07A3F7981CB68", StringComparison.OrdinalIgnoreCase))
+                {
+                    string newSalt = GenerateRandomSalt();
+                    string newHash = HashPasswordPbkdf2(trimmedInput, newSalt);
+                    _mainViewModel.Settings.AdminPasswordSalt = newSalt;
+                    _mainViewModel.Settings.AdminPasswordHash = newHash;
+                    _mainViewModel.SaveSettings();
+                    Log.Information("Migrated admin password from legacy SHA-256 to PBKDF2.");
 
-                _mainViewModel.Settings.AdminPasswordSalt = salt;
-                _mainViewModel.Settings.AdminPasswordHash = expectedHash;
-                _mainViewModel._settingsService.Save(_mainViewModel.Settings);
-                Log.Information("Migrated admin password config to salted hash schema.");
+                    IsAuthenticated = true;
+                    PasswordInput = string.Empty;
+                    Log.Information("Admin successfully authenticated.");
+                    return;
+                }
             }
 
-            string hashedInput = HashPassword(trimmedInput.ToLower(), salt);
+            string hashedInput = HashPasswordPbkdf2(trimmedInput, salt);
             Log.Information("ExecuteLogin: Performing admin authentication verification.");
             if (hashedInput.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
             {
@@ -283,15 +289,51 @@ namespace TextureSwapper.ViewModels
             else
             {
                 IsAuthenticated = false;
-                _ = _notificationService.ShowAsync("Authentication Failed", "Incorrect admin password.", ControlAppearance.Danger);
+                ShowNotificationSafe("Authentication Failed", "Incorrect admin password.", ControlAppearance.Danger);
                 Log.Warning("Failed admin authentication attempt.");
             }
         }
 
-        private string HashPassword(string password, string saltValue)
+        private static bool IsLegacyHash(string salt, string expectedHash)
         {
-            byte[] bytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(password + saltValue));
+            if (salt == "DEFAULT_SALT_123")
+            {
+                return true;
+            }
+
+            string[] knownLegacyHashes =
+            [
+                "19FFFAF056A656FB4A13BAB7F8829D8C6B35C7C197C9629C42E07A3F7981CB68",
+                "240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9",
+                "240751AF9EDC645A95A85A4815F54C546FF871D7374BE403E5D4665476718BD8",
+                "01B307ACBA4F54F55AAFC33BB06BBBF6CA803E9A37C083E4672B1BBA4CAE54E4",
+                "A3CB853E34B95F19DB1D3F9B2D354B679A9F24B22F01F09BBCB04EB921C57EA1"
+            ];
+            return knownLegacyHashes.Contains(expectedHash, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static string LegacyHashPassword(string password, string saltValue)
+        {
+            byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password + saltValue));
             return Convert.ToHexString(bytes);
+        }
+
+        private static string GenerateRandomSalt(int size = 32)
+        {
+            byte[] saltBytes = RandomNumberGenerator.GetBytes(size);
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        private static string HashPasswordPbkdf2(string password, string salt, int iterations = 100_000)
+        {
+            byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password),
+                saltBytes,
+                iterations,
+                HashAlgorithmName.SHA256,
+                32);
+            return Convert.ToHexString(hash);
         }
 
         private void LoadPaints()
@@ -331,7 +373,7 @@ namespace TextureSwapper.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load paints in Admin View.");
-                _ = _notificationService.ShowAsync("Error", "Failed to load custom paints.", ControlAppearance.Danger);
+                ShowNotificationSafe("Error", "Failed to load custom paints.", ControlAppearance.Danger);
             }
         }
 
@@ -363,7 +405,7 @@ namespace TextureSwapper.ViewModels
             try
             {
                 string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
-                Log.Information($"Saving admin category reassignments back to disk: {jsonPath}");
+                Log.Information("Saving admin category reassignments back to disk: {JsonPath}", jsonPath);
 
                 string json = JsonSerializer.Serialize(_allPaints, options);
 
@@ -387,10 +429,7 @@ namespace TextureSwapper.ViewModels
 
                 await _notificationService.ShowAsync("Success", "Category assignments saved successfully.", ControlAppearance.Success);
 
-                if (_mainViewModel != null)
-                {
-                    await _mainViewModel.ReloadSkinsDataAsync();
-                }
+                await _mainViewModel.ReloadSkinsDataAsync();
 
                 CloseRequested?.Invoke();
             }
@@ -399,6 +438,17 @@ namespace TextureSwapper.ViewModels
                 Log.Error(ex, "Failed to save paint category changes to disk.");
                 await _notificationService.ShowAsync("Error", $"Failed to save changes: {ex.Message}", ControlAppearance.Danger);
             }
+        }
+
+        private void ShowNotificationSafe(string title, string message, ControlAppearance appearance)
+        {
+            _ = _notificationService.ShowAsync(title, message, appearance).ContinueWith(t =>
+            {
+                if (t.IsFaulted && t.Exception != null)
+                {
+                    Log.Error(t.Exception, "Failed to show notification: {Title}", title);
+                }
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
     }
 }

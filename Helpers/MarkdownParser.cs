@@ -1,5 +1,5 @@
-#pragma warning disable SYSLIB1045
 
+using Serilog;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -12,8 +12,10 @@ namespace TextureSwapper.Helpers
 {
     public static class MarkdownParser
     {
-        private static readonly Regex InlinePatternRegex = new(@"(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)", RegexOptions.Compiled);
-        private static readonly Regex LinkMatchRegex = new(@"^\[([^\]]+)\]\(([^)]+)\)$", RegexOptions.Compiled);
+        private static readonly Regex InlinePatternRegex = new(@"(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+        private static readonly Regex LinkMatchRegex = new(@"^\[([^\]]+)\]\(([^)]+)\)$", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+        private static readonly Regex NumberedListStartRegex = new(@"^\d+\.\s+", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+        private static readonly Regex NumberedListMatchRegex = new(@"^(\d+)\.\s+(.*)$", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
 
         public static FlowDocument ParseToFlowDocument(string markdownText)
         {
@@ -90,9 +92,9 @@ namespace TextureSwapper.Helpers
                     ParseInlines(p, itemText);
                     doc.Blocks.Add(p);
                 }
-                else if (Regex.IsMatch(trimmed, @"^\d+\.\s+"))
+                else if (NumberedListStartRegex.IsMatch(trimmed))
                 {
-                    Match numMatch = Regex.Match(trimmed, @"^(\d+)\.\s+(.*)$");
+                    Match numMatch = NumberedListMatchRegex.Match(trimmed);
                     if (numMatch.Success)
                     {
                         string num = numMatch.Groups[1].Value;
@@ -178,6 +180,12 @@ namespace TextureSwapper.Helpers
         {
             try
             {
+                if (e.Uri.Scheme != Uri.UriSchemeHttp && e.Uri.Scheme != Uri.UriSchemeHttps)
+                {
+                    Log.Warning($"Blocked navigation to non-HTTP/HTTPS URI: {e.Uri}");
+                    return;
+                }
+
                 _ = Process.Start(new ProcessStartInfo
                 {
                     FileName = e.Uri.AbsoluteUri,

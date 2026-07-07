@@ -33,17 +33,21 @@ namespace TextureSwapper.Views
 
         private void OnCancelAdminLogin(object sender, RoutedEventArgs e)
         {
-            Visibility = Visibility.Collapsed;
             AdminPasswordBox.Password = string.Empty;
-        }
-
-        private void OnCloseAdminDashboard(object sender, RoutedEventArgs e)
-        {
-            Visibility = Visibility.Collapsed;
             if (DataContext is MainViewModel vm)
             {
                 vm.AdminVM.IsAuthenticated = false;
             }
+            Visibility = Visibility.Collapsed;
+        }
+
+        private void OnCloseAdminDashboard(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.AdminVM.IsAuthenticated = false;
+            }
+            Visibility = Visibility.Collapsed;
         }
 
         public void FocusPasswordBox()

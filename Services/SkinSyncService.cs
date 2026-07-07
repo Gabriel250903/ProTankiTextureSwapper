@@ -1,6 +1,7 @@
 using Serilog;
 using System.IO;
 using System.Text.Json;
+using System.Windows;
 using TextureSwapper.Core;
 using TextureSwapper.Models;
 using TextureSwapper.Services.Interfaces;
@@ -108,7 +109,7 @@ namespace TextureSwapper.Services
                 {
                     int completed = 0;
                     object progressLock = new();
-                    using SemaphoreSlim semaphore = new(5);
+                    SemaphoreSlim semaphore = new(5);
                     List<Task> downloadTasks = [];
 
                     foreach (SkinModel skin in missing)
@@ -131,7 +132,7 @@ namespace TextureSwapper.Services
                                     }
                                 });
 
-                                skin.NotifyPreviewChanged();
+                                Application.Current?.Dispatcher.Invoke(() => skin.NotifyPreviewChanged());
                             }
                             finally
                             {
@@ -145,7 +146,14 @@ namespace TextureSwapper.Services
                         }));
                     }
 
-                    await Task.WhenAll(downloadTasks);
+                    try
+                    {
+                        await Task.WhenAll(downloadTasks);
+                    }
+                    finally
+                    {
+                        semaphore.Dispose();
+                    }
                 }
 
                 combinedSkins.AddRange(catSkins);
@@ -278,7 +286,7 @@ namespace TextureSwapper.Services
 
         public List<InGamePaintModel> LoadInGamePaints()
         {
-            string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ingame_paints.json");
+            string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.InGamePaintsJson);
             List<InGamePaintModel> list = [];
 
             if (File.Exists(jsonPath))

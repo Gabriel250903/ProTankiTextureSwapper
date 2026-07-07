@@ -12,7 +12,13 @@ namespace TextureSwapper.Helpers
             string fullPath = Path.GetFullPath(Path.Combine(basePath, relativePath.Replace("\\", "/")));
             string rootPath = Path.GetFullPath(basePath);
 
-            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
+            if (!rootPath.EndsWith(Path.DirectorySeparatorChar))
+            {
+                rootPath += Path.DirectorySeparatorChar;
+            }
+
+            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase) &&
+                !fullPath.Equals(rootPath.TrimEnd(Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase))
             {
                 Log.Error("Path traversal attempt blocked! Base: {Base}, Attempted: {Attempted}", rootPath, fullPath);
                 throw new UnauthorizedAccessException("Path traversal attack detected!");
@@ -23,13 +29,23 @@ namespace TextureSwapper.Helpers
 
         public static bool IsGameRunning()
         {
-            if (Process.GetProcessesByName(Constants.GameProcessName).Length != 0)
+            Process[] processes = Process.GetProcessesByName(Constants.GameProcessName);
+            try
             {
-                Log.Warning("Detected running process: {ProcessName}", Constants.GameProcessName);
-                return true;
+                if (processes.Length != 0)
+                {
+                    Log.Warning("Detected running process: {ProcessName}", Constants.GameProcessName);
+                    return true;
+                }
+                return false;
             }
-
-            return false;
+            finally
+            {
+                foreach (Process p in processes)
+                {
+                    p.Dispose();
+                }
+            }
         }
 
         public static bool IsCacheFileLocked(string cachePath)
@@ -41,7 +57,7 @@ namespace TextureSwapper.Helpers
 
             try
             {
-                string[] files = Directory.GetFiles(cachePath);
+                string[] files = Directory.GetFiles(cachePath, "*", SearchOption.AllDirectories);
                 foreach (string file in files)
                 {
                     try
@@ -61,6 +77,25 @@ namespace TextureSwapper.Helpers
             }
 
             return false;
+        }
+
+        public static bool HasFileWithExtension(string directory, string filenameWithoutExtension)
+        {
+            if (string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(filenameWithoutExtension) || !Directory.Exists(directory))
+            {
+                return false;
+            }
+
+            try
+            {
+                string[] files = Directory.GetFiles(directory, filenameWithoutExtension + ".*");
+                return files.Any(f => !Path.GetFileName(f).Equals(filenameWithoutExtension, StringComparison.OrdinalIgnoreCase));
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to check for files with extension for target: {filenameWithoutExtension}");
+                return false;
+            }
         }
     }
 }

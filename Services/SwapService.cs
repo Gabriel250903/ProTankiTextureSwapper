@@ -39,6 +39,11 @@ namespace TextureSwapper.Services
                 if (File.Exists(sourceFile) && !File.Exists(backupFile))
                 {
                     Log.Information($"First time seeing {target}. Saving original version to {originalsDir}");
+                    string? destDir = Path.GetDirectoryName(backupFile);
+                    if (!string.IsNullOrEmpty(destDir))
+                    {
+                        _ = Directory.CreateDirectory(destDir);
+                    }
                     File.Copy(sourceFile, backupFile);
                 }
             }
@@ -79,7 +84,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to create selective backup for {skin.Name}.");
+                Log.Error(ex, $"Failed to create selective backup for {skin.Name}. Aborting swap.");
+                throw;
             }
         }
 
@@ -93,6 +99,7 @@ namespace TextureSwapper.Services
                 return "Cache directory not found.";
             }
 
+            bool hasExtensionFiles = false;
             List<string> missingTargets = [];
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
             {
@@ -102,6 +109,10 @@ namespace TextureSwapper.Services
                     if (!File.Exists(path))
                     {
                         missingTargets.Add(skin.DetailsTarget);
+                        if (FileHelper.HasFileWithExtension(cachePath, skin.DetailsTarget))
+                        {
+                            hasExtensionFiles = true;
+                        }
                     }
                 }
             }
@@ -116,6 +127,10 @@ namespace TextureSwapper.Services
                         if (!File.Exists(path))
                         {
                             missingTargets.Add(target);
+                            if (FileHelper.HasFileWithExtension(cachePath, target))
+                            {
+                                hasExtensionFiles = true;
+                            }
                         }
                     }
                 }
@@ -123,6 +138,10 @@ namespace TextureSwapper.Services
 
             if (missingTargets.Count != 0)
             {
+                if (hasExtensionFiles)
+                {
+                    return "CacheWithExtensions";
+                }
                 Log.Error($"Missing target files in cache for {skin.Name}");
                 return skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(inGamePaintName)
                     ? $"Paint:{inGamePaintName}"
@@ -134,7 +153,7 @@ namespace TextureSwapper.Services
                 EnsureOriginalsBackup(cachePath, skin);
                 SelectiveBackup(cachePath, skin);
 
-                string texturesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, skin.SourceFolder);
+                string texturesDir = FileHelper.GetSafePath(AppDomain.CurrentDomain.BaseDirectory, skin.SourceFolder);
 
                 if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
@@ -159,7 +178,9 @@ namespace TextureSwapper.Services
 
         public string? SwapBatch(string cachePath, IEnumerable<SkinModel> skins, string? inGamePaintName = null)
         {
-            Log.Information($"Starting batch swap for {skins.Count()} skins.");
+            List<SkinModel> skinsList = [.. skins];
+            string skinsCounterString = skinsList.Count > 1 ? "skins" : "skin";
+            Log.Information($"Starting batch swap for {skinsList.Count} {skinsCounterString}.");
 
             if (!Directory.Exists(cachePath))
             {
@@ -172,12 +193,17 @@ namespace TextureSwapper.Services
             List<string> notCachedSupplies = [];
             List<string> otherFailures = [];
 
-            foreach (SkinModel skin in skins)
+            bool anyCacheWithExtensions = false;
+            foreach (SkinModel skin in skinsList)
             {
                 string? result = Swap(cachePath, skin, inGamePaintName);
                 if (result != null)
                 {
-                    if (result == "NotCached")
+                    if (result == "CacheWithExtensions")
+                    {
+                        anyCacheWithExtensions = true;
+                    }
+                    else if (result == "NotCached")
                     {
                         notCachedSkins.Add(skin.Name);
                     }
@@ -203,16 +229,23 @@ namespace TextureSwapper.Services
             List<string> errorMessages = [];
             List<string> itemsToEquip = [.. notCachedSkins, .. notCachedPaints.Select(p => $"Paint '{p}'")];
 
-            if (itemsToEquip.Count != 0)
+            if (anyCacheWithExtensions)
             {
-                string list = string.Join("\n", itemsToEquip.Select(item => $"- {item}"));
-                errorMessages.Add($"Please open ProTanki and equip the following item(s) first to cache them:\n{list}");
+                errorMessages.Add("The cache files seem to have extensions added to them (e.g. .png, .jpg). Please rename them back to plain files without extensions (e.g. by running 'ren *.png *' inside the cache folder) so the app can recognize and swap them.");
             }
-
-            if (notCachedSupplies.Count != 0)
+            else
             {
-                string list = string.Join("\n", notCachedSupplies.Select(item => $"- {item}"));
-                errorMessages.Add($"Please open ProTanki and load into a game first to cache the following supply item(s):\n{list}");
+                if (itemsToEquip.Count != 0)
+                {
+                    string list = string.Join("\n", itemsToEquip.Select(item => $"- {item}"));
+                    errorMessages.Add($"Please open ProTanki and equip the following item(s) first to cache them:\n{list}");
+                }
+
+                if (notCachedSupplies.Count != 0)
+                {
+                    string list = string.Join("\n", notCachedSupplies.Select(item => $"- {item}"));
+                    errorMessages.Add($"Please open ProTanki and load into a game first to cache the following supply item(s):\n{list}");
+                }
             }
 
             if (otherFailures.Count != 0)
@@ -357,7 +390,8 @@ namespace TextureSwapper.Services
             try
             {
                 int fileCount = 0;
-                foreach (string file in Directory.GetFiles(cachePath))
+                string[] files = Directory.GetFiles(cachePath, "*", SearchOption.AllDirectories);
+                foreach (string file in files)
                 {
                     File.Delete(file);
                     fileCount++;
@@ -421,6 +455,11 @@ namespace TextureSwapper.Services
                 if (File.Exists(sourceFile) && !File.Exists(backupFile))
                 {
                     Log.Information($"First time seeing {target}. Saving original version to {originalsDir}");
+                    string? destDir = Path.GetDirectoryName(backupFile);
+                    if (!string.IsNullOrEmpty(destDir))
+                    {
+                        _ = Directory.CreateDirectory(destDir);
+                    }
                     File.Copy(sourceFile, backupFile);
                 }
             }
@@ -459,7 +498,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to create selective backup for shot effect {shotEffect.Name}.");
+                Log.Error(ex, $"Failed to create selective backup for shot effect {shotEffect.Name}. Aborting swap.");
+                throw;
             }
         }
 
@@ -473,6 +513,7 @@ namespace TextureSwapper.Services
                 return "Cache directory not found.";
             }
 
+            bool hasExtensionFiles = false;
             List<string> missingTargets = [];
             foreach (string target in shotEffect.Targets)
             {
@@ -482,12 +523,20 @@ namespace TextureSwapper.Services
                     if (!File.Exists(path))
                     {
                         missingTargets.Add(target);
+                        if (FileHelper.HasFileWithExtension(cachePath, target))
+                        {
+                            hasExtensionFiles = true;
+                        }
                     }
                 }
             }
 
             if (missingTargets.Count != 0)
             {
+                if (hasExtensionFiles)
+                {
+                    return "CacheWithExtensions";
+                }
                 Log.Error($"Missing target files in cache for shot effect {shotEffect.Turret} {shotEffect.Name}");
                 return "NotCached";
             }
@@ -497,11 +546,11 @@ namespace TextureSwapper.Services
                 EnsureOriginalsBackup(cachePath, shotEffect);
                 SelectiveBackup(cachePath, shotEffect);
 
-                string texturesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, shotEffect.SourceFolder);
+                string texturesDir = FileHelper.GetSafePath(AppDomain.CurrentDomain.BaseDirectory, shotEffect.SourceFolder);
 
                 foreach (string target in shotEffect.Targets)
                 {
-                    string sourceFilePath = Path.Combine(texturesDir, target);
+                    string sourceFilePath = FileHelper.GetSafePath(texturesDir, target);
                     if (File.Exists(sourceFilePath))
                     {
                         string destFilePath = FileHelper.GetSafePath(cachePath, target);

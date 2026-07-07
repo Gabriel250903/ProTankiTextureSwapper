@@ -34,7 +34,9 @@ namespace TextureSwapper.Services
             try
             {
                 string json = JsonSerializer.Serialize(settings, _jsonOptions);
-                File.WriteAllText(SettingsPath, json);
+                string tempPath = SettingsPath + ".tmp";
+                File.WriteAllText(tempPath, json);
+                File.Move(tempPath, SettingsPath, true);
             }
             catch (Exception ex)
             {

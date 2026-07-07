@@ -155,13 +155,138 @@
     "PreviewImage": "Textures/Paints/InGame/Winter.png"
   },
   {
-    "Name": "Zebra",
+    "Name": "Safari",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS83MC8zMTY0NDc1NDMxMDU3NC9pbWFnZS5qcGc=",
-    "PreviewImage": "Textures/Paints/InGame/Zebra.png"
+    "PreviewImage": "Textures/Paints/InGame/Safari.png"
   },
   {
     "Name": "Zeus",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNDYvMzE2NDQ3NTQzMTExNTYvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Zeus.png"
+  },
+  {
+    "Name": "In Love",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNTQvMzE2NDQ3NTQzMTAwMTQvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/In Love.png"
+  },
+  {
+    "Name": "Magma",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMjIvMzE2NDQ3NTQzMTMzMjcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Magma.png"
+  },
+  {
+    "Name": "Swash",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8xMDQvMzE2NDQ3NTQzMTA3NjYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Swash.png"
+  },
+  {
+    "Name": "Marine",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8zNi8zMTY0NDc1NDMxMDIwNS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Marine.png"
+  },
+  {
+    "Name": "Swamp",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8xMDIvMzE2NDQ3NTQzMTA3MjcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Swamp.png"
+  },
+  {
+    "Name": "Storm",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8xMDAvMzE2NDQ3NTQzMTA3MDUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Storm.png"
+  },
+  {
+    "Name": "Roger",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS82NC8zMTY0NDc1NDMxMDUyMC9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Roger.png"
+  },
+  {
+    "Name": "Fracture",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy83Mi8zMTY0NDc1NDMwNjA0NS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Fracture.png"
+  },
+  {
+    "Name": "Vortex",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMjQvMzE2NDQ3NTQzMDYzNDQvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Vortex.png"
+  },
+  {
+    "Name": "Corrosion",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8zNTAvMzE2NDQ3NTQzMDcyMjcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Corrosion.png"
+  },
+  {
+    "Name": "Tundra",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS8xMTAvMzE2NDQ3NTQzMTEwMjYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Tundra.png"
+  },
+  {
+    "Name": "Alien",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8zMzQvMzE2NDQ3NTQzMDcwNjUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Alien.png"
+  },
+  {
+    "Name": "Pixel",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzAvMzE2NDQ3NTQzMTM0MjMvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Pixel.png"
+  },
+  {
+    "Name": "Guerrilla",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy83Ni8zMTY0NDc1NDMwNjExNC9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Guerilla.png"
+  },
+  {
+    "Name": "Cedar",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8zNDQvMzE2NDQ3NTQzMDcxNzEvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Cedar.png"
+  },
+  {
+    "Name": "Dirty",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMDQvMzE2NDQ3NTQzMDcyMTUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Dirty.png"
+  },
+  {
+    "Name": "Savanna",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS83NC8zMTY0NDc1NDMxMDY0My9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Savanna.png"
+  },
+  {
+    "Name": "Sakura",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMTYvMzE2NDQ3NTQzMDYyNjcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Sakura.png"
+  },
+  {
+    "Name": "Atom",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMTYvMzE2NDQ3NTQzMTMyNjUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Atom.png"
+  },
+  {
+    "Name": "Digital",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMDIvMzE2NDQ3NTQzMDcyNjYvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Digital.png"
+  },
+  {
+    "Name": "Cherry",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy83MC8zMTY0NDc1NDMwNjAyNS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Cherry.png"
+  },
+  {
+    "Name": "Blacksmith",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy82Ni8zMTY0NDc1NDMwNjAxMC9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Blacksmith.png"
+  },
+  {
+    "Name": "Python",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS81Ni8zMTY0NDc1NDMxMDQzNS9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Python.png"
+  },
+  {
+    "Name": "Invader",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8xMDQvMzE2NDQ3NTQzMDYxNjcvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Invader.png"
+  },
+  {
+    "Name": "Dragon",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMDYvMzE2NDQ3NTQzMDczNTQvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Dragon.png"
   }
 ]

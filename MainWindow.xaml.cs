@@ -147,6 +147,7 @@ namespace TextureSwapper
         {
             AdminOverlay.Visibility = Visibility.Visible;
             _mainViewModel.AdminVM.IsAuthenticated = false;
+            _mainViewModel.AdminVM.CloseRequested -= OnAdminCloseRequested;
             _mainViewModel.AdminVM.CloseRequested += OnAdminCloseRequested;
             AdminOverlay.ClearPassword();
             AdminOverlay.FocusPasswordBox();

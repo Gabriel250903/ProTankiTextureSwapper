@@ -1,3 +1,4 @@
+using Serilog;
 using System.Windows.Input;
 
 namespace TextureSwapper.Helpers
@@ -6,7 +7,7 @@ namespace TextureSwapper.Helpers
     {
         private readonly Func<object?, Task> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         private readonly Predicate<object?>? _canExecute = canExecute;
-        private bool _isExecuting;
+        private volatile bool _isExecuting;
 
         public bool CanExecute(object? parameter)
         {
@@ -20,6 +21,10 @@ namespace TextureSwapper.Helpers
             try
             {
                 await _execute(parameter);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unhandled exception in async command execution.");
             }
             finally
             {

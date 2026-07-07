@@ -65,7 +65,7 @@
                         <Slider
                             Margin="0,10,0,0"
                             IsSnapToTickEnabled="True"
-                            Maximum="180"
+                            Maximum="365"
                             Minimum="1"
                             TickFrequency="1"
                             Value="{Binding BackupRetentionDays, Mode=TwoWay}" />

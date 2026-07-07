@@ -29,19 +29,40 @@ namespace TextureSwapper.Models
         public string PreviewImage { get; set; } = string.Empty;
         public List<string> Targets { get; set; } = [];
 
+        private string? _cachedFullPreviewPath;
+        private bool _previewCacheValid;
+
         [JsonIgnore]
         public string? FullPreviewPath
         {
             get
             {
-                if (string.IsNullOrEmpty(PreviewImage))
+                if (_previewCacheValid)
                 {
-                    return null;
+                    return _cachedFullPreviewPath;
                 }
 
-                string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
-                return File.Exists(fullPath) ? fullPath : null;
+                _cachedFullPreviewPath = ResolveFullPreviewPath();
+                _previewCacheValid = true;
+                return _cachedFullPreviewPath;
             }
+        }
+
+        private string? ResolveFullPreviewPath()
+        {
+            if (string.IsNullOrEmpty(PreviewImage))
+            {
+                return null;
+            }
+
+            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
+            return File.Exists(fullPath) ? fullPath : null;
+        }
+
+        public void NotifyPreviewChanged()
+        {
+            _previewCacheValid = false;
+            OnPropertyChanged(nameof(FullPreviewPath));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

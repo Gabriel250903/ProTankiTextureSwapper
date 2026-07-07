@@ -1,3 +1,4 @@
+using Serilog;
 using System.Windows;
 using TextureSwapper.Services.Interfaces;
 using Wpf.Ui.Controls;
@@ -8,13 +9,21 @@ namespace TextureSwapper.Services
     {
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {
-            _ = await Application.Current.Dispatcher.InvokeAsync(async () =>
+            try
             {
-                if (Application.Current.MainWindow is INotificationService notificationService)
+                await await Application.Current.Dispatcher.InvokeAsync(async () =>
                 {
-                    await notificationService.ShowAsync(title, message, appearance);
-                }
-            });
+                    if (Application.Current.MainWindow is MainWindow mainWindow)
+                    {
+                        await mainWindow.ShowAsync(title, message, appearance);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to show notification: {title} - {message}");
+            }
         }
     }
 }
+

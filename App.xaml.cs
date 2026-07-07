@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using TextureSwapper.Core;
@@ -29,7 +30,10 @@ namespace TextureSwapper
                     _ = Directory.CreateDirectory(logDir);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Failed to create log directory: {ex.Message}");
+            }
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

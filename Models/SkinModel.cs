@@ -23,27 +23,45 @@ namespace TextureSwapper.Models
             }
         }
 
-        public string Category { get; set; } = string.Empty;
+        private string _category = string.Empty;
+        public string Category
+        {
+            get => _category;
+            set => _category = value ?? string.Empty;
+        }
+
         private string _itemName = string.Empty;
         public string ItemName
         {
             get => _itemName;
             set
             {
-                if (_itemName != value)
+                string newVal = value ?? string.Empty;
+                if (_itemName != newVal)
                 {
-                    _itemName = value;
+                    _itemName = newVal;
                     OnPropertyChanged();
                 }
             }
         }
-        public string Name { get; set; } = string.Empty;
+
+        private string _name = string.Empty;
+        public string Name
+        {
+            get => _name;
+            set => _name = value ?? string.Empty;
+        }
 
         [JsonIgnore]
         public string VersionText => Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase)
                     ? "LC"
                     : Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase) ? "XT" : string.Empty;
-        public string SourceFolder { get; set; } = string.Empty;
+        private string _sourceFolder = string.Empty;
+        public string SourceFolder
+        {
+            get => _sourceFolder;
+            set => _sourceFolder = value ?? string.Empty;
+        }
 
         [JsonIgnore]
         public string DetailsTarget { get; set; } = string.Empty;
@@ -89,48 +107,69 @@ namespace TextureSwapper.Models
             set => ModelTarget = value ?? string.Empty;
         }
 
-        public string PreviewImage { get; set; } = string.Empty;
+        private string _previewImage = string.Empty;
+        public string PreviewImage
+        {
+            get => _previewImage;
+            set => _previewImage = value ?? string.Empty;
+        }
+
+        private string? _cachedFullPreviewPath;
+        private bool _previewCacheValid;
 
         [JsonIgnore]
         public string? FullPreviewPath
         {
             get
             {
-                if (string.IsNullOrEmpty(PreviewImage))
+                if (_previewCacheValid)
                 {
-                    return null;
+                    return _cachedFullPreviewPath;
                 }
 
-                string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
-                if (File.Exists(fullPath))
-                {
-                    return fullPath;
-                }
+                _cachedFullPreviewPath = ResolveFullPreviewPath();
+                _previewCacheValid = true;
+                return _cachedFullPreviewPath;
+            }
+        }
 
-                string ext = Path.GetExtension(fullPath).ToLower();
-                string[] altExts = [".png", ".jpg", ".jpeg"];
-                if (altExts.Contains(ext))
-                {
-                    foreach (string alt in altExts)
-                    {
-                        if (alt == ext)
-                        {
-                            continue;
-                        }
-
-                        string altPath = Path.ChangeExtension(fullPath, alt);
-                        if (File.Exists(altPath))
-                        {
-                            return altPath;
-                        }
-                    }
-                }
+        private string? ResolveFullPreviewPath()
+        {
+            if (string.IsNullOrEmpty(PreviewImage))
+            {
                 return null;
             }
+
+            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PreviewImage.Replace("\\", "/"));
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            string ext = Path.GetExtension(fullPath).ToLower();
+            string[] altExts = [".png", ".jpg", ".jpeg"];
+            if (altExts.Contains(ext))
+            {
+                foreach (string alt in altExts)
+                {
+                    if (alt == ext)
+                    {
+                        continue;
+                    }
+
+                    string altPath = Path.ChangeExtension(fullPath, alt);
+                    if (File.Exists(altPath))
+                    {
+                        return altPath;
+                    }
+                }
+            }
+            return null;
         }
 
         public void NotifyPreviewChanged()
         {
+            _previewCacheValid = false;
             OnPropertyChanged(nameof(FullPreviewPath));
         }
 
