@@ -423,10 +423,13 @@ namespace TextureSwapper.Services
             }
             else
             {
-                string altSourcePath = Path.ChangeExtension(fullSourcePath, ".jpg");
+                string currentExt = Path.GetExtension(fullSourcePath).ToLower();
+                string altExt = currentExt == ".png" ? ".jpg" : ".png";
+                string altSourcePath = Path.ChangeExtension(fullSourcePath, altExt);
+
                 if (File.Exists(altSourcePath))
                 {
-                    Log.Debug($"Source PNG not found, using JPG: {altSourcePath}");
+                    Log.Debug($"Source {currentExt.ToUpper()} not found, using {altExt.ToUpper()}: {altSourcePath}");
                     File.Copy(altSourcePath, fullTargetPath, true);
                 }
                 else

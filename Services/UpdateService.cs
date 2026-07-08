@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.Json;
 using TextureSwapper.Core;
@@ -51,12 +52,12 @@ namespace TextureSwapper.Services
                 }
                 catch (HttpRequestException ex)
                 {
-                    if (ex.InnerException is System.Net.Sockets.SocketException socketEx &&
-                        (socketEx.SocketErrorCode == System.Net.Sockets.SocketError.HostNotFound ||
-                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.NetworkUnreachable ||
-                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionRefused ||
-                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionAborted ||
-                         socketEx.SocketErrorCode == System.Net.Sockets.SocketError.TimedOut))
+                    if (ex.InnerException is SocketException socketEx &&
+                        (socketEx.SocketErrorCode == SocketError.HostNotFound ||
+                         socketEx.SocketErrorCode == SocketError.NetworkUnreachable ||
+                         socketEx.SocketErrorCode == SocketError.ConnectionRefused ||
+                         socketEx.SocketErrorCode == SocketError.ConnectionAborted ||
+                         socketEx.SocketErrorCode == SocketError.TimedOut))
                     {
                         Log.Warning("Network connection error. Switching to Offline Mode.");
                         IsOffline = true;
@@ -386,11 +387,43 @@ namespace TextureSwapper.Services
                 {
                     throw new CryptographicException($"Installer hash mismatch! Expected: {expectedHash}, Computed: {computedHash}");
                 }
-                Log.Information("Installer integrity check passed successfully.");
+                Log.Information("Installer hash integrity check passed successfully.");
             }
-            else
+
+            string signatureUrl = downloadUrl + ".sig";
+            byte[] signatureBytes;
+            try
             {
-                Log.Warning("Installer downloaded but no companion SHA256 file was found to verify integrity.");
+                Log.Information($"Fetching cryptographic signature from {signatureUrl}");
+                using HttpResponseMessage sigResponse = await _httpClient.GetAsync(signatureUrl);
+                if (!sigResponse.IsSuccessStatusCode)
+                {
+                    throw new CryptographicException("Failed to fetch installer cryptographic signature (.sig).");
+                }
+                signatureBytes = await sigResponse.Content.ReadAsByteArrayAsync();
+            }
+            catch (Exception ex) when (ex is not CryptographicException)
+            {
+                throw new CryptographicException($"Could not download installer security signature: {ex.Message}");
+            }
+
+            try
+            {
+                byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
+                using var ecdsa = ECDsa.Create();
+                ecdsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(Constants.PublisherPublicKey), out _);
+
+                bool isSignatureValid = ecdsa.VerifyData(fileBytes, signatureBytes, HashAlgorithmName.SHA256);
+                if (!isSignatureValid)
+                {
+                    throw new CryptographicException("Installer digital signature is invalid!");
+                }
+                Log.Information("Installer digital signature verified successfully.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Digital signature verification failed.");
+                throw;
             }
 
             Log.Information($"Launching installer: {tempPath}");

@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Textures\logo.ico</ApplicationIcon>
-    <Version>1.7.2</Version>
+    <Version>1.7.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,5 +41,10 @@
     </None>
     <None Remove="Textures\logo.png" />
     <Resource Include="Textures\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tools\**" />
+    <None Remove="Tools\**" />
   </ItemGroup>
 </Project>

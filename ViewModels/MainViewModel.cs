@@ -646,8 +646,16 @@ namespace TextureSwapper.ViewModels
                         GitHubAssetModel? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
                         if (asset != null)
                         {
-                            onProgress?.Invoke("Downloading update...");
-                            await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => onProgress?.Invoke($"Downloading update ({p:F0}%)..."));
+                            try
+                            {
+                                onProgress?.Invoke("Downloading update...");
+                                await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => onProgress?.Invoke($"Downloading update ({p:F0}%)..."));
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex, "Failed to download or run installer.");
+                                await _notificationService.ShowAsync("Update Failed", $"Could not complete update: {ex.Message}", ControlAppearance.Danger);
+                            }
                         }
                     }
                     return true;

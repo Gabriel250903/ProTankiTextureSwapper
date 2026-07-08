@@ -31,3 +31,7 @@ Desktop.ini
 *.sln.docstates
 *.opendb
 *.db
+
+# Security keys
+publisher_private_key.txt
+SignInstaller.ps1

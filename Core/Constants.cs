@@ -20,5 +20,6 @@ namespace TextureSwapper.Core
         public const string GitHubRepo = "Gabriel250903/ProTankiTextureSwapper";
         public const string GitHubRawUrl = "https://raw.githubusercontent.com/Gabriel250903/ProTankiTextureSwapper/main";
         public const string GitHubApiUrl = "https://api.github.com/repos/Gabriel250903/ProTankiTextureSwapper";
+        public const string PublisherPublicKey = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEObAIYp8M4ou4UkucutCo69vQaXSEWij1TYvuuC8j1kWD3O+mEWvTPL8McPoIOb7KTd/S6kdGn7SUEevshUch+g==";
     }
 }
