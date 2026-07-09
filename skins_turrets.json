@@ -248,5 +248,15 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNTYvMzE0NjQyMTQ0MjUzNDYvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNTYvMzE0NjQyMTQ0MjUzNDYvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNTYvMzE0NjQyMTQ0MjUzNDYvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Isida",
+    "Name": "Isida LC on XT",
+    "SourceFolder": "Textures/Turrets/Isida/Legacy/M3",
+    "PreviewImage": "Textures/Turrets/Isida/Legacy/M3/Isida_LC.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82NC82Ni8zMTczMTU1MTIwNDU2Ny9kZXRhaWxzLmpwZw==",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82NC82Ni8zMTczMTU1MTIwNDU2Ny9saWdodG1hcC5qcGc=",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82NC82Ni8zMTczMTU1MTIwNDU2Ny9kZXRhaWxzX2FscGhhLmpwZw=="
   }
 ]
