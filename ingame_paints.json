@@ -1,5 +1,10 @@
 [
   {
+    "Name": "Premium Paint",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS81Mi8zMTY0NDc1NDMxMDM3Ny9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Premium_paint.jpg"
+  },
+  {
     "Name": "Tiger",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNi8yMzIvMzE2NDQ3NTQzMTM0NDMvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Tiger.png"
