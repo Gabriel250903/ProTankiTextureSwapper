@@ -91,7 +91,7 @@ namespace TextureSwapper.Services
                     }
 
                     HashSet<string> remoteNames = new(remoteSkins.Select(s => s.Name), StringComparer.OrdinalIgnoreCase);
-                    int removed = catSkins.RemoveAll(s => !remoteNames.Contains(s.Name));
+                    int removed = catSkins.RemoveAll(s => !remoteNames.Contains(s.Name) && s.ItemName != "Uploaded");
                     if (removed > 0)
                     {
                         merged = true;
@@ -104,7 +104,7 @@ namespace TextureSwapper.Services
                     }
                 }
 
-                List<SkinModel> missing = [.. catSkins.Where(IsSkinMissingAssets)];
+                List<SkinModel> missing = [.. catSkins.Where(s => s.ItemName != "Uploaded" && IsSkinMissingAssets(s))];
                 if (missing.Count > 0 && !_updateService.IsOffline)
                 {
                     int completed = 0;
@@ -357,8 +357,21 @@ namespace TextureSwapper.Services
 
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
             {
-                string paintFile = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"), $"{skin.Name}.png");
-                return !File.Exists(paintFile);
+                string folder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
+                bool found = false;
+                if (Directory.Exists(folder))
+                {
+                    string[] allowedExts = [".png", ".jpg", ".jpeg"];
+                    foreach (string ext in allowedExts)
+                    {
+                        if (File.Exists(Path.Combine(folder, $"{skin.Name}{ext}")))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                return !found;
             }
 
             string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)

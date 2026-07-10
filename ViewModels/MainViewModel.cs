@@ -1,5 +1,5 @@
 using Serilog;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -20,89 +20,51 @@ namespace TextureSwapper.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly ISwapService _swapService;
-        private readonly IUpdateService _updateService;
-        private readonly ISkinSyncService _skinSyncService;
-        private readonly ICacheService _cacheService;
-        private readonly ISettingsService _settingsService;
-        private readonly IWindowService _windowService;
-        private readonly INotificationService _notificationService;
-        private List<SkinModel> _allSkins = [];
-
-        private string _cachePath = string.Empty;
-        private string _selectedCategory = string.Empty;
-        private string _selectedItemName = string.Empty;
-        private SkinModel? _selectedSkin;
         private bool _isLoading;
         private string _updateStatus = string.Empty;
-        private string _searchQuery = string.Empty;
-        private BackupModel? _selectedBackup;
+        private string _cachePath = string.Empty;
 
-        public ObservableCollection<SkinModel> FilteredSkins { get; } = [];
-        public ObservableCollection<List<SkinModel>> FilteredSkinsRows { get; } = [];
-        public ObservableCollection<string> Categories { get; } = [];
-        public ObservableCollection<string> SkinsCategories { get; } = [];
-        public ObservableCollection<string> ItemNames { get; } = [];
-        public ObservableCollection<BackupModel> SnapshotBackups { get; } = [];
-        public ObservableCollection<InGamePaintModel> InGamePaints { get; } = [];
-        public ObservableCollection<ShotEffectModel> FilteredShotEffects { get; } = [];
-        public ObservableCollection<string> ShotEffectTurrets { get; } = [];
+        public ISwapService SwapService { get; }
+        public IUpdateService UpdateService { get; }
+        public ISkinSyncService SkinSyncService { get; }
+        public ISettingsService SettingsService { get; }
+        public IWindowService WindowService { get; }
+        public INotificationService NotificationService { get; }
+        public IAiTextureService AiTextureService { get; }
 
-        private List<InGamePaintModel> _allInGamePaints = [];
-        private List<ShotEffectModel> _allShotEffects = [];
-
-        private string _selectedShotEffectTurret = string.Empty;
-        public string SelectedShotEffectTurret
-        {
-            get => _selectedShotEffectTurret;
-            set
-            {
-                if (SetProperty(ref _selectedShotEffectTurret, value))
-                {
-                    FilterShotEffects();
-                }
-            }
-        }
-
-        private ShotEffectModel? _selectedShotEffect;
-        public ShotEffectModel? SelectedShotEffect
-        {
-            get => _selectedShotEffect;
-            set => SetProperty(ref _selectedShotEffect, value);
-        }
-        private string _inGamePaintSearchQuery = string.Empty;
-        public string InGamePaintSearchQuery
-        {
-            get => _inGamePaintSearchQuery;
-            set
-            {
-                if (SetProperty(ref _inGamePaintSearchQuery, value))
-                {
-                    FilterInGamePaints();
-                }
-            }
-        }
-
-        private InGamePaintModel? _selectedInGamePaint;
-        public InGamePaintModel? SelectedInGamePaint
-        {
-            get => _selectedInGamePaint;
-            set
-            {
-                if (SetProperty(ref _selectedInGamePaint, value))
-                {
-                    OnPropertyChanged(nameof(ShowCustomPaints));
-                    OnPropertyChanged(nameof(ShowInGamePaints));
-                }
-            }
-        }
-
-        public bool ShowCustomPaints => SelectedInGamePaint != null;
-        public bool ShowInGamePaints => SelectedInGamePaint == null;
-
-        public ICommand GoBackToInGamePaintsCommand { get; }
+        public SkinsTabViewModel SkinsTabVM { get; }
+        public PaintsTabViewModel PaintsTabVM { get; }
+        public ShotEffectsTabViewModel ShotEffectsTabVM { get; }
+        public BackupsTabViewModel BackupsTabVM { get; }
+        public AdminViewModel AdminVM { get; }
 
         public AppSettings Settings { get; }
+
+        public List<SkinModel> AllSkins { get; set; } = [];
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                if (SetProperty(ref _isLoading, value))
+                {
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
+        public string UpdateStatus
+        {
+            get => _updateStatus;
+            set => SetProperty(ref _updateStatus, value);
+        }
+
+        public string CachePath
+        {
+            get => _cachePath;
+            set => SetProperty(ref _cachePath, value);
+        }
 
         public double UIScale
         {
@@ -112,222 +74,50 @@ namespace TextureSwapper.ViewModels
                 if (Settings.UIScale != value)
                 {
                     Settings.UIScale = value;
-                    _settingsService.Save(Settings);
                     OnPropertyChanged();
+                    SaveSettings();
                 }
             }
-        }
-
-        public BackupModel? SelectedBackup
-        {
-            get => _selectedBackup;
-            set => SetProperty(ref _selectedBackup, value);
-        }
-
-        public string SearchQuery
-        {
-            get => _searchQuery;
-            set
-            {
-                if (SetProperty(ref _searchQuery, value))
-                {
-                    FilterSkins();
-                }
-            }
-        }
-
-        private string _customPaintSearchQuery = string.Empty;
-        public string CustomPaintSearchQuery
-        {
-            get => _customPaintSearchQuery;
-            set
-            {
-                if (SetProperty(ref _customPaintSearchQuery, value))
-                {
-                    FilterSkins();
-                }
-            }
-        }
-
-        public string CachePath
-        {
-            get => _cachePath;
-            set => SetProperty(ref _cachePath, value);
-        }
-
-        public string SelectedCategory
-        {
-            get => _selectedCategory;
-            set
-            {
-                if (SetProperty(ref _selectedCategory, value))
-                {
-                    Settings.LastSelectedCategory = value;
-                    if (!IsLoading)
-                    {
-                        SaveSettings();
-                    }
-                    FilterItems();
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
-        }
-
-        public string SelectedItemName
-        {
-            get => _selectedItemName;
-            set
-            {
-                if (SetProperty(ref _selectedItemName, value))
-                {
-                    Settings.LastSelectedItemName = value;
-                    if (!IsLoading)
-                    {
-                        SaveSettings();
-                    }
-                    FilterSkins();
-                }
-            }
-        }
-
-        public SkinModel? SelectedSkin
-        {
-            get => _selectedSkin;
-            set => SetProperty(ref _selectedSkin, value);
-        }
-
-        private bool _isFoldersPaneVisible = true;
-        public bool IsFoldersPaneVisible
-        {
-            get => _isFoldersPaneVisible;
-            set => SetProperty(ref _isFoldersPaneVisible, value);
-        }
-
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
-
-        public string UpdateStatus
-        {
-            get => _updateStatus;
-            set => SetProperty(ref _updateStatus, value);
         }
 
         public ICommand BrowseCommand { get; }
-        public ICommand SwapCommand { get; }
         public ICommand RestoreCommand { get; }
         public ICommand ClearCacheCommand { get; }
-        public ICommand SelectAllAvailableCommand { get; }
         public ICommand OpenSettingsCommand { get; }
-        public ICommand RestoreBackupCommand { get; }
-        public ICommand ToggleSkinSelectionCommand { get; }
-        public ICommand SwapShotEffectCommand { get; }
-        public ICommand ToggleShotEffectSelectionCommand { get; }
-
-        public string SelectAllText => _allSkins.Any(s => s.IsSelected) ? "Deselect all textures" : "Select all available textures";
-        public string SelectAllIcon => _allSkins.Any(s => s.IsSelected) ? "DismissCircle24" : "CheckmarkCircle24";
-
-        public AdminViewModel AdminVM { get; }
 
         public MainViewModel(
             INotificationService notificationService,
-            IUpdateService updateService,
-            ISwapService swapService,
             ISettingsService settingsService,
-            ICacheService cacheService,
+            ISwapService swapService,
             ISkinSyncService skinSyncService,
-            IWindowService windowService)
+            IUpdateService updateService,
+            IWindowService windowService,
+            IAiTextureService aiTextureService)
         {
-            _notificationService = notificationService;
-            _updateService = updateService;
-            _swapService = swapService;
-            _settingsService = settingsService;
-            _cacheService = cacheService;
-            _skinSyncService = skinSyncService;
-            _windowService = windowService;
+            NotificationService = notificationService;
+            SettingsService = settingsService;
+            SwapService = swapService;
+            SkinSyncService = skinSyncService;
+            UpdateService = updateService;
+            WindowService = windowService;
+            AiTextureService = aiTextureService;
 
-            Settings = _settingsService.Load();
-            if (Settings.Theme == ApplicationTheme.Unknown)
-            {
-                Settings.Theme = ApplicationTheme.Dark;
-            }
+            Settings = SettingsService.Load();
+
+            SkinsTabVM = new SkinsTabViewModel(this);
+            PaintsTabVM = new PaintsTabViewModel(this);
+            ShotEffectsTabVM = new ShotEffectsTabViewModel(this);
+            BackupsTabVM = new BackupsTabViewModel(this);
             AdminVM = new AdminViewModel(this, notificationService);
 
-            CachePath = Settings.CustomCachePath ?? _swapService.DetectCachePath();
+            CachePath = Settings.CustomCachePath ?? SwapService.DetectCachePath();
 
             BrowseCommand = new RelayCommand(ExecuteBrowse);
-            SwapCommand = new AsyncRelayCommand(ExecuteSwap, _ =>
-            {
-                return !IsLoading && (SelectedCategory == "Paints"
-                    ? _allSkins.Any(s => s.IsSelected && s.Category == "Paints")
-                    : _allSkins.Any(s => s.IsSelected && s.Category != "Paints"));
-            });
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
-            SelectAllAvailableCommand = new RelayCommand(ExecuteSelectAllAvailable);
-            OpenSettingsCommand = new RelayCommand(_ => _windowService.ShowSettingsDialog());
-            RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !IsLoading && SelectedBackup != null);
-            ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
-            GoBackToInGamePaintsCommand = new RelayCommand(_ => SelectedInGamePaint = null);
-            SwapShotEffectCommand = new AsyncRelayCommand(ExecuteSwapShotEffect, _ => !IsLoading && _allShotEffects.Any(e => e.IsSelected));
-            ToggleShotEffectSelectionCommand = new RelayCommand(ExecuteToggleShotEffectSelection);
+            OpenSettingsCommand = new RelayCommand(_ => WindowService.ShowSettingsDialog());
 
             _ = InitializeAsync();
-        }
-
-        private void ExecuteToggleSkinSelection(object? parameter)
-        {
-            if (parameter is SkinModel skin)
-            {
-                skin.IsSelected = !skin.IsSelected;
-                Log.Information($"Toggled selection for skin: {skin.Name}. New state: {skin.IsSelected}");
-
-                if (skin.IsSelected)
-                {
-                    foreach (SkinModel otherSkin in _allSkins)
-                    {
-                        if (otherSkin != skin && otherSkin.Category == skin.Category && otherSkin.ItemName == skin.ItemName && otherSkin.IsSelected)
-                        {
-                            otherSkin.IsSelected = false;
-                            Log.Information($"Deselected conflicting skin {otherSkin.Name} because {skin.Name} was selected.");
-                        }
-                    }
-                }
-
-                CommandManager.InvalidateRequerySuggested();
-                OnPropertyChanged(nameof(SelectAllText));
-                OnPropertyChanged(nameof(SelectAllIcon));
-            }
-        }
-
-        private async Task LoadInGamePaintsAsync()
-        {
-            try
-            {
-                List<InGamePaintModel> paints = await Task.Run(() => _skinSyncService.LoadInGamePaints());
-                _allInGamePaints = paints;
-                FilterInGamePaints();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load in-game paints.");
-            }
-        }
-
-        private void FilterInGamePaints()
-        {
-            InGamePaints.Clear();
-            IEnumerable<InGamePaintModel> filtered = _allInGamePaints.AsEnumerable();
-            if (!string.IsNullOrWhiteSpace(InGamePaintSearchQuery))
-            {
-                filtered = filtered.Where(p => p.Name.Contains(InGamePaintSearchQuery, StringComparison.OrdinalIgnoreCase));
-            }
-            foreach (InGamePaintModel? paint in filtered)
-            {
-                InGamePaints.Add(paint);
-            }
         }
 
         private async Task InitializeAsync()
@@ -339,16 +129,16 @@ namespace TextureSwapper.ViewModels
             {
                 try
                 {
-                    await Task.Run(() => _swapService.PurgeOldBackups(Settings.MaxBackupRetentionDays));
-                    LoadBackups();
+                    await Task.Run(() => SwapService.PurgeOldBackups(Settings.MaxBackupRetentionDays));
+                    BackupsTabVM.LoadBackups();
                 }
                 catch (Exception ex)
                 {
                     Log.Warning(ex, "Failed to purge or load backups.");
                 }
 
-                await LoadInGamePaintsAsync();
-                await LoadShotEffectsAsync();
+                await PaintsTabVM.LoadInGamePaintsAsync();
+                await ShotEffectsTabVM.LoadShotEffectsAsync();
 
                 UpdateStatus = "Checking for updates...";
 
@@ -366,208 +156,162 @@ namespace TextureSwapper.ViewModels
             }
         }
 
-        private void LoadBackups()
+        public async Task ReloadSkinsDataAsync()
         {
-            SelectedBackup = null;
-            SnapshotBackups.Clear();
-            try
-            {
-                List<BackupModel> backups = _skinSyncService.LoadBackups();
-                foreach (BackupModel backup in backups)
-                {
-                    SnapshotBackups.Add(backup);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load backups.");
-            }
+            await LoadSkinsAsync();
         }
 
-        private async Task LoadShotEffectsAsync()
+        public async Task LoadSkinsAsync()
         {
             try
             {
                 IsLoading = true;
+
                 void HandleProgressChanged(string status)
                 {
-                    System.Windows.Application.Current?.Dispatcher.Invoke(() => UpdateStatus = status);
+                    _ = (Application.Current?.Dispatcher.Invoke(() => UpdateStatus = status));
                 }
 
-                _skinSyncService.ProgressChanged += HandleProgressChanged;
-                List<ShotEffectModel> effects = await _skinSyncService.SyncAndLoadShotEffectsAsync();
-                _skinSyncService.ProgressChanged -= HandleProgressChanged;
+                SkinSyncService.ProgressChanged += HandleProgressChanged;
 
-                _allShotEffects = effects;
+                (List<SkinModel>? skins, List<InGamePaintModel>? remoteInGamePaints) = await SkinSyncService.SyncAndLoadSkinsAsync();
 
-                IOrderedEnumerable<string> turrets = _allShotEffects.Select(e => e.Turret).Distinct().OrderBy(t => t);
-                ShotEffectTurrets.Clear();
-                foreach (string turret in turrets)
+                SkinSyncService.ProgressChanged -= HandleProgressChanged;
+
+                if (UpdateService.IsOffline)
                 {
-                    ShotEffectTurrets.Add(turret);
+                    await NotificationService.ShowAsync("Offline Mode", "Running in offline mode. Local databases and cached textures will be used.", ControlAppearance.Info);
                 }
 
-                SelectedShotEffectTurret = ShotEffectTurrets.FirstOrDefault(t => t.Equals("Railgun", StringComparison.OrdinalIgnoreCase)) ?? ShotEffectTurrets.FirstOrDefault() ?? string.Empty;
-                FilterShotEffects();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load shot effects.");
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
+                AllSkins = skins ?? [];
+                SkinsTabVM.OnSkinsLoaded();
+                PaintsTabVM.OnSkinsLoaded();
 
-        private void FilterShotEffects()
-        {
-            FilteredShotEffects.Clear();
-            IEnumerable<ShotEffectModel> filtered = _allShotEffects.Where(e => e.Turret.Equals(SelectedShotEffectTurret, StringComparison.OrdinalIgnoreCase));
-            foreach (ShotEffectModel? effect in filtered)
-            {
-                FilteredShotEffects.Add(effect);
-            }
-        }
-
-        private void ExecuteToggleShotEffectSelection(object? parameter)
-        {
-            if (parameter is ShotEffectModel effect)
-            {
-                effect.IsSelected = !effect.IsSelected;
-                Log.Information($"Toggled selection for shot effect: {effect.Name}. New state: {effect.IsSelected}");
-
-                if (effect.IsSelected)
+                if (remoteInGamePaints != null)
                 {
-                    foreach (ShotEffectModel otherEffect in _allShotEffects)
+                    await PaintsTabVM.LoadInGamePaintsAsync();
+                }
+
+                int missingPreviewsCount = PaintsTabVM.InGamePaints.Count(p => !string.IsNullOrEmpty(p.PreviewImage) && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p.PreviewImage.Replace("\\", "/"))));
+                if (missingPreviewsCount > 0 && !UpdateService.IsOffline)
+                {
+                    int completedPreviews = 0;
+                    object progressLock = new();
+                    using SemaphoreSlim semaphore = new(10);
+                    List<Task> downloadTasks = [];
+
+                    foreach (InGamePaintModel paint in PaintsTabVM.InGamePaints)
                     {
-                        if (otherEffect != effect && otherEffect.Turret == effect.Turret && otherEffect.IsSelected)
+                        if (string.IsNullOrEmpty(paint.PreviewImage))
                         {
-                            otherEffect.IsSelected = false;
-                            Log.Information($"Deselected conflicting shot effect {otherEffect.Name} because {effect.Name} was selected.");
+                            continue;
                         }
+
+                        string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
+                        if (File.Exists(localPreview))
+                        {
+                            continue;
+                        }
+
+                        string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
+                        downloadTasks.Add(Task.Run(async () =>
+                        {
+                            await semaphore.WaitAsync();
+                            try
+                            {
+                                lock (progressLock)
+                                {
+                                    UpdateStatus = $"Syncing in-game paints ({completedPreviews + 1}/{missingPreviewsCount}): {paint.Name}...";
+                                }
+
+                                Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
+                                _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
+                                using HttpResponseMessage res = await UpdateService.GetWithRetryAsync(remoteUrl);
+                                byte[] data = await res.Content.ReadAsByteArrayAsync();
+                                await File.WriteAllBytesAsync(localPreview, data);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
+                            }
+                            finally
+                            {
+                                int currentCompleted = Interlocked.Increment(ref completedPreviews);
+                                lock (progressLock)
+                                {
+                                    UpdateStatus = $"Syncing in-game paints ({currentCompleted}/{missingPreviewsCount})...";
+                                }
+                                _ = semaphore.Release();
+                            }
+                        }));
                     }
+
+                    await Task.WhenAll(downloadTasks);
                 }
 
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }
-
-        private async Task ExecuteSwapShotEffect(object? parameter)
-        {
-            if (!await EnsureSafeToOperate())
-            {
-                return;
-            }
-
-            ShotEffectModel? selectedEffect = _allShotEffects.FirstOrDefault(e => e.IsSelected);
-            if (selectedEffect == null)
-            {
-                await _notificationService.ShowAsync("Error", "Please select a shot effect first.", ControlAppearance.Danger);
-                return;
-            }
-
-            string notificationTitle = string.Empty;
-            string notificationMessage = string.Empty;
-            ControlAppearance notificationAppearance = ControlAppearance.Info;
-
-            try
-            {
-                IsLoading = true;
-                UpdateStatus = $"Applying shot effect: {selectedEffect.Turret} {selectedEffect.Name}...";
-
-                string? result = await Task.Run(() => _swapService.SwapShotEffect(CachePath, selectedEffect));
-                await Task.Delay(2000);
-                if (result == null)
-                {
-                    notificationTitle = "Success";
-                    notificationMessage = $"{selectedEffect.Turret} {selectedEffect.Name} shot effect applied successfully!";
-                    notificationAppearance = ControlAppearance.Success;
-                    LoadBackups();
-                }
-                else if (result == "NotCached")
-                {
-                    notificationTitle = "Notice";
-                    notificationMessage = $"The shot effect assets for {selectedEffect.Turret} are not cached by the loader yet. Please launch the game with this turret equipped first.";
-                    notificationAppearance = ControlAppearance.Caution;
-                }
-                else if (result == "CacheWithExtensions")
-                {
-                    notificationTitle = "Notice";
-                    notificationMessage = "The cache files seem to have extensions added to them (e.g. .png, .jpg). Please rename them back to plain files without extensions (e.g. by running 'ren *.png *' inside the cache folder) so the app can recognize and swap them.";
-                    notificationAppearance = ControlAppearance.Caution;
-                }
-                else
-                {
-                    notificationTitle = "Error";
-                    notificationMessage = $"Failed to apply shot effect: {result}";
-                    notificationAppearance = ControlAppearance.Danger;
-                }
+                UpdateStatus = string.Empty;
+                IsLoading = false;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to swap shot effect.");
-                notificationTitle = "Error";
-                notificationMessage = $"Swap error: {ex.Message}";
-                notificationAppearance = ControlAppearance.Danger;
-            }
-            finally
-            {
                 IsLoading = false;
-                UpdateStatus = string.Empty;
-                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
+                Log.Error(ex, "Failed to load skins.");
+                await NotificationService.ShowAsync("Error", $"Failed to load skins: {ex.Message}", ControlAppearance.Danger);
             }
         }
 
-        private async Task ExecuteRestoreBackup(object? parameter)
+        public async Task<bool> EnsureSafeToOperate()
         {
-            if (SelectedBackup == null)
+            if (string.IsNullOrWhiteSpace(CachePath) || !Directory.Exists(CachePath))
             {
-                return;
+                await NotificationService.ShowAsync("Error", "ProTanki cache folder path is not set or invalid. Please configure it in Settings.", ControlAppearance.Danger);
+                return false;
             }
 
-            if (!await EnsureSafeToOperate())
+            if (IsGameRunning())
             {
-                return;
+                MessageBox messageBox = new()
+                {
+                    Title = "Game is Running",
+                    Content = "ProTanki is currently running. Please close the game before swapping textures to avoid cache file access locks.",
+                    PrimaryButtonText = "OK",
+                    SecondaryButtonText = string.Empty
+                };
+                _ = await messageBox.ShowDialogAsync();
+                return false;
             }
 
-            string notificationTitle = string.Empty;
-            string notificationMessage = string.Empty;
-            ControlAppearance notificationAppearance = ControlAppearance.Info;
+            return true;
+        }
 
+        private bool IsGameRunning()
+        {
             try
             {
-                IsLoading = true;
-                UpdateStatus = $"Restoring from {SelectedBackup.DisplayName}...";
-                Log.Information($"Restoring cache snapshot from backup: {SelectedBackup.DisplayName} (Path: {SelectedBackup.FullPath})");
-                bool success = await Task.Run(() => _swapService.RestoreFromBackup(CachePath, SelectedBackup.FullPath));
-                if (success)
+                Process[] processes = System.Diagnostics.Process.GetProcessesByName("ProTanki");
+                if (processes.Length > 0)
                 {
-                    notificationTitle = "Success";
-                    notificationMessage = $"Restored from {SelectedBackup.DisplayName}";
-                    notificationAppearance = ControlAppearance.Success;
-
-                    UpdateStatus = $"Restoring from backup: {SelectedBackup.DisplayName}";
-                    await Task.Delay(2500);
+                    return true;
                 }
+                Process[] standalone = System.Diagnostics.Process.GetProcessesByName("ProTanki Standalone");
+                return standalone.Length > 0;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to restore from snapshot.");
-                notificationTitle = "Error";
-                notificationMessage = $"Restore failed: {ex.Message}";
-                notificationAppearance = ControlAppearance.Danger;
+                Log.Warning(ex, "Failed to verify running ProTanki processes.");
+                return false;
             }
-            finally
-            {
-                IsLoading = false;
-                UpdateStatus = string.Empty;
-            }
+        }
 
-            if (!string.IsNullOrEmpty(notificationTitle))
-            {
-                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
-            }
+        public void SaveTheme(ApplicationTheme theme)
+        {
+            Settings.Theme = theme;
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            SettingsService.Save(Settings);
         }
 
         public async Task TriggerUpdateCheckAsync()
@@ -586,25 +330,14 @@ namespace TextureSwapper.ViewModels
 
         public async Task ShowNotificationAsync(string title, string message, ControlAppearance appearance)
         {
-            await _notificationService.ShowAsync(title, message, appearance);
-        }
-
-        public void SaveTheme(ApplicationTheme theme)
-        {
-            Settings.Theme = theme;
-            SaveSettings();
-        }
-
-        public void SaveSettings()
-        {
-            _settingsService.Save(Settings);
+            await NotificationService.ShowAsync(title, message, appearance);
         }
 
         private async Task<bool> CheckForAppUpdatesAsync(Action<string>? onProgress = null)
         {
             onProgress?.Invoke("Checking for updates...");
 
-            GitHubReleaseModel? release = await _updateService.CheckForAppUpdatesAsync();
+            GitHubReleaseModel? release = await UpdateService.CheckForAppUpdatesAsync();
             if (release != null)
             {
                 string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "Unknown";
@@ -643,301 +376,42 @@ namespace TextureSwapper.ViewModels
                     MessageBoxResult result = await messageBox.ShowDialogAsync();
                     if (result == MessageBoxResult.Primary)
                     {
-                        GitHubAssetModel? asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe")) ?? release.Assets.FirstOrDefault();
-                        if (asset != null)
+                        onProgress?.Invoke("Downloading update...");
+                        try
                         {
-                            try
+                            GitHubAssetModel exeAsset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) ?? throw new FileNotFoundException("No installer executable (.exe) found in release assets.");
+                            void HandleProgress(double p)
                             {
-                                onProgress?.Invoke("Downloading update...");
-                                await _updateService.DownloadAndRunInstallerAsync(asset.BrowserDownloadUrl, p => onProgress?.Invoke($"Downloading update ({p:F0}%)..."));
+                                onProgress?.Invoke($"Downloading update ({p:F0}%)...");
                             }
-                            catch (Exception ex)
-                            {
-                                Log.Error(ex, "Failed to download or run installer.");
-                                await _notificationService.ShowAsync("Update Failed", $"Could not complete update: {ex.Message}", ControlAppearance.Danger);
-                            }
+
+                            await UpdateService.DownloadAndRunInstallerAsync(exeAsset.BrowserDownloadUrl, HandleProgress);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to download update installer.");
+                            await NotificationService.ShowAsync("Update Error", $"Failed to download update installer: {ex.Message}", ControlAppearance.Danger);
                         }
                     }
                     return true;
                 }
             }
+            onProgress?.Invoke("App is up-to-date.");
             return false;
         }
 
-        private bool IsNewerVersion(string current, string latest)
-        {
-            return Version.TryParse(current, out Version? vCurrent) && Version.TryParse(latest, out Version? vLatest) && vLatest > vCurrent;
-        }
-
-        public async Task ReloadSkinsDataAsync()
-        {
-            await LoadSkinsAsync();
-        }
-
-        private async Task LoadSkinsAsync()
+        private bool IsNewerVersion(string currentVersion, string latestVersion)
         {
             try
             {
-                IsLoading = true;
-
-                void HandleProgressChanged(string status)
-                {
-                    System.Windows.Application.Current?.Dispatcher.Invoke(() => UpdateStatus = status);
-                }
-
-                _skinSyncService.ProgressChanged += HandleProgressChanged;
-
-                (List<SkinModel>? skins, List<InGamePaintModel>? remoteInGamePaints) = await _skinSyncService.SyncAndLoadSkinsAsync();
-
-                _skinSyncService.ProgressChanged -= HandleProgressChanged;
-
-                if (_updateService.IsOffline)
-                {
-                    await _notificationService.ShowAsync("Offline Mode", "Running in offline mode. Local databases and cached textures will be used.", ControlAppearance.Info);
-                }
-
-                _allSkins = skins ?? [];
-                InitializeCategories();
-                FilterItems();
-
-                if (remoteInGamePaints != null)
-                {
-                    await LoadInGamePaintsAsync();
-                }
-
-                int missingPreviewsCount = InGamePaints.Count(p => !string.IsNullOrEmpty(p.PreviewImage) && !File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p.PreviewImage.Replace("\\", "/"))));
-                if (missingPreviewsCount > 0 && !_updateService.IsOffline)
-                {
-                    int completedPreviews = 0;
-                    object progressLock = new();
-                    using SemaphoreSlim semaphore = new(10);
-                    List<Task> downloadTasks = [];
-
-                    foreach (InGamePaintModel paint in InGamePaints)
-                    {
-                        if (string.IsNullOrEmpty(paint.PreviewImage))
-                        {
-                            continue;
-                        }
-
-                        string localPreview = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, paint.PreviewImage.Replace("\\", "/"));
-                        if (File.Exists(localPreview))
-                        {
-                            continue;
-                        }
-
-                        string remoteUrl = $"{Constants.GitHubRawUrl}/{paint.PreviewImage.Replace("\\", "/")}";
-                        downloadTasks.Add(Task.Run(async () =>
-                        {
-                            await semaphore.WaitAsync();
-                            try
-                            {
-                                lock (progressLock)
-                                {
-                                    UpdateStatus = $"Syncing in-game paints ({completedPreviews + 1}/{missingPreviewsCount}): {paint.Name}...";
-                                }
-
-                                Log.Information("Downloading missing in-game paint preview: {Path}", paint.PreviewImage);
-                                _ = Directory.CreateDirectory(Path.GetDirectoryName(localPreview)!);
-                                using HttpResponseMessage res = await _updateService.GetWithRetryAsync(remoteUrl);
-                                byte[] data = await res.Content.ReadAsByteArrayAsync();
-                                await File.WriteAllBytesAsync(localPreview, data);
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Warning("Failed to download in-game paint preview {Name}: {Message}", paint.Name, ex.Message);
-                            }
-                            finally
-                            {
-                                int currentCompleted = Interlocked.Increment(ref completedPreviews);
-                                lock (progressLock)
-                                {
-                                    UpdateStatus = $"Syncing in-game paints ({currentCompleted}/{missingPreviewsCount})...";
-                                }
-                                _ = semaphore.Release();
-                            }
-                        }));
-                    }
-
-                    await Task.WhenAll(downloadTasks);
-                }
-
-                UpdateStatus = string.Empty;
-                IsLoading = false;
+                Version current = new(currentVersion);
+                Version latest = new(latestVersion);
+                return latest > current;
             }
             catch (Exception ex)
             {
-                IsLoading = false;
-                Log.Error(ex, "Failed to load skins.");
-                await _notificationService.ShowAsync("Error", $"Failed to load skins: {ex.Message}", ControlAppearance.Danger);
-            }
-        }
-
-        private void ExecuteSelectAllAvailable(object? parameter)
-        {
-            string mode = parameter as string ?? "XT";
-
-            if (mode == "Deselect")
-            {
-                Log.Information("Deselecting all textures.");
-                foreach (SkinModel skin in _allSkins)
-                {
-                    skin.IsSelected = false;
-                }
-                _ = _notificationService.ShowAsync("Deselected All", "All textures have been deselected.", ControlAppearance.Info);
-            }
-            else
-            {
-                Log.Information("Selecting all {Mode} skins.", mode);
-
-                foreach (SkinModel skin in _allSkins)
-                {
-                    skin.IsSelected = false;
-                }
-
-                var groups = _allSkins.GroupBy(s => new { s.Category, s.ItemName });
-                int selectedCount = 0;
-
-                foreach (var group in groups)
-                {
-                    SkinModel? targetSkin = null;
-
-                    if (mode == "Legacy")
-                    {
-                        targetSkin = group.FirstOrDefault(s => s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase) || s.Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase));
-                    }
-                    else if (mode == "XT")
-                    {
-                        targetSkin = group.FirstOrDefault(s => s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase));
-                    }
-
-                    if (targetSkin != null)
-                    {
-                        targetSkin.IsSelected = true;
-                        selectedCount++;
-                    }
-                }
-
-                _ = _notificationService.ShowAsync("Selected All", $"Selected {selectedCount} textures ({mode} priority) for batch application.", ControlAppearance.Info);
-            }
-
-            CommandManager.InvalidateRequerySuggested();
-            OnPropertyChanged(nameof(SelectAllText));
-            OnPropertyChanged(nameof(SelectAllIcon));
-        }
-
-        private void InitializeCategories()
-        {
-            if (_allSkins == null || _allSkins.Count == 0)
-            {
-                return;
-            }
-
-            string? currentCategory = SelectedCategory;
-            Categories.Clear();
-            SkinsCategories.Clear();
-            List<string> uniqueCategories = [.. _allSkins.Select(s => s.Category).Distinct().OrderBy(c => c)];
-            foreach (string category in uniqueCategories)
-            {
-                Categories.Add(category);
-                if (!category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
-                {
-                    SkinsCategories.Add(category);
-                }
-            }
-
-            if (Categories.Any())
-            {
-                string targetCategory = !string.IsNullOrEmpty(currentCategory) && Categories.Contains(currentCategory)
-                    ? currentCategory
-                    : (Settings.LastSelectedCategory != null && Categories.Contains(Settings.LastSelectedCategory))
-                        ? Settings.LastSelectedCategory
-                        : Categories.First();
-
-                if (targetCategory.Equals("Paints", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetCategory = SkinsCategories.FirstOrDefault() ?? Categories.First();
-                }
-
-                SelectedCategory = targetCategory;
-            }
-        }
-
-        private void FilterItems()
-        {
-            ItemNames.Clear();
-            string allLabel = SelectedCategory == "Paints" ? "All" : "All models";
-            ItemNames.Add(allLabel);
-
-            List<string> matchingItems = [.. _allSkins
-                .Where(s => s.Category == SelectedCategory)
-                .Select(s => s.ItemName)
-                .Distinct()
-                .OrderBy(i => i)];
-
-            foreach (string itemName in matchingItems)
-            {
-                ItemNames.Add(itemName);
-            }
-
-            if (ItemNames.Any())
-            {
-                SelectedItemName = (Settings.LastSelectedItemName != null && ItemNames.Contains(Settings.LastSelectedItemName))
-                    ? Settings.LastSelectedItemName
-                    : allLabel;
-            }
-        }
-
-        private void FilterSkins()
-        {
-            FilteredSkins.Clear();
-            string currentQuery = SelectedCategory == "Paints" ? CustomPaintSearchQuery : SearchQuery;
-            string allLabel = SelectedCategory == "Paints" ? "All" : "All models";
-
-            IEnumerable<SkinModel> matchingSkins = _allSkins.Where(s =>
-                s.Category == SelectedCategory &&
-                (SelectedItemName == allLabel || s.ItemName == SelectedItemName) &&
-                (string.IsNullOrWhiteSpace(currentQuery) ||
-                 s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase) ||
-                 s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)));
-
-            foreach (SkinModel skin in matchingSkins)
-            {
-                FilteredSkins.Add(skin);
-            }
-
-            if (FilteredSkins.Any())
-            {
-                SelectedSkin = FilteredSkins.First();
-            }
-
-            UpdateFilteredSkinsRows();
-        }
-
-        private int _currentColumns = 4;
-
-        public void UpdateColumns(int cols)
-        {
-            if (_currentColumns != cols)
-            {
-                _currentColumns = cols;
-                UpdateFilteredSkinsRows();
-            }
-        }
-
-        private void UpdateFilteredSkinsRows()
-        {
-            FilteredSkinsRows.Clear();
-            List<SkinModel>? currentChunk = null;
-            int chunkSize = _currentColumns;
-            for (int i = 0; i < FilteredSkins.Count; i++)
-            {
-                if (i % chunkSize == 0)
-                {
-                    currentChunk = [];
-                    FilteredSkinsRows.Add(currentChunk);
-                }
-                currentChunk?.Add(FilteredSkins[i]);
+                Log.Warning(ex, $"Failed to parse versions: {currentVersion} vs {latestVersion}");
+                return false;
             }
         }
 
@@ -953,127 +427,8 @@ namespace TextureSwapper.ViewModels
             {
                 CachePath = dialog.FolderName;
                 Settings.CustomCachePath = CachePath;
-                _settingsService.Save(Settings);
+                SettingsService.Save(Settings);
                 Log.Information("User selected cache path: {Path}", CachePath);
-            }
-        }
-
-        private async Task<bool> EnsureSafeToOperate()
-        {
-            if (_cacheService.IsGameRunning())
-            {
-                await _notificationService.ShowAsync("Game Running", "Please close ProTanki and the Loader before proceeding.", ControlAppearance.Info);
-                return false;
-            }
-
-            if (_cacheService.IsCacheFileLocked(CachePath))
-            {
-                await _notificationService.ShowAsync("Cache Locked", "Some cache files are still in use by another process. Please wait or close other apps.", ControlAppearance.Info);
-                return false;
-            }
-
-            return true;
-        }
-
-        private async Task ExecuteSwap(object? parameter)
-        {
-            if (!await EnsureSafeToOperate())
-            {
-                return;
-            }
-
-            List<SkinModel> selectedSkins = [.. _allSkins.Where(s => s.IsSelected)];
-
-            if (selectedSkins.Count == 0 && SelectedSkin == null)
-            {
-                await _notificationService.ShowAsync("Error", "Please select at least one skin first.", ControlAppearance.Danger);
-                return;
-            }
-            string notificationTitle = string.Empty;
-            string notificationMessage = string.Empty;
-            ControlAppearance notificationAppearance = ControlAppearance.Info;
-
-            try
-            {
-                IsLoading = true;
-
-                List<SkinModel> skinsToApply = [];
-                if (selectedSkins.Count != 0)
-                {
-                    skinsToApply.AddRange(selectedSkins);
-                }
-                else if (SelectedSkin != null)
-                {
-                    skinsToApply.Add(SelectedSkin);
-                }
-
-                if (SelectedCategory == "Paints")
-                {
-                    if (SelectedInGamePaint == null)
-                    {
-                        await _notificationService.ShowAsync("Error", "Please select an in-game paint first.", ControlAppearance.Danger);
-                        IsLoading = false;
-                        return;
-                    }
-                    foreach (SkinModel skin in skinsToApply)
-                    {
-                        skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
-                    }
-                }
-
-                string skinMessage = skinsToApply.Count > 1 ? "skins" : "skin";
-                string textureMessage = skinsToApply.Count > 1 ? "textures" : "texture";
-
-
-                UpdateStatus = $"Applying {skinsToApply.Count} {textureMessage} to cache...";
-                Log.Information("Writing {Count} skins directly to cache disk path: {Path}", skinsToApply.Count, CachePath);
-
-                string? inGamePaintName = SelectedCategory == "Paints" ? SelectedInGamePaint?.Name : null;
-                string? error = await Task.Run(() => _swapService.SwapBatch(CachePath, skinsToApply, inGamePaintName));
-                if (error != null)
-                {
-                    notificationTitle = "Error";
-                    notificationMessage = error;
-                    notificationAppearance = ControlAppearance.Danger;
-                }
-                else
-                {
-                    LoadBackups();
-                    notificationTitle = "Success";
-                    notificationMessage = $"{skinsToApply.Count} {skinMessage} applied successfully!";
-                    notificationAppearance = ControlAppearance.Success;
-
-                    foreach (SkinModel skin in _allSkins)
-                    {
-                        skin.IsSelected = false;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(notificationTitle) && notificationAppearance == ControlAppearance.Success)
-                {
-                    UpdateStatus = $"Finalizing applying {skinsToApply.Count} {skinMessage}...";
-                    await Task.Delay(1500);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to apply skins.");
-                notificationTitle = "Error";
-                notificationMessage = $"Failed to apply skins: {ex.Message}";
-                notificationAppearance = ControlAppearance.Danger;
-            }
-            finally
-            {
-                IsLoading = false;
-                UpdateStatus = string.Empty;
-                CommandManager.InvalidateRequerySuggested();
-                OnPropertyChanged(nameof(SelectAllText));
-                OnPropertyChanged(nameof(SelectAllIcon));
-            }
-
-            if (!string.IsNullOrEmpty(notificationTitle))
-            {
-                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
 
@@ -1094,26 +449,26 @@ namespace TextureSwapper.ViewModels
 
                 UpdateStatus = "Restoring original textures...";
                 Log.Information("Restoring original game textures from 'Originals' backup folder to cache path: {CachePath}", CachePath);
-                bool restored = await Task.Run(() => _swapService.RestoreFullCache(CachePath));
+                bool restored = await Task.Run(() => SwapService.RestoreFullCache(CachePath));
                 if (restored)
                 {
-                    notificationTitle = "Restored";
-                    notificationMessage = "Original textures restored successfully.";
+                    notificationTitle = "Success";
+                    notificationMessage = "Original game textures successfully restored!";
                     notificationAppearance = ControlAppearance.Success;
+
+                    UpdateStatus = "Restoring original textures...";
+                    await Task.Delay(2500);
                 }
                 else
                 {
-                    notificationTitle = "No Backup";
-                    notificationMessage = "No original textures found to restore. Apply a skin first to create a backup.";
-                    notificationAppearance = ControlAppearance.Info;
+                    notificationTitle = "Error";
+                    notificationMessage = "Failed to restore textures. Ensure you have applied swaps first so that backups exist.";
+                    notificationAppearance = ControlAppearance.Danger;
                 }
-
-
-
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to restore textures.");
+                Log.Error(ex, "Failed to restore original textures.");
                 notificationTitle = "Error";
                 notificationMessage = $"Failed to restore: {ex.Message}";
                 notificationAppearance = ControlAppearance.Danger;
@@ -1126,36 +481,13 @@ namespace TextureSwapper.ViewModels
 
             if (!string.IsNullOrEmpty(notificationTitle))
             {
-                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
+                await NotificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
 
         private async Task ExecuteClearCache(object? parameter)
         {
             if (!await EnsureSafeToOperate())
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(CachePath) || !Directory.Exists(CachePath))
-            {
-                await _notificationService.ShowAsync("Error", "Invalid cache path.", ControlAppearance.Danger);
-                return;
-            }
-
-            MessageBox messageBox = new()
-            {
-                Title = "Confirm Clear Cache",
-                Content = "Are you sure you want to clear the ProTanki cache? The game will need to re-download all assets.",
-                PrimaryButtonText = "Clear Cache",
-                SecondaryButtonText = "Cancel",
-                CloseButtonText = string.Empty,
-                IsCloseButtonEnabled = false,
-                MaxWidth = 400
-            };
-
-            MessageBoxResult result = await messageBox.ShowDialogAsync();
-            if (result != MessageBoxResult.Primary)
             {
                 return;
             }
@@ -1168,10 +500,12 @@ namespace TextureSwapper.ViewModels
             {
                 IsLoading = true;
                 UpdateStatus = "Clearing ProTanki cache...";
-                Log.Information("Clearing all cache files at path: {CachePath}", CachePath);
-                await Task.Run(() => _swapService.ClearCache(CachePath));
-                notificationTitle = "Cache Cleared";
-                notificationMessage = "ProTanki cache has been emptied.";
+                Log.Information($"Clearing ProTanki cache directory: {CachePath}");
+
+                await Task.Run(() => SwapService.ClearCache(CachePath));
+
+                notificationTitle = "Success";
+                notificationMessage = "ProTanki cache successfully cleared! Launch the game to re-cache textures.";
                 notificationAppearance = ControlAppearance.Success;
 
                 UpdateStatus = "Clearing ProTanki cache...";
@@ -1192,7 +526,7 @@ namespace TextureSwapper.ViewModels
 
             if (!string.IsNullOrEmpty(notificationTitle))
             {
-                await _notificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
+                await NotificationService.ShowAsync(notificationTitle, notificationMessage, notificationAppearance);
             }
         }
     }

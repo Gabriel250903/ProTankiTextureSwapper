@@ -62,14 +62,14 @@ namespace TextureSwapper
                 {
                     case "Skins":
                         MainTabControl.SelectedIndex = 0;
-                        if (_mainViewModel.SelectedCategory == "Paints" && _mainViewModel.SkinsCategories.Any())
+                        if (_mainViewModel.SkinsTabVM.SelectedCategory == "Paints" && _mainViewModel.SkinsTabVM.SkinsCategories.Any())
                         {
-                            _mainViewModel.SelectedCategory = _mainViewModel.SkinsCategories.First();
+                            _mainViewModel.SkinsTabVM.SelectedCategory = _mainViewModel.SkinsTabVM.SkinsCategories.First();
                         }
                         break;
                     case "Paints":
                         MainTabControl.SelectedIndex = 1;
-                        _mainViewModel.SelectedCategory = "Paints";
+                        _mainViewModel.SkinsTabVM.SelectedCategory = "Paints";
                         break;
                     case "Backups":
                         MainTabControl.SelectedIndex = 2;

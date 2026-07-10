@@ -75,6 +75,38 @@
                 <ui:TextBlock
                     Margin="0,15,0,10"
                     FontTypography="Subtitle"
+                    Text="AI Texture Generator" />
+                <ui:Card Margin="0,0,0,20" Padding="15">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="Hugging Face API Token" />
+                                <ui:TextBlock
+                                    FontTypography="Caption"
+                                    Opacity="0.6"
+                                    Text="Input your free Hugging Face token to enable the AI generator." />
+                            </StackPanel>
+                            <ui:Button
+                                Grid.Column="1"
+                                Appearance="Secondary"
+                                Command="{Binding GetHuggingFaceTokenCommand}"
+                                Content="Get Free Token"
+                                Icon="{ui:SymbolIcon Open24}" />
+                        </Grid>
+                        <ui:TextBox
+                            Margin="0,12,0,0"
+                            PlaceholderText="Enter your API token here"
+                            Text="{Binding HuggingFaceToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:TextBlock
+                    Margin="0,15,0,10"
+                    FontTypography="Subtitle"
                     Text="Appearance &amp; Display" />
                 <ui:Card Margin="0,0,0,20" Padding="15">
                     <StackPanel>

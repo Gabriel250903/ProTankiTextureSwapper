@@ -243,9 +243,21 @@
                         Command="{Binding SelectAllAvailableCommand}"
                         CommandParameter="Legacy"
                         Content="Select All Legacy"
-                        ToolTip="Selects Legacy/LC version for all items where available.">
+                        ToolTip="Selects LC version for all items.">
                         <ui:Button.Icon>
                             <ui:SymbolIcon Symbol="History24" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+
+                    <ui:Button
+                        Margin="5"
+                        Appearance="Secondary"
+                        Command="{Binding SelectAllAvailableCommand}"
+                        CommandParameter="LC on XT"
+                        Content="Select All LC on XT"
+                        ToolTip="Selects LC version for all XT skin models.">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="CheckmarkUnderlineCircle24" />
                         </ui:Button.Icon>
                     </ui:Button>
 

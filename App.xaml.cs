@@ -58,6 +58,7 @@ namespace TextureSwapper
             _ = services.AddSingleton<ISettingsService, SettingsService>();
             _ = services.AddSingleton<ISkinSyncService, SkinSyncService>();
             _ = services.AddSingleton<IWindowService, WindowService>();
+            _ = services.AddSingleton<IAiTextureService, AiTextureService>();
 
             _ = services.AddSingleton<MainViewModel>();
             _ = services.AddTransient<SettingsViewModel>();

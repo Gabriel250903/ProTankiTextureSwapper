@@ -10,7 +10,7 @@
     xmlns:views="clr-namespace:TextureSwapper.Views"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     Title="ProTanki Texture Swapper"
-    Width="1050"
+    Width="1250"
     Height="700"
     MinWidth="900"
     MinHeight="580"
@@ -111,19 +111,19 @@
                     </TabControl.Template>
 
                     <TabItem Header="SKINS">
-                        <views:SkinsTabContent />
+                        <views:SkinsTabContent DataContext="{Binding SkinsTabVM}" />
                     </TabItem>
 
                     <TabItem Header="PAINTS">
-                        <views:PaintsTabContent />
+                        <views:PaintsTabContent DataContext="{Binding PaintsTabVM}" />
                     </TabItem>
 
                     <TabItem Header="BACKUP HISTORY">
-                        <views:BackupsTabContent />
+                        <views:BackupsTabContent DataContext="{Binding BackupsTabVM}" />
                     </TabItem>
 
                     <TabItem Header="SHOT EFFECTS">
-                        <views:ShotEffectsTabContent />
+                        <views:ShotEffectsTabContent DataContext="{Binding ShotEffectsTabVM}" />
                     </TabItem>
                 </TabControl>
             </Grid>

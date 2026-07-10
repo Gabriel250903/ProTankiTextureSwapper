@@ -81,6 +81,21 @@ namespace TextureSwapper.ViewModels
             }
         }
 
+        public string HuggingFaceToken
+        {
+            get => Settings.HuggingFaceToken;
+            set
+            {
+                if (Settings.HuggingFaceToken != value)
+                {
+                    Settings.HuggingFaceToken = value;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged();
+                    Log.Information("Hugging Face API Token updated.");
+                }
+            }
+        }
+
         private bool _isLoading;
         public bool IsLoading
         {
@@ -108,6 +123,7 @@ namespace TextureSwapper.ViewModels
         public ICommand CheckForUpdatesCommand { get; }
         public ICommand RefreshLogsCommand { get; }
         public ICommand OpenLogsFolderCommand { get; }
+        public ICommand GetHuggingFaceTokenCommand { get; }
 
         public SettingsViewModel(ISettingsService settingsService, MainViewModel mainViewModel)
         {
@@ -118,6 +134,21 @@ namespace TextureSwapper.ViewModels
             CheckForUpdatesCommand = new AsyncRelayCommand(ExecuteCheckForUpdates, _ => !IsLoading);
             RefreshLogsCommand = new RelayCommand(ExecuteRefreshLogs);
             OpenLogsFolderCommand = new RelayCommand(ExecuteOpenLogsFolder);
+            GetHuggingFaceTokenCommand = new RelayCommand(_ =>
+            {
+                try
+                {
+                    _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "https://huggingface.co/settings/tokens",
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to open Hugging Face token URL.");
+                }
+            });
 
             ExecuteRefreshLogs(null);
         }

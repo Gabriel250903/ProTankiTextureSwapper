@@ -13,7 +13,7 @@ namespace TextureSwapper.Views
 
         private void OnToggleFoldersClick(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MainViewModel vm)
+            if (DataContext is PaintsTabViewModel vm)
             {
                 vm.IsFoldersPaneVisible = !vm.IsFoldersPaneVisible;
             }
@@ -21,7 +21,7 @@ namespace TextureSwapper.Views
 
         private void OnListSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (e.WidthChanged && DataContext is MainViewModel vm)
+            if (e.WidthChanged && DataContext is PaintsTabViewModel vm)
             {
                 double width = e.NewSize.Width;
                 int cols = (int)((width - 25) / 230);

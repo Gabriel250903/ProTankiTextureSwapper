@@ -410,7 +410,7 @@ namespace TextureSwapper.Services
             try
             {
                 byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
-                using var ecdsa = ECDsa.Create();
+                using ECDsa ecdsa = ECDsa.Create();
                 ecdsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(Constants.PublisherPublicKey), out _);
 
                 bool isSignatureValid = ecdsa.VerifyData(fileBytes, signatureBytes, HashAlgorithmName.SHA256);
