@@ -61,17 +61,6 @@
   },
   {
     "Category": "Turrets",
-    "ItemName": "Thunder",
-    "Name": "Thunder Custom",
-    "SourceFolder": "Textures/Turrets/Thunder/Custom/M3",
-    "PreviewImage": "Textures/Turrets/Thunder/Custom/M3/Thunder_Custom.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzE0NjQxNDMxMTAzNjEvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjAvMzE0NjQyMTQ0MjYxMjEvb2JqZWN0LjNkcw=="
-  },
-  {
-    "Category": "Turrets",
     "ItemName": "Ricochet",
     "Name": "Ricochet XT",
     "SourceFolder": "Textures/Turrets/Ricochet/XT/M3",
