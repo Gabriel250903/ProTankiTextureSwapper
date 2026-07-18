@@ -401,6 +401,14 @@ namespace TextureSwapper.Services
                     return true;
                 }
             }
+            if (!string.IsNullOrEmpty(skin.ModelTarget))
+            {
+                string folder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
+                if (!File.Exists(Path.Combine(folder, "object.3ds")))
+                {
+                    return true;
+                }
+            }
 
             return false;
         }

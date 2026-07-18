@@ -25,7 +25,7 @@ namespace TextureSwapper.Services
             string originalsDir = FileHelper.GetSafePath(baseDir, Path.Combine(Constants.BackupsDir, Constants.OriginalsDir));
             _ = Directory.CreateDirectory(originalsDir);
 
-            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+            string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
             foreach (string target in targets)
             {
                 if (string.IsNullOrEmpty(target))
@@ -65,7 +65,7 @@ namespace TextureSwapper.Services
                     _ = Directory.CreateDirectory(dir);
                 }
 
-                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+                string[] targets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
 
                 using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
                 foreach (string target in targets)
@@ -118,7 +118,7 @@ namespace TextureSwapper.Services
             }
             else
             {
-                string[] requiredTargets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget];
+                string[] requiredTargets = [skin.DetailsTarget, skin.LightmapTarget, skin.AlphaTarget, skin.ModelTarget];
                 foreach (string target in requiredTargets)
                 {
                     if (!string.IsNullOrEmpty(target))
@@ -165,6 +165,10 @@ namespace TextureSwapper.Services
                     CopyAndRename(texturesDir, "details.jpg", cachePath, skin.DetailsTarget);
                     CopyAndRename(texturesDir, "lightmap.jpg", cachePath, skin.LightmapTarget);
                     CopyAndRename(texturesDir, "alpha.jpg", cachePath, skin.AlphaTarget);
+                    if (!string.IsNullOrEmpty(skin.ModelTarget))
+                    {
+                        CopyAndRename(texturesDir, "object.3ds", cachePath, skin.ModelTarget);
+                    }
                 }
                 Log.Information($"Skin {skin.Name} applied successfully.");
                 return null;
