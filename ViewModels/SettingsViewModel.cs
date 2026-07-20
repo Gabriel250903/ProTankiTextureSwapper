@@ -161,6 +161,11 @@ namespace TextureSwapper.ViewModels
                 if (!string.IsNullOrEmpty(logFile) && File.Exists(logFile))
                 {
                     using FileStream stream = new(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    const long maxBytes = 100_000;
+                    if (stream.Length > maxBytes)
+                    {
+                        _ = stream.Seek(-maxBytes, SeekOrigin.End);
+                    }
                     using StreamReader reader = new(stream);
                     LogContent = reader.ReadToEnd();
                     return;

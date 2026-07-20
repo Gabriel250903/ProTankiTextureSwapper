@@ -28,13 +28,13 @@ namespace TextureSwapper.ViewModels
             RestoreBackupCommand = new AsyncRelayCommand(ExecuteRestoreBackup, _ => !_mainVM.IsLoading && SelectedBackup != null);
         }
 
-        public void LoadBackups()
+        public async Task LoadBackupsAsync()
         {
             SelectedBackup = null;
             SnapshotBackups.Clear();
             try
             {
-                List<BackupModel> backups = _mainVM.SkinSyncService.LoadBackups();
+                List<BackupModel> backups = await Task.Run(() => _mainVM.SkinSyncService.LoadBackups());
                 foreach (BackupModel backup in backups)
                 {
                     SnapshotBackups.Add(backup);
@@ -44,6 +44,11 @@ namespace TextureSwapper.ViewModels
             {
                 Log.Error(ex, "Failed to load backups.");
             }
+        }
+
+        public void LoadBackups()
+        {
+            _ = LoadBackupsAsync();
         }
 
         private async Task ExecuteRestoreBackup(object? parameter)

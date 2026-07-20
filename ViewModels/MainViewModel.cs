@@ -1,5 +1,4 @@
 using Serilog;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -31,6 +30,7 @@ namespace TextureSwapper.ViewModels
         public IWindowService WindowService { get; }
         public INotificationService NotificationService { get; }
         public IAiTextureService AiTextureService { get; }
+        public ICacheService CacheService { get; }
 
         public SkinsTabViewModel SkinsTabVM { get; }
         public PaintsTabViewModel PaintsTabVM { get; }
@@ -92,7 +92,8 @@ namespace TextureSwapper.ViewModels
             ISkinSyncService skinSyncService,
             IUpdateService updateService,
             IWindowService windowService,
-            IAiTextureService aiTextureService)
+            IAiTextureService aiTextureService,
+            ICacheService cacheService)
         {
             NotificationService = notificationService;
             SettingsService = settingsService;
@@ -101,6 +102,7 @@ namespace TextureSwapper.ViewModels
             UpdateService = updateService;
             WindowService = windowService;
             AiTextureService = aiTextureService;
+            CacheService = cacheService;
 
             Settings = SettingsService.Load();
 
@@ -117,7 +119,18 @@ namespace TextureSwapper.ViewModels
             ClearCacheCommand = new AsyncRelayCommand(ExecuteClearCache, _ => !IsLoading);
             OpenSettingsCommand = new RelayCommand(_ => WindowService.ShowSettingsDialog());
 
-            _ = InitializeAsync();
+            _ = InitializeAsync().ContinueWith(t =>
+            {
+                if (t.IsFaulted && t.Exception != null)
+                {
+                    Log.Fatal(t.Exception, "Critical initialization failure.");
+                    _ = Application.Current?.Dispatcher.InvokeAsync(() =>
+                    {
+                        IsLoading = false;
+                        UpdateStatus = "Initialization failed.";
+                    });
+                }
+            }, TaskScheduler.Default);
         }
 
         private async Task InitializeAsync()
@@ -268,7 +281,7 @@ namespace TextureSwapper.ViewModels
                 return false;
             }
 
-            if (IsGameRunning())
+            if (CacheService.IsGameRunning())
             {
                 MessageBox messageBox = new()
                 {
@@ -282,25 +295,6 @@ namespace TextureSwapper.ViewModels
             }
 
             return true;
-        }
-
-        private bool IsGameRunning()
-        {
-            try
-            {
-                Process[] processes = System.Diagnostics.Process.GetProcessesByName("ProTanki");
-                if (processes.Length > 0)
-                {
-                    return true;
-                }
-                Process[] standalone = System.Diagnostics.Process.GetProcessesByName("ProTanki Standalone");
-                return standalone.Length > 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to verify running ProTanki processes.");
-                return false;
-            }
         }
 
         public void SaveTheme(ApplicationTheme theme)

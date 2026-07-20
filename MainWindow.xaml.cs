@@ -102,8 +102,13 @@ namespace TextureSwapper
 
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {
+            if (Application.Current?.Dispatcher == null || Application.Current.Dispatcher.HasShutdownStarted)
+            {
+                return;
+            }
+
             int notificationId = 0;
-            Application.Current.Dispatcher.Invoke(() =>
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 _currentNotificationId++;
                 notificationId = _currentNotificationId;
@@ -125,7 +130,12 @@ namespace TextureSwapper
 
             await Task.Delay(3000);
 
-            Application.Current.Dispatcher.Invoke(() =>
+            if (Application.Current?.Dispatcher == null || Application.Current.Dispatcher.HasShutdownStarted)
+            {
+                return;
+            }
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 if (_currentNotificationId == notificationId)
                 {

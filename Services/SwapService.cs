@@ -8,7 +8,7 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class SwapService : ISwapService
+    public sealed class SwapService : ISwapService
     {
         public string DetectCachePath()
         {
@@ -278,7 +278,8 @@ namespace TextureSwapper.Services
         {
             if (Directory.Exists(backupPath))
             {
-                if (Directory.GetFiles(backupPath).Length == 0)
+                string[] allFiles = Directory.GetFiles(backupPath, "*", SearchOption.AllDirectories);
+                if (allFiles.Length == 0)
                 {
                     Log.Warning($"Restore skipped: Backup directory {backupPath} is empty.");
                     return false;
@@ -287,10 +288,15 @@ namespace TextureSwapper.Services
                 try
                 {
                     int restoreCount = 0;
-                    foreach (string file in Directory.GetFiles(backupPath))
+                    foreach (string file in allFiles)
                     {
-                        string targetName = Path.GetFileName(file);
-                        string destFile = FileHelper.GetSafePath(cachePath, targetName);
+                        string relativePath = Path.GetRelativePath(backupPath, file);
+                        string destFile = FileHelper.GetSafePath(cachePath, relativePath);
+                        string? destDir = Path.GetDirectoryName(destFile);
+                        if (!string.IsNullOrEmpty(destDir))
+                        {
+                            _ = Directory.CreateDirectory(destDir);
+                        }
                         File.Copy(file, destFile, true);
                         restoreCount++;
                     }
@@ -313,6 +319,11 @@ namespace TextureSwapper.Services
                     foreach (ZipArchiveEntry entry in archive.Entries)
                     {
                         string destFile = FileHelper.GetSafePath(cachePath, entry.FullName);
+                        string? destDir = Path.GetDirectoryName(destFile);
+                        if (!string.IsNullOrEmpty(destDir))
+                        {
+                            _ = Directory.CreateDirectory(destDir);
+                        }
                         entry.ExtractToFile(destFile, true);
                         restoreCount++;
                     }
@@ -393,14 +404,31 @@ namespace TextureSwapper.Services
 
             try
             {
-                int fileCount = 0;
-                string[] files = Directory.GetFiles(cachePath, "*", SearchOption.AllDirectories);
-                foreach (string file in files)
+                try
                 {
-                    File.Delete(file);
-                    fileCount++;
+                    Directory.Delete(cachePath, true);
+                    _ = Directory.CreateDirectory(cachePath);
+                    Log.Information("Successfully cleared cache directory.");
                 }
-                Log.Information($"Successfully deleted {fileCount} {(fileCount == 1 ? "file" : "files")} from cache.");
+                catch (Exception ex)
+                {
+                    Log.Warning($"Failed to clear cache via Directory.Delete ({ex.Message}). Falling back to file-by-file deletion.");
+                    int fileCount = 0;
+                    string[] files = Directory.GetFiles(cachePath, "*", SearchOption.AllDirectories);
+                    foreach (string file in files)
+                    {
+                        try
+                        {
+                            File.Delete(file);
+                            fileCount++;
+                        }
+                        catch (Exception fileEx)
+                        {
+                            Log.Warning($"Failed to delete file {file}: {fileEx.Message}");
+                        }
+                    }
+                    Log.Information($"Successfully deleted {fileCount} files from cache (with some potential skips).");
+                }
             }
             catch (Exception ex)
             {

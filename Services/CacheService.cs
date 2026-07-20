@@ -3,7 +3,7 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class CacheService : ICacheService
+    public sealed class CacheService : ICacheService
     {
         public bool IsGameRunning()
         {

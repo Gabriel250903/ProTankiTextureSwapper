@@ -29,23 +29,27 @@ namespace TextureSwapper.Helpers
 
         public static bool IsGameRunning()
         {
-            Process[] processes = Process.GetProcessesByName(Constants.GameProcessName);
-            try
+            string[] processNames = [Constants.GameProcessName, "ProTanki Standalone"];
+            foreach (string name in processNames)
             {
-                if (processes.Length != 0)
+                Process[] processes = Process.GetProcessesByName(name);
+                try
                 {
-                    Log.Warning("Detected running process: {ProcessName}", Constants.GameProcessName);
-                    return true;
+                    if (processes.Length != 0)
+                    {
+                        Log.Warning("Detected running process: {ProcessName}", name);
+                        return true;
+                    }
                 }
-                return false;
-            }
-            finally
-            {
-                foreach (Process p in processes)
+                finally
                 {
-                    p.Dispose();
+                    foreach (Process p in processes)
+                    {
+                        p.Dispose();
+                    }
                 }
             }
+            return false;
         }
 
         public static bool IsCacheFileLocked(string cachePath)

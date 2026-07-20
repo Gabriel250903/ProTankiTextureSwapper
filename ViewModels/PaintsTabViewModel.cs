@@ -428,19 +428,28 @@ namespace TextureSwapper.ViewModels
                 _mainVM.IsLoading = true;
 
                 List<SkinModel> skinsToApply = selectedSkins.Count != 0 ? selectedSkins : [SelectedSkin!];
+                List<SkinModel> swapCopies = [];
 
                 foreach (SkinModel skin in skinsToApply)
                 {
-                    skin.DetailsTarget = SelectedInGamePaint.TargetUrl;
+                    swapCopies.Add(new SkinModel
+                    {
+                        Category = skin.Category,
+                        ItemName = skin.ItemName,
+                        Name = skin.Name,
+                        SourceFolder = skin.SourceFolder,
+                        DetailsTarget = SelectedInGamePaint.TargetUrl,
+                        PreviewImage = skin.PreviewImage
+                    });
                 }
 
-                string skinMessage = skinsToApply.Count > 1 ? "skins" : "skin";
-                string textureMessage = skinsToApply.Count > 1 ? "textures" : "texture";
+                string skinMessage = swapCopies.Count > 1 ? "skins" : "skin";
+                string textureMessage = swapCopies.Count > 1 ? "textures" : "texture";
 
-                _mainVM.UpdateStatus = $"Applying {skinsToApply.Count} {textureMessage} to cache...";
-                Log.Information($"Writing {skinsToApply.Count} paints directly to cache disk path: {_mainVM.CachePath}");
+                _mainVM.UpdateStatus = $"Applying {swapCopies.Count} {textureMessage} to cache...";
+                Log.Information($"Writing {swapCopies.Count} paints directly to cache disk path: {_mainVM.CachePath}");
 
-                string? error = await Task.Run(() => _mainVM.SwapService.SwapBatch(_mainVM.CachePath, skinsToApply, SelectedInGamePaint.Name));
+                string? error = await Task.Run(() => _mainVM.SwapService.SwapBatch(_mainVM.CachePath, swapCopies, SelectedInGamePaint.Name));
                 if (error != null)
                 {
                     notificationTitle = "Error";
@@ -501,7 +510,7 @@ namespace TextureSwapper.ViewModels
 
             if (string.IsNullOrWhiteSpace(_mainVM.Settings.HuggingFaceToken))
             {
-                var messageBox = new MessageBox
+                MessageBox messageBox = new()
                 {
                     Title = "API Token Required",
                     Content = "To use the AI Texture Generator, please input your free Hugging Face API Token in the app Settings.\n\nWould you like to open Settings now?",
@@ -558,7 +567,7 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
-            var messageBox = new MessageBox
+            MessageBox messageBox = new()
             {
                 Title = "Save Paint Options",
                 Content = "How would you like to save this generated paint?\n\n- 'Import to App' will register it directly as a usable paint in your list.\n- 'Save to PC' will let you save the image file anywhere on your computer.",
@@ -585,7 +594,7 @@ namespace TextureSwapper.ViewModels
                     defaultName = defaultName[..25];
                 }
 
-                var inputDialog = new InputDialog(defaultName)
+                InputDialog inputDialog = new(defaultName)
                 {
                     Owner = Application.Current.MainWindow
                 };
@@ -600,7 +609,7 @@ namespace TextureSwapper.ViewModels
                 try
                 {
                     _mainVM.IsLoading = true;
-                    byte[] resizedBytes = ResizeImageBytes(_generatedImageBytes, 256, 256);
+                    byte[] resizedBytes = await ResizeImageBytesAsync(_generatedImageBytes, 256, 256);
 
                     string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                     string uploadDirRelative = Path.Combine("Textures", "Paints", "Uploaded");
@@ -679,7 +688,7 @@ namespace TextureSwapper.ViewModels
                     try
                     {
                         _mainVM.IsLoading = true;
-                        byte[] resizedBytes = ResizeImageBytes(_generatedImageBytes, 256, 256);
+                        byte[] resizedBytes = await ResizeImageBytesAsync(_generatedImageBytes, 256, 256);
                         await File.WriteAllBytesAsync(targetPath, resizedBytes);
                         Log.Information("Saved AI paint to PC: {Path}", targetPath);
 
@@ -705,25 +714,45 @@ namespace TextureSwapper.ViewModels
 
         private byte[] ResizeImageBytes(byte[] bytes, int width, int height)
         {
-            using var ms = new MemoryStream(bytes);
-            var decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            using MemoryStream ms = new(bytes);
+            BitmapDecoder decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             BitmapFrame frame = decoder.Frames[0];
 
-            var targetVisual = new DrawingVisual();
+            DrawingVisual targetVisual = new();
             using (DrawingContext dc = targetVisual.RenderOpen())
             {
                 dc.DrawImage(frame, new Rect(0, 0, width, height));
             }
 
-            var targetBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap targetBitmap = new(width, height, 96, 96, PixelFormats.Pbgra32);
             targetBitmap.Render(targetVisual);
 
-            var encoder = new JpegBitmapEncoder();
+            JpegBitmapEncoder encoder = new();
             encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
 
-            using var outStream = new MemoryStream();
+            using MemoryStream outStream = new();
             encoder.Save(outStream);
             return outStream.ToArray();
+        }
+
+        private Task<byte[]> ResizeImageBytesAsync(byte[] bytes, int width, int height)
+        {
+            TaskCompletionSource<byte[]> tcs = new();
+            Thread thread = new(() =>
+            {
+                try
+                {
+                    byte[] result = ResizeImageBytes(bytes, width, height);
+                    tcs.SetResult(result);
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            return tcs.Task;
         }
 
         private BitmapImage? BytesToImage(byte[]? bytes)
@@ -735,8 +764,8 @@ namespace TextureSwapper.ViewModels
 
             try
             {
-                var image = new BitmapImage();
-                using (var ms = new MemoryStream(bytes))
+                BitmapImage image = new();
+                using (MemoryStream ms = new(bytes))
                 {
                     image.BeginInit();
                     image.CacheOption = BitmapCacheOption.OnLoad;
@@ -762,7 +791,7 @@ namespace TextureSwapper.ViewModels
 
             try
             {
-                var previewWindow = new ImagePreviewWindow(GeneratedImageSource)
+                ImagePreviewWindow previewWindow = new(GeneratedImageSource)
                 {
                     Owner = Application.Current.MainWindow
                 };

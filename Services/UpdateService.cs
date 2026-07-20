@@ -1,4 +1,5 @@
 using Serilog;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using System.Net.Http.Json;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Windows;
 using TextureSwapper.Core;
 using TextureSwapper.Helpers;
 using TextureSwapper.Models;
@@ -13,7 +15,7 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class UpdateService : IUpdateService
+    public sealed class UpdateService : IUpdateService
     {
         private static readonly HttpClient _httpClient;
 
@@ -319,7 +321,7 @@ namespace TextureSwapper.Services
 
         public async Task DownloadAndRunInstallerAsync(string downloadUrl, Action<double>? onProgress = null)
         {
-            string tempPath = Path.Combine(Path.GetTempPath(), "TextureSwapper_Setup.exe");
+            string tempPath = Path.Combine(Path.GetTempPath(), $"TextureSwapper_Setup_{Guid.NewGuid():N}.exe");
 
             Log.Information($"Downloading installer from {downloadUrl} to {tempPath}");
 
@@ -378,9 +380,10 @@ namespace TextureSwapper.Services
                 }
             }
 
+            byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
+
             if (!string.IsNullOrEmpty(expectedHash))
             {
-                byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
                 byte[] hashBytes = SHA256.HashData(fileBytes);
                 string computedHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
                 if (!computedHash.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
@@ -409,7 +412,6 @@ namespace TextureSwapper.Services
 
             try
             {
-                byte[] fileBytes = await File.ReadAllBytesAsync(tempPath);
                 using ECDsa ecdsa = ECDsa.Create();
                 ecdsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(Constants.PublisherPublicKey), out _);
 
@@ -427,8 +429,9 @@ namespace TextureSwapper.Services
             }
 
             Log.Information($"Launching installer: {tempPath}");
-            _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
-            Environment.Exit(0);
+            Log.CloseAndFlush();
+            _ = Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+            Application.Current?.Dispatcher.Invoke(Application.Current.Shutdown);
         }
     }
 }

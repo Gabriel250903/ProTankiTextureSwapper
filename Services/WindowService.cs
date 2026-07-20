@@ -5,7 +5,7 @@ using TextureSwapper.ViewModels;
 
 namespace TextureSwapper.Services
 {
-    public class WindowService : IWindowService
+    public sealed class WindowService : IWindowService
     {
         public void ShowSettingsDialog()
         {

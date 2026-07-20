@@ -261,7 +261,7 @@ namespace TextureSwapper.ViewModels
 
             if (IsLegacyHash(salt, expectedHash))
             {
-                string legacyHash = LegacyHashPassword(trimmedInput.ToLower(), "DEFAULT_SALT_123");
+                string legacyHash = LegacyHashPassword(trimmedInput, "DEFAULT_SALT_123");
                 if (legacyHash.Equals("19FFFAF056A656FB4A13BAB7F8829D8C6B35C7C197C9629C42E07A3F7981CB68", StringComparison.OrdinalIgnoreCase))
                 {
                     string newSalt = GenerateRandomSalt();
@@ -336,15 +336,15 @@ namespace TextureSwapper.ViewModels
             return Convert.ToHexString(hash);
         }
 
-        private void LoadPaints()
+        private async void LoadPaints()
         {
             try
             {
                 string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.PaintsSkinsJson);
                 if (File.Exists(jsonPath))
                 {
-                    string json = File.ReadAllText(jsonPath);
-                    _allPaints = JsonSerializer.Deserialize<List<SkinModel>>(json) ?? [];
+                    string json = await File.ReadAllTextAsync(jsonPath);
+                    _allPaints = await Task.Run(() => JsonSerializer.Deserialize<List<SkinModel>>(json) ?? []);
                 }
                 else
                 {
@@ -412,6 +412,7 @@ namespace TextureSwapper.ViewModels
                 await File.WriteAllTextAsync(jsonPath, json);
                 Log.Information("Successfully wrote updated paints list to output disk.");
 
+#if DEBUG
                 try
                 {
                     string sourceDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", ".."));
@@ -424,8 +425,9 @@ namespace TextureSwapper.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Log.Debug(ex, "Could not write back to source path (normal for release runs).");
+                    Log.Debug(ex, "Could not write back to source path.");
                 }
+#endif
 
                 await _notificationService.ShowAsync("Success", "Category assignments saved successfully.", ControlAppearance.Success);
 

@@ -7,16 +7,20 @@ namespace TextureSwapper.Helpers
     {
         private readonly Func<object?, Task> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         private readonly Predicate<object?>? _canExecute = canExecute;
-        private volatile bool _isExecuting;
+        private int _isExecuting;
 
         public bool CanExecute(object? parameter)
         {
-            return !_isExecuting && (_canExecute == null || _canExecute(parameter));
+            return _isExecuting == 0 && (_canExecute == null || _canExecute(parameter));
         }
 
         public async void Execute(object? parameter)
         {
-            _isExecuting = true;
+            if (Interlocked.CompareExchange(ref _isExecuting, 1, 0) != 0)
+            {
+                return;
+            }
+
             CommandManager.InvalidateRequerySuggested();
             try
             {
@@ -28,7 +32,7 @@ namespace TextureSwapper.Helpers
             }
             finally
             {
-                _isExecuting = false;
+                _ = Interlocked.Exchange(ref _isExecuting, 0);
                 CommandManager.InvalidateRequerySuggested();
             }
         }

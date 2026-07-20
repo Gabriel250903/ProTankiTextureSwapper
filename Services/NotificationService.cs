@@ -5,7 +5,7 @@ using Wpf.Ui.Controls;
 
 namespace TextureSwapper.Services
 {
-    public class NotificationService : INotificationService
+    public sealed class NotificationService : INotificationService
     {
         public async Task ShowAsync(string title, string message, ControlAppearance appearance)
         {

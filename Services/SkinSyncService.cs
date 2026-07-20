@@ -8,7 +8,7 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class SkinSyncService(IUpdateService updateService) : ISkinSyncService
+    public sealed class SkinSyncService(IUpdateService updateService) : ISkinSyncService
     {
         private readonly IUpdateService _updateService = updateService;
         public event Action<string>? ProgressChanged;
@@ -109,7 +109,7 @@ namespace TextureSwapper.Services
                 {
                     int completed = 0;
                     object progressLock = new();
-                    SemaphoreSlim semaphore = new(5);
+                    using SemaphoreSlim semaphore = new(5);
                     List<Task> downloadTasks = [];
 
                     foreach (SkinModel skin in missing)
@@ -146,14 +146,7 @@ namespace TextureSwapper.Services
                         }));
                     }
 
-                    try
-                    {
-                        await Task.WhenAll(downloadTasks);
-                    }
-                    finally
-                    {
-                        semaphore.Dispose();
-                    }
+                    await Task.WhenAll(downloadTasks);
                 }
 
                 combinedSkins.AddRange(catSkins);

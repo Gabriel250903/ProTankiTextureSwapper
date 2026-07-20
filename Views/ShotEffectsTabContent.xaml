@@ -60,6 +60,16 @@
         </Border>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer.Style>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCustomIsidaSelected}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ScrollViewer.Style>
             <ItemsControl ItemsSource="{Binding FilteredShotEffects}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -147,6 +157,1072 @@
             </ItemsControl>
         </ScrollViewer>
 
+        <Grid
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="0,5,0,0">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCustomIsidaSelected}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="380" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer
+                Grid.Column="0"
+                Padding="0,0,15,0"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <ui:Card Margin="0,0,0,15" Padding="15">
+                        <StackPanel>
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="#FFFF4500"
+                                Text="Damage Beam (Target: Enemy)" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="Customize color, adjustments, and overlay textures." />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Color Adjustments" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Hue" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.Hue, StringFormat={}{0:F0}°}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="360"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.Hue, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Saturation" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.Saturation, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.Saturation, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Brightness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.Brightness, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="-100"
+                                Value="{Binding DamageBeam.Brightness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Contrast" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.Contrast, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="2.0"
+                                Minimum="0.5"
+                                TickFrequency="0.05"
+                                Value="{Binding DamageBeam.Contrast, Mode=TwoWay}" />
+
+                            <CheckBox
+                                Margin="0,5,0,10"
+                                Content="Invert Colors"
+                                IsChecked="{Binding DamageBeam.Invert, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="RGB Levels (Color Balance)" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Red Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.RedScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.RedScale, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Green Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.GreenScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.GreenScale, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Blue Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.BlueScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.BlueScale, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Beam Shape &amp; Glow" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Beam Thickness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.BeamThickness, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="3.0"
+                                Minimum="0.2"
+                                TickFrequency="0.1"
+                                Value="{Binding DamageBeam.BeamThickness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Core Edge Sharpness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.CoreSharpness, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5.0"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding DamageBeam.CoreSharpness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Inner Core Boost (White Hot)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.InnerCoreBoost, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.InnerCoreBoost, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Wave Distortion" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Wave Amplitude" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.WaveAmplitude, StringFormat={}{0:F1}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="20"
+                                Minimum="0"
+                                TickFrequency="0.5"
+                                Value="{Binding DamageBeam.WaveAmplitude, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Wave Frequency" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.WaveFrequency, StringFormat={}{0:F1}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="10"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding DamageBeam.WaveFrequency, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Special Filters" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Glow Width (Blur)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.BlurRadius, StringFormat={}{0:F0}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                IsSnapToTickEnabled="True"
+                                Maximum="10"
+                                Minimum="0"
+                                TickFrequency="1"
+                                Value="{Binding DamageBeam.BlurRadius, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Pixelate (Retro Size)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.PixelSize, StringFormat={}{0:F0}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                IsSnapToTickEnabled="True"
+                                Maximum="16"
+                                Minimum="1"
+                                TickFrequency="1"
+                                Value="{Binding DamageBeam.PixelSize, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Noise / Grain Intensity" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.Noise, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.Noise, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Texture Overlay (Layer)" />
+
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ui:TextBlock
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="Overlay Texture File:" />
+                                    <ui:TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding DamageBeam.TextureName}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <ui:Button
+                                        Margin="0,0,5,0"
+                                        Command="{Binding DamageBeam.LoadTextureCommand}"
+                                        Content="Import..." />
+                                    <ui:Button Command="{Binding DamageBeam.ClearTextureCommand}" Content="Clear">
+                                        <ui:Button.Style>
+                                            <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DamageBeam.TexturePath}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:Button.Style>
+                                    </ui:Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="150" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock
+                                    VerticalAlignment="Center"
+                                    Opacity="0.8"
+                                    Text="Blend Mode" />
+                                <ComboBox
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding BlendModes}"
+                                    SelectedItem="{Binding DamageBeam.BlendMode, Mode=TwoWay}" />
+                            </Grid>
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Scale X (Tiling)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.TextureScaleX, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding DamageBeam.TextureScaleX, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Scale Y (Tiling)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.TextureScaleY, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding DamageBeam.TextureScaleY, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Offset X" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.TextureOffsetX, StringFormat={}{0:F2}}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="1.0"
+                                Minimum="-1.0"
+                                TickFrequency="0.05"
+                                Value="{Binding DamageBeam.TextureOffsetX, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Offset Y" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.TextureOffsetY, StringFormat={}{0:F2}}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="1.0"
+                                Minimum="-1.0"
+                                TickFrequency="0.05"
+                                Value="{Binding DamageBeam.TextureOffsetY, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Overlay Opacity" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding DamageBeam.OverlayOpacity, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding DamageBeam.OverlayOpacity, Mode=TwoWay}" />
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Margin="0,0,0,15" Padding="15">
+                        <StackPanel>
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="#FF00FF7F"
+                                Text="Healing Beam (Target: Ally)" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="Customize color, adjustments, and overlay textures." />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Color Adjustments" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Hue" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.Hue, StringFormat={}{0:F0}°}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="360"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.Hue, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Saturation" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.Saturation, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.Saturation, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Brightness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.Brightness, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="-100"
+                                Value="{Binding HealingBeam.Brightness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Contrast" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.Contrast, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="2.0"
+                                Minimum="0.5"
+                                TickFrequency="0.05"
+                                Value="{Binding HealingBeam.Contrast, Mode=TwoWay}" />
+
+                            <CheckBox
+                                Margin="0,5,0,10"
+                                Content="Invert Colors"
+                                IsChecked="{Binding HealingBeam.Invert, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="RGB Levels (Color Balance)" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Red Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.RedScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.RedScale, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Green Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.GreenScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.GreenScale, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Blue Level" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.BlueScale, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="200"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.BlueScale, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Beam Shape &amp; Glow" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Beam Thickness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.BeamThickness, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="3.0"
+                                Minimum="0.2"
+                                TickFrequency="0.1"
+                                Value="{Binding HealingBeam.BeamThickness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Core Edge Sharpness" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.CoreSharpness, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5.0"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding HealingBeam.CoreSharpness, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Inner Core Boost (White Hot)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.InnerCoreBoost, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.InnerCoreBoost, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Wave Distortion" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Wave Amplitude" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.WaveAmplitude, StringFormat={}{0:F1}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="20"
+                                Minimum="0"
+                                TickFrequency="0.5"
+                                Value="{Binding HealingBeam.WaveAmplitude, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Wave Frequency" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.WaveFrequency, StringFormat={}{0:F1}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="10"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding HealingBeam.WaveFrequency, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Special Filters" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Glow Width (Blur)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.BlurRadius, StringFormat={}{0:F0}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                IsSnapToTickEnabled="True"
+                                Maximum="10"
+                                Minimum="0"
+                                TickFrequency="1"
+                                Value="{Binding HealingBeam.BlurRadius, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Pixelate (Retro Size)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.PixelSize, StringFormat={}{0:F0}px}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                IsSnapToTickEnabled="True"
+                                Maximum="16"
+                                Minimum="1"
+                                TickFrequency="1"
+                                Value="{Binding HealingBeam.PixelSize, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Noise / Grain Intensity" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.Noise, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.Noise, Mode=TwoWay}" />
+
+                            <Separator Margin="0,5,0,10" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <ui:TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="Texture Overlay (Layer)" />
+
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ui:TextBlock
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="Overlay Texture File:" />
+                                    <ui:TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding HealingBeam.TextureName}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <ui:Button
+                                        Margin="0,0,5,0"
+                                        Command="{Binding HealingBeam.LoadTextureCommand}"
+                                        Content="Import..." />
+                                    <ui:Button Command="{Binding HealingBeam.ClearTextureCommand}" Content="Clear">
+                                        <ui:Button.Style>
+                                            <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HealingBeam.TexturePath}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:Button.Style>
+                                    </ui:Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="150" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock
+                                    VerticalAlignment="Center"
+                                    Opacity="0.8"
+                                    Text="Blend Mode" />
+                                <ComboBox
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding BlendModes}"
+                                    SelectedItem="{Binding HealingBeam.BlendMode, Mode=TwoWay}" />
+                            </Grid>
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Scale X (Tiling)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.TextureScaleX, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding HealingBeam.TextureScaleX, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Scale Y (Tiling)" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.TextureScaleY, StringFormat={}{0:F2}x}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="5"
+                                Minimum="0.1"
+                                TickFrequency="0.1"
+                                Value="{Binding HealingBeam.TextureScaleY, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Offset X" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.TextureOffsetX, StringFormat={}{0:F2}}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="1.0"
+                                Minimum="-1.0"
+                                TickFrequency="0.05"
+                                Value="{Binding HealingBeam.TextureOffsetX, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Texture Offset Y" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.TextureOffsetY, StringFormat={}{0:F2}}" />
+                            </Grid>
+                            <Slider
+                                Margin="0,0,0,12"
+                                Maximum="1.0"
+                                Minimum="-1.0"
+                                TickFrequency="0.05"
+                                Value="{Binding HealingBeam.TextureOffsetY, Mode=TwoWay}" />
+
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBlock Opacity="0.8" Text="Overlay Opacity" />
+                                <ui:TextBlock
+                                    Grid.Column="1"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding HealingBeam.OverlayOpacity, StringFormat={}{0:F0}%}" />
+                            </Grid>
+                            <Slider
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding HealingBeam.OverlayOpacity, Mode=TwoWay}" />
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Padding="15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,20,0" VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="Generate &amp; Swap Custom Effect" />
+                                <ui:TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="This will generate the custom colorized textures and swap them with the game's cached Isida effects."
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ui:Button
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Appearance="Success"
+                                Command="{Binding ApplyCustomIsidaEffectCommand}"
+                                Content="GENERATE &amp; APPLY"
+                                FontWeight="Bold"
+                                Icon="{ui:SymbolIcon Flash24}" />
+                        </Grid>
+                    </ui:Card>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ui:Card
+                Grid.Column="1"
+                Margin="5,0,0,0"
+                Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                        <ui:TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="Live Realtime Preview" />
+                        <ui:TextBlock
+                            Margin="0,2,0,0"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="Realtime rendering of the custom lightning beams." />
+                    </StackPanel>
+
+                    <Border
+                        Grid.Row="1"
+                        Padding="20"
+                        Background="#FF111111"
+                        BorderBrush="#FF2F2F2F"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Border
+                                    Width="100"
+                                    Height="280"
+                                    Padding="5"
+                                    Background="#FF000000"
+                                    BorderBrush="#FF444444"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Image Source="{Binding DamageBeam.Preview}" Stretch="Fill" />
+                                </Border>
+                                <ui:TextBlock
+                                    Margin="0,8,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Foreground="#FFFF4500"
+                                    Text="Damage" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Border
+                                    Width="100"
+                                    Height="280"
+                                    Padding="5"
+                                    Background="#FF000000"
+                                    BorderBrush="#FF444444"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Image Source="{Binding HealingBeam.Preview}" Stretch="Fill" />
+                                </Border>
+                                <ui:TextBlock
+                                    Margin="0,8,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Foreground="#FF00FF7F"
+                                    Text="Healing" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </ui:Card>
+        </Grid>
+
         <Border
             Grid.Row="2"
             Margin="0,15,0,0"
@@ -155,6 +1231,16 @@
             BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="12">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCustomIsidaSelected}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

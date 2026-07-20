@@ -7,18 +7,16 @@ using TextureSwapper.Services.Interfaces;
 
 namespace TextureSwapper.Services
 {
-    public class AiTextureService : IAiTextureService
+    public sealed class AiTextureService : IAiTextureService
     {
-        private readonly HttpClient _httpClient;
-        private const string ModelName = "black-forest-labs/FLUX.1-schnell";
-
-        public AiTextureService()
+        private static readonly HttpClient _httpClient = new(new SocketsHttpHandler
         {
-            _httpClient = new HttpClient
-            {
-                Timeout = TimeSpan.FromSeconds(60)
-            };
-        }
+            PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+        })
+        {
+            Timeout = TimeSpan.FromSeconds(60)
+        };
+        private const string ModelName = "black-forest-labs/FLUX.1-schnell";
 
         public async Task<byte[]?> GenerateTextureAsync(string prompt, string token)
         {
@@ -36,7 +34,7 @@ namespace TextureSwapper.Services
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Trim());
             request.Headers.Add("X-Use-Cache", "false");
 
-            int randomSeed = new Random().Next(1, 99999999);
+            int randomSeed = Random.Shared.Next(1, 99999999);
             var payload = new
             {
                 inputs = formattedPrompt,
