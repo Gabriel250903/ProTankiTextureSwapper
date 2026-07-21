@@ -1958,5 +1958,243 @@
     "Name": "X_Noir",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/X_Noir.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Special",
+    "Name": "Tracer",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tracer.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Special",
+    "Name": "Youtuber",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Youtuber.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "America",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/America.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Argentina",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Argentina.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Australia",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Australia.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Belgium",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Belgium.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Brazil",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Brazil.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Cameroon",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Cameroon.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Canada",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Canada.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Costarica",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Costarica.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Croatia",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Croatia.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Denmark",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Denmark.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Ecuador",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Ecuador.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "England",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/England.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "France",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/France.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Germany",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Germany.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Ghana",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Ghana.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Iran",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Iran.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Japan",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Japan.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Korea",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Korea.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Mexico",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Mexico.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Morocco",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Morocco.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Netherlands",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Netherlands.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Poland",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Poland.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Portugal",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Portugal.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Qatar",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Qatar.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Saudi",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Saudi.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Senegal",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Senegal.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Serbia",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Serbia.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Spain",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Spain.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Switzerland",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Switzerland.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Tunisia",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tunisia.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Uruguay",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Uruguay.jpg"
+  },
+  {
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Wales",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Wales.jpg"
   }
 ]
