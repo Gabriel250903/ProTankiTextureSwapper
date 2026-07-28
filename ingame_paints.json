@@ -293,5 +293,30 @@
     "Name": "Dragon",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMDYvMzE2NDQ3NTQzMDczNTQvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Dragon.png"
+  },
+  {
+    "Name": "Arachnid",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81Ni8zMTQ2NDE0MzE0MTA2Ni9pbWFnZS5qcGc=",
+    "PreviewImage": "Textures/Paints/InGame/Arachnid.jpg"
+  },
+  {
+    "Name": "Soul Flight",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMzMvNy8xL2ltYWdlLmpwZw==",
+    "PreviewImage": "Textures/Paints/InGame/Soul_Flight.jpg"
+  },
+  {
+    "Name": "Year of the dragon",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMzAvMzE0NjQxNDMxNTIzNjQvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Year_of_the_dragon.jpg"
+  },
+  {
+    "Name": "Eternity",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yNDYvMzE0NjQxNDMxNTM0NjAvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Eternity.jpg"
+  },
+  {
+    "Name": "Moonwalker",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8yNzYvMzE0NjQxNDMxNDQ2MzQvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Moonwalker.jpg"
   }
 ]
