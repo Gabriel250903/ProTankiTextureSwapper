@@ -2,7 +2,7 @@
   {
     "Name": "Premium Paint",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNS81Mi8zMTY0NDc1NDMxMDM3Ny9pbWFnZS5qcGc=",
-    "PreviewImage": "Textures/Paints/InGame/Premium_paint.jpg"
+    "PreviewImage": "Textures/Paints/InGame/Premium Paint.jpg"
   },
   {
     "Name": "Tiger",
@@ -302,12 +302,12 @@
   {
     "Name": "Soul Flight",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMzMvNy8xL2ltYWdlLmpwZw==",
-    "PreviewImage": "Textures/Paints/InGame/Soul_Flight.jpg"
+    "PreviewImage": "Textures/Paints/InGame/Soul Flight.jpg"
   },
   {
     "Name": "Year of the dragon",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMzAvMzE0NjQxNDMxNTIzNjQvaW1hZ2UuanBn",
-    "PreviewImage": "Textures/Paints/InGame/Year_of_the_dragon.jpg"
+    "PreviewImage": "Textures/Paints/InGame/Year of the dragon.jpg"
   },
   {
     "Name": "Eternity",
