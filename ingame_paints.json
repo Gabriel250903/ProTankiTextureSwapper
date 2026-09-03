@@ -301,12 +301,12 @@
   },
   {
     "Name": "Soul Flight",
-    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMzMvNy8xL2ltYWdlLmpwZw==",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8zMTIvMzE2NDQ3NTQzMDY2MjYvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Soul Flight.jpg"
   },
   {
     "Name": "Year of the dragon",
-    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMzAvMzE0NjQxNDMxNTIzNjQvaW1hZ2UuanBn",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xNC8yMzAvMzE2NDQ3NTQzMDc1NzUvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Year of the dragon.jpg"
   },
   {
@@ -318,5 +318,15 @@
     "Name": "Moonwalker",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy8yNzYvMzE2NDQ3NTQzMDY0NTQvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Moonwalker.jpg"
+  },
+  {
+    "Name": "Nexus",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC81NC8yMTIvMzE2NTc2NTU3MTYwMDEvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Nexus.jpg"
+  },
+  {
+    "Name": "Aurora",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC80NC80NC8zMTY0NDc1NDQxNjI3Mi9pbWFnZS5qcGc",
+    "PreviewImage": "Textures/Paints/InGame/Aurora.jpg"
   }
 ]
