@@ -16,6 +16,7 @@ Logs/
 Output/
 Publish/
 test/
+Tools/
 settings.json
 installer.iss
 CodeDependencies.iss
@@ -34,4 +35,14 @@ Desktop.ini
 *.db
 
 publisher_private_key.txt
+installer_private_key.txt
+license_private_key.pem
+license_public_key.pem
+publisher_private_key.pem
+publisher_public_key.pem
 SignInstaller.ps1
+dotnet-tools.json
+
+Textures/Premium/
+asset_master_key.txt
+Tools/asset_master_key.txt
