@@ -13,9 +13,8 @@
     "Category": "Hulls",
     "ItemName": "Viking",
     "Name": "Viking LC",
-    "IsPremium": true,
-    "SourceFolder": "Textures/Encrypted/Hulls/Viking/Legacy/M3",
-    "PreviewImage": "Textures/Encrypted/Hulls/Viking/Legacy/M3/Viking_LC.png",
+    "SourceFolder": "Textures/Hulls/Viking/Legacy/M3",
+    "PreviewImage": "Textures/Hulls/Viking/Legacy/M3/Viking_LC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMxNDY0MTQzMDczNjAzL2RldGFpbHMuanBn",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMxNDY0MTQzMDczNjAzL2xpZ2h0bWFwLmpwZw==",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMxNDY0MTQzMDczNjAzL2RldGFpbHNfYWxwaGEuanBn"
