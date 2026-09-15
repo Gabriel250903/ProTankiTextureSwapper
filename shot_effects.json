@@ -5,11 +5,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Blue",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Blue/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   },
   {
@@ -18,11 +18,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Darkness",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Darkness/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   },
   {
@@ -31,11 +31,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Green",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Green/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   },
   {
@@ -44,11 +44,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Purple",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Purple/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   },
   {
@@ -57,11 +57,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Red",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Red/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   },
   {
@@ -70,11 +70,11 @@
     "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Snow",
     "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Snow/preview.jpg",
     "Targets": [
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMxNDY0MTQzMDExNzM2L2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMxNDY0MTQzMDExNjQzL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMxNDY0MTQzMDEyMjQyL2ltYWdlLmpwZw==",
-      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMxNDY0MTQzMDEyMTQyL2ltYWdlLmpwZw=="
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
   }
 ]
