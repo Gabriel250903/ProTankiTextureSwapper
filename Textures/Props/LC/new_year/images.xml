@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<images>
+  <image name="elka.png" new-name="elka.jpg" alpha="elka.gif" />
+  <image name="fahwerk1.jpg" new-name="fahwerk1.jpg" />
+  <image name="fahwerk1_1.jpg" new-name="fahwerk1_1.jpg" />
+  <image name="fahwerk1_2.jpg" new-name="fahwerk1_2.jpg" />
+  <image name="fahwerk2.jpg" new-name="fahwerk2.jpg" />
+  <image name="fahwerk2_1.jpg" new-name="fahwerk2_1.jpg" />
+  <image name="forest1.png" new-name="forest1.jpg" alpha="forest1.gif" />
+  <image name="forest3.png" new-name="forest3.jpg" alpha="forest3.gif" />
+  <image name="forest4.png" new-name="forest4.jpg" alpha="forest4.gif" />
+  <image name="nubu_2.jpg" new-name="nubu_2.jpg" />
+  <image name="nubu_3.jpg" new-name="nubu_3.jpg" />
+  <image name="ny_ban.jpg" new-name="ny_ban.jpg" />
+  <image name="ny_ban1.jpg" new-name="ny_ban1.jpg" />
+  <image name="ny_ban2.jpg" new-name="ny_ban2.jpg" />
+  <image name="ny_ban3.jpg" new-name="ny_ban3.jpg" />
+  <image name="shar_1.png" new-name="shar_1.jpg" alpha="shar_1.gif" />
+  <image name="shar_2.png" new-name="shar_2.jpg" alpha="shar_2.gif" />
+  <image name="shar_3.png" new-name="shar_3.jpg" alpha="shar_3.gif" />
+  <image name="shar_4.png" new-name="shar_4.jpg" alpha="shar_4.gif" />
+  <image name="snowman_0.png" new-name="snowman_0.jpg" alpha="snowman_0.gif" />
+  <image name="snowman_2.png" new-name="snowman_2.jpg" alpha="snowman_2.gif" />
+  <image name="snowman_4.png" new-name="snowman_4.jpg" alpha="snowman_4.gif" />
+  <image name="tow_end.jpg" new-name="tow_end.jpg" />
+  <image name="tow_end1.jpg" new-name="tow_end1.jpg" />
+  <image name="tow_roof.jpg" new-name="tow_roof.jpg" />
+  <image name="tow_roof1.jpg" new-name="tow_roof1.jpg" />
+  <image name="vilhou3.jpg" new-name="vilhou3.jpg" />
+  <image name="vilhou4.jpg" new-name="vilhou4.jpg" />
+</images>

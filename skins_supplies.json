@@ -2,34 +2,12 @@
   {
     "Category": "Supplies",
     "ItemName": "Repair Kit",
-    "Name": "Repair Kit New",
-    "SourceFolder": "Textures/Supplies/RepairKit/New",
-    "PreviewImage": "Textures/Supplies/RepairKit/New/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMTc2MDE1MjIzNzIyMC9ib3hfbWVkLmpwZw=="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Repair Kit",
     "Name": "Repair Kit NY2013",
     "SourceFolder": "Textures/Supplies/RepairKit/NY2013",
     "PreviewImage": "Textures/Supplies/RepairKit/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMTc2MDE1MjIzNzIyMC9ib3hfbWVkLmpwZw=="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Double Damage",
-    "Name": "Double Damage New",
-    "SourceFolder": "Textures/Supplies/DoubleDamage/New",
-    "PreviewImage": "Textures/Supplies/DoubleDamage/New/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTc2MDE1MjIzNzE3NC9ib3hfc2hvdC5qcGc="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Double Armor",
-    "Name": "Double Armor New",
-    "SourceFolder": "Textures/Supplies/DoubleArmor/New",
-    "PreviewImage": "Textures/Supplies/DoubleArmor/New/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTc2MDE1MjIzNzE2My9ib3hfYXJtci5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
@@ -37,7 +15,9 @@
     "Name": "Double Damage NY2013",
     "SourceFolder": "Textures/Supplies/DoubleDamage/NY2013",
     "PreviewImage": "Textures/Supplies/DoubleDamage/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTc2MDE1MjIzNzE3NC9ib3hfc2hvdC5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
@@ -45,15 +25,9 @@
     "Name": "Double Armor NY2013",
     "SourceFolder": "Textures/Supplies/DoubleArmor/NY2013",
     "PreviewImage": "Textures/Supplies/DoubleArmor/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTc2MDE1MjIzNzE2My9ib3hfYXJtci5qcGc="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Speed Boost",
-    "Name": "Speed Boost New",
-    "SourceFolder": "Textures/Supplies/SpeedBoost/New",
-    "PreviewImage": "Textures/Supplies/SpeedBoost/New/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMTc2MDE1MjIzNjc0Mi9ib3hfbm9zLmpwZw=="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
@@ -61,16 +35,9 @@
     "Name": "Speed Boost NY2013",
     "SourceFolder": "Textures/Supplies/SpeedBoost/NY2013",
     "PreviewImage": "Textures/Supplies/SpeedBoost/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMTc2MDE1MjIzNjc0Mi9ib3hfbm9zLmpwZw=="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Gold Box",
-    "Name": "Gold Box New",
-    "SourceFolder": "Textures/Supplies/GoldBox/New",
-    "PreviewImage": "Textures/Supplies/GoldBox/New/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTc3NjI3MzUyMDU3NC9ib3guanBn",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTY1NDUxMjEzNTMzMS9vYmplY3QuM2Rz"
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
@@ -78,7 +45,9 @@
     "Name": "Gold Box NY2013",
     "SourceFolder": "Textures/Supplies/GoldBox/NY2013",
     "PreviewImage": "Textures/Supplies/GoldBox/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTc3NjI3MzUyMDU3NC9ib3guanBn"
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
@@ -86,54 +55,1048 @@
     "Name": "Crystal Box NY2013",
     "SourceFolder": "Textures/Supplies/CrystalBox/NY2013",
     "PreviewImage": "Textures/Supplies/CrystalBox/NY2013/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMTc2MDE1MjIzNzEyMi9ib3guanBn"
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Repair Kit",
-    "Name": "Repair Kit hmm",
-    "SourceFolder": "Textures/Supplies/RepairKit/hmm",
-    "PreviewImage": "Textures/Supplies/RepairKit/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMTc2MDE1MjIzNzIyMC9ib3hfbWVkLmpwZw=="
-  },
-  {
-    "Category": "Supplies",
-    "ItemName": "Double Damage",
-    "Name": "Double Damage hmm",
-    "SourceFolder": "Textures/Supplies/DoubleDamage/hmm",
-    "PreviewImage": "Textures/Supplies/DoubleDamage/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMTc2MDE1MjIzNzE3NC9ib3hfc2hvdC5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
     "ItemName": "Double Armor",
-    "Name": "Double Armor hmm",
-    "SourceFolder": "Textures/Supplies/DoubleArmor/hmm",
-    "PreviewImage": "Textures/Supplies/DoubleArmor/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMTc2MDE1MjIzNzE2My9ib3hfYXJtci5qcGc="
+    "Name": "Double Armor New Year 2011",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/new_year_2011",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
-    "ItemName": "Speed Boost",
-    "Name": "Speed Boost hmm",
-    "SourceFolder": "Textures/Supplies/SpeedBoost/hmm",
-    "PreviewImage": "Textures/Supplies/SpeedBoost/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMTc2MDE1MjIzNjc0Mi9ib3hfbm9zLmpwZw=="
+    "ItemName": "Double Armor",
+    "Name": "Double Armor New Year 2015",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/new_year_2015",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/new_year_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
   },
   {
     "Category": "Supplies",
-    "ItemName": "Gold Box",
-    "Name": "Gold Box hmm",
-    "SourceFolder": "Textures/Supplies/GoldBox/hmm",
-    "PreviewImage": "Textures/Supplies/GoldBox/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMTc3NjI3MzUyMDU3NC9ib3guanBn"
+    "ItemName": "Double Armor",
+    "Name": "Double Armor Old",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/old",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Armor",
+    "Name": "Double Armor Release 1.100",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/release_1.100",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Armor",
+    "Name": "Double Armor Release 284",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/release_284",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Armor",
+    "Name": "Double Armor Very First",
+    "SourceFolder": "Textures/Supplies/DoubleArmor/very_first",
+    "PreviewImage": "Textures/Supplies/DoubleArmor/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9ib3hfYXJtci5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1MS8zMjAzMDYyNDUzNzcxNS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage New Year 2011",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/new_year_2011",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage New Year 2015",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/new_year_2015",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/new_year_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage Old",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/old",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage Release 1.100",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/release_1.100",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage Release 284",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/release_284",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Double Damage",
+    "Name": "Double Damage Very First",
+    "SourceFolder": "Textures/Supplies/DoubleDamage/very_first",
+    "PreviewImage": "Textures/Supplies/DoubleDamage/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9ib3hfc2hvdC5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ny8zMjAzMDYyNDUzNzI3NS9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
   },
   {
     "Category": "Supplies",
     "ItemName": "Crystal Box",
-    "Name": "Crystal Box hmm",
-    "SourceFolder": "Textures/Supplies/CrystalBox/hmm",
-    "PreviewImage": "Textures/Supplies/CrystalBox/hmm/details.jpg",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMTc2MDE1MjIzNzEyMi9ib3guanBn"
+    "Name": "Crystal Box 100 Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/100_release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/100_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box 1 Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/1_release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/1_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box 20 Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/20_release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/20_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box 50 Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/50_release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/50_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box 5 Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/5_release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/5_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box New Year 2011",
+    "SourceFolder": "Textures/Supplies/CrystalBox/new_year_2011",
+    "PreviewImage": "Textures/Supplies/CrystalBox/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box Old",
+    "SourceFolder": "Textures/Supplies/CrystalBox/old",
+    "PreviewImage": "Textures/Supplies/CrystalBox/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box Release 1.100",
+    "SourceFolder": "Textures/Supplies/CrystalBox/release_1.100",
+    "PreviewImage": "Textures/Supplies/CrystalBox/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box Release 123",
+    "SourceFolder": "Textures/Supplies/CrystalBox/release_123",
+    "PreviewImage": "Textures/Supplies/CrystalBox/release_123/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box Release 284",
+    "SourceFolder": "Textures/Supplies/CrystalBox/release_284",
+    "PreviewImage": "Textures/Supplies/CrystalBox/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Crystal Box",
+    "Name": "Crystal Box Very First",
+    "SourceFolder": "Textures/Supplies/CrystalBox/very_first",
+    "PreviewImage": "Textures/Supplies/CrystalBox/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Mi8zMjAzMDYyNDUzNzYxMi9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2011",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2011",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2012",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2012",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2012/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2014",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2014",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2014/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Birthday Tanki 2019",
+    "SourceFolder": "Textures/Supplies/GoldBox/birthday_to_2019",
+    "PreviewImage": "Textures/Supplies/GoldBox/birthday_to_2019/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Brazil Carnival 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/br_carnival_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/br_carnival_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Brazil Carnival 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/br_carnival_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/br_carnival_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Brazil Easter 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/br_easter_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/br_easter_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Brazil Independence Day 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/br_independence_day_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/br_independence_day_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Chinese New Year 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/chinese_new_year_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/chinese_new_year_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Chinese New Year 2023",
+    "SourceFolder": "Textures/Supplies/GoldBox/chinese_new_year_2023",
+    "PreviewImage": "Textures/Supplies/GoldBox/chinese_new_year_2023/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Christmas 2014",
+    "SourceFolder": "Textures/Supplies/GoldBox/christmas_2014",
+    "PreviewImage": "Textures/Supplies/GoldBox/christmas_2014/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box China Birthday Tanki 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/cn_birthday_to_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/cn_birthday_to_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box China National Day",
+    "SourceFolder": "Textures/Supplies/GoldBox/cn_national_day",
+    "PreviewImage": "Textures/Supplies/GoldBox/cn_national_day/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box China National Day 2011",
+    "SourceFolder": "Textures/Supplies/GoldBox/cn_national_day_2011",
+    "PreviewImage": "Textures/Supplies/GoldBox/cn_national_day_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Container Release 284",
+    "SourceFolder": "Textures/Supplies/GoldBox/container_release_284",
+    "PreviewImage": "Textures/Supplies/GoldBox/container_release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Cosmonautics Day 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/cosmonautics_day_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/cosmonautics_day_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Crazy Weekend",
+    "SourceFolder": "Textures/Supplies/GoldBox/crazy_weekend",
+    "PreviewImage": "Textures/Supplies/GoldBox/crazy_weekend/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Day Of The Dead 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/day_of_the_dead_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/day_of_the_dead_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Easter 2021",
+    "SourceFolder": "Textures/Supplies/GoldBox/easter_2021",
+    "PreviewImage": "Textures/Supplies/GoldBox/easter_2021/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Energy 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/energy_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/energy_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Euro 2012",
+    "SourceFolder": "Textures/Supplies/GoldBox/euro_2012",
+    "PreviewImage": "Textures/Supplies/GoldBox/euro_2012/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Fools Day 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/fools_day_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/fools_day_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Fools Day 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/fools_day_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/fools_day_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Fools Day 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/fools_day_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/fools_day_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Gamescom",
+    "SourceFolder": "Textures/Supplies/GoldBox/gamescom",
+    "PreviewImage": "Textures/Supplies/GoldBox/gamescom/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2012",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2012",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2012/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2013",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2013",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2013/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2014",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2014",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2014/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Halloween 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/halloween_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/halloween_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Iron Days 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/iron_days_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/iron_days_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Iron Days 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/iron_days_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/iron_days_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box May Holidays 2013",
+    "SourceFolder": "Textures/Supplies/GoldBox/may_holidays_2013",
+    "PreviewImage": "Textures/Supplies/GoldBox/may_holidays_2013/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box May Holidays 2014",
+    "SourceFolder": "Textures/Supplies/GoldBox/may_holidays_2014",
+    "PreviewImage": "Textures/Supplies/GoldBox/may_holidays_2014/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Moon Silence",
+    "SourceFolder": "Textures/Supplies/GoldBox/moon_silence",
+    "PreviewImage": "Textures/Supplies/GoldBox/moon_silence/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2011",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2011",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2013",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2013",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2013/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2014",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2014",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2014/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2015 Common",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2015_common",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2015_common/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2015 Enlarged",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2015_enlarged",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2015_enlarged/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box New Year 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/new_year_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/new_year_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Old",
+    "SourceFolder": "Textures/Supplies/GoldBox/old",
+    "PreviewImage": "Textures/Supplies/GoldBox/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Release 1.100",
+    "SourceFolder": "Textures/Supplies/GoldBox/release_1.100",
+    "PreviewImage": "Textures/Supplies/GoldBox/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Release 123",
+    "SourceFolder": "Textures/Supplies/GoldBox/release_123",
+    "PreviewImage": "Textures/Supplies/GoldBox/release_123/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Release 284",
+    "SourceFolder": "Textures/Supplies/GoldBox/release_284",
+    "PreviewImage": "Textures/Supplies/GoldBox/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Release 284 Updated",
+    "SourceFolder": "Textures/Supplies/GoldBox/release_284_updated",
+    "PreviewImage": "Textures/Supplies/GoldBox/release_284_updated/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box SLTV StarSeries Season 3",
+    "SourceFolder": "Textures/Supplies/GoldBox/sltv_ss_season_3",
+    "PreviewImage": "Textures/Supplies/GoldBox/sltv_ss_season_3/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box St Patricks Day 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/st_patricks_day_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/st_patricks_day_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Summer Sale 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/summer_sale_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/summer_sale_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Tankers Day 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/tankers_day_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/tankers_day_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Tankers Day 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/tankers_day_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/tankers_day_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Ufo Day 2018",
+    "SourceFolder": "Textures/Supplies/GoldBox/ufo_day_2018",
+    "PreviewImage": "Textures/Supplies/GoldBox/ufo_day_2018/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Valentines Day 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/valentines_day_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/valentines_day_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Valentines Day 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/valentines_day_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/valentines_day_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Valentines Day 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/valentines_day_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/valentines_day_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Valentines Day 2018",
+    "SourceFolder": "Textures/Supplies/GoldBox/valentines_day_2018",
+    "PreviewImage": "Textures/Supplies/GoldBox/valentines_day_2018/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Very First",
+    "SourceFolder": "Textures/Supplies/GoldBox/very_first",
+    "PreviewImage": "Textures/Supplies/GoldBox/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Victory Day 2011",
+    "SourceFolder": "Textures/Supplies/GoldBox/victory_day_2011",
+    "PreviewImage": "Textures/Supplies/GoldBox/victory_day_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Victory Day 2013",
+    "SourceFolder": "Textures/Supplies/GoldBox/victory_day_2013",
+    "PreviewImage": "Textures/Supplies/GoldBox/victory_day_2013/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Videoblog 100",
+    "SourceFolder": "Textures/Supplies/GoldBox/videoblog_100",
+    "PreviewImage": "Textures/Supplies/GoldBox/videoblog_100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Womens Day 2015",
+    "SourceFolder": "Textures/Supplies/GoldBox/womens_day_2015",
+    "PreviewImage": "Textures/Supplies/GoldBox/womens_day_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Womens Day 2016",
+    "SourceFolder": "Textures/Supplies/GoldBox/womens_day_2016",
+    "PreviewImage": "Textures/Supplies/GoldBox/womens_day_2016/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Womens Day 2017",
+    "SourceFolder": "Textures/Supplies/GoldBox/womens_day_2017",
+    "PreviewImage": "Textures/Supplies/GoldBox/womens_day_2017/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Gold Box",
+    "Name": "Gold Box Womens Day 2022",
+    "SourceFolder": "Textures/Supplies/GoldBox/womens_day_2022",
+    "PreviewImage": "Textures/Supplies/GoldBox/womens_day_2022/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9ib3guanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1My8zMjAzMDYyNDUzNzY1NC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit New Year 2011",
+    "SourceFolder": "Textures/Supplies/RepairKit/new_year_2011",
+    "PreviewImage": "Textures/Supplies/RepairKit/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit New Year 2015",
+    "SourceFolder": "Textures/Supplies/RepairKit/new_year_2015",
+    "PreviewImage": "Textures/Supplies/RepairKit/new_year_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit Old",
+    "SourceFolder": "Textures/Supplies/RepairKit/old",
+    "PreviewImage": "Textures/Supplies/RepairKit/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit Release 1.100",
+    "SourceFolder": "Textures/Supplies/RepairKit/release_1.100",
+    "PreviewImage": "Textures/Supplies/RepairKit/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit Release 284",
+    "SourceFolder": "Textures/Supplies/RepairKit/release_284",
+    "PreviewImage": "Textures/Supplies/RepairKit/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Repair Kit",
+    "Name": "Repair Kit Very First",
+    "SourceFolder": "Textures/Supplies/RepairKit/very_first",
+    "PreviewImage": "Textures/Supplies/RepairKit/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9ib3hfbWVkLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1NS8zMjAzMDYyNDU0MDA0MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost New Year 2011",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/new_year_2011",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/new_year_2011/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost New Year 2015",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/new_year_2015",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/new_year_2015/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Holidays & Events"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost Old",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/old",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/old/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost Release 1.100",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/release_1.100",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/release_1.100/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost Release 284",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/release_284",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/release_284/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
+  },
+  {
+    "Category": "Supplies",
+    "ItemName": "Speed Boost",
+    "Name": "Speed Boost Very First",
+    "SourceFolder": "Textures/Supplies/SpeedBoost/very_first",
+    "PreviewImage": "Textures/Supplies/SpeedBoost/very_first/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9ib3hfbm9zLmpwZw==",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI1Ni8zMjAzMDYyNDUzNzc1MC9vYmplY3QuM2Rz",
+    "SubCategory": "Vintage"
   }
 ]

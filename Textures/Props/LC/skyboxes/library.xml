@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<library name="Skyboxes" id="skyboxes">
+  <skyboxes>
+    <skybox id="1" name="1" file="1.jpg" />
+    <skybox id="2" name="2" file="2.jpg" />
+    <skybox id="3" name="3" file="3.jpg" />
+    <skybox id="4" name="4" file="4.jpg" />
+    <skybox id="5" name="5" file="5.jpg" />
+    <skybox id="6" name="6" file="6.jpg" />
+    <skybox id="7" name="7" file="7.jpg" />
+    <skybox id="8" name="8" file="8.jpg" />
+    <skybox id="9" name="9" file="9.jpg" />
+    <skybox id="10" name="10" file="10.jpg" />
+    <skybox id="11" name="11" file="11.jpg" />
+    <skybox id="12" name="12" file="12.jpg" />
+    <skybox id="13" name="13" file="13.jpg" />
+    <skybox id="14" name="14" file="14.jpg" />
+    <skybox id="15" name="15" file="15.jpg" />
+    <skybox id="16" name="16" file="16.jpg" />
+    <skybox id="17" name="17" file="17.jpg" />
+  </skyboxes>
+</library>

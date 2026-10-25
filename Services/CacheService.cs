@@ -1,5 +1,5 @@
-using TextureSwapper.Helpers;
-using TextureSwapper.Services.Interfaces;
+using TextureSwapper.Core.Interfaces;
+using TextureSwapper.Helpers.Utilities;
 
 namespace TextureSwapper.Services
 {
@@ -10,9 +10,9 @@ namespace TextureSwapper.Services
             return FileHelper.IsGameRunning();
         }
 
-        public bool IsCacheFileLocked(string cachePath)
+        public bool IsCacheFileLocked(string cachePath, IEnumerable<string>? targetFiles = null)
         {
-            return FileHelper.IsCacheFileLocked(cachePath);
+            return FileHelper.IsCacheFileLocked(cachePath, targetFiles);
         }
     }
 }

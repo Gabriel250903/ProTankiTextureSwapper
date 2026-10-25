@@ -1,0 +1,869 @@
+<ui:FluentWindow
+  x:Class="TextureSwapper.Views.Windows.PropsEditorWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:TextureSwapper.Views.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:editors="clr-namespace:TextureSwapper.ViewModels.Editors"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  Title="{DynamicResource Loc_Props_Title}"
+  Width="1300"
+  Height="780"
+  MinWidth="1000"
+  MinHeight="650"
+  d:DataContext="{d:DesignInstance editors:PropsEditorViewModel,
+                                     IsDesignTimeCreatable=False}"
+  Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+  ExtendsContentIntoTitleBar="True"
+  WindowBackdropType="Mica"
+  WindowStartupLocation="CenterOwner"
+  mc:Ignorable="d"
+>
+  <Window.Resources>
+    <ResourceDictionary>
+      <BooleanToVisibilityConverter x:Key="BoolToVis" />
+      <ResourceDictionary.MergedDictionaries>
+        <ui:ThemesDictionary Theme="Dark" />
+        <ui:ControlsDictionary />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar
+      Title="{DynamicResource Loc_Props_Title}"
+      Height="46"
+      VerticalAlignment="Center"
+      FontWeight="Bold"
+    />
+
+    <Grid Grid.Row="1" Margin="15,5,15,15">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="280" />
+        <ColumnDefinition Width="10" />
+        <ColumnDefinition Width="350" />
+        <ColumnDefinition Width="10" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0" Padding="12" Background="#0AFFFFFF" CornerRadius="8">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="405*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            FontSize="16"
+            FontWeight="SemiBold"
+            Foreground="White"
+            Text="{DynamicResource Loc_Props_Props}"
+          />
+
+          <ui:TextBox
+            Grid.Row="1"
+            Margin="0,0,0,8"
+            Icon="{ui:SymbolIcon Search24}"
+            PlaceholderText="{DynamicResource Loc_Props_SearchPlaceholder}"
+            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+          />
+
+          <ComboBox
+            Grid.Row="2"
+            Margin="0,0,0,10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding Categories}"
+            SelectedItem="{Binding SelectedCategory}"
+          />
+
+          <ListBox
+            Grid.Row="3"
+            Margin="0,10,0,0"
+            Background="Transparent"
+            BorderThickness="0"
+            ItemsSource="{Binding FilteredProps}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            SelectedItem="{Binding SelectedProp}"
+          >
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel>
+                  <TextBlock FontWeight="SemiBold" Foreground="White" Text="{Binding Name}" />
+                  <TextBlock FontSize="11" Foreground="#AAAAAA">
+                    <Run Text="{Binding Category, Mode=OneWay}" />
+                  </TextBlock>
+                  <TextBlock
+                    Margin="0,2,0,0"
+                    FontSize="10"
+                    Foreground="#777777"
+                    Text="{Binding TextureFilename}"
+                  />
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="2" Padding="12" Background="#0AFFFFFF" CornerRadius="8">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel>
+            <Border
+              Margin="0,0,0,15"
+              Padding="12"
+              Background="#14FFFFFF"
+              BorderBrush="#25FFFFFF"
+              BorderThickness="1"
+              CornerRadius="6"
+              Visibility="{Binding HasLcVersion, Converter={StaticResource BoolToVis}}"
+            >
+              <StackPanel>
+                <Grid Margin="0,0,0,10">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="White"
+                    Text="{DynamicResource Loc_Props_PropVersion}"
+                  />
+                  <Border
+                    Grid.Column="1"
+                    Padding="8,3"
+                    Background="#2000B4D8"
+                    BorderBrush="#4000B4D8"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                  >
+                    <TextBlock
+                      FontSize="10"
+                      FontWeight="SemiBold"
+                      Foreground="#00B4D8"
+                      Text="{Binding CurrentVersionBadgeText}"
+                    />
+                  </Border>
+                </Grid>
+
+                <StackPanel Margin="0,0,0,8">
+                  <RadioButton
+                    Margin="0,0,0,8"
+                    Content="{DynamicResource Loc_Props_VersionDefault}"
+                    FontSize="12"
+                    Foreground="White"
+                    GroupName="PropVersionGroup"
+                    IsChecked="{Binding IsDefaultSelected, Mode=TwoWay}"
+                  />
+                  <RadioButton
+                    Margin="0,0,0,8"
+                    Content="{DynamicResource Loc_Props_VersionLCNormal}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Foreground="#FFD166"
+                    GroupName="PropVersionGroup"
+                    IsChecked="{Binding IsLcNormalSelected, Mode=TwoWay}"
+                    Visibility="{Binding HasLcNormalVersion, Converter={StaticResource BoolToVis}}"
+                  />
+                  <RadioButton
+                    Margin="0,0,0,8"
+                    Content="{DynamicResource Loc_Props_VersionLCWinter}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Foreground="#48CAE4"
+                    GroupName="PropVersionGroup"
+                    IsChecked="{Binding IsLcWinterSelected, Mode=TwoWay}"
+                    Visibility="{Binding HasLcWinterVersion, Converter={StaticResource BoolToVis}}"
+                  />
+                </StackPanel>
+
+                <Border
+                  Margin="0,8,0,0"
+                  Padding="8"
+                  Background="#2A200E"
+                  BorderBrush="#8A6D3B"
+                  BorderThickness="1"
+                  CornerRadius="4"
+                  Visibility="{Binding IsMeshShared, Converter={StaticResource BoolToVis}}"
+                >
+                  <TextBlock
+                    FontSize="10"
+                    Foreground="#E0C097"
+                    Text="{Binding SharedMeshWarning}"
+                    TextWrapping="Wrap"
+                  />
+                </Border>
+              </StackPanel>
+            </Border>
+
+            <Border
+              Margin="0,0,0,15"
+              Padding="12"
+              Background="#14FFFFFF"
+              BorderBrush="#25FFFFFF"
+              BorderThickness="1"
+              CornerRadius="6"
+              Visibility="{Binding ShowSelectPropNotice, Converter={StaticResource BoolToVis}}"
+            >
+              <StackPanel>
+                <TextBlock
+                  Margin="0,0,0,6"
+                  FontSize="14"
+                  FontWeight="SemiBold"
+                  Foreground="White"
+                  Text="{DynamicResource Loc_Props_PropVersion}"
+                />
+                <TextBlock
+                  FontSize="12"
+                  Foreground="#AAAAAA"
+                  Text="{DynamicResource Loc_Props_SelectPropNotice}"
+                  TextWrapping="Wrap"
+                />
+              </StackPanel>
+            </Border>
+
+            <Border
+              Margin="0,0,0,15"
+              Padding="12"
+              Background="#14FFFFFF"
+              BorderBrush="#25FFFFFF"
+              BorderThickness="1"
+              CornerRadius="6"
+              Visibility="{Binding ShowNoLcNotice, Converter={StaticResource BoolToVis}}"
+            >
+              <StackPanel>
+                <TextBlock
+                  Margin="0,0,0,6"
+                  FontSize="14"
+                  FontWeight="SemiBold"
+                  Foreground="White"
+                  Text="{DynamicResource Loc_Props_PropVersion}"
+                />
+                <TextBlock
+                  FontSize="12"
+                  Foreground="#AAAAAA"
+                  Text="{DynamicResource Loc_Props_NoLcVersion}"
+                  TextWrapping="Wrap"
+                />
+              </StackPanel>
+            </Border>
+
+            <StackPanel Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}">
+              <TextBlock
+                Margin="0,0,0,15"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Text="{DynamicResource Loc_Props_Adjustments}"
+              />
+
+              <StackPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox
+                  Margin="0,0,15,0"
+                  Content="{DynamicResource Loc_Props_FlipHorizontal}"
+                  IsChecked="{Binding FlipHorizontal}"
+                />
+                <CheckBox
+                  Content="{DynamicResource Loc_Props_FlipVertical}"
+                  IsChecked="{Binding FlipVertical}"
+                />
+              </StackPanel>
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding Hue, StringFormat='Hue: {0:F0}°'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsSnapToTickEnabled="True"
+                Maximum="360"
+                Minimum="0"
+                TickFrequency="1"
+                Value="{Binding Hue}"
+              />
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding Saturation, StringFormat='Saturation: {0:F0}%'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsSnapToTickEnabled="True"
+                Maximum="200"
+                Minimum="0"
+                TickFrequency="1"
+                Value="{Binding Saturation}"
+              />
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding Brightness, StringFormat='Brightness: {0:F0}%'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsSnapToTickEnabled="True"
+                Maximum="100"
+                Minimum="-100"
+                TickFrequency="1"
+                Value="{Binding Brightness}"
+              />
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding Contrast, StringFormat='Contrast: {0:F2}'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsSnapToTickEnabled="True"
+                Maximum="3"
+                Minimum="0"
+                TickFrequency="0.05"
+                Value="{Binding Contrast}"
+              />
+
+              <Separator Margin="0,5,0,15" />
+
+              <TextBlock
+                Margin="0,0,0,8"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Text="{DynamicResource Loc_Props_ChromaKeyMask}"
+              />
+
+              <CheckBox
+                Margin="0,0,0,8"
+                Content="{DynamicResource Loc_Props_EnableColorProtection}"
+                IsChecked="{Binding ProtectEnabled}"
+              />
+
+              <controls:CustomColorPicker
+                Height="32"
+                Margin="0,0,0,8"
+                IsEnabled="{Binding ProtectEnabled}"
+                SelectedColor="{Binding ProtectColor, Mode=TwoWay}"
+              />
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding ProtectTolerance, StringFormat='Tolerance: {0:F0}'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsEnabled="{Binding ProtectEnabled}"
+                IsSnapToTickEnabled="True"
+                Maximum="441"
+                Minimum="0"
+                TickFrequency="1"
+                Value="{Binding ProtectTolerance}"
+              />
+
+              <Separator Margin="0,5,0,15" />
+
+              <TextBlock
+                Margin="0,0,0,8"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Text="{DynamicResource Loc_Props_ColorTint}"
+              />
+
+              <controls:CustomColorPicker
+                Height="32"
+                Margin="0,0,0,8"
+                SelectedColor="{Binding TintColor, Mode=TwoWay}"
+              />
+
+              <TextBlock
+                Margin="0,0,0,3"
+                Foreground="#CCCCCC"
+                Text="{Binding TintStrength, StringFormat='Tint Strength: {0:P0}'}"
+              />
+              <Slider
+                Margin="0,0,0,12"
+                IsSnapToTickEnabled="True"
+                Maximum="1"
+                Minimum="0"
+                TickFrequency="0.01"
+                Value="{Binding TintStrength}"
+              />
+
+              <Separator Margin="0,5,0,15" />
+
+              <TextBlock
+                Margin="0,0,0,8"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Text="{DynamicResource Loc_Props_PresetThemes}"
+              />
+
+              <ItemsControl ItemsSource="{Binding PresetNames}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Button
+                      Margin="0,0,6,6"
+                      Padding="10,6"
+                      Command="{Binding DataContext.ApplyPresetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                      CommandParameter="{Binding}"
+                      Content="{Binding}"
+                      FontSize="11"
+                    />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+
+              <Separator Margin="0,10,0,15" />
+
+              <TextBlock
+                Margin="0,0,0,8"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Text="{DynamicResource Loc_Props_DecalOverlays}"
+              />
+
+              <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                <Button
+                  Margin="0,0,8,0"
+                  Padding="10,6"
+                  Command="{Binding ImportDecalCommand}"
+                  Content="{DynamicResource Loc_Props_ImportDecal}"
+                />
+                <Button
+                  Padding="10,6"
+                  Command="{Binding RemoveDecalCommand}"
+                  Content="{DynamicResource Loc_Props_Remove}"
+                />
+              </StackPanel>
+
+              <ListBox
+                MaxHeight="120"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding Decals}"
+                SelectedItem="{Binding SelectedDecal}"
+              >
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock FontSize="11" Foreground="#CCCCCC">
+                      <Run Text="📌 " />
+                      <Run Text="{Binding ImagePath, Mode=OneWay}" />
+                    </TextBlock>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+
+              <Border Margin="0,10,0,0" Padding="10" Background="#15FFFFFF" CornerRadius="6">
+                <Border.Style>
+                  <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding SelectedDecal}" Value="{x:Null}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Border.Style>
+                <StackPanel DataContext="{Binding SelectedDecal}">
+                  <TextBlock
+                    Margin="0,0,0,10"
+                    FontWeight="SemiBold"
+                    Foreground="White"
+                    Text="{DynamicResource Loc_Props_EditSelectedDecal}"
+                  />
+
+                  <TextBlock
+                    Margin="0,0,0,3"
+                    Foreground="#CCC"
+                    Text="{DynamicResource Loc_Props_BlendMode}"
+                  />
+                  <ComboBox
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding DataContext.AvailableBlendModes, RelativeSource={RelativeSource AncestorType=Window}}"
+                    SelectedItem="{Binding BlendMode}"
+                  />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding X, StringFormat='Position X: {0:F0}'}"
+                  />
+                  <Slider Margin="0,0,0,10" Maximum="1024" Minimum="-512" Value="{Binding X}" />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Y, StringFormat='Position Y: {0:F0}'}"
+                  />
+                  <Slider Margin="0,0,0,10" Maximum="1024" Minimum="-512" Value="{Binding Y}" />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Scale, StringFormat='Scale: {0:F2}x'}"
+                  />
+                  <Slider
+                    Margin="0,0,0,10"
+                    IsSnapToTickEnabled="True"
+                    Maximum="5.0"
+                    Minimum="0.1"
+                    TickFrequency="0.1"
+                    Value="{Binding Scale}"
+                  />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Rotation, StringFormat='Rotation: {0:F0}°'}"
+                  />
+                  <Slider Margin="0,0,0,10" Maximum="360" Minimum="0" Value="{Binding Rotation}" />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Opacity, StringFormat='Opacity: {0:P0}'}"
+                  />
+                  <Slider
+                    Margin="0,0,0,10"
+                    IsSnapToTickEnabled="True"
+                    Maximum="1"
+                    Minimum="0"
+                    TickFrequency="0.05"
+                    Value="{Binding Opacity}"
+                  />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Brightness, StringFormat='Brightness: {0:F0}%'}"
+                  />
+                  <Slider
+                    Margin="0,0,0,10"
+                    Maximum="100"
+                    Minimum="-100"
+                    Value="{Binding Brightness}"
+                  />
+
+                  <TextBlock
+                    Foreground="#CCC"
+                    Text="{Binding Contrast, StringFormat='Contrast: {0:F2}'}"
+                  />
+                  <Slider
+                    Margin="0,0,0,0"
+                    IsSnapToTickEnabled="True"
+                    Maximum="3"
+                    Minimum="0"
+                    TickFrequency="0.1"
+                    Value="{Binding Contrast}"
+                  />
+                </StackPanel>
+              </Border>
+
+              <Separator Margin="0,10,0,15" />
+
+              <Button
+                Padding="12,8"
+                HorizontalAlignment="Stretch"
+                Command="{Binding ResetFiltersCommand}"
+                Content="{DynamicResource Loc_Props_ResetAllFilters}"
+              />
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+
+      <Border Grid.Column="4" Padding="15" Background="#1E1E1E" CornerRadius="8">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            FontSize="16"
+            FontWeight="SemiBold"
+            Foreground="White"
+            Text="{DynamicResource Loc_Props_LivePreview}"
+          />
+
+          <Border Grid.Row="1" Background="#2D2D30" ClipToBounds="True" CornerRadius="4">
+            <Grid>
+              <Image
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="{Binding OriginalPreviewImage}"
+                Stretch="Uniform"
+              />
+
+              <Image
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="{Binding PreviewImage}"
+                Stretch="Uniform"
+              >
+                <Image.Style>
+                  <Style TargetType="Image">
+                    <Setter Property="Opacity" Value="{Binding Value, ElementName=BlendSlider}" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsAdmin}" Value="False">
+                        <Setter Property="Opacity" Value="1.0" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Image.Style>
+              </Image>
+
+              <TextBlock
+                Margin="30"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="#666666"
+                Text="{DynamicResource Loc_Props_SelectPropPreview}"
+                TextAlignment="Center"
+                TextWrapping="Wrap"
+              >
+                <TextBlock.Style>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding PreviewImage}" Value="{x:Null}">
+                        <Setter Property="Visibility" Value="Visible" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBlock.Style>
+              </TextBlock>
+            </Grid>
+          </Border>
+
+          <StackPanel
+            Grid.Row="2"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
+          >
+            <TextBlock
+              Margin="0,0,10,0"
+              VerticalAlignment="Center"
+              FontSize="11"
+              Foreground="#888"
+              Text="{DynamicResource Loc_Props_Original}"
+            />
+            <Slider
+              x:Name="BlendSlider"
+              Width="150"
+              VerticalAlignment="Center"
+              IsSnapToTickEnabled="False"
+              Maximum="1"
+              Minimum="0"
+              Value="1"
+            />
+            <TextBlock
+              Margin="10,0,0,0"
+              VerticalAlignment="Center"
+              FontSize="11"
+              Foreground="#888"
+              Text="{DynamicResource Loc_Props_Edited}"
+            />
+          </StackPanel>
+
+          <StackPanel
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            HorizontalAlignment="Center"
+            IsEnabled="{Binding IsNotBatching}"
+          >
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+              <Button
+                Margin="0,0,8,0"
+                Padding="16,10"
+                Background="#4CAF50"
+                Command="{Binding ApplyCommand}"
+                Content="{DynamicResource Loc_Props_ApplyToGame}"
+                FontSize="13"
+                FontWeight="Bold"
+                Foreground="White"
+              />
+              <Button
+                Margin="0,0,8,0"
+                Padding="14,10"
+                Background="#E59866"
+                Command="{Binding ApplyAllLcCommand}"
+                Content="{DynamicResource Loc_Props_ApplyAllLCNormal}"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Foreground="#1A1A1A"
+                ToolTip="{DynamicResource Loc_Props_ApplyAllLCNormalTooltip}"
+              />
+              <Button
+                Margin="0,0,8,0"
+                Padding="14,10"
+                Background="#48CAE4"
+                Command="{Binding ApplyAllLcWinterCommand}"
+                Content="{DynamicResource Loc_Props_ApplyAllLCWinter}"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Foreground="#1A1A1A"
+                ToolTip="{DynamicResource Loc_Props_ApplyAllLCWinterTooltip}"
+              />
+              <Button
+                Padding="16,10"
+                Command="{Binding RestoreCommand}"
+                Content="{DynamicResource Loc_Props_RestoreOriginal}"
+                FontSize="13"
+              />
+            </StackPanel>
+          </StackPanel>
+
+          <StackPanel
+            Grid.Row="4"
+            Margin="0,15,0,0"
+            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
+          >
+            <CheckBox
+              Margin="0,0,0,5"
+              Content="{DynamicResource Loc_Props_EnableMassTheming}"
+              Foreground="#999"
+              IsChecked="{Binding IsMassThemingEnabled}"
+            />
+
+            <Border
+              Padding="10"
+              Background="#251F10"
+              BorderBrush="#8A6D3B"
+              BorderThickness="1"
+              CornerRadius="4"
+              Visibility="{Binding IsMassThemingEnabled, Converter={StaticResource BoolToVis}}"
+            >
+              <StackPanel>
+                <TextBlock
+                  Margin="0,0,0,5"
+                  FontWeight="Bold"
+                  Foreground="#E0C097"
+                  Text="{DynamicResource Loc_Props_DangerZone}"
+                />
+                <TextBlock
+                  Margin="0,0,0,10"
+                  FontSize="11"
+                  Foreground="#B09077"
+                  Text="{DynamicResource Loc_Props_DangerZoneDesc}"
+                  TextWrapping="Wrap"
+                />
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <Button
+                    Grid.Column="0"
+                    Padding="10,6"
+                    HorizontalAlignment="Stretch"
+                    Background="#8A3B3B"
+                    Command="{Binding BatchApplyCommand}"
+                    Content="{DynamicResource Loc_Props_ApplyAllFiltered}"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Visibility="{Binding IsNotBatching, Converter={StaticResource BoolToVis}}"
+                  />
+
+                  <Button
+                    Grid.Column="0"
+                    Padding="10,6"
+                    HorizontalAlignment="Stretch"
+                    Background="#333"
+                    Command="{Binding CancelBatchCommand}"
+                    Content="{DynamicResource Loc_Props_CancelBatch}"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Visibility="{Binding IsBatching, Converter={StaticResource BoolToVis}}"
+                  />
+                </Grid>
+
+                <ProgressBar
+                  Height="4"
+                  Margin="0,10,0,0"
+                  Visibility="{Binding IsBatching, Converter={StaticResource BoolToVis}}"
+                  Value="{Binding BatchProgress}"
+                />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <ui:InfoBar
+      x:Name="ToastInfoBar"
+      Grid.Row="1"
+      MaxWidth="350"
+      Margin="0,20,20,0"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Top"
+      Panel.ZIndex="2000"
+      IsClosable="False"
+      IsOpen="False"
+    />
+
+    <Grid
+      x:Name="PropsLoadingOverlay"
+      Grid.RowSpan="2"
+      Panel.ZIndex="10000"
+      Background="#E50B0B0B"
+      Visibility="{Binding IsWorking, Converter={StaticResource BoolToVis}}"
+    >
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ui:ProgressRing Width="80" Height="60" IsIndeterminate="True" />
+        <ui:TextBlock
+          Margin="0,20,0,0"
+          HorizontalAlignment="Center"
+          FontSize="16"
+          FontTypography="Title"
+          Foreground="White"
+          Text="{Binding LoadingMessage}"
+        />
+        <ProgressBar
+          Margin="0,15,0,0"
+          Width="260"
+          Height="6"
+          Value="{Binding BatchProgress}"
+          Maximum="100"
+          Visibility="{Binding IsBatching, Converter={StaticResource BoolToVis}}"
+        />
+      </StackPanel>
+    </Grid>
+
+    <controls:PremiumLockOverlayControl
+      Grid.RowSpan="2"
+      FeatureTitle="{DynamicResource Loc_Props_Title}"
+      IsLocked="{Binding IsPremiumLocked}"
+    />
+  </Grid>
+</ui:FluentWindow>

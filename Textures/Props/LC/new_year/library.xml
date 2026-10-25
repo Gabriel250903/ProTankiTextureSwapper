@@ -1,0 +1,94 @@
+<library name="NY" id="new_year">
+  <prop-group name="NY">
+    <prop name="Elka">
+      <mesh file="elka.3ds" />
+    </prop>
+    <prop name="ny_banner">
+      <mesh file="ny_banner.3ds">
+        <texture name="NY Ban 0" diffuse-map="ny_ban.jpg" />
+        <texture name="NY Ban 1" diffuse-map="ny_ban1.jpg" />
+        <texture name="NY Ban 2" diffuse-map="ny_ban2.jpg" />
+        <texture name="NY Ban 3" diffuse-map="ny_ban3.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+  <prop-group name="Snowman Sprites">
+    <prop name="snowman 0">
+      <sprite file="snowman_0.png" origin-y="0.95" scale="3" />
+    </prop>
+    <prop name="snowman 2">
+      <sprite file="snowman_2.png" origin-y="0.95" scale="3" />
+    </prop>
+    <prop name="snowman 4">
+      <sprite file="snowman_4.png" origin-y="0.95" scale="3" />
+    </prop>
+  </prop-group>
+  <prop-group name="Sprites">
+    <prop name="Shar 1">
+      <sprite file="shar_1.png" origin-y="0.1" scale="1" />
+    </prop>
+    <prop name="Shar 2">
+      <sprite file="shar_2.png" origin-y="0.1" scale="1" />
+    </prop>
+    <prop name="Shar 3">
+      <sprite file="shar_3.png" origin-y="0.1" scale="1" />
+    </prop>
+    <prop name="Shar 4">
+      <sprite file="shar_4.png" origin-y="0.1" scale="1" />
+    </prop>
+  </prop-group>
+  <prop-group name="Builds NY">
+    <prop name="Village House 3">
+      <mesh file="vilhou_3.3ds">
+        <texture name="OnDirt" diffuse-map="vilhou3.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Village House 4">
+      <mesh file="vilhou_4.3ds">
+        <texture name="OnDirt" diffuse-map="vilhou4.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Fahwerk House 1">
+      <mesh file="fahwerk1.3ds">
+        <texture name="NY" diffuse-map="fahwerk1.jpg" />
+        <texture name="NY 1" diffuse-map="fahwerk1_1.jpg" />
+        <texture name="NY 2" diffuse-map="fahwerk1_2.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Fahwerk House 2">
+      <mesh file="fahwerk2.3ds">
+        <texture name="NY" diffuse-map="fahwerk2.jpg" />
+        <texture name="NY 1" diffuse-map="fahwerk2_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Fort Tower End">
+      <mesh file="tower_end.3ds">
+        <texture name="NY" diffuse-map="tow_end.jpg" />
+        <texture name="NY 1" diffuse-map="tow_end1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Fort Tower Roof">
+      <mesh file="tower_roof.3ds">
+        <texture name="NY" diffuse-map="tow_roof.jpg" />
+        <texture name="NY 1" diffuse-map="tow_roof1.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+  <prop-group name="Forest">
+    <prop name="forest1">
+      <mesh file="forest1.3ds">
+        <texture name="forest1" diffuse-map="forest1.png" />
+      </mesh>
+    </prop>
+    <prop name="forest3">
+      <mesh file="forest3.3ds">
+        <texture name="forest3" diffuse-map="forest3.png" />
+      </mesh>
+    </prop>
+    <prop name="forest4">
+      <mesh file="forest4.3ds">
+        <texture name="forest4" diffuse-map="forest4.png" />
+      </mesh>
+    </prop>
+  </prop-group>
+</library>

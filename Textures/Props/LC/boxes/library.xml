@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<library name="Boxes" id="boxes">
+  <prop-group name="default">
+    <prop name="Bonus Box">
+      <mesh file="box.3ds">
+        <texture name="Crystal 100" diffuse-map="crystal_100.jpg" />
+        <texture name="Crystal" diffuse-map="crystal.jpg" />
+        <texture name="Double Armor" diffuse-map="double_armor.jpg" />
+        <texture name="Double Damage" diffuse-map="double_damage.jpg" />
+        <texture name="First Aid" diffuse-map="first_aid.jpg" />
+        <texture name="Nitro" diffuse-map="nitro.jpg" />
+        <texture name="Tanki Sandbox" diffuse-map="tanki_sandbox.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+</library>

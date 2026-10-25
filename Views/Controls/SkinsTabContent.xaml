@@ -1,0 +1,638 @@
+<UserControl
+  x:Class="TextureSwapper.Views.Controls.SkinsTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:helpers="clr-namespace:TextureSwapper.Helpers.Converters"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
+  d:DataContext="{d:DesignInstance vm:MainViewModel,
+                                     IsDesignTimeCreatable=False}"
+  mc:Ignorable="d"
+>
+  <UserControl.Resources>
+    <helpers:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+
+    <Style x:Key="TagPillItemStyle" TargetType="ListBoxItem">
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="12,4" />
+      <Setter Property="Margin" Value="0,0,6,0" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ListBoxItem">
+            <Border
+              x:Name="PillBorder"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="12"
+              Padding="{TemplateBinding Padding}"
+            >
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+              </Trigger>
+              <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+                <Setter TargetName="PillBorder" Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
+                <Setter Property="Foreground" Value="White" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="ModPillButtonStyle" TargetType="Button">
+      <Setter Property="Width" Value="36" />
+      <Setter Property="Height" Value="22" />
+      <Setter Property="Margin" Value="1,0" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="PillBorder" Background="{TemplateBinding Background}" CornerRadius="4">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter
+                  TargetName="PillBorder"
+                  Property="Background"
+                  Value="{DynamicResource ControlFillColorTertiaryBrush}"
+                />
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.3" />
+                <Setter Property="Cursor" Value="Arrow" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </UserControl.Resources>
+
+  <Grid Margin="0,10,0,0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0" Margin="0,0,0,20">
+      <ui:TextBlock
+        FontSize="32"
+        FontTypography="Title"
+        FontWeight="Bold"
+        Text="{DynamicResource Loc_Skins_Title}"
+        FontFamily="{DynamicResource ActiveDisplayFont}"
+      />
+    </StackPanel>
+
+    <ListBox
+      Grid.Row="1"
+      Margin="0,0,0,20"
+      Background="Transparent"
+      BorderThickness="0"
+      ItemContainerStyle="{StaticResource CategoryButtonStyle}"
+      ItemsSource="{Binding SkinsCategories}"
+      SelectedItem="{Binding SelectedCategory}"
+    >
+      <ListBox.ItemsPanel>
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+      </ListBox.ItemsPanel>
+    </ListBox>
+
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="220" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <Border
+        Grid.Column="0"
+        Background="{DynamicResource ControlFillColorDefaultBrush}"
+        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1,1,0,1"
+        CornerRadius="12,0,0,12"
+      >
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <ui:TextBlock
+            Margin="15,15,15,10"
+            FontTypography="Caption"
+            FontWeight="SemiBold"
+            Opacity="0.5"
+            Text="{DynamicResource Loc_Skins_Models}"
+          />
+          <ListView
+            Grid.Row="1"
+            Padding="5,0,5,10"
+            Background="Transparent"
+            BorderThickness="0"
+            ItemContainerStyle="{StaticResource ModernSidebarListViewItemStyle}"
+            ItemsSource="{Binding ItemNames}"
+            SelectedItem="{Binding SelectedItemName}"
+          />
+        </Grid>
+      </Border>
+
+      <Border
+        Grid.Column="1"
+        Background="{DynamicResource ControlFillColorTertiaryBrush}"
+        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+        BorderThickness="0,1,1,1"
+        CornerRadius="0,12,12,0"
+      >
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <Grid Margin="20,15,20,10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ui:TextBlock
+              Grid.Column="0"
+              VerticalAlignment="Center"
+              FontTypography="Caption"
+              FontWeight="SemiBold"
+              Opacity="0.5"
+              Text="{DynamicResource Loc_Skins_AvailableSkins}"
+            />
+
+            <StackPanel
+              Grid.Column="1"
+              Margin="0,0,12,0"
+              VerticalAlignment="Center"
+              Orientation="Horizontal"
+            >
+              <ui:SymbolIcon
+                Margin="0,0,6,0"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Symbol="ArrowSort24"
+              />
+              <ComboBox
+                Width="135"
+                VerticalAlignment="Center"
+                ItemsSource="{Binding SortOptions}"
+                SelectedItem="{Binding SelectedSortOption, Mode=TwoWay}"
+              />
+            </StackPanel>
+
+            <ui:TextBox
+              Grid.Column="2"
+              Width="220"
+              HorizontalAlignment="Right"
+              Icon="{ui:SymbolIcon Search24}"
+              PlaceholderText="{DynamicResource Loc_Skins_SearchPlaceholder}"
+              Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            />
+          </Grid>
+
+          <ScrollViewer
+            Grid.Row="1"
+            Margin="20,0,20,10"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Disabled"
+          >
+            <ListBox
+              Background="Transparent"
+              BorderThickness="0"
+              ItemContainerStyle="{StaticResource TagPillItemStyle}"
+              ItemsSource="{Binding AvailableTags}"
+              SelectedItem="{Binding SelectedTagFilter, Mode=TwoWay}"
+            >
+              <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+              </ListBox.ItemsPanel>
+            </ListBox>
+          </ScrollViewer>
+
+          <ListBox
+            Grid.Row="2"
+            Margin="10,0,10,10"
+            Background="Transparent"
+            BorderThickness="0"
+            ItemsSource="{Binding FilteredSkinsRows}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            SizeChanged="OnListSizeChanged"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+          >
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                      <ContentPresenter />
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <ItemsControl ItemsSource="{Binding}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border
+                        Width="220"
+                        Margin="5"
+                        ClipToBounds="True"
+                        CornerRadius="12"
+                        Cursor="Hand"
+                      >
+                        <Border.InputBindings>
+                          <MouseBinding
+                            Command="{Binding Data.ToggleSkinSelectionCommand, Source={StaticResource DataContextProxy}}"
+                            CommandParameter="{Binding}"
+                            MouseAction="LeftClick"
+                          />
+                        </Border.InputBindings>
+                        <Border.Style>
+                          <Style TargetType="Border">
+                            <Setter
+                              Property="Background"
+                              Value="{DynamicResource ControlFillColorDefaultBrush}"
+                            />
+                            <Setter
+                              Property="BorderBrush"
+                              Value="{DynamicResource CardStrokeColorDefaultBrush}"
+                            />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Style.Triggers>
+                              <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter
+                                  Property="BorderBrush"
+                                  Value="{DynamicResource SystemAccentColorBrush}"
+                                />
+                                <Setter Property="BorderThickness" Value="2" />
+                              </DataTrigger>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                <Setter
+                                  Property="Background"
+                                  Value="{DynamicResource ControlFillColorSecondaryBrush}"
+                                />
+                              </Trigger>
+                            </Style.Triggers>
+                          </Style>
+                        </Border.Style>
+                        <Grid>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="120" />
+                            <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+
+                          <Border Grid.Row="0" ClipToBounds="True" CornerRadius="12,12,0,0">
+                            <Grid>
+                              <Image
+                                Width="150"
+                                Height="150"
+                                Opacity="0.9"
+                                Source="{Binding FullPreviewPath, Converter={StaticResource ImageThumbnailConverter}, IsAsync=True, TargetNullValue={x:Null}}"
+                                Stretch="Uniform"
+                              />
+                              <Border
+                                Margin="8"
+                                Padding="6,2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Background="#D83B01"
+                                CornerRadius="4"
+                                ToolTip="{Binding WarningMessage}"
+                                Visibility="{Binding IsExperimental, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              >
+                                <StackPanel Orientation="Horizontal">
+                                  <ui:SymbolIcon
+                                    FontSize="10"
+                                    Foreground="White"
+                                    Symbol="Warning20"
+                                  />
+                                  <TextBlock
+                                    Margin="4,0,0,0"
+                                    FontSize="9"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="EXPERIMENTAL"
+                                  />
+                                </StackPanel>
+                              </Border>
+                              <Border
+                                Margin="8"
+                                Padding="6,2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Background="#E5B50A"
+                                CornerRadius="4"
+                                Visibility="{Binding IsPremium, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              >
+                                <StackPanel Orientation="Horizontal">
+                                  <ui:SymbolIcon
+                                    FontSize="10"
+                                    Foreground="Black"
+                                    Symbol="LockClosed20"
+                                  />
+                                  <TextBlock
+                                    Margin="4,0,0,0"
+                                    FontSize="10"
+                                    FontWeight="Bold"
+                                    Foreground="Black"
+                                    Text="PREMIUM"
+                                  />
+                                </StackPanel>
+                              </Border>
+                            </Grid>
+                          </Border>
+
+                          <StackPanel Grid.Row="1" Margin="12,10">
+                            <ui:TextBlock
+                              FontSize="14"
+                              FontWeight="SemiBold"
+                              Text="{Binding Name}"
+                            />
+                            <DockPanel Margin="0,2,0,0">
+                              <ui:TextBlock
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Center"
+                                FontTypography="Caption"
+                                Opacity="0.6"
+                                Text="{Binding VersionDisplay}"
+                              />
+                              <Border
+                                DockPanel.Dock="Right"
+                                Margin="6,0,0,0"
+                                Padding="6,1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                ToolTip="{Binding TagsDisplayText}"
+                                Visibility="{Binding PrimaryThemeTag, Converter={StaticResource StringToVisibilityConverter}}"
+                              >
+                                <TextBlock
+                                  FontSize="9"
+                                  FontWeight="SemiBold"
+                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                  Text="{Binding PrimaryThemeTag}"
+                                />
+                              </Border>
+                            </DockPanel>
+
+                            <Border
+                              Margin="0,8,0,0"
+                              Padding="2"
+                              HorizontalAlignment="Left"
+                              Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                              BorderThickness="1"
+                              CornerRadius="6"
+                              Visibility="{Binding HasModifications, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            >
+                              <StackPanel Orientation="Horizontal">
+                                <Button
+                                  Command="{Binding SetModificationCommand}"
+                                  CommandParameter="M0"
+                                  Content="M0"
+                                  IsEnabled="{Binding IsM0Available}"
+                                  ToolTip="{Binding M0ToolTip}"
+                                >
+                                  <Button.Style>
+                                    <Style
+                                      BasedOn="{StaticResource ModPillButtonStyle}"
+                                      TargetType="Button"
+                                    >
+                                      <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsM0Selected}" Value="True">
+                                          <Setter
+                                            Property="Background"
+                                            Value="{DynamicResource SystemAccentColorBrush}"
+                                          />
+                                          <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                      </Style.Triggers>
+                                    </Style>
+                                  </Button.Style>
+                                </Button>
+
+                                <Button
+                                  Command="{Binding SetModificationCommand}"
+                                  CommandParameter="M1"
+                                  Content="M1"
+                                  IsEnabled="{Binding IsM1Available}"
+                                  ToolTip="{Binding M1ToolTip}"
+                                >
+                                  <Button.Style>
+                                    <Style
+                                      BasedOn="{StaticResource ModPillButtonStyle}"
+                                      TargetType="Button"
+                                    >
+                                      <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsM1Selected}" Value="True">
+                                          <Setter
+                                            Property="Background"
+                                            Value="{DynamicResource SystemAccentColorBrush}"
+                                          />
+                                          <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                      </Style.Triggers>
+                                    </Style>
+                                  </Button.Style>
+                                </Button>
+
+                                <Button
+                                  Command="{Binding SetModificationCommand}"
+                                  CommandParameter="M2"
+                                  Content="M2"
+                                  IsEnabled="{Binding IsM2Available}"
+                                  ToolTip="{Binding M2ToolTip}"
+                                >
+                                  <Button.Style>
+                                    <Style
+                                      BasedOn="{StaticResource ModPillButtonStyle}"
+                                      TargetType="Button"
+                                    >
+                                      <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsM2Selected}" Value="True">
+                                          <Setter
+                                            Property="Background"
+                                            Value="{DynamicResource SystemAccentColorBrush}"
+                                          />
+                                          <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                      </Style.Triggers>
+                                    </Style>
+                                  </Button.Style>
+                                </Button>
+
+                                <Button
+                                  Command="{Binding SetModificationCommand}"
+                                  CommandParameter="M3"
+                                  Content="M3"
+                                  IsEnabled="{Binding IsM3Available}"
+                                  ToolTip="{Binding M3ToolTip}"
+                                >
+                                  <Button.Style>
+                                    <Style
+                                      BasedOn="{StaticResource ModPillButtonStyle}"
+                                      TargetType="Button"
+                                    >
+                                      <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsM3Selected}" Value="True">
+                                          <Setter
+                                            Property="Background"
+                                            Value="{DynamicResource SystemAccentColorBrush}"
+                                          />
+                                          <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                      </Style.Triggers>
+                                    </Style>
+                                  </Button.Style>
+                                </Button>
+                              </StackPanel>
+                            </Border>
+                          </StackPanel>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <Border
+      Grid.Row="3"
+      Margin="0,20,0,0"
+      Background="{DynamicResource ControlFillColorDefaultBrush}"
+      BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+      BorderThickness="1"
+      CornerRadius="12"
+    >
+      <Grid Margin="16,12">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
+          <ui:DropDownButton
+            Appearance="Secondary"
+            Content="{DynamicResource Loc_Skins_QuickSelect}"
+          >
+            <ui:DropDownButton.Icon>
+              <ui:SymbolIcon Symbol="CheckmarkCircle24" />
+            </ui:DropDownButton.Icon>
+            <ui:DropDownButton.Flyout>
+              <ContextMenu>
+                <MenuItem
+                  Command="{Binding SelectAllAvailableCommand}"
+                  CommandParameter="XT"
+                  Header="{DynamicResource Loc_Skins_SelectAllXT}"
+                />
+                <MenuItem
+                  Command="{Binding SelectAllAvailableCommand}"
+                  CommandParameter="Legacy"
+                  Header="{DynamicResource Loc_Skins_SelectAllLegacy}"
+                />
+                <MenuItem
+                  Command="{Binding SelectAllAvailableCommand}"
+                  CommandParameter="LC on XT"
+                  Header="{DynamicResource Loc_Skins_SelectAllLCOnXT}"
+                />
+                <MenuItem
+                  Command="{Binding SelectAllAvailableCommand}"
+                  CommandParameter="Demonic"
+                  Header="{DynamicResource Loc_Skins_SelectAllDemonic}"
+                />
+                <Separator />
+                <MenuItem
+                  Command="{Binding SelectAllAvailableCommand}"
+                  CommandParameter="Deselect"
+                  Header="{DynamicResource Loc_Skins_DeselectAll}"
+                />
+              </ContextMenu>
+            </ui:DropDownButton.Flyout>
+          </ui:DropDownButton>
+
+          <ui:Button
+            Margin="8,0,8,0"
+            Appearance="Secondary"
+            Command="{Binding ClearCacheCommand}"
+            Content="{DynamicResource Loc_Skins_ClearCache}"
+            Icon="{ui:SymbolIcon Delete24}"
+            ToolTip="{DynamicResource Loc_Skins_ClearCacheTooltip}"
+          />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
+          <ui:Button
+            Margin="8,0,8,0"
+            Appearance="Secondary"
+            Command="{Binding RestoreCommand}"
+            Content="{DynamicResource Loc_Skins_RestoreOriginals}"
+            Icon="{ui:SymbolIcon ArrowUndo24}"
+          />
+
+          <ui:Button
+            Appearance="Success"
+            Command="{Binding SwapCommand}"
+            Content="{DynamicResource Loc_Skins_ApplySelected}"
+            FontWeight="SemiBold"
+            Icon="{ui:SymbolIcon Flash24}"
+          />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

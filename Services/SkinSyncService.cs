@@ -1,33 +1,63 @@
-using Serilog;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
+using Serilog;
 using TextureSwapper.Core;
-using TextureSwapper.Models;
-using TextureSwapper.Services.Interfaces;
+using TextureSwapper.Core.Interfaces;
+using TextureSwapper.Core.Models;
 
 namespace TextureSwapper.Services
 {
-    public sealed class SkinSyncService(IUpdateService updateService) : ISkinSyncService
+    public sealed class SkinSyncService(
+        IUpdateService updateService,
+        ISettingsService settingsService
+    ) : ISkinSyncService
     {
         private readonly IUpdateService _updateService = updateService;
+        private readonly ISettingsService _settingsService = settingsService;
         public event Action<string>? ProgressChanged;
+        public event Action<SkinModel>? SkinPreviewUpdated;
         private readonly JsonSerializerOptions options = new() { WriteIndented = true };
 
-        public async Task<(List<SkinModel> Skins, List<InGamePaintModel>? RemoteInGamePaints)> SyncAndLoadSkinsAsync()
+        public async Task<(
+            List<SkinModel> Skins,
+            List<InGamePaintModel>? RemoteInGamePaints
+        )> SyncAndLoadSkinsAsync(CancellationToken cancellationToken = default)
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string localHullsPath = Path.Combine(baseDir, Constants.HullsSkinsJson);
             string localTurretsPath = Path.Combine(baseDir, Constants.TurretsSkinsJson);
             string localSuppliesPath = Path.Combine(baseDir, Constants.SuppliesSkinsJson);
+            string localSpawnersPath = Path.Combine(baseDir, Constants.SpawnersSkinsJson);
             string localPaintsPath = Path.Combine(baseDir, Constants.PaintsSkinsJson);
 
             (string Name, string LocalPath, string RemoteFileName)[] categories =
             [
-                (Name: "Hulls", LocalPath: localHullsPath, RemoteFileName: Constants.HullsSkinsJson),
-                (Name: "Turrets", LocalPath: localTurretsPath, RemoteFileName: Constants.TurretsSkinsJson),
-                (Name: "Supplies", LocalPath: localSuppliesPath, RemoteFileName: Constants.SuppliesSkinsJson),
-                (Name: "Paints", LocalPath: localPaintsPath, RemoteFileName: Constants.PaintsSkinsJson)
+                (
+                    Name: "Hulls",
+                    LocalPath: localHullsPath,
+                    RemoteFileName: Constants.HullsSkinsJson
+                ),
+                (
+                    Name: "Turrets",
+                    LocalPath: localTurretsPath,
+                    RemoteFileName: Constants.TurretsSkinsJson
+                ),
+                (
+                    Name: "Supplies",
+                    LocalPath: localSuppliesPath,
+                    RemoteFileName: Constants.SuppliesSkinsJson
+                ),
+                (
+                    Name: "Spawners",
+                    LocalPath: localSpawnersPath,
+                    RemoteFileName: Constants.SpawnersSkinsJson
+                ),
+                (
+                    Name: "Paints",
+                    LocalPath: localPaintsPath,
+                    RemoteFileName: Constants.PaintsSkinsJson
+                ),
             ];
 
             List<SkinModel> combinedSkins = [];
@@ -35,7 +65,9 @@ namespace TextureSwapper.Services
 
             foreach ((string Name, string LocalPath, string RemoteFileName) in categories)
             {
-                string localJson = File.Exists(LocalPath) ? await File.ReadAllTextAsync(LocalPath) : string.Empty;
+                string localJson = File.Exists(LocalPath)
+                    ? await File.ReadAllTextAsync(LocalPath, cancellationToken)
+                    : string.Empty;
                 List<SkinModel> catSkins = [];
                 if (!string.IsNullOrEmpty(localJson))
                 {
@@ -56,30 +88,58 @@ namespace TextureSwapper.Services
                 }
 
                 ProgressChanged?.Invoke($"Syncing {Name.ToLower()} database...");
-                (List<SkinModel>? remoteSkins, string? remoteJson) = await _updateService.FetchRemoteSkinsFileAsync(RemoteFileName);
+                (List<SkinModel>? remoteSkins, string? remoteJson) =
+                    await _updateService.FetchRemoteSkinsFileAsync(RemoteFileName);
 
                 if (remoteSkins != null && remoteJson != localJson)
                 {
-                    Log.Information($"Remote {RemoteFileName} is different from local. Merging changes...");
+                    bool skipTargets = _settingsService.Load().SkipRemoteTargetSync;
+                    Log.Information(
+                        $"Remote {RemoteFileName} is different from local. Merging changes... (PreserveLocalTargets: {skipTargets})"
+                    );
                     bool merged = false;
                     foreach (SkinModel remoteSkin in remoteSkins)
                     {
-                        SkinModel? localSkin = catSkins.FirstOrDefault(s => s.Name.Equals(remoteSkin.Name, StringComparison.OrdinalIgnoreCase));
+                        SkinModel? localSkin = catSkins.FirstOrDefault(s =>
+                            s.Name.Equals(remoteSkin.Name, StringComparison.OrdinalIgnoreCase)
+                        );
                         if (localSkin != null)
                         {
-                            if (localSkin.DetailsTarget != remoteSkin.DetailsTarget ||
-                                localSkin.LightmapTarget != remoteSkin.LightmapTarget ||
-                                localSkin.AlphaTarget != remoteSkin.AlphaTarget ||
-                                localSkin.ModelTarget != remoteSkin.ModelTarget ||
-                                localSkin.SourceFolder != remoteSkin.SourceFolder ||
-                                localSkin.PreviewImage != remoteSkin.PreviewImage)
+                            bool targetsChanged =
+                                localSkin.DetailsTarget != remoteSkin.DetailsTarget
+                                || localSkin.LightmapTarget != remoteSkin.LightmapTarget
+                                || localSkin.AlphaTarget != remoteSkin.AlphaTarget
+                                || localSkin.ModelTarget != remoteSkin.ModelTarget;
+
+                            bool isLocalEncrypted = localSkin.SourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase);
+
+                            bool metaChanged = !isLocalEncrypted && (
+                                localSkin.SourceFolder != remoteSkin.SourceFolder
+                                || localSkin.PreviewImage != remoteSkin.PreviewImage
+                            );
+
+                            if (targetsChanged || metaChanged)
                             {
-                                localSkin.DetailsTarget = remoteSkin.DetailsTarget;
-                                localSkin.LightmapTarget = remoteSkin.LightmapTarget;
-                                localSkin.AlphaTarget = remoteSkin.AlphaTarget;
-                                localSkin.ModelTarget = remoteSkin.ModelTarget;
-                                localSkin.SourceFolder = remoteSkin.SourceFolder;
-                                localSkin.PreviewImage = remoteSkin.PreviewImage;
+                                if (!skipTargets)
+                                {
+                                    localSkin.DetailsTarget = remoteSkin.DetailsTarget;
+                                    localSkin.LightmapTarget = remoteSkin.LightmapTarget;
+                                    localSkin.AlphaTarget = remoteSkin.AlphaTarget;
+                                    localSkin.ModelTarget = remoteSkin.ModelTarget;
+                                }
+                                else if (targetsChanged)
+                                {
+                                    Log.Information(
+                                        "Preserve Local Target URLs enabled: preserved local targets for {SkinName}.",
+                                        localSkin.Name
+                                    );
+                                }
+
+                                if (!isLocalEncrypted)
+                                {
+                                    localSkin.SourceFolder = remoteSkin.SourceFolder;
+                                    localSkin.PreviewImage = remoteSkin.PreviewImage;
+                                }
                                 merged = true;
                             }
                         }
@@ -90,8 +150,17 @@ namespace TextureSwapper.Services
                         }
                     }
 
-                    HashSet<string> remoteNames = new(remoteSkins.Select(s => s.Name), StringComparer.OrdinalIgnoreCase);
-                    int removed = catSkins.RemoveAll(s => !remoteNames.Contains(s.Name) && s.ItemName != "Uploaded");
+                    HashSet<string> remoteNames = new(
+                        remoteSkins.Select(s => s.Name),
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                    int removed = catSkins.RemoveAll(s =>
+                        !remoteNames.Contains(s.Name)
+                        && s.ItemName != "Uploaded"
+                        && !s.SourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase)
+                        && !s.IsPremium
+                        && IsSkinMissingAssets(s)
+                    );
                     if (removed > 0)
                     {
                         merged = true;
@@ -100,12 +169,23 @@ namespace TextureSwapper.Services
                     if (merged)
                     {
                         string mergedJson = JsonSerializer.Serialize(catSkins, options);
-                        await File.WriteAllTextAsync(LocalPath, mergedJson);
+                        await File.WriteAllTextAsync(LocalPath, mergedJson, cancellationToken);
                     }
                 }
 
-                List<SkinModel> missing = [.. catSkins.Where(s => s.ItemName != "Uploaded" && IsSkinMissingAssets(s))];
-                if (missing.Count > 0 && !_updateService.IsOffline)
+                List<SkinModel> missing =
+                [
+                    .. catSkins.Where(s => s.ItemName != "Uploaded" && IsSkinMissingAssets(s)),
+                ];
+                if (missing.Count > 25)
+                {
+                    Log.Warning(
+                        "{Count} {Category} skins are missing. Skipping individual file sync to prevent GitHub rate limits.",
+                        missing.Count,
+                        Name
+                    );
+                }
+                else if (missing.Count > 0 && !_updateService.IsOffline)
                 {
                     int completed = 0;
                     object progressLock = new();
@@ -114,39 +194,67 @@ namespace TextureSwapper.Services
 
                     foreach (SkinModel skin in missing)
                     {
-                        downloadTasks.Add(Task.Run(async () =>
-                        {
-                            await semaphore.WaitAsync();
-                            try
+                        downloadTasks.Add(
+                            Task.Run(async () =>
                             {
-                                lock (progressLock)
-                                {
-                                    ProgressChanged?.Invoke($"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}...");
-                                }
-
-                                await _updateService.EnsureAssetsExistAsync(skin, p =>
+                                await semaphore.WaitAsync();
+                                try
                                 {
                                     lock (progressLock)
                                     {
-                                        ProgressChanged?.Invoke($"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}");
+                                        ProgressChanged?.Invoke(
+                                            $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}..."
+                                        );
                                     }
-                                });
 
-                                Application.Current?.Dispatcher.Invoke(() => skin.NotifyPreviewChanged());
-                            }
-                            finally
-                            {
-                                int currentCompleted = Interlocked.Increment(ref completed);
-                                lock (progressLock)
-                                {
-                                    ProgressChanged?.Invoke($"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})...");
+                                    await _updateService.EnsureAssetsExistAsync(
+                                        skin,
+                                        p =>
+                                        {
+                                            lock (progressLock)
+                                            {
+                                                ProgressChanged?.Invoke(
+                                                    $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}"
+                                                );
+                                            }
+                                        }
+                                    );
+
+                                    Application.Current?.Dispatcher.Invoke(() =>
+                                    {
+                                        skin.NotifyPreviewChanged();
+                                        SkinPreviewUpdated?.Invoke(skin);
+                                    });
                                 }
-                                _ = semaphore.Release();
-                            }
-                        }));
+                                finally
+                                {
+                                    int currentCompleted = Interlocked.Increment(ref completed);
+                                    lock (progressLock)
+                                    {
+                                        ProgressChanged?.Invoke(
+                                            $"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})..."
+                                        );
+                                    }
+                                    _ = semaphore.Release();
+                                }
+                            }, cancellationToken)
+                        );
                     }
 
                     await Task.WhenAll(downloadTasks);
+                }
+
+                foreach (SkinModel skin in catSkins)
+                {
+                    if (
+                        skin.Name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
+                        || skin.SourceFolder.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
+                        || skin.Name.Contains(" DC", StringComparison.OrdinalIgnoreCase)
+                        || skin.SourceFolder.Contains("/DC/", StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        skin.IsPremium = true;
+                    }
                 }
 
                 combinedSkins.AddRange(catSkins);
@@ -155,13 +263,20 @@ namespace TextureSwapper.Services
             try
             {
                 string localInGamePath = Path.Combine(baseDir, Constants.InGamePaintsJson);
-                string localInGameJson = File.Exists(localInGamePath) ? await File.ReadAllTextAsync(localInGamePath) : string.Empty;
+                string localInGameJson = File.Exists(localInGamePath)
+                    ? await File.ReadAllTextAsync(localInGamePath, cancellationToken)
+                    : string.Empty;
                 ProgressChanged?.Invoke("Syncing in-game paints database...");
-                (List<InGamePaintModel>? fetchedPaints, string? remoteInGameJson) = await _updateService.FetchRemoteInGamePaintsFileAsync(Constants.InGamePaintsJson);
+                (List<InGamePaintModel>? fetchedPaints, string? remoteInGameJson) =
+                    await _updateService.FetchRemoteInGamePaintsFileAsync(
+                        Constants.InGamePaintsJson
+                    );
                 if (fetchedPaints != null && remoteInGameJson != localInGameJson)
                 {
-                    Log.Information("Remote ingame_paints.json is different from local. Updating...");
-                    await File.WriteAllTextAsync(localInGamePath, remoteInGameJson!);
+                    Log.Information(
+                        "Remote ingame_paints.json is different from local. Updating..."
+                    );
+                    await File.WriteAllTextAsync(localInGamePath, remoteInGameJson!, cancellationToken);
                     remoteInGamePaints = fetchedPaints;
                 }
             }
@@ -173,18 +288,23 @@ namespace TextureSwapper.Services
             return (combinedSkins, remoteInGamePaints);
         }
 
-        public async Task<List<ShotEffectModel>> SyncAndLoadShotEffectsAsync()
+        public async Task<List<ShotEffectModel>> SyncAndLoadShotEffectsAsync(
+            CancellationToken cancellationToken = default
+        )
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string localPath = Path.Combine(baseDir, Constants.ShotEffectsJson);
 
-            string localJson = File.Exists(localPath) ? await File.ReadAllTextAsync(localPath) : string.Empty;
+            string localJson = File.Exists(localPath)
+                ? await File.ReadAllTextAsync(localPath, cancellationToken)
+                : string.Empty;
             List<ShotEffectModel> shotEffects = [];
             if (!string.IsNullOrEmpty(localJson))
             {
                 try
                 {
-                    shotEffects = JsonSerializer.Deserialize<List<ShotEffectModel>>(localJson) ?? [];
+                    shotEffects =
+                        JsonSerializer.Deserialize<List<ShotEffectModel>>(localJson) ?? [];
                 }
                 catch (JsonException ex)
                 {
@@ -200,24 +320,53 @@ namespace TextureSwapper.Services
             try
             {
                 ProgressChanged?.Invoke("Syncing shot effects database...");
-                (List<ShotEffectModel>? remoteEffects, string? remoteJson) = await _updateService.FetchRemoteShotEffectsFileAsync(Constants.ShotEffectsJson);
+                (List<ShotEffectModel>? remoteEffects, string? remoteJson) =
+                    await _updateService.FetchRemoteShotEffectsFileAsync(Constants.ShotEffectsJson);
 
                 if (remoteEffects != null && remoteJson != localJson)
                 {
-                    Log.Information("Remote shot_effects.json is different from local. Merging changes...");
+                    bool skipTargets = _settingsService.Load().SkipRemoteTargetSync;
+                    Log.Information(
+                        $"Remote shot_effects.json is different from local. Merging changes... (PreserveLocalTargets: {skipTargets})"
+                    );
                     bool merged = false;
                     foreach (ShotEffectModel remoteEffect in remoteEffects)
                     {
-                        ShotEffectModel? localEffect = shotEffects.FirstOrDefault(s => s.Turret.Equals(remoteEffect.Turret, StringComparison.OrdinalIgnoreCase) && s.Name.Equals(remoteEffect.Name, StringComparison.OrdinalIgnoreCase));
+                        ShotEffectModel? localEffect = shotEffects.FirstOrDefault(s =>
+                            s.Turret.Equals(remoteEffect.Turret, StringComparison.OrdinalIgnoreCase)
+                            && s.Name.Equals(remoteEffect.Name, StringComparison.OrdinalIgnoreCase)
+                        );
                         if (localEffect != null)
                         {
-                            if (!localEffect.SourceFolder.Equals(remoteEffect.SourceFolder, StringComparison.OrdinalIgnoreCase) ||
-                                !localEffect.PreviewImage.Equals(remoteEffect.PreviewImage, StringComparison.OrdinalIgnoreCase) ||
-                                string.Join(",", localEffect.Targets) != string.Join(",", remoteEffect.Targets))
+                            bool targetsChanged =
+                                string.Join(",", localEffect.Targets)
+                                != string.Join(",", remoteEffect.Targets);
+                            bool metaChanged =
+                                !localEffect.SourceFolder.Equals(
+                                    remoteEffect.SourceFolder,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                                || !localEffect.PreviewImage.Equals(
+                                    remoteEffect.PreviewImage,
+                                    StringComparison.OrdinalIgnoreCase
+                                );
+
+                            if (targetsChanged || metaChanged)
                             {
                                 localEffect.SourceFolder = remoteEffect.SourceFolder;
                                 localEffect.PreviewImage = remoteEffect.PreviewImage;
-                                localEffect.Targets = remoteEffect.Targets;
+                                if (!skipTargets)
+                                {
+                                    localEffect.Targets = remoteEffect.Targets;
+                                }
+                                else if (targetsChanged)
+                                {
+                                    Log.Information(
+                                        "Preserve Local Target URLs enabled: preserved local shot effect targets for {Turret} - {Name}.",
+                                        localEffect.Turret,
+                                        localEffect.Name
+                                    );
+                                }
                                 merged = true;
                             }
                         }
@@ -228,8 +377,13 @@ namespace TextureSwapper.Services
                         }
                     }
 
-                    HashSet<string> remoteKeys = new(remoteEffects.Select(s => $"{s.Turret}:{s.Name}"), StringComparer.OrdinalIgnoreCase);
-                    int removed = shotEffects.RemoveAll(s => !remoteKeys.Contains($"{s.Turret}:{s.Name}"));
+                    HashSet<string> remoteKeys = new(
+                        remoteEffects.Select(s => $"{s.Turret}:{s.Name}"),
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                    int removed = shotEffects.RemoveAll(s =>
+                        !remoteKeys.Contains($"{s.Turret}:{s.Name}")
+                    );
                     if (removed > 0)
                     {
                         merged = true;
@@ -238,7 +392,7 @@ namespace TextureSwapper.Services
                     if (merged)
                     {
                         string mergedJson = JsonSerializer.Serialize(shotEffects, options);
-                        await File.WriteAllTextAsync(localPath, mergedJson);
+                        await File.WriteAllTextAsync(localPath, mergedJson, cancellationToken);
                     }
                 }
             }
@@ -252,7 +406,10 @@ namespace TextureSwapper.Services
 
         public List<BackupModel> LoadBackups()
         {
-            string backupsRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
+            string backupsRoot = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                Constants.BackupsDir
+            );
             if (!Directory.Exists(backupsRoot))
             {
                 return [];
@@ -265,13 +422,15 @@ namespace TextureSwapper.Services
             {
                 FileInfo fi = new(file);
                 string nameWithoutExt = Path.GetFileNameWithoutExtension(file);
-                backups.Add(new BackupModel
-                {
-                    FolderName = fi.Name,
-                    DisplayName = nameWithoutExt.Replace("_", " "),
-                    CreationDate = fi.CreationTime,
-                    FullPath = fi.FullName
-                });
+                backups.Add(
+                    new BackupModel
+                    {
+                        FolderName = fi.Name,
+                        DisplayName = nameWithoutExt.Replace("_", " "),
+                        CreationDate = fi.CreationTime,
+                        FullPath = fi.FullName,
+                    }
+                );
             }
 
             return [.. backups.OrderByDescending(b => b.CreationDate)];
@@ -279,7 +438,10 @@ namespace TextureSwapper.Services
 
         public List<InGamePaintModel> LoadInGamePaints()
         {
-            string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.InGamePaintsJson);
+            string jsonPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                Constants.InGamePaintsJson
+            );
             List<InGamePaintModel> list = [];
 
             if (File.Exists(jsonPath))
@@ -295,13 +457,24 @@ namespace TextureSwapper.Services
                 }
             }
 
-            string inGameDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Textures", "Paints", "InGame");
+            string inGameDir = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Textures",
+                "Paints",
+                "InGame"
+            );
             if (Directory.Exists(inGameDir))
             {
-                string[] files = [.. Directory.GetFiles(inGameDir, "*.*")
-                    .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                                f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                                f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))];
+                string[] files =
+                [
+                    .. Directory
+                        .GetFiles(inGameDir, "*.*")
+                        .Where(f =>
+                            f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                            || f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                            || f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+                        ),
+                ];
 
                 bool modified = false;
                 foreach (string file in files)
@@ -309,15 +482,23 @@ namespace TextureSwapper.Services
                     string name = Path.GetFileNameWithoutExtension(file);
                     if (!list.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                     {
-                        string relativePreview = Path.Combine("Textures", "Paints", "InGame", Path.GetFileName(file)).Replace("\\", "/");
+                        string relativePreview = Path.Combine(
+                                "Textures",
+                                "Paints",
+                                "InGame",
+                                Path.GetFileName(file)
+                            )
+                            .Replace("\\", "/");
                         string targetUrl = name.ToLower();
 
-                        list.Add(new InGamePaintModel
-                        {
-                            Name = name,
-                            PreviewImage = relativePreview,
-                            TargetUrl = targetUrl
-                        });
+                        list.Add(
+                            new InGamePaintModel
+                            {
+                                Name = name,
+                                PreviewImage = relativePreview,
+                                TargetUrl = targetUrl,
+                            }
+                        );
                         modified = true;
                     }
                 }
@@ -341,8 +522,18 @@ namespace TextureSwapper.Services
 
         private bool IsSkinMissingAssets(SkinModel skin)
         {
+            if (
+                string.IsNullOrEmpty(skin.PreviewImage)
+                || skin.PreviewImage.StartsWith("pack:", StringComparison.OrdinalIgnoreCase)
+            )
+            {
+                return false;
+            }
+
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string previewPath = Path.GetFullPath(Path.Combine(baseDir, skin.PreviewImage.Replace("\\", "/")));
+            string previewPath = Path.GetFullPath(
+                Path.Combine(baseDir, skin.PreviewImage.Replace("\\", "/"))
+            );
             if (!File.Exists(previewPath))
             {
                 return true;
@@ -367,19 +558,50 @@ namespace TextureSwapper.Services
                 return !found;
             }
 
-            string[] suffixes = skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
-                ? ["details"]
-                : ["details", "lightmap", "alpha"];
+            List<string> suffixes =
+                skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
+                || skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
+                    ? ["details"]
+                    : ["details", "lightmap"];
+
+            if (!string.IsNullOrEmpty(skin.AlphaTarget))
+            {
+                suffixes.Add("alpha");
+            }
+
+            string baseFolder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
+            if (!Directory.Exists(baseFolder))
+            {
+                return true;
+            }
+
+            string targetFolder = baseFolder;
+            if (
+                skin.Category is "Turrets" or "Hulls"
+                && !Directory.EnumerateFiles(baseFolder, "details.*").Any()
+            )
+            {
+                string m3Folder = Path.Combine(baseFolder, "M3");
+                if (Directory.Exists(m3Folder))
+                {
+                    targetFolder = m3Folder;
+                }
+            }
 
             foreach (string suffix in suffixes)
             {
-                string folder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
                 bool found = false;
-                if (Directory.Exists(folder))
+                if (Directory.Exists(targetFolder))
                 {
-                    string[] matchingFiles = Directory.GetFiles(folder, $"{suffix}.*");
+                    string[] matchingFiles = Directory.GetFiles(targetFolder, $"{suffix}.*");
                     foreach (string file in matchingFiles)
                     {
+                        string fname = Path.GetFileName(file);
+                        if (fname.EndsWith(".enc", StringComparison.OrdinalIgnoreCase))
+                        {
+                            found = true;
+                            break;
+                        }
                         string ext = Path.GetExtension(file).ToLower();
                         string[] allowed = [".png", ".jpg", ".jpeg"];
                         if (allowed.Contains(ext))
@@ -394,10 +616,15 @@ namespace TextureSwapper.Services
                     return true;
                 }
             }
+
             if (!string.IsNullOrEmpty(skin.ModelTarget))
             {
-                string folder = Path.Combine(baseDir, skin.SourceFolder.Replace("\\", "/"));
-                if (!File.Exists(Path.Combine(folder, "object.3ds")))
+                if (
+                    !File.Exists(Path.Combine(targetFolder, "object.3ds"))
+                    && !File.Exists(Path.Combine(targetFolder, "object.3ds.enc"))
+                    && !File.Exists(Path.Combine(baseFolder, "object.3ds"))
+                    && !File.Exists(Path.Combine(baseFolder, "object.3ds.enc"))
+                )
                 {
                     return true;
                 }

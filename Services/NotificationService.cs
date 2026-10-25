@@ -1,6 +1,7 @@
-using Serilog;
 using System.Windows;
-using TextureSwapper.Services.Interfaces;
+using Serilog;
+using TextureSwapper.Core.Interfaces;
+using TextureSwapper.Views.Windows;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper.Services
@@ -13,9 +14,39 @@ namespace TextureSwapper.Services
             {
                 await await Application.Current.Dispatcher.InvokeAsync(async () =>
                 {
-                    if (Application.Current.MainWindow is MainWindow mainWindow)
+                    INotificationService? targetService = null;
+
+                    Window? activeWindow = Application
+                        .Current.Windows.OfType<Window>()
+                        .FirstOrDefault(w => w.IsActive && w is INotificationService);
+
+                    if (activeWindow is INotificationService activeService)
                     {
-                        await mainWindow.ShowAsync(title, message, appearance);
+                        targetService = activeService;
+                    }
+                    else
+                    {
+                        Window? topmostChildWindow = Application
+                            .Current.Windows.OfType<Window>()
+                            .LastOrDefault(w =>
+                                w.IsVisible
+                                && w != Application.Current.MainWindow
+                                && w is INotificationService
+                            );
+
+                        if (topmostChildWindow is INotificationService childService)
+                        {
+                            targetService = childService;
+                        }
+                        else if (Application.Current.MainWindow is MainWindow mainWindow)
+                        {
+                            targetService = mainWindow;
+                        }
+                    }
+
+                    if (targetService != null)
+                    {
+                        await targetService.ShowAsync(title, message, appearance);
                     }
                 });
             }
@@ -26,4 +57,3 @@ namespace TextureSwapper.Services
         }
     }
 }
-

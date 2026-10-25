@@ -20,8 +20,8 @@ Tools/
 settings.json
 installer.iss
 CodeDependencies.iss
-cache_preview/
-AlphaGenerator.py
+dotnet-tools.json
+Textures/Premium/
 
 Thumbs.db
 ehthumbs.db
@@ -34,15 +34,3 @@ Desktop.ini
 *.opendb
 *.db
 
-publisher_private_key.txt
-installer_private_key.txt
-license_private_key.pem
-license_public_key.pem
-publisher_private_key.pem
-publisher_public_key.pem
-SignInstaller.ps1
-dotnet-tools.json
-
-Textures/Premium/
-asset_master_key.txt
-Tools/asset_master_key.txt

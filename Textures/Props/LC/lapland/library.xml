@@ -1,0 +1,146 @@
+<library name="Lapland" id="lapland">
+  <prop-group name="l">
+    <prop name="Tr1">
+      <mesh file="tr1.3ds">
+        <texture name="tr1 1" diffuse-map="tr1_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Tr2">
+      <mesh file="tr2.3ds">
+        <texture name="tr2 1" diffuse-map="tr1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Pt1">
+      <mesh file="pt1.3ds">
+        <texture name="pt1 1" diffuse-map="pt1.jpg" />
+        <texture name="pt1 2" diffuse-map="pt1_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Pt2">
+      <mesh file="pt2.3ds">
+        <texture name="pt2 1" diffuse-map="pt2.jpg" />
+        <texture name="pt2 2" diffuse-map="pt2_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Pt3">
+      <mesh file="pt3.3ds">
+        <texture name="pt3 1" diffuse-map="pt3.jpg" />
+        <texture name="pt3 2" diffuse-map="pt3_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Pt4">
+      <mesh file="pt4.3ds">
+        <texture name="pt1 1" diffuse-map="pt1.jpg" />
+        <texture name="pt1 2" diffuse-map="pt1_1.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+  <prop-group name="t">
+    <prop name="t11">
+      <mesh file="t11.3ds">
+        <texture name="g11 1" diffuse-map="gr11_1.jpg" />
+        <texture name="g11 2" diffuse-map="gr11_2.jpg" />
+        <texture name="g11 3" diffuse-map="gr11_3.jpg" />
+        <texture name="g11 6" diffuse-map="gr11_6.jpg" />
+        <texture name="g11 7" diffuse-map="gr11_7.jpg" />
+        <texture name="g11 8" diffuse-map="gr11_8.jpg" />
+        <texture name="g11 10" diffuse-map="gr11_10.jpg" />
+        <texture name="g11 11" diffuse-map="gr11_11.jpg" />
+        <texture name="ice11 0" diffuse-map="ice11_0.jpg" />
+        <texture name="ice11 1" diffuse-map="ice11_1.jpg" />
+        <texture name="ice11 2" diffuse-map="ice11_2.jpg" />
+        <texture name="ice11 3" diffuse-map="ice11_3.jpg" />
+        <texture name="ice11 4" diffuse-map="ice11_4.jpg" />
+      </mesh>
+    </prop>
+    <prop name="t21">
+      <mesh file="t21.3ds">
+        <texture name="g21 1" diffuse-map="gr21_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="t22">
+      <mesh file="t22.3ds">
+        <texture name="g22 1" diffuse-map="gr22_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="t32">
+      <mesh file="t32.3ds">
+        <texture name="g32 1" diffuse-map="gr32_1.jpg" />
+      </mesh>
+    </prop>
+    <prop name="t33">
+      <mesh file="t33.3ds">
+        <texture name="g33 1" diffuse-map="gr33_1.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+  <prop-group name="c">
+    <prop name="Cliff 0">
+      <mesh file="cliff_0.3ds" />
+    </prop>
+    <prop name="Cliff 1">
+      <mesh file="cliff_1.3ds" />
+    </prop>
+    <prop name="Cliff Corner">
+      <mesh file="cliff_cor.3ds" />
+    </prop>
+    <prop name="Cliff Inner Corner">
+      <mesh file="cliff_c2.3ds" />
+    </prop>
+    <prop name="bg">
+      <mesh file="bg.3ds">
+        <texture name="bground" diffuse-map="bg.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+  <prop-group name="i">
+    <prop name="Peterbilt">
+      <mesh file="peter.3ds">
+        <texture name="Cola" diffuse-map="peter.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Sniga">
+      <mesh file="snigga.3ds">
+        <texture name="snig" diffuse-map="snigga.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Sniga Bad">
+      <mesh file="sniggab.3ds">
+        <texture name="snig" diffuse-map="snigga.jpg" />
+      </mesh>
+    </prop>
+    <prop name="l">
+      <mesh file="l.3ds">
+        <texture name="l" diffuse-map="l.jpg" />
+      </mesh>
+    </prop>
+    <prop name="WFWall">
+      <mesh file="wf.3ds">
+        <texture name="Wood 1" diffuse-map="wf.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Candy">
+      <mesh file="candy.3ds" />
+    </prop>
+    <prop name="v1">
+      <mesh file="v1.3ds" />
+    </prop>
+  </prop-group>
+  <prop-group name="s">
+    <prop name="T1">
+      <sprite file="wood1.png" origin-y="0.98" scale="3.4" />
+    </prop>
+    <prop name="T2">
+      <sprite file="wood2.png" origin-y="0.98" scale="3.4" />
+    </prop>
+    <prop name="T3">
+      <sprite file="wood3.png" origin-y="0.98" scale="3.4" />
+    </prop>
+    <prop name="NT1">
+      <sprite file="nwood1.png" origin-y="0.99" scale="2.5" />
+    </prop>
+    <prop name="NT2">
+      <sprite file="nwood2.png" origin-y="0.99" scale="2.5" />
+    </prop>
+  </prop-group>
+</library>

@@ -1,14 +1,4 @@
-﻿[
-  {
-    "Category": "Hulls",
-    "ItemName": "Viking",
-    "Name": "Viking XT",
-    "SourceFolder": "Textures/Hulls/Viking/XT/M3",
-    "PreviewImage": "Textures/Hulls/Viking/XT/M3/Viking_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHMuanBn",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2xpZ2h0bWFwLmpwZw==",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHNfYWxwaGEuanBn"
-  },
+[
   {
     "Category": "Hulls",
     "ItemName": "Viking",
@@ -35,16 +25,6 @@
     "Name": "Hornet LC",
     "SourceFolder": "Textures/Hulls/Hornet/Legacy/M3",
     "PreviewImage": "Textures/Hulls/Hornet/Legacy/M3/Hornet_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHMuanBn",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2xpZ2h0bWFwLmpwZw==",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHNfYWxwaGEuanBn"
-  },
-  {
-    "Category": "Hulls",
-    "ItemName": "Hornet",
-    "Name": "Hornet Hmm",
-    "SourceFolder": "Textures/Hulls/Hornet/Hmm/M3",
-    "PreviewImage": "Textures/mystery_hmm.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHMuanBn",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2xpZ2h0bWFwLmpwZw==",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHNfYWxwaGEuanBn"
@@ -81,16 +61,6 @@
   },
   {
     "Category": "Hulls",
-    "ItemName": "Wasp",
-    "Name": "Wasp Hmm",
-    "SourceFolder": "Textures/Hulls/Wasp/Hmm/M3",
-    "PreviewImage": "Textures/mystery_hmm.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMjAyMzUxMDQyMjE2Mi9kZXRhaWxzLmpwZw==",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMjAyMzUxMDQyMjE2Mi9saWdodG1hcC5qcGc=",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNC8zMjAyMzUxMDQyMjE2Mi9kZXRhaWxzX2FscGhhLmpwZw=="
-  },
-  {
-    "Category": "Hulls",
     "ItemName": "Hunter",
     "Name": "Hunter XT",
     "SourceFolder": "Textures/Hulls/Hunter/XT/M3",
@@ -105,16 +75,6 @@
     "Name": "Hunter LC",
     "SourceFolder": "Textures/Hulls/Hunter/Legacy/M3",
     "PreviewImage": "Textures/Hulls/Hunter/Legacy/M3/Hunter_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2RldGFpbHMuanBn",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2xpZ2h0bWFwLmpwZw==",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2RldGFpbHNfYWxwaGEuanBn"
-  },
-  {
-    "Category": "Hulls",
-    "ItemName": "Hunter",
-    "Name": "Hunter Hmm",
-    "SourceFolder": "Textures/Hulls/Hunter/Hmm/M3",
-    "PreviewImage": "Textures/mystery_hmm.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2RldGFpbHMuanBn",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2xpZ2h0bWFwLmpwZw==",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzM0LzMyMDIzNTEwNDE2MDI1L2RldGFpbHNfYWxwaGEuanBn"
@@ -141,16 +101,6 @@
   },
   {
     "Category": "Hulls",
-    "ItemName": "Mammoth",
-    "Name": "Mammoth Hmm",
-    "SourceFolder": "Textures/Hulls/Mammoth/Hmm/M3",
-    "PreviewImage": "Textures/mystery_hmm.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzQ0LzMyMDIzNTEwNDE3MDA2L2RldGFpbHMuanBn",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzQ0LzMyMDIzNTEwNDE3MDA2L2xpZ2h0bWFwLmpwZw==",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzQ0LzMyMDIzNTEwNDE3MDA2L2RldGFpbHNfYWxwaGEuanBn"
-  },
-  {
-    "Category": "Hulls",
     "ItemName": "Dictator",
     "Name": "Dictator XT",
     "SourceFolder": "Textures/Hulls/Dictator/XT/M3",
@@ -165,16 +115,6 @@
     "Name": "Dictator LC",
     "SourceFolder": "Textures/Hulls/Dictator/Legacy/M3",
     "PreviewImage": "Textures/Hulls/Dictator/Legacy/M3/Dictator_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9kZXRhaWxzLmpwZw==",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9saWdodG1hcC5qcGc=",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9kZXRhaWxzX2FscGhhLmpwZw=="
-  },
-  {
-    "Category": "Hulls",
-    "ItemName": "Dictator",
-    "Name": "Dictator Hmm",
-    "SourceFolder": "Textures/Hulls/Dictator/Hmm/M3",
-    "PreviewImage": "Textures/mystery_hmm.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9kZXRhaWxzLmpwZw==",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9saWdodG1hcC5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82LzMyMi8zMjAyMzUxMDQxMzMyNS9kZXRhaWxzX2FscGhhLmpwZw=="
@@ -273,11 +213,12 @@
     "Category": "Hulls",
     "ItemName": "Titan",
     "Name": "Titan Demonic",
-    "SourceFolder": "Textures/Hulls/Titan/Demonic/M3",
-    "PreviewImage": "Textures/Hulls/Titan/Demonic/M3/Titan_Demonic.png",
+    "SourceFolder": "Textures/Encrypted/Hulls/Titan/Demonic/M3",
+    "PreviewImage": "Textures/Encrypted/Hulls/Titan/Demonic/M3/Titan_Demonic.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMyMDIzNTEwNDE3NzcwL2RldGFpbHMuanBn",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMyMDIzNTEwNDE3NzcwL2xpZ2h0bWFwLmpwZw==",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMyMDIzNTEwNDE3NzcwL2RldGFpbHNfYWxwaGEuanBn"
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzU0LzMyMDIzNTEwNDE3NzcwL2RldGFpbHNfYWxwaGEuanBn",
+    "IsPremium": true
   },
   {
     "Category": "Hulls",

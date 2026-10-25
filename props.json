@@ -1,0 +1,4832 @@
+[
+  {
+    "Id": "Boxes_aHR0cD",
+    "Name": "Boxes",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Boxes.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Boxes.jpg"
+  },
+  {
+    "Id": "brid_1_aHR0cD",
+    "Name": "Brid 1",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "brid_1.png",
+    "MeshFilename": "brid_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_1.png"
+  },
+  {
+    "Id": "Bush_aHR0cD",
+    "Name": "Bush",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Bush.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Bush.png"
+  },
+  {
+    "Id": "Cactus_aHR0cD",
+    "Name": "Cactus",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Cactus.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Cactus.jpg"
+  },
+  {
+    "Id": "Cat1_aHR0cD",
+    "Name": "Cat1",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Cat1.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Cat1.png"
+  },
+  {
+    "Id": "Cat2_aHR0cD",
+    "Name": "Cat2",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Cat2.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Cat2.png"
+  },
+  {
+    "Id": "Fence1_aHR0cD",
+    "Name": "Fence1",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Fence1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Fence1.jpg"
+  },
+  {
+    "Id": "Fence2_aHR0cD",
+    "Name": "Fence2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Fence2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Fence2.jpg"
+  },
+  {
+    "Id": "Fence3_aHR0cD",
+    "Name": "Fence3",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Fence3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Fence3.jpg"
+  },
+  {
+    "Id": "Ground1x1_1_aHR0cD",
+    "Name": "Ground1x1 1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_1.jpg"
+  },
+  {
+    "Id": "Ground1x1_2_aHR0cD",
+    "Name": "Ground1x1 2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_2.jpg"
+  },
+  {
+    "Id": "Ground1x1_3_aHR0cD",
+    "Name": "Ground1x1 3",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_3.jpg"
+  },
+  {
+    "Id": "Ground1x1_4_aHR0cD",
+    "Name": "Ground1x1 4",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_4.jpg"
+  },
+  {
+    "Id": "Ground1x1_5_aHR0cD",
+    "Name": "Ground1x1 5",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_5.jpg"
+  },
+  {
+    "Id": "Ground1x1_6_aHR0cD",
+    "Name": "Ground1x1 6",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1_6.jpg"
+  },
+  {
+    "Id": "Ground1x1_aHR0cD",
+    "Name": "Ground1x1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground1x1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground1x1.jpg"
+  },
+  {
+    "Id": "Ground2x1_aHR0cD",
+    "Name": "Ground2x1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground2x1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground2x1.jpg"
+  },
+  {
+    "Id": "Ground2x2_aHR0cD",
+    "Name": "Ground2x2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground2x2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground2x2.jpg"
+  },
+  {
+    "Id": "Ground3x2_aHR0cD",
+    "Name": "Ground3x2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground3x2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground3x2.jpg"
+  },
+  {
+    "Id": "Ground3x3_aHR0cD",
+    "Name": "Ground3x3",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Ground3x3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Ground3x3.jpg"
+  },
+  {
+    "Id": "House1_aHR0cD",
+    "Name": "House1",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House1.jpg"
+  },
+  {
+    "Id": "House2_aHR0cD",
+    "Name": "House2",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House2.jpg"
+  },
+  {
+    "Id": "House3_aHR0cD",
+    "Name": "House3",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House3.jpg"
+  },
+  {
+    "Id": "House4_aHR0cD",
+    "Name": "House4",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House4.jpg"
+  },
+  {
+    "Id": "House5_aHR0cD",
+    "Name": "House5",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House5.jpg"
+  },
+  {
+    "Id": "House6_aHR0cD",
+    "Name": "House6",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "House6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: House6.jpg"
+  },
+  {
+    "Id": "Rock2_aHR0cD",
+    "Name": "Rock2",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Rock2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Rock2.jpg"
+  },
+  {
+    "Id": "Rock3_aHR0cD",
+    "Name": "Rock3",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Rock3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Rock3.jpg"
+  },
+  {
+    "Id": "Rock4_aHR0cD",
+    "Name": "Rock4",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Rock4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Rock4.jpg"
+  },
+  {
+    "Id": "Straw_aHR0cD",
+    "Name": "Straw",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Straw.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Straw.jpg"
+  },
+  {
+    "Id": "Tanker_aHR0cD",
+    "Name": "Tanker",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Tanker.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Tanker.jpg"
+  },
+  {
+    "Id": "tunnel1_aHR0cD",
+    "Name": "Tunnel1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "tunnel1.jpg",
+    "MeshFilename": "tunnel_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tunnel1.jpg"
+  },
+  {
+    "Id": "Water_aHR0cD",
+    "Name": "Water",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Water.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Water.jpg"
+  },
+  {
+    "Id": "Windmill_aHR0cD",
+    "Name": "Windmill",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "Windmill.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: Windmill.jpg"
+  },
+  {
+    "Id": "wtile_a_aHR0cD",
+    "Name": "Wtile A",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_a.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_a.jpg"
+  },
+  {
+    "Id": "wtile_b_aHR0cD",
+    "Name": "Wtile B",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_b.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_b.jpg"
+  },
+  {
+    "Id": "wtile_c_aHR0cD",
+    "Name": "Wtile C",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_c.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_c.jpg"
+  },
+  {
+    "Id": "wtile_s_aHR0cD",
+    "Name": "Wtile S",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_s.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_s.jpg"
+  },
+  {
+    "Id": "wtile_ss_aHR0cD",
+    "Name": "Wtile Ss",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_ss.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_ss.jpg"
+  },
+  {
+    "Id": "xamer212_aHR0cD",
+    "Name": "Xamer212",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83MS8zMjIvMzIwMjM1MTA2NzMyNjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "xamer212.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: xamer212.png"
+  },
+  {
+    "Id": "cliff_0_aHR0cD",
+    "Name": "Cliff 0",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_0.jpg",
+    "MeshFilename": "cliff_0.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_0.jpg"
+  },
+  {
+    "Id": "cliff_1_aHR0cD",
+    "Name": "Cliff 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_1.jpg",
+    "MeshFilename": "cliff_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_1.jpg"
+  },
+  {
+    "Id": "cliff_2_aHR0cD",
+    "Name": "Cliff 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_2.jpg",
+    "MeshFilename": "cliff_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_2.jpg"
+  },
+  {
+    "Id": "cliff_4_aHR0cD",
+    "Name": "Cliff 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_4.jpg",
+    "MeshFilename": "cliff_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_4.jpg"
+  },
+  {
+    "Id": "cliff_c2_aHR0cD",
+    "Name": "Cliff C2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_c2.jpg",
+    "MeshFilename": "cliff_c2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_c2.jpg"
+  },
+  {
+    "Id": "cliff_co_aHR0cD",
+    "Name": "Cliff Co",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_co.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_co.jpg"
+  },
+  {
+    "Id": "cliff_r2_aHR0cD",
+    "Name": "Cliff R2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_r2.jpg",
+    "MeshFilename": "cliff_r2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_r2.jpg"
+  },
+  {
+    "Id": "cliff_ri_aHR0cD",
+    "Name": "Cliff Ri",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80LzMyMDIzNTEwNDM0NDA0L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "cliff_ri.jpg",
+    "MeshFilename": "cliff_ri.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cliff_ri.jpg"
+  },
+  {
+    "Id": "badgir_aHR0cD",
+    "Name": "Badgir",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "badgir.jpg",
+    "MeshFilename": "badgir.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: badgir.jpg"
+  },
+  {
+    "Id": "balaro_aHR0cD",
+    "Name": "Balaro",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "balaro.jpg",
+    "MeshFilename": "balaro.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: balaro.jpg"
+  },
+  {
+    "Id": "brokene_aHR0cD",
+    "Name": "Brokene",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brokene.jpg",
+    "MeshFilename": "broken.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brokene.jpg"
+  },
+  {
+    "Id": "brokenn_aHR0cD",
+    "Name": "Brokenn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brokenn.jpg",
+    "MeshFilename": "broken.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brokenn.jpg"
+  },
+  {
+    "Id": "brokens_aHR0cD",
+    "Name": "Brokens",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brokens.jpg",
+    "MeshFilename": "broken.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brokens.jpg"
+  },
+  {
+    "Id": "brokenw_aHR0cD",
+    "Name": "Brokenw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brokenw.jpg",
+    "MeshFilename": "broken.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brokenw.jpg"
+  },
+  {
+    "Id": "carpet_aHR0cD",
+    "Name": "Carpet",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "carpet.jpg",
+    "MeshFilename": "carpet.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: carpet.jpg"
+  },
+  {
+    "Id": "cornerne_aHR0cD",
+    "Name": "Cornerne",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "cornerne.jpg",
+    "MeshFilename": "corner.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cornerne.jpg"
+  },
+  {
+    "Id": "cornernw_aHR0cD",
+    "Name": "Cornernw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "cornernw.jpg",
+    "MeshFilename": "corner.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cornernw.jpg"
+  },
+  {
+    "Id": "cornerse_aHR0cD",
+    "Name": "Cornerse",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "cornerse.jpg",
+    "MeshFilename": "corner.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cornerse.jpg"
+  },
+  {
+    "Id": "cornersw_aHR0cD",
+    "Name": "Cornersw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "cornersw.jpg",
+    "MeshFilename": "corner.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: cornersw.jpg"
+  },
+  {
+    "Id": "darvaze_aHR0cD",
+    "Name": "Darvaze",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "darvaze.jpg",
+    "MeshFilename": "darvaze.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: darvaze.jpg"
+  },
+  {
+    "Id": "door_aHR0cD",
+    "Name": "Door",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "door.jpg",
+    "MeshFilename": "door.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: door.jpg"
+  },
+  {
+    "Id": "ende_aHR0cD",
+    "Name": "Ende",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "ende.jpg",
+    "MeshFilename": "end.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: ende.jpg"
+  },
+  {
+    "Id": "endn_aHR0cD",
+    "Name": "Endn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "endn.jpg",
+    "MeshFilename": "end.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: endn.jpg"
+  },
+  {
+    "Id": "ends_aHR0cD",
+    "Name": "Ends",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "ends.jpg",
+    "MeshFilename": "end.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: ends.jpg"
+  },
+  {
+    "Id": "endw_aHR0cD",
+    "Name": "Endw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "endw.jpg",
+    "MeshFilename": "end.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: endw.jpg"
+  },
+  {
+    "Id": "flashlig_aHR0cD",
+    "Name": "Flashlig",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "flashlig.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: flashlig.jpg"
+  },
+  {
+    "Id": "gonbad_aHR0cD",
+    "Name": "Gonbad",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "gonbad.jpg",
+    "MeshFilename": "gonbad.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: gonbad.jpg"
+  },
+  {
+    "Id": "lob_aHR0cD",
+    "Name": "Lob",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lob.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lob.png"
+  },
+  {
+    "Id": "mehrab_aHR0cD",
+    "Name": "Mehrab",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "mehrab.jpg",
+    "MeshFilename": "mehrab.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: mehrab.jpg"
+  },
+  {
+    "Id": "menare_aHR0cD",
+    "Name": "Menare",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "menare.jpg",
+    "MeshFilename": "menare.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: menare.jpg"
+  },
+  {
+    "Id": "outwdne_aHR0cD",
+    "Name": "Outwdne",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "outwdne.jpg",
+    "MeshFilename": "outwd.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: outwdne.jpg"
+  },
+  {
+    "Id": "outwdnw_aHR0cD",
+    "Name": "Outwdnw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "outwdnw.jpg",
+    "MeshFilename": "outwd.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: outwdnw.jpg"
+  },
+  {
+    "Id": "outwdse_aHR0cD",
+    "Name": "Outwdse",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "outwdse.jpg",
+    "MeshFilename": "outwd.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: outwdse.jpg"
+  },
+  {
+    "Id": "outwdsw_aHR0cD",
+    "Name": "Outwdsw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "outwdsw.jpg",
+    "MeshFilename": "outwd.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: outwdsw.jpg"
+  },
+  {
+    "Id": "sayes_aHR0cD",
+    "Name": "Sayes",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sayes.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sayes.jpg"
+  },
+  {
+    "Id": "sayew_aHR0cD",
+    "Name": "Sayew",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sayew.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sayew.jpg"
+  },
+  {
+    "Id": "stair_aHR0cD",
+    "Name": "Stair",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "stair.jpg",
+    "MeshFilename": "stair.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: stair.jpg"
+  },
+  {
+    "Id": "taghnoor_aHR0cD",
+    "Name": "Taghnoor",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "taghnoor.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: taghnoor.png"
+  },
+  {
+    "Id": "walln_1_aHR0cD",
+    "Name": "Walln 1",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walln_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walln_1.jpg"
+  },
+  {
+    "Id": "walln_2_aHR0cD",
+    "Name": "Walln 2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walln_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walln_2.jpg"
+  },
+  {
+    "Id": "walln_aHR0cD",
+    "Name": "Walln",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walln.jpg",
+    "MeshFilename": "wall.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: walln.jpg"
+  },
+  {
+    "Id": "walls_1_aHR0cD",
+    "Name": "Walls 1",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_1.jpg"
+  },
+  {
+    "Id": "walls_2_aHR0cD",
+    "Name": "Walls 2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_2.jpg"
+  },
+  {
+    "Id": "walls_farsh_aHR0cD",
+    "Name": "Walls Farsh",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_farsh.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_farsh.jpg"
+  },
+  {
+    "Id": "walls_farsh2_aHR0cD",
+    "Name": "Walls Farsh2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_farsh2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_farsh2.jpg"
+  },
+  {
+    "Id": "walls_farsh3_aHR0cD",
+    "Name": "Walls Farsh3",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_farsh3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_farsh3.jpg"
+  },
+  {
+    "Id": "walls_farsh4_aHR0cD",
+    "Name": "Walls Farsh4",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls_farsh4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: walls_farsh4.jpg"
+  },
+  {
+    "Id": "walls_aHR0cD",
+    "Name": "Walls",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "walls.jpg",
+    "MeshFilename": "wall.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: walls.jpg"
+  },
+  {
+    "Id": "windown_aHR0cD",
+    "Name": "Windown",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "windown.jpg",
+    "MeshFilename": "window.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: windown.jpg"
+  },
+  {
+    "Id": "windows_aHR0cD",
+    "Name": "Windows",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "windows.jpg",
+    "MeshFilename": "window.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: windows.jpg"
+  },
+  {
+    "Id": "windoww_aHR0cD",
+    "Name": "Windoww",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "windoww.jpg",
+    "MeshFilename": "window.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: windoww.jpg"
+  },
+  {
+    "Id": "woode_aHR0cD",
+    "Name": "Woode",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "woode.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: woode.jpg"
+  },
+  {
+    "Id": "woodn_aHR0cD",
+    "Name": "Woodn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "woodn.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: woodn.jpg"
+  },
+  {
+    "Id": "woods_aHR0cD",
+    "Name": "Woods",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "woods.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: woods.jpg"
+  },
+  {
+    "Id": "woodw_aHR0cD",
+    "Name": "Woodw",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80MS8zMjAyMzUxMDQzNjM0MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "woodw.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: woodw.jpg"
+  },
+  {
+    "Id": "charchub_aHR0cD",
+    "Name": "Charchub",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "charchub.jpg",
+    "MeshFilename": "charchub.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: charchub.jpg"
+  },
+  {
+    "Id": "dar_aHR0cD",
+    "Name": "Dar",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dar.jpg",
+    "MeshFilename": "dar.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: dar.jpg"
+  },
+  {
+    "Id": "dargah_aHR0cD",
+    "Name": "Dargah",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dargah.jpg",
+    "MeshFilename": "dargah.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: dargah.jpg"
+  },
+  {
+    "Id": "kariz_aHR0cD",
+    "Name": "Kariz",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "kariz.jpg",
+    "MeshFilename": "kariz.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: kariz.jpg"
+  },
+  {
+    "Id": "multi_aHR0cD",
+    "Name": "Multi",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "multi.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: multi.jpg"
+  },
+  {
+    "Id": "turn_aHR0cD",
+    "Name": "Turn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "turn.jpg",
+    "MeshFilename": "turn.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: turn.jpg"
+  },
+  {
+    "Id": "turn3_aHR0cD",
+    "Name": "Turn3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80My8zMjAyMzUxMDQzNjc0Ni9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "turn3.jpg",
+    "MeshFilename": "turn3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: turn3.jpg"
+  },
+  {
+    "Id": "crater_aHR0cD",
+    "Name": "Crater",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crater.jpg",
+    "MeshFilename": "crater.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: crater.jpg"
+  },
+  {
+    "Id": "land03_aHR0cD",
+    "Name": "Land03",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "land03.jpg",
+    "MeshFilename": "land03.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: land03.jpg"
+  },
+  {
+    "Id": "rise_gr1_aHR0cD",
+    "Name": "Rise Gr1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_gr1.jpg",
+    "MeshFilename": "rise_gr1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_gr1.jpg"
+  },
+  {
+    "Id": "rise_gr2_aHR0cD",
+    "Name": "Rise Gr2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_gr2.jpg",
+    "MeshFilename": "rise_gr2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_gr2.jpg"
+  },
+  {
+    "Id": "rise_gr3_aHR0cD",
+    "Name": "Rise Gr3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_gr3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_gr3.jpg"
+  },
+  {
+    "Id": "rise_gr4_aHR0cD",
+    "Name": "Rise Gr4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi80Ny8zMjAyMzUxMDQzNzMyMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_gr4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_gr4.jpg"
+  },
+  {
+    "Id": "bg_rock_aHR0cD",
+    "Name": "Bg Rock",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bg_rock.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bg_rock.jpg"
+  },
+  {
+    "Id": "bg_rock1_aHR0cD",
+    "Name": "Bg Rock1",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bg_rock1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bg_rock1.jpg"
+  },
+  {
+    "Id": "bg_rock2_aHR0cD",
+    "Name": "Bg Rock2",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bg_rock2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bg_rock2.jpg"
+  },
+  {
+    "Id": "bg_rock3_aHR0cD",
+    "Name": "Bg Rock3",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bg_rock3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bg_rock3.jpg"
+  },
+  {
+    "Id": "bg_rock4_aHR0cD",
+    "Name": "Bg Rock4",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bg_rock4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bg_rock4.jpg"
+  },
+  {
+    "Id": "corn_b_aHR0cD",
+    "Name": "Corn B",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corn_b.jpg",
+    "MeshFilename": "corn_b.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corn_b.jpg"
+  },
+  {
+    "Id": "corn1_aHR0cD",
+    "Name": "Corn1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corn1.jpg",
+    "MeshFilename": "corn1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corn1.jpg"
+  },
+  {
+    "Id": "corn2_aHR0cD",
+    "Name": "Corn2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corn2.jpg",
+    "MeshFilename": "corn2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corn2.jpg"
+  },
+  {
+    "Id": "corn3_aHR0cD",
+    "Name": "Corn3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corn3.jpg",
+    "MeshFilename": "corn3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corn3.jpg"
+  },
+  {
+    "Id": "corn4_aHR0cD",
+    "Name": "Corn4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corn4.jpg",
+    "MeshFilename": "corn4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corn4.jpg"
+  },
+  {
+    "Id": "rise_r1_aHR0cD",
+    "Name": "Rise R1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_r1.jpg",
+    "MeshFilename": "rise_r1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_r1.jpg"
+  },
+  {
+    "Id": "rise_u1_aHR0cD",
+    "Name": "Rise U1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_u1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_u1.jpg"
+  },
+  {
+    "Id": "rise_u2_aHR0cD",
+    "Name": "Rise U2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_u2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_u2.jpg"
+  },
+  {
+    "Id": "rise_u3_aHR0cD",
+    "Name": "Rise U3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rise_u3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_u3.jpg"
+  },
+  {
+    "Id": "sm_rck1_aHR0cD",
+    "Name": "Sm Rck1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sm_rck1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sm_rck1.jpg"
+  },
+  {
+    "Id": "sm_rck2_aHR0cD",
+    "Name": "Sm Rck2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sm_rck2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sm_rck2.jpg"
+  },
+  {
+    "Id": "sm_rck3_aHR0cD",
+    "Name": "Sm Rck3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sm_rck3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sm_rck3.jpg"
+  },
+  {
+    "Id": "sm_rck4_aHR0cD",
+    "Name": "Sm Rck4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sm_rck4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sm_rck4.jpg"
+  },
+  {
+    "Id": "sm_rock_aHR0cD",
+    "Name": "Sm Rock",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "sm_rock.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sm_rock.jpg"
+  },
+  {
+    "Id": "up_rock1_aHR0cD",
+    "Name": "Up Rock1",
+    "Category": "Rocks",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi81MS8zMjAyMzUxMDQzNzQyNi9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "up_rock1.jpg",
+    "MeshFilename": "up_rock1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: up_rock1.jpg"
+  },
+  {
+    "Id": "gasoline_aHR0cD",
+    "Name": "Gasoline",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8wLzMyMDIzNTEwNDM0MjcyL2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "gasoline.jpg",
+    "MeshFilename": "gasoline.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: gasoline.jpg"
+  },
+  {
+    "Id": "smhouse4_aHR0cD",
+    "Name": "Smhouse4",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8wLzMyMDIzNTEwNDM0MjcyL2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "smhouse4.jpg",
+    "MeshFilename": "smhouse4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: smhouse4.jpg"
+  },
+  {
+    "Id": "smhouse5_aHR0cD",
+    "Name": "Smhouse5",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8wLzMyMDIzNTEwNDM0MjcyL2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "smhouse5.jpg",
+    "MeshFilename": "smhouse5.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: smhouse5.jpg"
+  },
+  {
+    "Id": "concrete_1_aHR0cD",
+    "Name": "Concrete 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_1.jpg"
+  },
+  {
+    "Id": "concrete_2_aHR0cD",
+    "Name": "Concrete 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_2.jpg"
+  },
+  {
+    "Id": "concrete_3_aHR0cD",
+    "Name": "Concrete 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_3.jpg"
+  },
+  {
+    "Id": "concrete_4_aHR0cD",
+    "Name": "Concrete 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_4.jpg"
+  },
+  {
+    "Id": "concrete_road_0_aHR0cD",
+    "Name": "Concrete Road 0",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_0.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_0.jpg"
+  },
+  {
+    "Id": "concrete_road_det_1_aHR0cD",
+    "Name": "Concrete Road Det 1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_det_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_det_1.jpg"
+  },
+  {
+    "Id": "concrete_road_det_2_aHR0cD",
+    "Name": "Concrete Road Det 2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_det_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_det_2.jpg"
+  },
+  {
+    "Id": "concrete_road_det_3_aHR0cD",
+    "Name": "Concrete Road Det 3",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_det_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_det_3.jpg"
+  },
+  {
+    "Id": "concrete_road_end_zebra_aHR0cD",
+    "Name": "Concrete Road End Zebra",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_end_zebra.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_end_zebra.jpg"
+  },
+  {
+    "Id": "concrete_road_end_aHR0cD",
+    "Name": "Concrete Road End",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_end.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_end.jpg"
+  },
+  {
+    "Id": "concrete_road_zebra_aHR0cD",
+    "Name": "Concrete Road Zebra",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road_zebra.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road_zebra.jpg"
+  },
+  {
+    "Id": "concrete_road_aHR0cD",
+    "Name": "Concrete Road",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "concrete_road.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: concrete_road.jpg"
+  },
+  {
+    "Id": "fliptile_aHR0cD",
+    "Name": "Fliptile",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fliptile.jpg",
+    "MeshFilename": "fliptile.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: fliptile.jpg"
+  },
+  {
+    "Id": "grass2_1_1_aHR0cD",
+    "Name": "Grass2 1 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_1_1.jpg"
+  },
+  {
+    "Id": "grass2_1_2_aHR0cD",
+    "Name": "Grass2 1 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_1_2.jpg"
+  },
+  {
+    "Id": "grass3_2_1_aHR0cD",
+    "Name": "Grass3 2 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_2_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_2_1.jpg"
+  },
+  {
+    "Id": "grass3_2_2_aHR0cD",
+    "Name": "Grass3 2 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_2_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_2_2.jpg"
+  },
+  {
+    "Id": "pave_1_aHR0cD",
+    "Name": "Pave 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pave_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pave_1.jpg"
+  },
+  {
+    "Id": "pave_2_aHR0cD",
+    "Name": "Pave 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pave_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pave_2.jpg"
+  },
+  {
+    "Id": "pave_3_aHR0cD",
+    "Name": "Pave 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pave_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pave_3.jpg"
+  },
+  {
+    "Id": "pave_4_aHR0cD",
+    "Name": "Pave 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pave_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pave_4.jpg"
+  },
+  {
+    "Id": "pavement_2x1_1_aHR0cD",
+    "Name": "Pavement 2X1 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x1_1.jpg"
+  },
+  {
+    "Id": "pavement_2x1_2_aHR0cD",
+    "Name": "Pavement 2X1 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x1_2.jpg"
+  },
+  {
+    "Id": "pavement_2x1_3_aHR0cD",
+    "Name": "Pavement 2X1 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x1_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x1_3.jpg"
+  },
+  {
+    "Id": "pavement_2x1_4_aHR0cD",
+    "Name": "Pavement 2X1 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x1_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x1_4.jpg"
+  },
+  {
+    "Id": "pavement_2x2_1_aHR0cD",
+    "Name": "Pavement 2X2 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x2_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x2_1.jpg"
+  },
+  {
+    "Id": "pavement_2x2_2_aHR0cD",
+    "Name": "Pavement 2X2 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_2x2_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_2x2_2.jpg"
+  },
+  {
+    "Id": "pavement_3x1_1_aHR0cD",
+    "Name": "Pavement 3X1 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x1_1.jpg"
+  },
+  {
+    "Id": "pavement_3x1_2_aHR0cD",
+    "Name": "Pavement 3X1 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x1_2.jpg"
+  },
+  {
+    "Id": "pavement_3x2_1_aHR0cD",
+    "Name": "Pavement 3X2 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x2_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x2_1.jpg"
+  },
+  {
+    "Id": "pavement_3x2_2_aHR0cD",
+    "Name": "Pavement 3X2 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x2_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x2_2.jpg"
+  },
+  {
+    "Id": "pavement_3x3_1_aHR0cD",
+    "Name": "Pavement 3X3 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x3_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x3_1.jpg"
+  },
+  {
+    "Id": "pavement_3x3_2_aHR0cD",
+    "Name": "Pavement 3X3 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pavement_3x3_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pavement_3x3_2.jpg"
+  },
+  {
+    "Id": "pc_3turn_aHR0cD",
+    "Name": "Pc 3Turn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_3turn.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_3turn.jpg"
+  },
+  {
+    "Id": "pc_corner_1_aHR0cD",
+    "Name": "Pc Corner 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_corner_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_corner_1.jpg"
+  },
+  {
+    "Id": "pc_corner_2_aHR0cD",
+    "Name": "Pc Corner 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_corner_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_corner_2.jpg"
+  },
+  {
+    "Id": "pc_incor_1_aHR0cD",
+    "Name": "Pc Incor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_incor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_incor_1.jpg"
+  },
+  {
+    "Id": "pc_trans_1_aHR0cD",
+    "Name": "Pc Trans 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_trans_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_trans_1.jpg"
+  },
+  {
+    "Id": "pc_trans_2_aHR0cD",
+    "Name": "Pc Trans 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_trans_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_trans_2.jpg"
+  },
+  {
+    "Id": "pc_trans_3_aHR0cD",
+    "Name": "Pc Trans 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_trans_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_trans_3.jpg"
+  },
+  {
+    "Id": "pc_turn_2_aHR0cD",
+    "Name": "Pc Turn 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_turn_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_turn_2.jpg"
+  },
+  {
+    "Id": "pc_turn_aHR0cD",
+    "Name": "Pc Turn",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pc_turn.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pc_turn.jpg"
+  },
+  {
+    "Id": "pg_corner_1_aHR0cD",
+    "Name": "Pg Corner 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_corner_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_corner_1.jpg"
+  },
+  {
+    "Id": "pg_corner_2_aHR0cD",
+    "Name": "Pg Corner 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_corner_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_corner_2.jpg"
+  },
+  {
+    "Id": "pg_incor_1_aHR0cD",
+    "Name": "Pg Incor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_incor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_incor_1.jpg"
+  },
+  {
+    "Id": "pg_trans_1_aHR0cD",
+    "Name": "Pg Trans 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_trans_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_trans_1.jpg"
+  },
+  {
+    "Id": "pg_trans_2_aHR0cD",
+    "Name": "Pg Trans 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_trans_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_trans_2.jpg"
+  },
+  {
+    "Id": "pg_trans_3_aHR0cD",
+    "Name": "Pg Trans 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMC8zMjAyMzUxMDQzNDYyMS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "pg_trans_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: pg_trans_3.jpg"
+  },
+  {
+    "Id": "wall_3w_g_aHR0cD",
+    "Name": "Wall 3W G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_3w_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_3w_g.jpg"
+  },
+  {
+    "Id": "wall_3w_aHR0cD",
+    "Name": "Wall 3W",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_3w.jpg",
+    "MeshFilename": "wall_3w.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_3w.jpg"
+  },
+  {
+    "Id": "wall_cr_g_aHR0cD",
+    "Name": "Wall Cr G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_cr_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_cr_g.jpg"
+  },
+  {
+    "Id": "wall_cr_aHR0cD",
+    "Name": "Wall Cr",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_cr.jpg",
+    "MeshFilename": "wall_cr.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_cr.jpg"
+  },
+  {
+    "Id": "wall_e1_g_aHR0cD",
+    "Name": "Wall E1 G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e1_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e1_g.jpg"
+  },
+  {
+    "Id": "wall_e1_aHR0cD",
+    "Name": "Wall E1",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e1.jpg",
+    "MeshFilename": "wall_e1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e1.jpg"
+  },
+  {
+    "Id": "wall_e2_g_aHR0cD",
+    "Name": "Wall E2 G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e2_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e2_g.jpg"
+  },
+  {
+    "Id": "wall_e2_aHR0cD",
+    "Name": "Wall E2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e2.jpg",
+    "MeshFilename": "wall_e2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e2.jpg"
+  },
+  {
+    "Id": "wall_e3_g_aHR0cD",
+    "Name": "Wall E3 G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e3_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e3_g.jpg"
+  },
+  {
+    "Id": "wall_e3_aHR0cD",
+    "Name": "Wall E3",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_e3.jpg",
+    "MeshFilename": "wall_e3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_e3.jpg"
+  },
+  {
+    "Id": "wall_st_g_aHR0cD",
+    "Name": "Wall St G",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_st_g.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_st_g.jpg"
+  },
+  {
+    "Id": "wall_st_aHR0cD",
+    "Name": "Wall St",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xMi8zMjAyMzUxMDQzNDc2MC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_st.jpg",
+    "MeshFilename": "wall_st.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_st.jpg"
+  },
+  {
+    "Id": "smhouse2_aHR0cD",
+    "Name": "Smhouse2",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xNi8zMjAyMzUxMDQzNTE3NC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "smhouse2.jpg",
+    "MeshFilename": "smhouse2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: smhouse2.jpg"
+  },
+  {
+    "Id": "smhouse3_aHR0cD",
+    "Name": "Smhouse3",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8xNi8zMjAyMzUxMDQzNTE3NC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "smhouse3.jpg",
+    "MeshFilename": "smhouse3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: smhouse3.jpg"
+  },
+  {
+    "Id": "fab_tow_aHR0cD",
+    "Name": "Fab Tow",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yLzMyMDIzNTEwNDM0MzQ2L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "fab_tow.jpg",
+    "MeshFilename": "fab_tow.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: fab_tow.jpg"
+  },
+  {
+    "Id": "fab_tow2_aHR0cD",
+    "Name": "Fab Tow2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yLzMyMDIzNTEwNDM0MzQ2L2xpYnJhcnkudGFyYQ==",
+    "TextureFilename": "fab_tow2.jpg",
+    "MeshFilename": "fab_tow2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: fab_tow2.jpg"
+  },
+  {
+    "Id": "nubu_1_aHR0cD",
+    "Name": "Nubu 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMjEvMzIwMjM1MTA0Mzc2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_1.jpg",
+    "MeshFilename": "nubu_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_1.jpg"
+  },
+  {
+    "Id": "nubu_10_aHR0cD",
+    "Name": "Nubu 10",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMjIvMzIwMjM1MTA0Mzc3MTQvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_10.jpg",
+    "MeshFilename": "nubu_10.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_10.jpg"
+  },
+  {
+    "Id": "nubu_12_halloween_aHR0cD",
+    "Name": "Nubu 12 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMjQvMzIwMjM1MTA0Mzc3NjMvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_12_halloween.jpg",
+    "MeshFilename": "nubu_12.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_12_halloween.jpg"
+  },
+  {
+    "Id": "nubu_12_aHR0cD",
+    "Name": "Nubu 12",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMjQvMzIwMjM1MTA0Mzc3NjMvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_12.jpg",
+    "MeshFilename": "nubu_12.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_12.jpg"
+  },
+  {
+    "Id": "nubu_14_aHR0cD",
+    "Name": "Nubu 14",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMjYvMzIwMjM1MTA0NDAwMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_14.jpg",
+    "MeshFilename": "nubu_14.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_14.jpg"
+  },
+  {
+    "Id": "asp_1_aHR0cD",
+    "Name": "Asp 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_1.jpg"
+  },
+  {
+    "Id": "asp_10_aHR0cD",
+    "Name": "Asp 10",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_10.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_10.jpg"
+  },
+  {
+    "Id": "asp_11_aHR0cD",
+    "Name": "Asp 11",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_11.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_11.jpg"
+  },
+  {
+    "Id": "asp_12_aHR0cD",
+    "Name": "Asp 12",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_12.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_12.jpg"
+  },
+  {
+    "Id": "asp_13_aHR0cD",
+    "Name": "Asp 13",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_13.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_13.jpg"
+  },
+  {
+    "Id": "asp_14_aHR0cD",
+    "Name": "Asp 14",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_14.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_14.jpg"
+  },
+  {
+    "Id": "asp_2_aHR0cD",
+    "Name": "Asp 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_2.jpg"
+  },
+  {
+    "Id": "asp_3_aHR0cD",
+    "Name": "Asp 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_3.jpg"
+  },
+  {
+    "Id": "asp_4_aHR0cD",
+    "Name": "Asp 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_4.jpg"
+  },
+  {
+    "Id": "asp_5_aHR0cD",
+    "Name": "Asp 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_5.jpg"
+  },
+  {
+    "Id": "asp_6_aHR0cD",
+    "Name": "Asp 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_6.jpg"
+  },
+  {
+    "Id": "asp_7_aHR0cD",
+    "Name": "Asp 7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_7.jpg"
+  },
+  {
+    "Id": "asp_8_aHR0cD",
+    "Name": "Asp 8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_8.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_8.jpg"
+  },
+  {
+    "Id": "asp_9_aHR0cD",
+    "Name": "Asp 9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp_9.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp_9.jpg"
+  },
+  {
+    "Id": "asp21_aHR0cD",
+    "Name": "Asp21",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp21.jpg"
+  },
+  {
+    "Id": "asp22_aHR0cD",
+    "Name": "Asp22",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp22.jpg"
+  },
+  {
+    "Id": "asp33_aHR0cD",
+    "Name": "Asp33",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "asp33.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: asp33.jpg"
+  },
+  {
+    "Id": "beton_1_aHR0cD",
+    "Name": "Beton 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_1.jpg"
+  },
+  {
+    "Id": "beton_2_aHR0cD",
+    "Name": "Beton 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_2.jpg"
+  },
+  {
+    "Id": "beton_3_aHR0cD",
+    "Name": "Beton 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_3.jpg"
+  },
+  {
+    "Id": "beton_4_aHR0cD",
+    "Name": "Beton 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_4.jpg"
+  },
+  {
+    "Id": "beton_5_aHR0cD",
+    "Name": "Beton 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_5.jpg"
+  },
+  {
+    "Id": "beton_6_aHR0cD",
+    "Name": "Beton 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_6.jpg"
+  },
+  {
+    "Id": "beton_7_aHR0cD",
+    "Name": "Beton 7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_7.jpg"
+  },
+  {
+    "Id": "beton_tube_aHR0cD",
+    "Name": "Beton Tube",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "beton_tube.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: beton_tube.jpg"
+  },
+  {
+    "Id": "con21_aHR0cD",
+    "Name": "Con21",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "con21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: con21.jpg"
+  },
+  {
+    "Id": "con22_aHR0cD",
+    "Name": "Con22",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "con22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: con22.jpg"
+  },
+  {
+    "Id": "dirt_1_aHR0cD",
+    "Name": "Dirt 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_1.jpg"
+  },
+  {
+    "Id": "dirt_2_aHR0cD",
+    "Name": "Dirt 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_2.jpg"
+  },
+  {
+    "Id": "dirt_3_aHR0cD",
+    "Name": "Dirt 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_3.jpg"
+  },
+  {
+    "Id": "dirt_4_aHR0cD",
+    "Name": "Dirt 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_4.jpg"
+  },
+  {
+    "Id": "dirt_5_aHR0cD",
+    "Name": "Dirt 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_5.jpg"
+  },
+  {
+    "Id": "dirt_6_aHR0cD",
+    "Name": "Dirt 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_6.jpg"
+  },
+  {
+    "Id": "dirt_7_aHR0cD",
+    "Name": "Dirt 7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_7.jpg"
+  },
+  {
+    "Id": "dirt_8_aHR0cD",
+    "Name": "Dirt 8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_8.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_8.jpg"
+  },
+  {
+    "Id": "dirt_9_aHR0cD",
+    "Name": "Dirt 9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "dirt_9.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dirt_9.jpg"
+  },
+  {
+    "Id": "grass_a1_aHR0cD",
+    "Name": "Grass A1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_a1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_a1.jpg"
+  },
+  {
+    "Id": "grass_a2_aHR0cD",
+    "Name": "Grass A2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_a2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_a2.jpg"
+  },
+  {
+    "Id": "grass_a3_aHR0cD",
+    "Name": "Grass A3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_a3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_a3.jpg"
+  },
+  {
+    "Id": "grass_a4_aHR0cD",
+    "Name": "Grass A4",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_a4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_a4.jpg"
+  },
+  {
+    "Id": "grass_b1_aHR0cD",
+    "Name": "Grass B1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_b1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_b1.jpg"
+  },
+  {
+    "Id": "grass_b2_aHR0cD",
+    "Name": "Grass B2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_b2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_b2.jpg"
+  },
+  {
+    "Id": "grass_b3_aHR0cD",
+    "Name": "Grass B3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_b3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_b3.jpg"
+  },
+  {
+    "Id": "grass_b4_aHR0cD",
+    "Name": "Grass B4",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass_b4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_b4.jpg"
+  },
+  {
+    "Id": "grass21_aHR0cD",
+    "Name": "Grass21",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass21.jpg"
+  },
+  {
+    "Id": "grass22_aHR0cD",
+    "Name": "Grass22",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "grass22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass22.jpg"
+  },
+  {
+    "Id": "ground21_aHR0cD",
+    "Name": "Ground21",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "ground21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ground21.jpg"
+  },
+  {
+    "Id": "ground22_aHR0cD",
+    "Name": "Ground22",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "ground22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ground22.jpg"
+  },
+  {
+    "Id": "rail_1_aHR0cD",
+    "Name": "Rail 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "rail_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rail_1.jpg"
+  },
+  {
+    "Id": "rail_2_aHR0cD",
+    "Name": "Rail 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "rail_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: rail_2.jpg"
+  },
+  {
+    "Id": "road_1_aHR0cD",
+    "Name": "Road 1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_1.jpg"
+  },
+  {
+    "Id": "road_2_aHR0cD",
+    "Name": "Road 2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_2.jpg"
+  },
+  {
+    "Id": "road_3_aHR0cD",
+    "Name": "Road 3",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_3.jpg"
+  },
+  {
+    "Id": "road_4_aHR0cD",
+    "Name": "Road 4",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_4.jpg"
+  },
+  {
+    "Id": "road_6_aHR0cD",
+    "Name": "Road 6",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_6.jpg"
+  },
+  {
+    "Id": "road_7_aHR0cD",
+    "Name": "Road 7",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_7.jpg"
+  },
+  {
+    "Id": "road_8_aHR0cD",
+    "Name": "Road 8",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_8.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_8.jpg"
+  },
+  {
+    "Id": "road_9_aHR0cD",
+    "Name": "Road 9",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "road_9.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: road_9.jpg"
+  },
+  {
+    "Id": "sand_1_aHR0cD",
+    "Name": "Sand 1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand_1.jpg"
+  },
+  {
+    "Id": "sand_2_aHR0cD",
+    "Name": "Sand 2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand_2.jpg"
+  },
+  {
+    "Id": "sand_3_aHR0cD",
+    "Name": "Sand 3",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand_3.jpg"
+  },
+  {
+    "Id": "sand_4_aHR0cD",
+    "Name": "Sand 4",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand_4.jpg"
+  },
+  {
+    "Id": "sand21_aHR0cD",
+    "Name": "Sand21",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand21.jpg"
+  },
+  {
+    "Id": "sand22_aHR0cD",
+    "Name": "Sand22",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand22.jpg"
+  },
+  {
+    "Id": "sand33_aHR0cD",
+    "Name": "Sand33",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMTcvMzIwMjM1MTA0Mzc1MzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "sand33.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: sand33.jpg"
+  },
+  {
+    "Id": "nubu_5_aHR0cD",
+    "Name": "Nubu 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMzcvMzIwMjM1MTA0NDAzMTQvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_5.jpg",
+    "MeshFilename": "nubu_5.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_5.jpg"
+  },
+  {
+    "Id": "nubu_2_halloween_aHR0cD",
+    "Name": "Nubu 2 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMzEvMzIwMjM1MTA0NDAxNDcvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_2_halloween.jpg",
+    "MeshFilename": "nubu_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_2_halloween.jpg"
+  },
+  {
+    "Id": "nubu_2_aHR0cD",
+    "Name": "Nubu 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMzEvMzIwMjM1MTA0NDAxNDcvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_2.jpg",
+    "MeshFilename": "nubu_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_2.jpg"
+  },
+  {
+    "Id": "nubu_3_aHR0cD",
+    "Name": "Nubu 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yMzMvMzIwMjM1MTA0NDAyMTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_3.jpg",
+    "MeshFilename": "nubu_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_3.jpg"
+  },
+  {
+    "Id": "nubu_6_aHR0cD",
+    "Name": "Nubu 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNDEvMzIwMjM1MTA0NDAzNjIvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_6.jpg",
+    "MeshFilename": "nubu_6.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_6.jpg"
+  },
+  {
+    "Id": "nubu_8_halloween_aHR0cD",
+    "Name": "Nubu 8 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNDMvMzIwMjM1MTA0NDA0MjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_8_halloween.jpg",
+    "MeshFilename": "nubu_8.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_8_halloween.jpg"
+  },
+  {
+    "Id": "nubu_8_aHR0cD",
+    "Name": "Nubu 8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNDMvMzIwMjM1MTA0NDA0MjUvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_8.jpg",
+    "MeshFilename": "nubu_8.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_8.jpg"
+  },
+  {
+    "Id": "nubu_9_halloween_aHR0cD",
+    "Name": "Nubu 9 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNDUvMzIwMjM1MTA0NDA1MTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_9_halloween.jpg",
+    "MeshFilename": "nubu_9.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_9_halloween.jpg"
+  },
+  {
+    "Id": "nubu_9_aHR0cD",
+    "Name": "Nubu 9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNDUvMzIwMjM1MTA0NDA1MTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "nubu_9.jpg",
+    "MeshFilename": "nubu_9.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: nubu_9.jpg"
+  },
+  {
+    "Id": "elmvv512_aHR0cD",
+    "Name": "Elmvv512",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjIvMzIwMjM1MTA0NDE3NTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "elmvv512.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: elmvv512.jpg"
+  },
+  {
+    "Id": "fence512_aHR0cD",
+    "Name": "Fence512",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjIvMzIwMjM1MTA0NDE3NTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "fence512.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fence512.jpg"
+  },
+  {
+    "Id": "minen_aHR0cD",
+    "Name": "Minen",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjIvMzIwMjM1MTA0NDE3NTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "minen.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: minen.png"
+  },
+  {
+    "Id": "rise_2_aHR0cD",
+    "Name": "Rise 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "rise_2.jpg",
+    "MeshFilename": "rise_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_2.jpg"
+  },
+  {
+    "Id": "rise_3_aHR0cD",
+    "Name": "Rise 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "rise_3.jpg",
+    "MeshFilename": "rise_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_3.jpg"
+  },
+  {
+    "Id": "rise_5_aHR0cD",
+    "Name": "Rise 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "rise_5.jpg",
+    "MeshFilename": "rise_5.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rise_5.jpg"
+  },
+  {
+    "Id": "slope_1_aHR0cD",
+    "Name": "Slope 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "slope_1.jpg",
+    "MeshFilename": "slope_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: slope_1.jpg"
+  },
+  {
+    "Id": "slope_2_aHR0cD",
+    "Name": "Slope 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "slope_2.jpg",
+    "MeshFilename": "slope_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: slope_2.jpg"
+  },
+  {
+    "Id": "slope_2a_aHR0cD",
+    "Name": "Slope 2A",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "slope_2a.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: slope_2a.jpg"
+  },
+  {
+    "Id": "slope_2b_aHR0cD",
+    "Name": "Slope 2B",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNjUvMzIwMjM1MTA0NDIxNTcvbGlicmFyeS50YXJh",
+    "TextureFilename": "slope_2b.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: slope_2b.jpg"
+  },
+  {
+    "Id": "ow_1_aHR0cD",
+    "Name": "Ow 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_1.jpg",
+    "MeshFilename": "ow_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_1.jpg"
+  },
+  {
+    "Id": "ow_2_aHR0cD",
+    "Name": "Ow 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_2.jpg",
+    "MeshFilename": "ow_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_2.jpg"
+  },
+  {
+    "Id": "ow_21_aHR0cD",
+    "Name": "Ow 21",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_21.jpg"
+  },
+  {
+    "Id": "ow_22_aHR0cD",
+    "Name": "Ow 22",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_22.jpg"
+  },
+  {
+    "Id": "ow_23_aHR0cD",
+    "Name": "Ow 23",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_23.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_23.jpg"
+  },
+  {
+    "Id": "ow_24_aHR0cD",
+    "Name": "Ow 24",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_24.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_24.jpg"
+  },
+  {
+    "Id": "ow_25_aHR0cD",
+    "Name": "Ow 25",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_25.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_25.jpg"
+  },
+  {
+    "Id": "ow_t_aHR0cD",
+    "Name": "Ow T",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "ow_t.jpg",
+    "MeshFilename": "ow_t.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: ow_t.jpg"
+  },
+  {
+    "Id": "tunnel1_aHR0cD",
+    "Name": "Tunnel1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "tunnel1.jpg",
+    "MeshFilename": "tunnel_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tunnel1.jpg"
+  },
+  {
+    "Id": "tunnel2_aHR0cD",
+    "Name": "Tunnel2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "tunnel2.jpg",
+    "MeshFilename": "tunnel_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tunnel2.jpg"
+  },
+  {
+    "Id": "wtile_b_aHR0cD",
+    "Name": "Wtile B",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_b.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_b.jpg"
+  },
+  {
+    "Id": "wtile_b1_aHR0cD",
+    "Name": "Wtile B1",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_b1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_b1.jpg"
+  },
+  {
+    "Id": "wtile_b2_aHR0cD",
+    "Name": "Wtile B2",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_b2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_b2.jpg"
+  },
+  {
+    "Id": "wtile_s_aHR0cD",
+    "Name": "Wtile S",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile_s.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile_s.jpg"
+  },
+  {
+    "Id": "wtile_aHR0cD",
+    "Name": "Wtile",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTAvMzIwMjM1MTA0NDEyNTAvbGlicmFyeS50YXJh",
+    "TextureFilename": "wtile.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wtile.jpg"
+  },
+  {
+    "Id": "shit_0_aHR0cD",
+    "Name": "Shit 0",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNTcvMzIwMzA2MjQ1MzcyMzUvbGlicmFyeS50YXJh",
+    "TextureFilename": "shit_0.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: shit_0.jpg"
+  },
+  {
+    "Id": "vilhou1_halloween_aHR0cD",
+    "Name": "Vilhou1 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou1_halloween.jpg",
+    "MeshFilename": "vilhou_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou1_halloween.jpg"
+  },
+  {
+    "Id": "vilhou1_aHR0cD",
+    "Name": "Vilhou1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou1.jpg",
+    "MeshFilename": "vilhou_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou1.jpg"
+  },
+  {
+    "Id": "vilhou2_halloween_aHR0cD",
+    "Name": "Vilhou2 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou2_halloween.jpg",
+    "MeshFilename": "vilhou_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou2_halloween.jpg"
+  },
+  {
+    "Id": "vilhou2_aHR0cD",
+    "Name": "Vilhou2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou2.jpg",
+    "MeshFilename": "vilhou_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou2.jpg"
+  },
+  {
+    "Id": "vilhou3_halloween_aHR0cD",
+    "Name": "Vilhou3 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou3_halloween.jpg",
+    "MeshFilename": "vilhou_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou3_halloween.jpg"
+  },
+  {
+    "Id": "vilhou3_aHR0cD",
+    "Name": "Vilhou3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou3.jpg",
+    "MeshFilename": "vilhou_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou3.jpg"
+  },
+  {
+    "Id": "vilhou4_halloween_aHR0cD",
+    "Name": "Vilhou4 Halloween",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou4_halloween.jpg",
+    "MeshFilename": "vilhou_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou4_halloween.jpg"
+  },
+  {
+    "Id": "vilhou4_aHR0cD",
+    "Name": "Vilhou4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzcvMzIwMjM1MTA0NDI2NjAvbGlicmFyeS50YXJh",
+    "TextureFilename": "vilhou4.jpg",
+    "MeshFilename": "vilhou_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: vilhou4.jpg"
+  },
+  {
+    "Id": "blocks_aHR0cD",
+    "Name": "Blocks",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "blocks.jpg",
+    "MeshFilename": "blocks.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: blocks.jpg"
+  },
+  {
+    "Id": "broktank_aHR0cD",
+    "Name": "Broktank",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "broktank.jpg",
+    "MeshFilename": "brok_tank.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: broktank.jpg"
+  },
+  {
+    "Id": "chest01_aHR0cD",
+    "Name": "Chest01",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest01.jpg",
+    "MeshFilename": "chest01.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest01.jpg"
+  },
+  {
+    "Id": "chest02_aHR0cD",
+    "Name": "Chest02",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest02.jpg",
+    "MeshFilename": "chest02.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest02.jpg"
+  },
+  {
+    "Id": "chest03_aHR0cD",
+    "Name": "Chest03",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest03.jpg",
+    "MeshFilename": "chest03.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest03.jpg"
+  },
+  {
+    "Id": "chest04_aHR0cD",
+    "Name": "Chest04",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest04.jpg",
+    "MeshFilename": "chest04.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest04.jpg"
+  },
+  {
+    "Id": "chest05_aHR0cD",
+    "Name": "Chest05",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest05.jpg",
+    "MeshFilename": "chest05.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest05.jpg"
+  },
+  {
+    "Id": "chest06_aHR0cD",
+    "Name": "Chest06",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "chest06.jpg",
+    "MeshFilename": "chest06.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: chest06.jpg"
+  },
+  {
+    "Id": "post_aHR0cD",
+    "Name": "Post",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "post.jpg",
+    "MeshFilename": "post.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: post.jpg"
+  },
+  {
+    "Id": "tube_1_aHR0cD",
+    "Name": "Tube 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "tube_1.jpg",
+    "MeshFilename": "tube_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tube_1.jpg"
+  },
+  {
+    "Id": "tube_2_aHR0cD",
+    "Name": "Tube 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "tube_2.jpg",
+    "MeshFilename": "tube_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tube_2.jpg"
+  },
+  {
+    "Id": "tube_3_aHR0cD",
+    "Name": "Tube 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "tube_3.jpg",
+    "MeshFilename": "tube_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tube_3.jpg"
+  },
+  {
+    "Id": "tube_4_aHR0cD",
+    "Name": "Tube 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzEvMzIwMjM1MTA0NDIzMTEvbGlicmFyeS50YXJh",
+    "TextureFilename": "tube_4.jpg",
+    "MeshFilename": "tube_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tube_4.jpg"
+  },
+  {
+    "Id": "tree01_aHR0cD",
+    "Name": "Tree01",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzUvMzIwMjM1MTA0NDI1NzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "tree01.jpg",
+    "MeshFilename": "tree01.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tree01.jpg"
+  },
+  {
+    "Id": "tree02_aHR0cD",
+    "Name": "Tree02",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8yNzUvMzIwMjM1MTA0NDI1NzcvbGlicmFyeS50YXJh",
+    "TextureFilename": "tree02.jpg",
+    "MeshFilename": "tree02.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tree02.jpg"
+  },
+  {
+    "Id": "dark_gravel_aHR0cD",
+    "Name": "Dark Gravel",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dark_gravel.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dark_gravel.jpg"
+  },
+  {
+    "Id": "dd_cor_1_aHR0cD",
+    "Name": "Dd Cor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_cor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_cor_1.jpg"
+  },
+  {
+    "Id": "dd_cor_2_aHR0cD",
+    "Name": "Dd Cor 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_cor_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_cor_2.jpg"
+  },
+  {
+    "Id": "dd_cor_3_aHR0cD",
+    "Name": "Dd Cor 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_cor_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_cor_3.jpg"
+  },
+  {
+    "Id": "dd_cor_4_aHR0cD",
+    "Name": "Dd Cor 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_cor_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_cor_4.jpg"
+  },
+  {
+    "Id": "dd_incor_1_aHR0cD",
+    "Name": "Dd Incor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_incor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_incor_1.jpg"
+  },
+  {
+    "Id": "dd_incor_2_aHR0cD",
+    "Name": "Dd Incor 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_incor_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_incor_2.jpg"
+  },
+  {
+    "Id": "dd_tr_1_aHR0cD",
+    "Name": "Dd Tr 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_tr_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_tr_1.jpg"
+  },
+  {
+    "Id": "dd_tr_2_aHR0cD",
+    "Name": "Dd Tr 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_tr_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_tr_2.jpg"
+  },
+  {
+    "Id": "dd_tr_3_aHR0cD",
+    "Name": "Dd Tr 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_tr_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_tr_3.jpg"
+  },
+  {
+    "Id": "dd_tr_4_aHR0cD",
+    "Name": "Dd Tr 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dd_tr_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dd_tr_4.jpg"
+  },
+  {
+    "Id": "dg_cor_1_aHR0cD",
+    "Name": "Dg Cor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_cor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_cor_1.jpg"
+  },
+  {
+    "Id": "dg_cor_2_aHR0cD",
+    "Name": "Dg Cor 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_cor_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_cor_2.jpg"
+  },
+  {
+    "Id": "dg_cor_3_aHR0cD",
+    "Name": "Dg Cor 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_cor_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_cor_3.jpg"
+  },
+  {
+    "Id": "dg_cor_4_aHR0cD",
+    "Name": "Dg Cor 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_cor_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_cor_4.jpg"
+  },
+  {
+    "Id": "dg_incor_1_aHR0cD",
+    "Name": "Dg Incor 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_incor_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_incor_1.jpg"
+  },
+  {
+    "Id": "dg_incor_2_aHR0cD",
+    "Name": "Dg Incor 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_incor_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_incor_2.jpg"
+  },
+  {
+    "Id": "dg_tr_1_aHR0cD",
+    "Name": "Dg Tr 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_tr_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_tr_1.jpg"
+  },
+  {
+    "Id": "dg_tr_2_aHR0cD",
+    "Name": "Dg Tr 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_tr_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_tr_2.jpg"
+  },
+  {
+    "Id": "dg_tr_3_aHR0cD",
+    "Name": "Dg Tr 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_tr_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_tr_3.jpg"
+  },
+  {
+    "Id": "dg_tr_4_aHR0cD",
+    "Name": "Dg Tr 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "dg_tr_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: dg_tr_4.jpg"
+  },
+  {
+    "Id": "grass_1_aHR0cD",
+    "Name": "Grass 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_1.jpg"
+  },
+  {
+    "Id": "grass_2_aHR0cD",
+    "Name": "Grass 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_2.jpg"
+  },
+  {
+    "Id": "grass_3_aHR0cD",
+    "Name": "Grass 3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_3.jpg"
+  },
+  {
+    "Id": "grass_4_aHR0cD",
+    "Name": "Grass 4",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_4.jpg"
+  },
+  {
+    "Id": "grass_railroad_aHR0cD",
+    "Name": "Grass Railroad",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_railroad.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_railroad.jpg"
+  },
+  {
+    "Id": "grass2_1_1_aHR0cD",
+    "Name": "Grass2 1 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_1_1.jpg"
+  },
+  {
+    "Id": "grass2_1_2_aHR0cD",
+    "Name": "Grass2 1 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_1_2.jpg"
+  },
+  {
+    "Id": "grass2_2_1_aHR0cD",
+    "Name": "Grass2 2 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_2_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_2_1.jpg"
+  },
+  {
+    "Id": "grass2_2_2_aHR0cD",
+    "Name": "Grass2 2 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_2_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_2_2.jpg"
+  },
+  {
+    "Id": "grass2_2_3_aHR0cD",
+    "Name": "Grass2 2 3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_2_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_2_3.jpg"
+  },
+  {
+    "Id": "grass2_2_4_aHR0cD",
+    "Name": "Grass2 2 4",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_2_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_2_4.jpg"
+  },
+  {
+    "Id": "grass2_2_5_aHR0cD",
+    "Name": "Grass2 2 5",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2_2_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2_2_5.jpg"
+  },
+  {
+    "Id": "grass3_1_1_aHR0cD",
+    "Name": "Grass3 1 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_1_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_1_1.jpg"
+  },
+  {
+    "Id": "grass3_1_2_aHR0cD",
+    "Name": "Grass3 1 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_1_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_1_2.jpg"
+  },
+  {
+    "Id": "grass3_2_1_aHR0cD",
+    "Name": "Grass3 2 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_2_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_2_1.jpg"
+  },
+  {
+    "Id": "grass3_2_2_aHR0cD",
+    "Name": "Grass3 2 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_2_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_2_2.jpg"
+  },
+  {
+    "Id": "grass3_3_1_aHR0cD",
+    "Name": "Grass3 3 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_3_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_3_1.jpg"
+  },
+  {
+    "Id": "grass3_3_2_aHR0cD",
+    "Name": "Grass3 3 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_3_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_3_2.jpg"
+  },
+  {
+    "Id": "grass3_3_3_aHR0cD",
+    "Name": "Grass3 3 3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass3_3_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass3_3_3.jpg"
+  },
+  {
+    "Id": "gravel_aHR0cD",
+    "Name": "Gravel",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMC8zMjAyMzUxMDQzNTcxMy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "gravel.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: gravel.jpg"
+  },
+  {
+    "Id": "hang_1_aHR0cD",
+    "Name": "Hang 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMy8zMjAyMzUxMDQzNjExMC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "hang_1.jpg",
+    "MeshFilename": "hang_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hang_1.jpg"
+  },
+  {
+    "Id": "hang_2_aHR0cD",
+    "Name": "Hang 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMy8zMjAyMzUxMDQzNjExMC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "hang_2.jpg",
+    "MeshFilename": "hang_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hang_2.jpg"
+  },
+  {
+    "Id": "hang_3_aHR0cD",
+    "Name": "Hang 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zMy8zMjAyMzUxMDQzNjExMC9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "hang_3.jpg",
+    "MeshFilename": "hang_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hang_3.jpg"
+  },
+  {
+    "Id": "brid_1_aHR0cD",
+    "Name": "Brid 1",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_1.png",
+    "MeshFilename": "brid_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_1.png"
+  },
+  {
+    "Id": "brid_1_aHR0cD",
+    "Name": "Brid 1",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_1.png",
+    "MeshFilename": "brid_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_1.png"
+  },
+  {
+    "Id": "brid_2_aHR0cD",
+    "Name": "Brid 2",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_2.jpg",
+    "MeshFilename": "brid_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_2.jpg"
+  },
+  {
+    "Id": "brid_21_aHR0cD",
+    "Name": "Brid 21",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_21.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_21.jpg"
+  },
+  {
+    "Id": "brid_22_aHR0cD",
+    "Name": "Brid 22",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_22.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_22.jpg"
+  },
+  {
+    "Id": "brid_23_aHR0cD",
+    "Name": "Brid 23",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_23.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_23.jpg"
+  },
+  {
+    "Id": "brid_24_aHR0cD",
+    "Name": "Brid 24",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_24.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_24.jpg"
+  },
+  {
+    "Id": "brid_3_aHR0cD",
+    "Name": "Brid 3",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_3.jpg",
+    "MeshFilename": "brid_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_3.jpg"
+  },
+  {
+    "Id": "brid_4_aHR0cD",
+    "Name": "Brid 4",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_4.jpg",
+    "MeshFilename": "brid_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_4.jpg"
+  },
+  {
+    "Id": "brid_5_aHR0cD",
+    "Name": "Brid 5",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_5.jpg",
+    "MeshFilename": "brid_5.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_5.jpg"
+  },
+  {
+    "Id": "brid_6_aHR0cD",
+    "Name": "Brid 6",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_6.jpg",
+    "MeshFilename": "brid_6.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_6.jpg"
+  },
+  {
+    "Id": "brid_61_aHR0cD",
+    "Name": "Brid 61",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_61.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_61.jpg"
+  },
+  {
+    "Id": "brid_7_aHR0cD",
+    "Name": "Brid 7",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_7.jpg",
+    "MeshFilename": "brid_7.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_7.jpg"
+  },
+  {
+    "Id": "brid_71_aHR0cD",
+    "Name": "Brid 71",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_71.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_71.jpg"
+  },
+  {
+    "Id": "brid_72_aHR0cD",
+    "Name": "Brid 72",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "brid_72.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: brid_72.jpg"
+  },
+  {
+    "Id": "st_br1_aHR0cD",
+    "Name": "St Br1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNS8zMjAyMzUxMDQzNjE2MS9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "st_br1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: st_br1.jpg"
+  },
+  {
+    "Id": "contain_aHR0cD",
+    "Name": "Contain",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNy8zMjAyMzUxMDQzNjI1Ny9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "contain.jpg",
+    "MeshFilename": "contain.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: contain.jpg"
+  },
+  {
+    "Id": "contain2_aHR0cD",
+    "Name": "Contain2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNy8zMjAyMzUxMDQzNjI1Ny9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "contain2.jpg",
+    "MeshFilename": "contain.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: contain2.jpg"
+  },
+  {
+    "Id": "tower_aHR0cD",
+    "Name": "Tower",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNy8zMjAyMzUxMDQzNjI1Ny9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "tower.png",
+    "MeshFilename": "tower.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tower.png"
+  },
+  {
+    "Id": "tower1_aHR0cD",
+    "Name": "Tower1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNy8zMjAyMzUxMDQzNjI1Ny9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "tower1.png",
+    "MeshFilename": "tower.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: tower1.png"
+  },
+  {
+    "Id": "watch_to_aHR0cD",
+    "Name": "Watch To",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMi8zNy8zMjAyMzUxMDQzNjI1Ny9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "watch_to.png",
+    "MeshFilename": "watch_to.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: watch_to.png"
+  },
+  {
+    "Id": "bridge_1_aHR0cD",
+    "Name": "Bridge 1",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8yMjEvMzIwMjM1MTA0MzM3NDcvbGlicmFyeS50YXJh",
+    "TextureFilename": "bridge_1.jpg",
+    "MeshFilename": "bridge_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: bridge_1.jpg"
+  },
+  {
+    "Id": "bridge_4_aHR0cD",
+    "Name": "Bridge 4",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8yMjEvMzIwMjM1MTA0MzM3NDcvbGlicmFyeS50YXJh",
+    "TextureFilename": "bridge_4.jpg",
+    "MeshFilename": "bridge_4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: bridge_4.jpg"
+  },
+  {
+    "Id": "bridge_8_aHR0cD",
+    "Name": "Bridge 8",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8yMjEvMzIwMjM1MTA0MzM3NDcvbGlicmFyeS50YXJh",
+    "TextureFilename": "bridge_8.jpg",
+    "MeshFilename": "bridge_8.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: bridge_8.jpg"
+  },
+  {
+    "Id": "bk_roof_aHR0cD",
+    "Name": "Bk Roof",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzEvMzIwMjM1MTA0MzQwNTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "bk_roof.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bk_roof.jpg"
+  },
+  {
+    "Id": "h_roofc2_aHR0cD",
+    "Name": "H Roofc2",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzEvMzIwMjM1MTA0MzQwNTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "h_roofc2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: h_roofc2.jpg"
+  },
+  {
+    "Id": "hs_roof_aHR0cD",
+    "Name": "Hs Roof",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzEvMzIwMjM1MTA0MzQwNTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_roof.jpg",
+    "MeshFilename": "hs_roof.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_roof.jpg"
+  },
+  {
+    "Id": "hs_roof1_aHR0cD",
+    "Name": "Hs Roof1",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzEvMzIwMjM1MTA0MzQwNTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_roof1.jpg",
+    "MeshFilename": "hs_roof1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_roof1.jpg"
+  },
+  {
+    "Id": "hs_roofc_aHR0cD",
+    "Name": "Hs Roofc",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzEvMzIwMjM1MTA0MzQwNTUvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_roofc.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_roofc.jpg"
+  },
+  {
+    "Id": "big_wall_aHR0cD",
+    "Name": "Big Wall",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "big_wall.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: big_wall.jpg"
+  },
+  {
+    "Id": "h_tube1_aHR0cD",
+    "Name": "H Tube1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "h_tube1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: h_tube1.jpg"
+  },
+  {
+    "Id": "h_tube3_aHR0cD",
+    "Name": "H Tube3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "h_tube3.jpg",
+    "MeshFilename": "h_tube3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: h_tube3.jpg"
+  },
+  {
+    "Id": "hs_brid2_aHR0cD",
+    "Name": "Hs Brid2",
+    "Category": "Bridges",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_brid2.jpg",
+    "MeshFilename": "hs_brid2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_brid2.jpg"
+  },
+  {
+    "Id": "hs_corn1_aHR0cD",
+    "Name": "Hs Corn1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_corn1.jpg",
+    "MeshFilename": "hs_corn1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_corn1.jpg"
+  },
+  {
+    "Id": "hs_corn2_aHR0cD",
+    "Name": "Hs Corn2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_corn2.jpg",
+    "MeshFilename": "hs_corn2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_corn2.jpg"
+  },
+  {
+    "Id": "hs_par10_aHR0cD",
+    "Name": "Hs Par10",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_par10.jpg",
+    "MeshFilename": "hs_par10.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_par10.jpg"
+  },
+  {
+    "Id": "hs_par12_aHR0cD",
+    "Name": "Hs Par12",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_par12.jpg",
+    "MeshFilename": "hs_par12.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_par12.jpg"
+  },
+  {
+    "Id": "hs_part1_aHR0cD",
+    "Name": "Hs Part1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part1.jpg",
+    "MeshFilename": "hs_part1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part1.jpg"
+  },
+  {
+    "Id": "hs_part2_aHR0cD",
+    "Name": "Hs Part2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part2.jpg",
+    "MeshFilename": "hs_part2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part2.jpg"
+  },
+  {
+    "Id": "hs_part3_aHR0cD",
+    "Name": "Hs Part3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part3.jpg",
+    "MeshFilename": "hs_part3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part3.jpg"
+  },
+  {
+    "Id": "hs_part4_aHR0cD",
+    "Name": "Hs Part4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part4.jpg",
+    "MeshFilename": "hs_part4.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part4.jpg"
+  },
+  {
+    "Id": "hs_part6_aHR0cD",
+    "Name": "Hs Part6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part6.jpg",
+    "MeshFilename": "hs_part6.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part6.jpg"
+  },
+  {
+    "Id": "hs_part7_aHR0cD",
+    "Name": "Hs Part7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part7.jpg",
+    "MeshFilename": "hs_part7.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part7.jpg"
+  },
+  {
+    "Id": "hs_part8_aHR0cD",
+    "Name": "Hs Part8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part8.jpg",
+    "MeshFilename": "hs_part8.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part8.jpg"
+  },
+  {
+    "Id": "hs_part9_aHR0cD",
+    "Name": "Hs Part9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_part9.jpg",
+    "MeshFilename": "hs_part9.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_part9.jpg"
+  },
+  {
+    "Id": "hs_wl5_aHR0cD",
+    "Name": "Hs Wl5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_wl5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_wl5.jpg"
+  },
+  {
+    "Id": "hs_wl51_aHR0cD",
+    "Name": "Hs Wl51",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_wl51.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_wl51.jpg"
+  },
+  {
+    "Id": "hs_wl52_aHR0cD",
+    "Name": "Hs Wl52",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_wl52.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_wl52.jpg"
+  },
+  {
+    "Id": "hs_wl53_aHR0cD",
+    "Name": "Hs Wl53",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzMvMzIwMjM1MTA0MzQxMzAvbGlicmFyeS50YXJh",
+    "TextureFilename": "hs_wl53.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: hs_wl53.jpg"
+  },
+  {
+    "Id": "bush1_aHR0cD",
+    "Name": "Bush1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzUvMzIwMjM1MTA0MzQyMTQvbGlicmFyeS50YXJh",
+    "TextureFilename": "bush1.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bush1.png"
+  },
+  {
+    "Id": "bush2_aHR0cD",
+    "Name": "Bush2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzUvMzIwMjM1MTA0MzQyMTQvbGlicmFyeS50YXJh",
+    "TextureFilename": "bush2.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bush2.png"
+  },
+  {
+    "Id": "wood1_aHR0cD",
+    "Name": "Wood1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8zNzUvMzIwMjM1MTA0MzQyMTQvbGlicmFyeS50YXJh",
+    "TextureFilename": "wood1.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: wood1.png"
+  },
+  {
+    "Id": "wall_1_aHR0cD",
+    "Name": "Wall 1",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80NS8zMjAyMzUxMDQ0Mjc1My9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_1.jpg",
+    "MeshFilename": "wall_1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_1.jpg"
+  },
+  {
+    "Id": "wall_2_aHR0cD",
+    "Name": "Wall 2",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80NS8zMjAyMzUxMDQ0Mjc1My9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_2.jpg",
+    "MeshFilename": "wall_2.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_2.jpg"
+  },
+  {
+    "Id": "wall_3_aHR0cD",
+    "Name": "Wall 3",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80NS8zMjAyMzUxMDQ0Mjc1My9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall_3.jpg",
+    "MeshFilename": "wall_3.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall_3.jpg"
+  },
+  {
+    "Id": "wallcorn_aHR0cD",
+    "Name": "Wallcorn",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80NS8zMjAyMzUxMDQ0Mjc1My9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wallcorn.jpg",
+    "MeshFilename": "wallcorn.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wallcorn.jpg"
+  },
+  {
+    "Id": "wgates_aHR0cD",
+    "Name": "Wgates",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80NS8zMjAyMzUxMDQ0Mjc1My9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wgates.jpg",
+    "MeshFilename": "wgates.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wgates.jpg"
+  },
+  {
+    "Id": "corner_aHR0cD",
+    "Name": "Corner",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "corner.jpg",
+    "MeshFilename": "corner.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: corner.jpg"
+  },
+  {
+    "Id": "door_aHR0cD",
+    "Name": "Door",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "door.jpg",
+    "MeshFilename": "door.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: door.jpg"
+  },
+  {
+    "Id": "end_aHR0cD",
+    "Name": "End",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "end.jpg",
+    "MeshFilename": "end.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: end.jpg"
+  },
+  {
+    "Id": "outwd_aHR0cD",
+    "Name": "Outwd",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "outwd.jpg",
+    "MeshFilename": "outwd.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: outwd.jpg"
+  },
+  {
+    "Id": "wall_aHR0cD",
+    "Name": "Wall",
+    "Category": "Walls & Fences",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "wall.jpg",
+    "MeshFilename": "wall.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: wall.jpg"
+  },
+  {
+    "Id": "window_aHR0cD",
+    "Name": "Window",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy80Ny8zMjAyMzUxMDQ0MzAyNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "window.jpg",
+    "MeshFilename": "window.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: window.jpg"
+  },
+  {
+    "Id": "bush2_aHR0cD",
+    "Name": "Bush2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "bush2.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: bush2.png"
+  },
+  {
+    "Id": "crack_1_aHR0cD",
+    "Name": "Crack 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_1.jpg"
+  },
+  {
+    "Id": "crack_2_aHR0cD",
+    "Name": "Crack 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_2.jpg"
+  },
+  {
+    "Id": "crack_3_aHR0cD",
+    "Name": "Crack 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_3.jpg"
+  },
+  {
+    "Id": "crack_4_aHR0cD",
+    "Name": "Crack 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_4.jpg"
+  },
+  {
+    "Id": "crack_5_aHR0cD",
+    "Name": "Crack 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_5.jpg"
+  },
+  {
+    "Id": "crack_6_aHR0cD",
+    "Name": "Crack 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_6.jpg"
+  },
+  {
+    "Id": "crack_7_aHR0cD",
+    "Name": "Crack 7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_7.jpg"
+  },
+  {
+    "Id": "crack_8_aHR0cD",
+    "Name": "Crack 8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_8.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_8.jpg"
+  },
+  {
+    "Id": "crack_9_aHR0cD",
+    "Name": "Crack 9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "crack_9.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: crack_9.jpg"
+  },
+  {
+    "Id": "fade_distant_aHR0cD",
+    "Name": "Fade Distant",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fade_distant.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fade_distant.jpg"
+  },
+  {
+    "Id": "fade_dpng_aHR0cD",
+    "Name": "Fade Dpng",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fade_dpng.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fade_dpng.png"
+  },
+  {
+    "Id": "fade_tpng_aHR0cD",
+    "Name": "Fade Tpng",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fade_tpng.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fade_tpng.png"
+  },
+  {
+    "Id": "fade_turn_aHR0cD",
+    "Name": "Fade Turn",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fade_turn.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fade_turn.jpg"
+  },
+  {
+    "Id": "fade_aHR0cD",
+    "Name": "Fade",
+    "Category": "Ground & Tiles",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "fade.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: fade.jpg"
+  },
+  {
+    "Id": "grass_1_aHR0cD",
+    "Name": "Grass 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_1.jpg"
+  },
+  {
+    "Id": "grass_2_aHR0cD",
+    "Name": "Grass 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_2.jpg"
+  },
+  {
+    "Id": "grass_3_aHR0cD",
+    "Name": "Grass 3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_3.jpg"
+  },
+  {
+    "Id": "grass_path_1_aHR0cD",
+    "Name": "Grass Path 1",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_path_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_path_1.jpg"
+  },
+  {
+    "Id": "grass_path_2_aHR0cD",
+    "Name": "Grass Path 2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_path_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_path_2.jpg"
+  },
+  {
+    "Id": "grass_path_3_aHR0cD",
+    "Name": "Grass Path 3",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass_path_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass_path_3.jpg"
+  },
+  {
+    "Id": "grass_aHR0cD",
+    "Name": "Grass",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass.jpg"
+  },
+  {
+    "Id": "grass2x2_aHR0cD",
+    "Name": "Grass2x2",
+    "Category": "Foliage",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "grass2x2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: grass2x2.jpg"
+  },
+  {
+    "Id": "half_aHR0cD",
+    "Name": "Half",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "half.jpg",
+    "MeshFilename": "half.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: half.jpg"
+  },
+  {
+    "Id": "halfx1_aHR0cD",
+    "Name": "Halfx1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "halfx1.jpg",
+    "MeshFilename": "halfx1.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: halfx1.jpg"
+  },
+  {
+    "Id": "khak1x1_aHR0cD",
+    "Name": "Khak1x1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "khak1x1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: khak1x1.jpg"
+  },
+  {
+    "Id": "khak1x2_aHR0cD",
+    "Name": "Khak1x2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "khak1x2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: khak1x2.jpg"
+  },
+  {
+    "Id": "khak2x2_aHR0cD",
+    "Name": "Khak2x2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "khak2x2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: khak2x2.jpg"
+  },
+  {
+    "Id": "lale_aHR0cD",
+    "Name": "Lale",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lale.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lale.png"
+  },
+  {
+    "Id": "lale2_aHR0cD",
+    "Name": "Lale2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lale2.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lale2.png"
+  },
+  {
+    "Id": "lale3_aHR0cD",
+    "Name": "Lale3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lale3.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lale3.png"
+  },
+  {
+    "Id": "lale4_aHR0cD",
+    "Name": "Lale4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lale4.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lale4.png"
+  },
+  {
+    "Id": "lale5_aHR0cD",
+    "Name": "Lale5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "lale5.png",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: lale5.png"
+  },
+  {
+    "Id": "newnakhl_aHR0cD",
+    "Name": "Newnakhl",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "newnakhl.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: newnakhl.jpg"
+  },
+  {
+    "Id": "parche_aHR0cD",
+    "Name": "Parche",
+    "Category": "Houses & Buildings",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "parche.jpg",
+    "MeshFilename": "parche.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: parche.jpg"
+  },
+  {
+    "Id": "path_1_aHR0cD",
+    "Name": "Path 1",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_1.jpg"
+  },
+  {
+    "Id": "path_10_aHR0cD",
+    "Name": "Path 10",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_10.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_10.jpg"
+  },
+  {
+    "Id": "path_2_aHR0cD",
+    "Name": "Path 2",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_2.jpg"
+  },
+  {
+    "Id": "path_3_aHR0cD",
+    "Name": "Path 3",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_3.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_3.jpg"
+  },
+  {
+    "Id": "path_4_aHR0cD",
+    "Name": "Path 4",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_4.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_4.jpg"
+  },
+  {
+    "Id": "path_5_aHR0cD",
+    "Name": "Path 5",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_5.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_5.jpg"
+  },
+  {
+    "Id": "path_6_aHR0cD",
+    "Name": "Path 6",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_6.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_6.jpg"
+  },
+  {
+    "Id": "path_7_aHR0cD",
+    "Name": "Path 7",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_7.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_7.jpg"
+  },
+  {
+    "Id": "path_8_aHR0cD",
+    "Name": "Path 8",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_8.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_8.jpg"
+  },
+  {
+    "Id": "path_9_aHR0cD",
+    "Name": "Path 9",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_9.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_9.jpg"
+  },
+  {
+    "Id": "path_full_aHR0cD",
+    "Name": "Path Full",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path_full.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path_full.jpg"
+  },
+  {
+    "Id": "path_aHR0cD",
+    "Name": "Path",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "path.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: path.jpg"
+  },
+  {
+    "Id": "rabet_aHR0cD",
+    "Name": "Rabet",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "rabet.jpg",
+    "MeshFilename": "rabet.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: rabet.jpg"
+  },
+  {
+    "Id": "straw_1x1_aHR0cD",
+    "Name": "Straw 1X1",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "straw_1x1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: straw_1x1.jpg"
+  },
+  {
+    "Id": "straw_2_aHR0cD",
+    "Name": "Straw 2",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "straw_2.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: straw_2.jpg"
+  },
+  {
+    "Id": "straw_half_aHR0cD",
+    "Name": "Straw Half",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "straw_half.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: straw_half.jpg"
+  },
+  {
+    "Id": "straw_halfx1_aHR0cD",
+    "Name": "Straw Halfx1",
+    "Category": "Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "straw_halfx1.jpg",
+    "MeshFilename": null,
+    "ThumbnailPath": "",
+    "Description": "Texture: straw_halfx1.jpg"
+  },
+  {
+    "Id": "yonje_aHR0cD",
+    "Name": "Yonje",
+    "Category": "Misc Props",
+    "LibraryBase64Url": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMy81MS8zMjAyMzUxMDQ0MzExNy9saWJyYXJ5LnRhcmE=",
+    "TextureFilename": "yonje.jpg",
+    "MeshFilename": "yonje.3ds",
+    "ThumbnailPath": "",
+    "Description": "Texture: yonje.jpg"
+  }
+]

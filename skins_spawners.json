@@ -1,0 +1,26 @@
+[
+  {
+    "Category": "Spawners",
+    "ItemName": "Flag Pedestals",
+    "Name": "Red Flag Pedestal LC",
+    "SourceFolder": "Textures/Spawners/FlagPedestalsLC/Red",
+    "PreviewImage": "Textures/Spawners/FlagPedestalsLC/Red/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMzNC8zMjAyMzUxMDM2MzE0NS9mc19yZWQuanBn"
+  },
+  {
+    "Category": "Spawners",
+    "ItemName": "Flag Pedestals",
+    "Name": "Blue Flag Pedestal LC",
+    "SourceFolder": "Textures/Spawners/FlagPedestalsLC/Blue",
+    "PreviewImage": "Textures/Spawners/FlagPedestalsLC/Blue/details.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMzMi8zMjAyMzUxMDM2MzExNy9mc19ibHVlLmpwZw=="
+  },
+  {
+    "Category": "Spawners",
+    "ItemName": "Parachutes",
+    "Name": "Original Parachute",
+    "SourceFolder": "Textures/Spawners/Parachute/Template",
+    "PreviewImage": "Textures/Spawners/Parachute/Template/para.jpg",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzI0Ny8zMjAzMDYyNDU0MDExMS9wYXJhLmpwZw=="
+  }
+]

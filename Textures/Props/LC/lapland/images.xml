@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<images>
+  <image name="bg.jpg" new-name="bg.jpg" />
+  <image name="gr11_1.jpg" new-name="gr11_1.jpg" />
+  <image name="gr11_10.jpg" new-name="gr11_10.jpg" />
+  <image name="gr11_11.jpg" new-name="gr11_11.jpg" />
+  <image name="gr11_2.jpg" new-name="gr11_2.jpg" />
+  <image name="gr11_3.jpg" new-name="gr11_3.jpg" />
+  <image name="gr11_6.jpg" new-name="gr11_6.jpg" />
+  <image name="gr11_7.jpg" new-name="gr11_7.jpg" />
+  <image name="gr11_8.jpg" new-name="gr11_8.jpg" />
+  <image name="gr21_1.jpg" new-name="gr21_1.jpg" />
+  <image name="gr22_1.jpg" new-name="gr22_1.jpg" />
+  <image name="gr32_1.jpg" new-name="gr32_1.jpg" />
+  <image name="gr33_1.jpg" new-name="gr33_1.jpg" />
+  <image name="grcl.jpg" new-name="grcl.jpg" />
+  <image name="grcl1.jpg" new-name="grcl1.jpg" />
+  <image name="grcl_1.jpg" new-name="grcl_1.jpg" />
+  <image name="grcl_2.jpg" new-name="grcl_2.jpg" />
+  <image name="grcl_3.jpg" new-name="grcl_3.jpg" />
+  <image name="ice11_0.jpg" new-name="ice11_0.jpg" />
+  <image name="ice11_1.jpg" new-name="ice11_1.jpg" />
+  <image name="ice11_2.jpg" new-name="ice11_2.jpg" />
+  <image name="ice11_3.jpg" new-name="ice11_3.jpg" />
+  <image name="ice11_4.jpg" new-name="ice11_4.jpg" />
+  <image name="l.jpg" new-name="l.jpg" />
+  <image name="lolipop.jpg" new-name="lolipop.jpg" />
+  <image name="nwood1.png" new-name="nwood1.jpg" alpha="nwood1.gif" />
+  <image name="nwood2.png" new-name="nwood2.jpg" alpha="nwood2.gif" />
+  <image name="peter.jpg" new-name="peter.jpg" />
+  <image name="pt1.jpg" new-name="pt1.jpg" />
+  <image name="pt1_1.jpg" new-name="pt1_1.jpg" />
+  <image name="pt2.jpg" new-name="pt2.jpg" />
+  <image name="pt2_1.jpg" new-name="pt2_1.jpg" />
+  <image name="pt3.jpg" new-name="pt3.jpg" />
+  <image name="pt3_1.jpg" new-name="pt3_1.jpg" />
+  <image name="snigga.jpg" new-name="snigga.jpg" />
+  <image name="tr1.jpg" new-name="tr1.jpg" />
+  <image name="tr1_1.jpg" new-name="tr1_1.jpg" />
+  <image name="v1.jpg" new-name="v1.jpg" />
+  <image name="wf.jpg" new-name="wf.jpg" />
+  <image name="wood1.png" new-name="wood1.jpg" alpha="wood1.gif" />
+  <image name="wood2.png" new-name="wood2.jpg" alpha="wood2.gif" />
+  <image name="wood3.png" new-name="wood3.jpg" alpha="wood3.gif" />
+</images>

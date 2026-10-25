@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<library name="Domination Keypoints" id="domination_keypoints">
+  <prop-group name="default">
+    <prop name="Domination Keypoint">
+      <mesh file="dom_stand.3ds">
+        <texture name="Neutral" diffuse-map="dom_stand_gray.jpg" />
+        <texture name="Blue" diffuse-map="dom_stand_blue.jpg" />
+        <texture name="Red" diffuse-map="dom_stand_red.jpg" />
+      </mesh>
+    </prop>
+  </prop-group>
+</library>

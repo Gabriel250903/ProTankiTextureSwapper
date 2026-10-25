@@ -1,0 +1,128 @@
+<UserControl
+  x:Class="TextureSwapper.Views.Controls.CustomColorPicker"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  x:Name="Root"
+  d:DesignHeight="32"
+  d:DesignWidth="32"
+  mc:Ignorable="d"
+>
+  <Grid>
+    <ToggleButton
+      x:Name="SwatchButton"
+      Margin="0"
+      Padding="0"
+      HorizontalAlignment="Left"
+      Background="Transparent"
+      BorderThickness="0"
+    >
+      <Border
+        Width="32"
+        Height="32"
+        Background="{Binding SelectedColorBrush, ElementName=Root}"
+        BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="4"
+        Cursor="Hand"
+      />
+    </ToggleButton>
+
+    <Popup
+      AllowsTransparency="True"
+      IsOpen="{Binding IsChecked, ElementName=SwatchButton}"
+      Placement="Bottom"
+      PlacementTarget="{Binding ElementName=SwatchButton}"
+      StaysOpen="False"
+      VerticalOffset="4"
+    >
+      <Border
+        Width="240"
+        Padding="15"
+        Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+        BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="8"
+      >
+        <Border.Effect>
+          <DropShadowEffect BlurRadius="10" Opacity="0.3" ShadowDepth="2" />
+        </Border.Effect>
+        <StackPanel>
+          <Border
+            Height="40"
+            Margin="0,0,0,10"
+            Background="{Binding SelectedColorBrush, ElementName=Root}"
+            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+          />
+
+          <TextBlock
+            Margin="0,0,0,4"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="{DynamicResource Loc_Color_HexColor}"
+          />
+          <ui:TextBox
+            Margin="0,0,0,12"
+            Text="{Binding HexValue, ElementName=Root, UpdateSourceTrigger=PropertyChanged}"
+          />
+
+          <TextBlock
+            Margin="0,0,0,2"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="{DynamicResource Loc_Color_Red}"
+          />
+          <Slider
+            Margin="0,0,0,8"
+            Maximum="255"
+            Minimum="0"
+            Value="{Binding R, ElementName=Root}"
+          />
+
+          <TextBlock
+            Margin="0,0,0,2"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="{DynamicResource Loc_Color_Green}"
+          />
+          <Slider
+            Margin="0,0,0,8"
+            Maximum="255"
+            Minimum="0"
+            Value="{Binding G, ElementName=Root}"
+          />
+
+          <TextBlock
+            Margin="0,0,0,2"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="{DynamicResource Loc_Color_Blue}"
+          />
+          <Slider
+            Margin="0,0,0,8"
+            Maximum="255"
+            Minimum="0"
+            Value="{Binding B, ElementName=Root}"
+          />
+
+          <TextBlock
+            Margin="0,0,0,2"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="{DynamicResource Loc_Color_Alpha}"
+          />
+          <Slider
+            Margin="0,0,0,0"
+            Maximum="255"
+            Minimum="0"
+            Value="{Binding A, ElementName=Root}"
+          />
+        </StackPanel>
+      </Border>
+    </Popup>
+  </Grid>
+</UserControl>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<library name="Parachutes" id="parachutes">
+  <prop-group name="default">
+    <prop name="Parachute">
+      <mesh file="parachute.3ds">
+        <texture name="Parachute" diffuse-map="parachute.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Parachute Inner">
+      <mesh file="parachute_inner.3ds">
+        <texture name="Parachute Inner" diffuse-map="parachute_inner.jpg" />
+      </mesh>
+    </prop>
+    <prop name="Cords">
+      <sprite file="cords.png" />
+    </prop>
+  </prop-group>
+</library>

@@ -1,17 +1,21 @@
-using Serilog;
+using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
-using TextureSwapper.Models;
-using TextureSwapper.Services.Interfaces;
+using System.Threading;
+using Serilog;
+using TextureSwapper.Core.Interfaces;
+using TextureSwapper.Core.Models;
 
 namespace TextureSwapper.Services
 {
     public sealed class SettingsService : ISettingsService
     {
-        private static readonly string SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+        private static readonly string SettingsPath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "Settings.json"
+        );
         private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
+        private static readonly object _saveLock = new();
 
         public AppSettings Load()
         {
@@ -20,28 +24,15 @@ namespace TextureSwapper.Services
                 if (File.Exists(SettingsPath))
                 {
                     string json = File.ReadAllText(SettingsPath);
-                    AppSettings settings = JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions) ?? new AppSettings();
-
-                    if (!string.IsNullOrEmpty(settings.HuggingFaceToken))
-                    {
-                        try
-                        {
-                            byte[] encryptedBytes = Convert.FromBase64String(settings.HuggingFaceToken);
-                            byte[] decryptedBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
-                            settings.HuggingFaceToken = Encoding.UTF8.GetString(decryptedBytes);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warning(ex, "Failed to decrypt API token using DPAPI. The token may be corrupted or was not encrypted.");
-                        }
-                    }
-
+                    AppSettings settings =
+                        JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions)
+                        ?? new AppSettings();
                     return settings;
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to load settings.");
+                Log.Error(ex, "Failed to load Settings.");
             }
 
             return new AppSettings();
@@ -49,32 +40,71 @@ namespace TextureSwapper.Services
 
         public void Save(AppSettings settings)
         {
-            try
+            lock (_saveLock)
             {
-                AppSettings copy = JsonSerializer.Deserialize<AppSettings>(JsonSerializer.Serialize(settings, _jsonOptions), _jsonOptions) ?? new AppSettings();
+                string tempPath = SettingsPath + $".tmp_{Guid.NewGuid():N}";
+                try
+                {
+                    string json = JsonSerializer.Serialize(settings, _jsonOptions);
 
-                if (!string.IsNullOrEmpty(copy.HuggingFaceToken))
+                    if (File.Exists(SettingsPath))
+                    {
+                        var attrs = File.GetAttributes(SettingsPath);
+                        if (attrs.HasFlag(FileAttributes.ReadOnly))
+                        {
+                            File.SetAttributes(SettingsPath, attrs & ~FileAttributes.ReadOnly);
+                        }
+                    }
+
+                    File.WriteAllText(tempPath, json);
+
+                    bool moved = false;
+                    for (int attempt = 1; attempt <= 5; attempt++)
+                    {
+                        try
+                        {
+                            File.Move(tempPath, SettingsPath, overwrite: true);
+                            moved = true;
+                            break;
+                        }
+                        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                        {
+                            if (attempt == 5)
+                            {
+                                Log.Warning(ex, "Failed to atomically replace Settings.json via File.Move after 5 attempts. Falling back to direct write.");
+                            }
+                            else
+                            {
+                                Thread.Sleep(30);
+                            }
+                        }
+                    }
+
+                    if (!moved)
+                    {
+                        using var stream = new FileStream(SettingsPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        using var writer = new StreamWriter(stream);
+                        writer.Write(json);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to save Settings.");
+                }
+                finally
                 {
                     try
                     {
-                        byte[] plainBytes = Encoding.UTF8.GetBytes(copy.HuggingFaceToken);
-                        byte[] encryptedBytes = ProtectedData.Protect(plainBytes, null, DataProtectionScope.CurrentUser);
-                        copy.HuggingFaceToken = Convert.ToBase64String(encryptedBytes);
+                        if (File.Exists(tempPath))
+                        {
+                            File.Delete(tempPath);
+                        }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Log.Warning(ex, "Failed to encrypt API token using DPAPI. The token may be corrupted or was not encrypted.");
+                        Log.Error("Failed to delete temporary settings file: {TempPath}", tempPath);
                     }
                 }
-
-                string json = JsonSerializer.Serialize(copy, _jsonOptions);
-                string tempPath = SettingsPath + ".tmp";
-                File.WriteAllText(tempPath, json);
-                File.Move(tempPath, SettingsPath, true);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to save settings.");
             }
         }
     }
