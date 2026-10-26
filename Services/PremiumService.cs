@@ -1893,10 +1893,10 @@ namespace TextureSwapper.Services
                 string endpoint = $"{Constants.GatekeeperWorkerUrl}/license/asset-key";
                 string keyToSend = _lastSettings.PremiumLicenseKey?.Trim() ?? string.Empty;
 
-                var payload = new
+                Dictionary<string, string> payload = new()
                 {
-                    hwid = myHwid,
-                    licenseKey = keyToSend,
+                    { "hwid", myHwid },
+                    { "licenseKey", keyToSend },
                 };
 
                 using HttpRequestMessage req = new(HttpMethod.Post, endpoint)

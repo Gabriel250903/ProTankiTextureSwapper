@@ -37,13 +37,22 @@ namespace TextureSwapper.Services.Composers
         {
             try
             {
-                int texIndex = fullPath.IndexOf("Textures", StringComparison.OrdinalIgnoreCase);
-                if (texIndex < 0)
+                string normalized = fullPath.Replace('\\', '/');
+                int texIndex = normalized.IndexOf("/Textures/", StringComparison.OrdinalIgnoreCase);
+                string relativePath;
+                if (texIndex >= 0)
+                {
+                    relativePath = normalized[(texIndex + 1)..];
+                }
+                else if (normalized.StartsWith("Textures/", StringComparison.OrdinalIgnoreCase))
+                {
+                    relativePath = normalized;
+                }
+                else
                 {
                     return false;
                 }
 
-                string relativePath = fullPath[texIndex..].Replace('\\', '/');
                 string url = $"{Constants.GitHubRawUrl}/{relativePath}";
 
                 Log.Information("Attempting to auto-download missing shot effect template: {Url}", url);

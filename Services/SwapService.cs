@@ -45,10 +45,22 @@ namespace TextureSwapper.Services
         {
             try
             {
-                int texIndex = filePath.IndexOf("Textures", StringComparison.OrdinalIgnoreCase);
-                if (texIndex < 0) return false;
+                string normalized = filePath.Replace('\\', '/');
+                int texIndex = normalized.IndexOf("/Textures/", StringComparison.OrdinalIgnoreCase);
+                string relativePath;
+                if (texIndex >= 0)
+                {
+                    relativePath = normalized[(texIndex + 1)..];
+                }
+                else if (normalized.StartsWith("Textures/", StringComparison.OrdinalIgnoreCase))
+                {
+                    relativePath = normalized;
+                }
+                else
+                {
+                    return false;
+                }
 
-                string relativePath = filePath[texIndex..].Replace('\\', '/');
                 string url = $"{Constants.GitHubRawUrl}/{relativePath}";
 
                 Log.Information("Attempting to auto-download missing asset from GitHub: {Url}", url);
