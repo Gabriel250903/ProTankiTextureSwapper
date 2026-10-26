@@ -22,6 +22,7 @@
   <SkipType name="*Converter*" />
   <SkipType name="*Proxy*" />
   <SkipType name="*App*" />
+  <SkipType name="*AnonymousType*" />
 
   <Module file="$(InPath)\TextureSwapper.dll" />
 </Obfuscator>

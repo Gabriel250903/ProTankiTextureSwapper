@@ -16,6 +16,11 @@ namespace TextureSwapper.Core.Interfaces
             string targetHwid,
             string nickname
         );
+        Task<(bool Success, string Message)> UpdateNicknameAsync(
+            string newNickname,
+            string? licenseKey = null,
+            string? hwid = null
+        );
         Task<List<ServerLicenseKeyItem>> FetchAllLicenseKeysAsync(bool forceRefresh = false);
         Task<bool> CheckAndSyncAssignedLicenseAsync(
             AppSettings? settings = null,
@@ -24,6 +29,7 @@ namespace TextureSwapper.Core.Interfaces
         bool IsPremiumUnlocked { get; }
         bool IsTrialActive { get; }
         TimeSpan? TrialTimeRemaining { get; }
+        void ClearPremiumState(AppSettings? settings = null);
         Task<PremiumActivationResult> StartFreeTrialAsync(string nickname);
         Task<(bool Success, string Message)> ResetDeviceTrialAsync(string hwid);
         Task<(bool Success, string Message)> RevokeDeviceTrialAsync(string hwid);

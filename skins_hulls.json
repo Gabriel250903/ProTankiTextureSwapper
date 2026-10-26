@@ -11,6 +11,17 @@
   },
   {
     "Category": "Hulls",
+    "ItemName": "Viking",
+    "Name": "Viking XT",
+    "SourceFolder": "Textures/Hulls/Viking/XT/M3",
+    "PreviewImage": "Textures/Hulls/Viking/XT/M3/Viking_XT.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHNfYWxwaGEuanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL29iamVjdC4zZHM="
+  },
+  {
+    "Category": "Hulls",
     "ItemName": "Hornet",
     "Name": "Hornet XT",
     "SourceFolder": "Textures/Hulls/Hornet/XT/M3",

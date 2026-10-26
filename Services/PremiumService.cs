@@ -35,7 +35,8 @@ namespace TextureSwapper.Services
         private static HttpClient CreateDefaultHttpClient()
         {
             HttpClient client = new() { Timeout = TimeSpan.FromSeconds(20) };
-            client.DefaultRequestHeaders.Add("X-Api-Key", Constants.GatekeeperApiKey);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "TextureSwapper/2.0");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", Constants.GatekeeperApiKey);
             return client;
         }
 
@@ -458,6 +459,70 @@ namespace TextureSwapper.Services
             }
         }
 
+        public async Task<(bool Success, string Message)> UpdateNicknameAsync(
+            string newNickname,
+            string? licenseKey = null,
+            string? hwid = null
+        )
+        {
+            if (string.IsNullOrWhiteSpace(newNickname))
+            {
+                return (false, "Nickname cannot be empty.");
+            }
+
+            string cleanNickname = newNickname.Trim();
+            string cleanKey = licenseKey?.Trim() ?? string.Empty;
+            string cleanHwid = hwid?.Trim() ?? string.Empty;
+
+            try
+            {
+                _cachedKeys = null;
+                _keysCacheExpiry = DateTime.MinValue;
+
+                Dictionary<string, string> payload = new()
+                {
+                    { "action", "update_nickname" },
+                    { "nickname", cleanNickname },
+                    { "licenseKey", cleanKey },
+                    { "hwid", cleanHwid },
+                };
+
+                using HttpResponseMessage response = await PostAdminJsonAsync(
+                    ACTIVATION_URL,
+                    payload
+                );
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string currentHwid = HardwareFingerprintHelper.GetMachineHwid();
+                    if (!string.IsNullOrEmpty(cleanHwid) && cleanHwid.Equals(currentHwid, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _lastSettings ??= _settingsService.Load();
+                        _lastSettings.UserNickname = cleanNickname;
+                        _settingsService.Save(_lastSettings);
+                    }
+                    return (true, $"Nickname updated to '{cleanNickname}'.");
+                }
+
+                if (!string.IsNullOrEmpty(cleanKey) && !string.IsNullOrEmpty(cleanHwid))
+                {
+                    PremiumActivationResult fallbackRes = await AssignKeyToDeviceAsync(cleanKey, cleanHwid, cleanNickname);
+                    if (fallbackRes.Success)
+                    {
+                        return (true, $"Nickname updated to '{cleanNickname}'.");
+                    }
+                }
+
+                string errBody = await response.Content.ReadAsStringAsync();
+                return (false, $"Server returned error: {response.StatusCode} {errBody}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error updating user nickname.");
+                return (false, ex.Message);
+            }
+        }
+
         public async Task<List<ServerLicenseKeyItem>> FetchAllLicenseKeysAsync(
             bool forceRefresh = false
         )
@@ -802,6 +867,7 @@ namespace TextureSwapper.Services
                 {
                     { "action", "sync_device" },
                     { "hwid", myHwid },
+                    { "nickname", settings.UserNickname ?? string.Empty },
                 };
 
                 using HttpRequestMessage req = new(HttpMethod.Post, ACTIVATION_URL)
@@ -973,19 +1039,17 @@ namespace TextureSwapper.Services
                             return false;
                         }
 
-                        if (!string.IsNullOrWhiteSpace(settings.PremiumLicenseKey))
+                        if (wasUnlocked || !string.IsNullOrWhiteSpace(settings.PremiumLicenseKey))
                         {
-                            return await VerifyPremiumStatusAsync(settings);
-                        }
-
-                        if (wasUnlocked)
-                        {
-                            Log.Warning(
+                            Log.Information(
                                 "License Sync: No active license key found on server for device {Hwid}. Revoking premium.",
                                 myHwid
                             );
                             ClearPremiumState(settings);
-                            PremiumStatusChanged?.Invoke(this, false);
+                            if (wasUnlocked)
+                            {
+                                PremiumStatusChanged?.Invoke(this, false);
+                            }
                         }
 
                         return false;
@@ -1779,27 +1843,35 @@ namespace TextureSwapper.Services
             }
         }
 
-        internal void ClearPremiumState(AppSettings settings)
+        public void ClearPremiumState(AppSettings? settings = null)
         {
+            settings ??= _lastSettings ?? _settingsService?.Load() ?? new AppSettings();
+            bool wasUnlocked = settings.IsPremiumUnlocked;
             settings.IsPremiumUnlocked = false;
+            settings.PremiumLicenseKey = string.Empty;
             settings.PremiumActivationSignature = string.Empty;
             settings.PremiumExpiresAtUtc = string.Empty;
             settings.IsTrialLicense = false;
             _cachedAssetKey = null;
             _lastSettings = settings;
             _settingsService?.Save(settings);
+            if (wasUnlocked)
+            {
+                PremiumStatusChanged?.Invoke(this, false);
+            }
         }
 
         public async Task<byte[]?> GetAssetDecryptionKeyAsync(bool forceRefresh = false)
         {
+            _lastSettings ??= _settingsService.Load();
+
             if (
                 _lastSettings == null
                 || !IsPremiumUnlocked
-                || string.IsNullOrWhiteSpace(_lastSettings.PremiumLicenseKey)
             )
             {
                 Log.Warning(
-                    "AssetKey: Cannot request key - Premium is not unlocked or license key is missing."
+                    "AssetKey: Cannot request key - Premium is not unlocked."
                 );
                 return null;
             }
@@ -1819,25 +1891,36 @@ namespace TextureSwapper.Services
 
                 string myHwid = HardwareFingerprintHelper.GetMachineHwid();
                 string endpoint = $"{Constants.GatekeeperWorkerUrl}/license/asset-key";
+                string keyToSend = _lastSettings.PremiumLicenseKey?.Trim() ?? string.Empty;
 
                 var payload = new
                 {
                     hwid = myHwid,
-                    licenseKey = _lastSettings.PremiumLicenseKey.Trim(),
+                    licenseKey = keyToSend,
                 };
 
                 using HttpRequestMessage req = new(HttpMethod.Post, endpoint)
                 {
                     Content = JsonContent.Create(payload),
                 };
-                req.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
+
+                if (!_httpClient.DefaultRequestHeaders.Contains("User-Agent"))
+                {
+                    _ = req.Headers.TryAddWithoutValidation("User-Agent", "TextureSwapper/2.0");
+                }
+                if (!_httpClient.DefaultRequestHeaders.Contains("X-Api-Key"))
+                {
+                    _ = req.Headers.TryAddWithoutValidation("X-Api-Key", Constants.GatekeeperApiKey);
+                }
 
                 using HttpResponseMessage response = await _httpClient.SendAsync(req);
                 if (!response.IsSuccessStatusCode)
                 {
+                    string errContent = await response.Content.ReadAsStringAsync();
                     Log.Warning(
-                        "AssetKey: Server returned status {Status} when fetching decryption key.",
-                        response.StatusCode
+                        "AssetKey: Server returned status {Status} ({Error}) when fetching decryption key.",
+                        response.StatusCode,
+                        errContent
                     );
                     return null;
                 }
@@ -1847,11 +1930,39 @@ namespace TextureSwapper.Services
                 );
                 if (doc.RootElement.TryGetProperty("key", out JsonElement keyElem))
                 {
-                    string? base64Key = keyElem.GetString();
-                    if (!string.IsNullOrEmpty(base64Key))
+                    string? rawKey = keyElem.GetString();
+                    if (!string.IsNullOrEmpty(rawKey))
                     {
-                        byte[] keyBytes = Convert.FromBase64String(base64Key);
-                        if (keyBytes.Length == 32)
+                        byte[]? keyBytes = null;
+                        try
+                        {
+                            byte[] b64 = Convert.FromBase64String(rawKey);
+                            if (b64.Length == 32)
+                            {
+                                keyBytes = b64;
+                            }
+                        }
+                        catch { }
+
+                        if (keyBytes == null && rawKey.Length == 64)
+                        {
+                            try
+                            {
+                                byte[] hex = Convert.FromHexString(rawKey);
+                                if (hex.Length == 32)
+                                {
+                                    keyBytes = hex;
+                                }
+                            }
+                            catch { }
+                        }
+
+                        if (keyBytes == null && rawKey.Length == 32)
+                        {
+                            keyBytes = System.Text.Encoding.UTF8.GetBytes(rawKey);
+                        }
+
+                        if (keyBytes != null && keyBytes.Length == 32)
                         {
                             _cachedAssetKey = keyBytes;
                             Log.Information(

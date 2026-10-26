@@ -86,7 +86,7 @@ namespace TextureSwapper.Services
                         Log.Warning(
                             $"Request failed, retrying in {Math.Pow(2, i)}s. Error: {ex.Message}"
                         );
-                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)), cancellationToken);
                     }
                     else
                     {
@@ -174,7 +174,11 @@ namespace TextureSwapper.Services
                     onProgress
                 );
 
-                List<string> prefixes = ["details"];
+                List<string> prefixes =
+                    skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
+                    && skin.Name.Contains("Parachute", StringComparison.OrdinalIgnoreCase)
+                        ? ["para"]
+                        : ["details"];
                 if (
                     !skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
                     && !skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)

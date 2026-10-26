@@ -436,6 +436,48 @@ namespace TextureSwapper.ViewModels
 
         public ObservableCollection<AdminDeviceItem> FilteredAssignDevices { get; } = [];
 
+        private bool _isEditNicknameModalVisible;
+        public bool IsEditNicknameModalVisible
+        {
+            get => _isEditNicknameModalVisible;
+            set => SetProperty(ref _isEditNicknameModalVisible, value);
+        }
+
+        private string _editNicknameText = string.Empty;
+        public string EditNicknameText
+        {
+            get => _editNicknameText;
+            set => SetProperty(ref _editNicknameText, value);
+        }
+
+        private string _editNicknameTargetKey = string.Empty;
+        public string EditNicknameTargetKey
+        {
+            get => _editNicknameTargetKey;
+            set => SetProperty(ref _editNicknameTargetKey, value);
+        }
+
+        private string _editNicknameTargetHwid = string.Empty;
+        public string EditNicknameTargetHwid
+        {
+            get => _editNicknameTargetHwid;
+            set => SetProperty(ref _editNicknameTargetHwid, value);
+        }
+
+        private string _editNicknameTargetTitle = string.Empty;
+        public string EditNicknameTargetTitle
+        {
+            get => _editNicknameTargetTitle;
+            set => SetProperty(ref _editNicknameTargetTitle, value);
+        }
+
+        private bool _isUpdatingNickname;
+        public bool IsUpdatingNickname
+        {
+            get => _isUpdatingNickname;
+            set => SetProperty(ref _isUpdatingNickname, value);
+        }
+
         private string _adminLogContent = string.Empty;
         public string AdminLogContent
         {
@@ -476,6 +518,10 @@ namespace TextureSwapper.ViewModels
         public ICommand CloseDeviceProfileCommand { get; }
         public ICommand ProfileAssignKeyCommand { get; }
         public ICommand CloseAssignKeyModalCommand { get; }
+        public ICommand OpenEditNicknameCommand { get; }
+        public ICommand CloseEditNicknameModalCommand { get; }
+        public ICommand ConfirmEditNicknameCommand { get; }
+        public ICommand EditNicknameUseWindowsUsernameCommand { get; }
         public ICommand SelectMyDeviceForAssignCommand { get; }
         public ICommand ConfirmAssignKeyCommand { get; }
 
@@ -659,6 +705,11 @@ namespace TextureSwapper.ViewModels
                 }
             });
             ConfirmAssignKeyCommand = new AsyncRelayCommand(ExecuteConfirmAssignKey);
+
+            OpenEditNicknameCommand = new RelayCommand(ExecuteOpenEditNicknameModal);
+            CloseEditNicknameModalCommand = new RelayCommand(_ => IsEditNicknameModalVisible = false);
+            ConfirmEditNicknameCommand = new AsyncRelayCommand(ExecuteConfirmEditNickname, _ => !IsUpdatingNickname);
+            EditNicknameUseWindowsUsernameCommand = new RelayCommand(_ => EditNicknameText = Environment.UserName);
 
             RevokeTrialCommand = new AsyncRelayCommand(ExecuteRevokeTrialAsync);
             ResetTrialCommand = new AsyncRelayCommand(ExecuteResetTrialAsync);
@@ -1396,7 +1447,7 @@ namespace TextureSwapper.ViewModels
             if (parameter is ServerLicenseKeyItem key)
             {
                 TargetAssignKeyItem = key;
-                AssignNickname = !string.IsNullOrWhiteSpace(key.Nickname)
+                AssignNickname = (!string.IsNullOrWhiteSpace(key.Nickname) && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
                     ? key.Nickname
                     : (
                         !string.IsNullOrWhiteSpace(_mainViewModel.Settings.UserNickname)
@@ -1605,6 +1656,139 @@ namespace TextureSwapper.ViewModels
             }
         }
 
+        private void ExecuteOpenEditNicknameModal(object? parameter)
+        {
+            if (parameter is ServerLicenseKeyItem key)
+            {
+                EditNicknameTargetKey = key.LicenseKey;
+                EditNicknameTargetHwid = key.Hwid;
+                EditNicknameText = (!string.IsNullOrWhiteSpace(key.Nickname) && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
+                    ? key.Nickname
+                    : string.Empty;
+                EditNicknameTargetTitle = $"License Key: {key.LicenseKey}";
+            }
+            else if (parameter is AdminDeviceItem dev)
+            {
+                var matchedKey = _allServerKeys.FirstOrDefault(k => !string.IsNullOrEmpty(k.Hwid) && k.Hwid.Equals(dev.Hwid, StringComparison.OrdinalIgnoreCase));
+                EditNicknameTargetKey = !string.IsNullOrEmpty(dev.LicenseKey) ? dev.LicenseKey : (matchedKey?.LicenseKey ?? string.Empty);
+                EditNicknameTargetHwid = dev.Hwid;
+                string currentNick = !string.IsNullOrWhiteSpace(dev.Nickname) && !dev.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    ? dev.Nickname
+                    : (matchedKey?.Nickname ?? string.Empty);
+                EditNicknameText = (!string.IsNullOrWhiteSpace(currentNick) && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
+                    ? currentNick
+                    : string.Empty;
+                string hwidShort = dev.Hwid.Length > 12 ? dev.Hwid[..12] + "..." : dev.Hwid;
+                EditNicknameTargetTitle = $"Device: {hwidShort}";
+            }
+            else if (SelectedProfileKey != null)
+            {
+                EditNicknameTargetKey = SelectedProfileKey.LicenseKey;
+                EditNicknameTargetHwid = SelectedProfileKey.Hwid ?? SelectedProfileDevice?.Hwid ?? string.Empty;
+                EditNicknameText = (!string.IsNullOrWhiteSpace(SelectedProfileKey.Nickname) && !SelectedProfileKey.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
+                    ? SelectedProfileKey.Nickname
+                    : string.Empty;
+                EditNicknameTargetTitle = $"License Key: {SelectedProfileKey.LicenseKey}";
+            }
+            else if (SelectedProfileDevice != null)
+            {
+                var matchedKey = _allServerKeys.FirstOrDefault(k => !string.IsNullOrEmpty(k.Hwid) && k.Hwid.Equals(SelectedProfileDevice.Hwid, StringComparison.OrdinalIgnoreCase));
+                EditNicknameTargetKey = !string.IsNullOrEmpty(SelectedProfileDevice.LicenseKey) ? SelectedProfileDevice.LicenseKey : (matchedKey?.LicenseKey ?? string.Empty);
+                EditNicknameTargetHwid = SelectedProfileDevice.Hwid;
+                string currentNick = !string.IsNullOrWhiteSpace(SelectedProfileDevice.Nickname) && !SelectedProfileDevice.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    ? SelectedProfileDevice.Nickname
+                    : (matchedKey?.Nickname ?? string.Empty);
+                EditNicknameText = (!string.IsNullOrWhiteSpace(currentNick) && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
+                    ? currentNick
+                    : string.Empty;
+                string hwidShort = SelectedProfileDevice.Hwid.Length > 12 ? SelectedProfileDevice.Hwid[..12] + "..." : SelectedProfileDevice.Hwid;
+                EditNicknameTargetTitle = $"Device: {hwidShort}";
+            }
+            else
+            {
+                return;
+            }
+
+            IsEditNicknameModalVisible = true;
+        }
+
+        private async Task ExecuteConfirmEditNickname(object? parameter)
+        {
+            string newNickname = EditNicknameText?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(newNickname))
+            {
+                ShowNotificationSafe("Validation Error", "Nickname cannot be empty.", ControlAppearance.Danger);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(EditNicknameTargetKey) && string.IsNullOrWhiteSpace(EditNicknameTargetHwid))
+            {
+                ShowNotificationSafe("Error", "No license key or device HWID specified.", ControlAppearance.Danger);
+                return;
+            }
+
+            try
+            {
+                IsUpdatingNickname = true;
+                (bool success, string message) = await _mainViewModel.PremiumService.UpdateNicknameAsync(
+                    newNickname,
+                    EditNicknameTargetKey,
+                    EditNicknameTargetHwid
+                );
+
+                if (success)
+                {
+                    ShowNotificationSafe("Success", $"Nickname updated to '{newNickname}'.", ControlAppearance.Success);
+                    IsEditNicknameModalVisible = false;
+
+                    if (!string.IsNullOrEmpty(EditNicknameTargetKey))
+                    {
+                        var keyItem = _allServerKeys.FirstOrDefault(k => k.LicenseKey.Equals(EditNicknameTargetKey, StringComparison.OrdinalIgnoreCase));
+                        if (keyItem != null) keyItem.Nickname = newNickname;
+                    }
+                    if (!string.IsNullOrEmpty(EditNicknameTargetHwid))
+                    {
+                        foreach (var keyItem in _allServerKeys.Where(k => k.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            keyItem.Nickname = newNickname;
+                        }
+                        var devItem = _allDevices.FirstOrDefault(d => d.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase));
+                        if (devItem != null) devItem.Nickname = newNickname;
+                    }
+
+                    if (SelectedProfileKey != null &&
+                        ((!string.IsNullOrEmpty(EditNicknameTargetKey) && SelectedProfileKey.LicenseKey.Equals(EditNicknameTargetKey, StringComparison.OrdinalIgnoreCase)) ||
+                         (!string.IsNullOrEmpty(EditNicknameTargetHwid) && SelectedProfileKey.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase))))
+                    {
+                        SelectedProfileKey.Nickname = newNickname;
+                    }
+
+                    if (SelectedProfileDevice != null &&
+                        !string.IsNullOrEmpty(EditNicknameTargetHwid) &&
+                        SelectedProfileDevice.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase))
+                    {
+                        SelectedProfileDevice.Nickname = newNickname;
+                    }
+
+                    UpdatePagedKeys();
+                    FilterDevices();
+                    UpdateProfileKey();
+                }
+                else
+                {
+                    ShowNotificationSafe("Error", $"Failed to update nickname: {message}", ControlAppearance.Danger);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotificationSafe("Error", ex.Message, ControlAppearance.Danger);
+            }
+            finally
+            {
+                IsUpdatingNickname = false;
+            }
+        }
+
         private async Task ExecuteRevokeKey(object? parameter)
         {
             string key = parameter is ServerLicenseKeyItem itemParam
@@ -1641,6 +1825,11 @@ namespace TextureSwapper.ViewModels
                         item?.Nickname ?? string.Empty,
                         DateTime.UtcNow
                     );
+
+                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
+                    }
 
                     UpdatePagedKeys();
                     UpdateProfileKey();
@@ -1697,6 +1886,11 @@ namespace TextureSwapper.ViewModels
                         DateTime.UtcNow
                     );
 
+                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
+                    }
+
                     UpdatePagedKeys();
                     UpdateProfileKey();
                 }
@@ -1741,6 +1935,11 @@ namespace TextureSwapper.ViewModels
                     );
 
                     _locallyDeletedKeys[key] = DateTime.UtcNow;
+
+                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
+                    }
 
                     UpdatePagedKeys();
                     UpdateProfileKey();

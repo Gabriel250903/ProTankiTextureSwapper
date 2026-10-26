@@ -163,8 +163,166 @@ namespace TextureSwapper.Core.Models
                 {
                     _isTrial = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UserDisplay));
                 }
             }
+        }
+
+        private string _nickname = string.Empty;
+
+        [JsonPropertyName("nickname")]
+        public string Nickname
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_nickname)) return _nickname;
+                if (!string.IsNullOrEmpty(_ipAddress))
+                {
+                    if (_ipAddress.StartsWith("Trial: ", StringComparison.OrdinalIgnoreCase))
+                        return _ipAddress[7..].Trim();
+                    if (_ipAddress.StartsWith("User: ", StringComparison.OrdinalIgnoreCase))
+                        return _ipAddress[6..].Trim();
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (_nickname != value)
+                {
+                    _nickname = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UserDisplay));
+                }
+            }
+        }
+
+        private string _licenseKey = string.Empty;
+
+        [JsonPropertyName("license_key")]
+        public string LicenseKey
+        {
+            get => _licenseKey;
+            set
+            {
+                if (_licenseKey != value)
+                {
+                    _licenseKey = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _tier = string.Empty;
+
+        [JsonPropertyName("tier")]
+        public string Tier
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_tier)) return _tier;
+                if (IsTrial || (!string.IsNullOrEmpty(_ipAddress) && _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase)))
+                    return "3-Day Free Trial";
+                if (!string.IsNullOrEmpty(_ipAddress) && _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase))
+                    return "Lifetime Supporter";
+                if (string.Equals(_lastSeen, "Free User", StringComparison.OrdinalIgnoreCase) || string.Equals(_ipAddress, "Free User", StringComparison.OrdinalIgnoreCase))
+                    return "Free User";
+                return "Free User";
+            }
+            set
+            {
+                if (_tier != value)
+                {
+                    _tier = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UserDisplay));
+                }
+            }
+        }
+
+        private string _location = string.Empty;
+
+        [JsonPropertyName("location")]
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                if (_location != value)
+                {
+                    _location = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string DisplayIpAddress
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_ipAddress) ||
+                    _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase) ||
+                    _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase) ||
+                    _ipAddress.Equals("Free User", StringComparison.OrdinalIgnoreCase) ||
+                    _ipAddress.Equals("Banned Device", StringComparison.OrdinalIgnoreCase))
+                {
+                    return "Unknown";
+                }
+                return _ipAddress;
+            }
+        }
+
+        [JsonIgnore]
+        public string DisplayLastSeen
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_lastSeen) ||
+                    _lastSeen.Equals("Free User", StringComparison.OrdinalIgnoreCase) ||
+                    _lastSeen.Equals("Active", StringComparison.OrdinalIgnoreCase) ||
+                    _lastSeen.Equals("Banned", StringComparison.OrdinalIgnoreCase) ||
+                    _lastSeen.StartsWith("Expires:", StringComparison.OrdinalIgnoreCase) ||
+                    _lastSeen.StartsWith("Ban Exp:", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrWhiteSpace(_firstSeen) &&
+                        DateTime.TryParse(_firstSeen, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out DateTime fsUtc))
+                    {
+                        return FormatTimestamp(fsUtc);
+                    }
+                    return "Recent";
+                }
+
+                if (DateTime.TryParse(_lastSeen, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out DateTime dtUtc))
+                {
+                    return FormatTimestamp(dtUtc);
+                }
+                return _lastSeen;
+            }
+        }
+
+        [JsonIgnore]
+        public string UserDisplay
+        {
+            get
+            {
+                string nick = Nickname;
+                string t = Tier;
+                if (!string.IsNullOrWhiteSpace(nick))
+                {
+                    return $"{nick} • {t}";
+                }
+                return t;
+            }
+        }
+
+        private static string FormatTimestamp(DateTime utc)
+        {
+            TimeSpan elapsed = DateTime.UtcNow - utc;
+            if (elapsed.TotalMinutes < 1) return "Just now";
+            if (elapsed.TotalMinutes < 60) return $"{(int)elapsed.TotalMinutes}m ago";
+            if (elapsed.TotalHours < 24) return $"{(int)elapsed.TotalHours}h ago";
+            if (elapsed.TotalDays < 7) return $"{(int)elapsed.TotalDays}d ago";
+            return utc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
         }
 
         [JsonIgnore]

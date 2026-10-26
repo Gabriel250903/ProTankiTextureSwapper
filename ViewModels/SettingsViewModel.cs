@@ -734,7 +734,17 @@ public class SettingsViewModel : ViewModelBase
                 ActivationStatusText = string.Empty;
                 OnPropertyChanged(nameof(IsPremiumLocked));
                 OnPropertyChanged(nameof(IsPremiumUnlocked));
+                OnPropertyChanged(nameof(IsTrialActive));
+                OnPropertyChanged(nameof(CanStartTrial));
+                OnPropertyChanged(nameof(HasClaimedTrial));
+                OnPropertyChanged(nameof(TrialRemainingDisplay));
                 OnPropertyChanged(nameof(PremiumExpirationDisplay));
+                OnPropertyChanged(nameof(LicenseTierDisplay));
+                OnPropertyChanged(nameof(DisplayLicenseKey));
+                OnPropertyChanged(nameof(PremiumLicenseKey));
+                OnPropertyChanged(nameof(LastVerifiedDisplay));
+                OnPropertyChanged(nameof(HasExpirationDisplay));
+                OnPropertyChanged(nameof(HasCryptographicSignature));
                 await _mainViewModel.ShowNotificationAsync(
                     "Premium Activated",
                     "Thank you for supporting ProTanki Texture Swapper!",
@@ -796,6 +806,12 @@ public class SettingsViewModel : ViewModelBase
                 OnPropertyChanged(nameof(HasClaimedTrial));
                 OnPropertyChanged(nameof(TrialRemainingDisplay));
                 OnPropertyChanged(nameof(PremiumExpirationDisplay));
+                OnPropertyChanged(nameof(LicenseTierDisplay));
+                OnPropertyChanged(nameof(DisplayLicenseKey));
+                OnPropertyChanged(nameof(PremiumLicenseKey));
+                OnPropertyChanged(nameof(LastVerifiedDisplay));
+                OnPropertyChanged(nameof(HasExpirationDisplay));
+                OnPropertyChanged(nameof(HasCryptographicSignature));
                 await _mainViewModel.ShowNotificationAsync(
                     _localizationService.GetString("Loc_Msg_TrialActivatedTitle"),
                     _localizationService.GetString("Loc_Msg_TrialActivated"),

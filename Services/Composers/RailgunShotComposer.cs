@@ -377,6 +377,7 @@ namespace TextureSwapper.Services.Composers
                 Invert = options.Invert,
             };
 
+            int savedCount = 0;
             foreach (
                 (
                     CachedTextureData? template,
@@ -412,6 +413,7 @@ namespace TextureSwapper.Services.Composers
 
                     File.WriteAllBytes(Path.Combine(outputDirectory, primaryTarget), jpegBytes);
                     File.WriteAllBytes(Path.Combine(outputDirectory, legacyTarget), jpegBytes);
+                    savedCount++;
                 }
                 finally
                 {
@@ -419,7 +421,13 @@ namespace TextureSwapper.Services.Composers
                 }
             }
 
-            Log.Information($"Successfully saved custom Railgun textures to {outputDirectory}");
+            if (savedCount == 0)
+            {
+                Log.Error("Failed to save custom Railgun textures: no templates could be loaded.");
+                throw new InvalidOperationException("Failed to generate custom Railgun textures: shot effect templates could not be loaded.");
+            }
+
+            Log.Information($"Successfully saved custom Railgun textures ({savedCount} files) to {outputDirectory}");
         }
 
         private static byte[] RecolorPixels(
@@ -523,7 +531,13 @@ namespace TextureSwapper.Services.Composers
 
             lock (_lock)
             {
-                if (_chargeSphereTemplate != null)
+                if (
+                    _charge1Template != null
+                    && _charge2Template != null
+                    && _chargeSphereTemplate != null
+                    && _beamCoreTemplate != null
+                    && _beamSpiralTemplate != null
+                )
                 {
                     return;
                 }

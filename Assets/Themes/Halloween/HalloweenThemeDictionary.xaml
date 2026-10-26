@@ -13,12 +13,14 @@
     <Color x:Key="HalloweenSecondaryColor">#FF9B51E0</Color>
     <Color x:Key="HalloweenDarkVioletColor">#FF09040E</Color>
     <Color x:Key="HalloweenCardColor">#E6140722</Color>
-    <Color x:Key="HalloweenCardStrokeColor">#FFFF6B00</Color>
+    <Color x:Key="HalloweenCardStrokeColor">#40FF6B00</Color>
+    <Color x:Key="HalloweenCardSelectedStrokeColor">#00FF7F</Color>
 
     <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource HalloweenPrimaryColor}" />
     <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="{StaticResource HalloweenDarkVioletColor}" />
     <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="{StaticResource HalloweenCardColor}" />
     <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="{StaticResource HalloweenCardStrokeColor}" />
+    <SolidColorBrush x:Key="CardSelectedBorderBrush" Color="{StaticResource HalloweenCardSelectedStrokeColor}" />
     <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#CC1E0A30" />
     <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#FF3D1504" />
     <SolidColorBrush x:Key="ControlFillColorTertiaryBrush" Color="#B312061E" />

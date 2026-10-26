@@ -23,6 +23,8 @@
       <helpers:ImageThumbnailConverter x:Key="ImageThumbnailConverter" />
       <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 
+      <SolidColorBrush x:Key="CardSelectedBorderBrush" Color="#3B82F6" />
+
       <Style TargetType="{x:Type ListBoxItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

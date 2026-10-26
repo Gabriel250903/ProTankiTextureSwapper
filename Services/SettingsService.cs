@@ -16,9 +16,15 @@ namespace TextureSwapper.Services
         );
         private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
         private static readonly object _saveLock = new();
+        private AppSettings? _cachedSettings;
 
         public AppSettings Load()
         {
+            if (_cachedSettings != null)
+            {
+                return _cachedSettings;
+            }
+
             try
             {
                 if (File.Exists(SettingsPath))
@@ -27,6 +33,7 @@ namespace TextureSwapper.Services
                     AppSettings settings =
                         JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions)
                         ?? new AppSettings();
+                    _cachedSettings = settings;
                     return settings;
                 }
             }
@@ -35,11 +42,13 @@ namespace TextureSwapper.Services
                 Log.Error(ex, "Failed to load Settings.");
             }
 
-            return new AppSettings();
+            _cachedSettings = new AppSettings();
+            return _cachedSettings;
         }
 
         public void Save(AppSettings settings)
         {
+            _cachedSettings = settings;
             lock (_saveLock)
             {
                 string tempPath = SettingsPath + $".tmp_{Guid.NewGuid():N}";

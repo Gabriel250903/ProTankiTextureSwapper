@@ -561,7 +561,7 @@ namespace TextureSwapper.Services
             List<string> suffixes =
                 skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
                 || skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
-                    ? ["details"]
+                    ? (skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase) && skin.Name.Contains("Parachute", StringComparison.OrdinalIgnoreCase) ? ["para"] : ["details"])
                     : ["details", "lightmap"];
 
             if (!string.IsNullOrEmpty(skin.AlphaTarget))

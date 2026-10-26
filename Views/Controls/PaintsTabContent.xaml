@@ -307,7 +307,7 @@
                               <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                 <Setter
                                   Property="BorderBrush"
-                                  Value="{DynamicResource SystemAccentColorBrush}"
+                                  Value="{DynamicResource CardSelectedBorderBrush}"
                                 />
                                 <Setter Property="BorderThickness" Value="2" />
                               </DataTrigger>
@@ -337,11 +337,29 @@
                           </Border>
 
                           <StackPanel Grid.Row="1" Margin="12,10">
-                            <ui:TextBlock
-                              FontSize="14"
-                              FontWeight="SemiBold"
-                              Text="{Binding Name}"
-                            />
+                            <Grid>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                              </Grid.ColumnDefinitions>
+                              <ui:TextBlock
+                                Grid.Column="0"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Text="{Binding Name}"
+                                TextTrimming="CharacterEllipsis"
+                              />
+                              <ui:SymbolIcon
+                                Grid.Column="1"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Filled="True"
+                                FontSize="16"
+                                Foreground="{DynamicResource CardSelectedBorderBrush}"
+                                Symbol="CheckmarkCircle24"
+                                Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              />
+                            </Grid>
                             <ui:TextBlock
                               FontTypography="Caption"
                               Opacity="0.6"

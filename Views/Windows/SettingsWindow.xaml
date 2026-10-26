@@ -109,6 +109,14 @@
                                     </StackPanel>
 
                                     <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,6"
+                                        Appearance="Secondary"
+                                        Command="{Binding SyncLicenseCommand}"
+                                        Icon="{ui:SymbolIcon ArrowSync24}"
+                                        ToolTip="Sync license with server" />
+
+                                    <ui:Button
                                         Appearance="Primary"
                                         Command="{Binding BuyPremiumCommand}"
                                         Content="{DynamicResource Loc_Settings_GetPremium}"

@@ -27,7 +27,7 @@ namespace TextureSwapper.Core
         public const string TexturesLatestDownloadUrl =
             "https://github.com/Gabriel250903/ProTankiTextureSwapper/releases/latest/download/textures.zip";
         public const string PublisherPublicKey =
-            "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEObAIYp8M4ou4UkucutCo69vQaXSEWij1TYvuuC8j1kWD3O+mEWvTPL8McPoIOb7KTd/S6kdGn7SUEevshUch+g==";
+            "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEPW3oT7Mz3IlRPzkQvJCqo/6BmmnifQipLjbAf54zrg2JaaPZrOdwy8oJR9kcsCHSEELCMLzbfcBoVSGgyVFeWQ==";
         public const string SpawnersSkinsJson = "skins_spawners.json";
         public const string GatekeeperWorkerUrl =
             "https://textureswapper-gatekeeper.flytoxp.workers.dev";

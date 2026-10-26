@@ -1,8 +1,10 @@
 using System.Buffers;
 using System.IO;
+using System.Net.Http;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Serilog;
+using TextureSwapper.Core;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Utilities;
 
@@ -10,11 +12,70 @@ namespace TextureSwapper.Services.Composers
 {
     public abstract class BaseShotEffectComposer
     {
+        private static readonly HttpClient _templateHttpClient = new(new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+            ConnectTimeout = TimeSpan.FromSeconds(10),
+        })
+        {
+            Timeout = TimeSpan.FromSeconds(15)
+        };
+
+        static BaseShotEffectComposer()
+        {
+            _templateHttpClient.DefaultRequestHeaders.Add("User-Agent", "TextureSwapper/2.0");
+        }
+
         public class CachedTextureData
         {
             public int Width { get; init; }
             public int Height { get; init; }
             public byte[] Pixels { get; init; } = [];
+        }
+
+        private static bool TryDownloadTemplate(string fullPath)
+        {
+            try
+            {
+                int texIndex = fullPath.IndexOf("Textures", StringComparison.OrdinalIgnoreCase);
+                if (texIndex < 0)
+                {
+                    return false;
+                }
+
+                string relativePath = fullPath[texIndex..].Replace('\\', '/');
+                string url = $"{Constants.GitHubRawUrl}/{relativePath}";
+
+                Log.Information("Attempting to auto-download missing shot effect template: {Url}", url);
+
+                using HttpResponseMessage response = _templateHttpClient.GetAsync(url).GetAwaiter().GetResult();
+                if (!response.IsSuccessStatusCode)
+                {
+                    Log.Warning("Failed to download template ({StatusCode}): {Url}", response.StatusCode, url);
+                    return false;
+                }
+
+                byte[] data = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+                if (data.Length == 0)
+                {
+                    return false;
+                }
+
+                string? dir = Path.GetDirectoryName(fullPath);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                File.WriteAllBytes(fullPath, data);
+                Log.Information("Successfully downloaded template: {Path}", fullPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to auto-download template for {Path}", fullPath);
+                return false;
+            }
         }
 
         protected static CachedTextureData? LoadTextureData(string path)
@@ -27,8 +88,11 @@ namespace TextureSwapper.Services.Composers
 
                 if (!File.Exists(fullPath))
                 {
-                    Log.Warning("Template file not found: {Path}", fullPath);
-                    return null;
+                    if (!TryDownloadTemplate(fullPath))
+                    {
+                        Log.Debug("Template file not found: {Path}", fullPath);
+                        return null;
+                    }
                 }
 
                 BitmapImage bitmap = new();

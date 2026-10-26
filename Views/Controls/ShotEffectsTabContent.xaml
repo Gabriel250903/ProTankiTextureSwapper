@@ -138,7 +138,7 @@
                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
                       <Setter
                         Property="BorderBrush"
-                        Value="{DynamicResource SystemAccentColorBrush}"
+                        Value="{DynamicResource CardSelectedBorderBrush}"
                       />
                       <Setter Property="BorderThickness" Value="2" />
                     </DataTrigger>
@@ -187,7 +187,7 @@
                     Grid.Column="1"
                     VerticalAlignment="Center"
                     Filled="True"
-                    Foreground="{DynamicResource SystemAccentColorBrush}"
+                    Foreground="{DynamicResource CardSelectedBorderBrush}"
                     Symbol="CheckmarkCircle24"
                     Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                   />

@@ -38,8 +38,9 @@ namespace TextureSwapper.Services
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string hullsDir = Path.Combine(baseDir, "Textures", "Hulls");
                 string turretsDir = Path.Combine(baseDir, "Textures", "Turrets");
+                string shotEffectsDir = Path.Combine(baseDir, "Textures", "ShotEffects");
 
-                if (!Directory.Exists(hullsDir) || !Directory.Exists(turretsDir))
+                if (!Directory.Exists(hullsDir) || !Directory.Exists(turretsDir) || !Directory.Exists(shotEffectsDir))
                 {
                     return false;
                 }
@@ -50,8 +51,11 @@ namespace TextureSwapper.Services
                 bool hasTurrets = Directory
                     .EnumerateFiles(turretsDir, "*.*", SearchOption.AllDirectories)
                     .Any();
+                bool hasShotEffects = Directory
+                    .EnumerateFiles(shotEffectsDir, "*.*", SearchOption.AllDirectories)
+                    .Any();
 
-                return hasHulls && hasTurrets;
+                return hasHulls && hasTurrets && hasShotEffects;
             }
             catch (Exception ex)
             {
@@ -152,7 +156,6 @@ namespace TextureSwapper.Services
                                 cancellationToken
                             );
 
-                            // If GitHub latest release endpoint returns 404, query releases to find the newest release with textures.zip
                             if (response.StatusCode == HttpStatusCode.NotFound
                                 && downloadUrl == Constants.TexturesLatestDownloadUrl)
                             {
@@ -325,26 +328,22 @@ namespace TextureSwapper.Services
                         {
                             cancellationToken.ThrowIfCancellationRequested();
 
-                            // 1. Normalize slashes and trim leading slashes to prevent Path.Combine drive-root jump
                             string entryPath = entry.FullName.Replace('\\', '/').TrimStart('/');
 
-                            // 2. Strip redundant top-level 'Textures/' folder if present
                             if (entryPath.StartsWith("Textures/", StringComparison.OrdinalIgnoreCase))
                             {
-                                entryPath = entryPath.Substring("Textures/".Length);
+                                entryPath = entryPath["Textures/".Length..];
                             }
 
                             if (string.IsNullOrWhiteSpace(entryPath))
                             {
                                 continue;
                             }
-
-                            // 3. Resolve destination strictly inside safeTargetRoot (baseDir/Textures/)
+                            
                             string destPath = Path.GetFullPath(
                                 Path.Combine(safeTargetRoot, entryPath)
                             );
 
-                            // Zip Slip protection - guarantee files never escape safeTargetRoot
                             if (
                                 !destPath.StartsWith(
                                     safeTargetRoot,
@@ -359,21 +358,18 @@ namespace TextureSwapper.Services
                                 continue;
                             }
 
-                            // Directory entry in ZIP
                             if (string.IsNullOrEmpty(entry.Name) || entryPath.EndsWith('/'))
                             {
                                 _ = Directory.CreateDirectory(destPath);
                                 continue;
                             }
 
-                            // Ensure parent directory exists
                             string? parentDir = Path.GetDirectoryName(destPath);
                             if (!string.IsNullOrEmpty(parentDir))
                             {
                                 _ = Directory.CreateDirectory(parentDir);
                             }
 
-                            // Clear ReadOnly attribute if file already exists to avoid UnauthorizedAccessException
                             if (File.Exists(destPath))
                             {
                                 try

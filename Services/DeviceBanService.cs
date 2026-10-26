@@ -343,16 +343,15 @@ namespace TextureSwapper.Services
                 _lastCheckTime = DateTime.MinValue;
 
                 string requestUrl = $"{Constants.GatekeeperWorkerUrl}/admin/ban";
-                string jsonPayload = JsonSerializer.Serialize(
-                    new
-                    {
-                        hwid = hwid.Trim(),
-                        reason = string.IsNullOrWhiteSpace(reason)
-                            ? "Banned by administrator."
-                            : reason.Trim(),
-                        duration_hours = durationHours,
-                    }
-                );
+                Dictionary<string, object> payload = new()
+                {
+                    ["hwid"] = hwid.Trim(),
+                    ["reason"] = string.IsNullOrWhiteSpace(reason)
+                        ? "Banned by administrator."
+                        : reason.Trim(),
+                    ["duration_hours"] = durationHours,
+                };
+                string jsonPayload = JsonSerializer.Serialize(payload);
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
@@ -386,7 +385,11 @@ namespace TextureSwapper.Services
                 _lastCheckTime = DateTime.MinValue;
 
                 string requestUrl = $"{Constants.GatekeeperWorkerUrl}/admin/unban";
-                string jsonPayload = JsonSerializer.Serialize(new { hwid = hwid.Trim() });
+                Dictionary<string, string> payload = new()
+                {
+                    ["hwid"] = hwid.Trim(),
+                };
+                string jsonPayload = JsonSerializer.Serialize(payload);
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
@@ -415,9 +418,12 @@ namespace TextureSwapper.Services
             {
                 string hwid = GetDeviceHardwareId();
                 string requestUrl = $"{Constants.GatekeeperWorkerUrl}/admin/auth";
-                string jsonPayload = JsonSerializer.Serialize(
-                    new { secret = password.Trim(), hwid }
-                );
+                Dictionary<string, string> payload = new()
+                {
+                    ["secret"] = password.Trim(),
+                    ["hwid"] = hwid,
+                };
+                string jsonPayload = JsonSerializer.Serialize(payload);
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");

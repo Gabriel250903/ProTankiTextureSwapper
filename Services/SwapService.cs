@@ -1,5 +1,6 @@
 using System.IO;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Security.Cryptography;
 using Serilog;
 using TextureSwapper.Core;
@@ -9,13 +10,21 @@ using TextureSwapper.Helpers.Utilities;
 
 namespace TextureSwapper.Services
 {
-    public sealed class SwapService : ISwapService
+    public sealed class SwapService(IPremiumService? premiumService = null) : ISwapService
     {
-        private readonly IPremiumService? _premiumService;
-
-        public SwapService(IPremiumService? premiumService = null)
+        private readonly IPremiumService? _premiumService = premiumService;
+        private static readonly HttpClient _assetDownloadHttpClient = new(new SocketsHttpHandler
         {
-            _premiumService = premiumService;
+            PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+            ConnectTimeout = TimeSpan.FromSeconds(10),
+        })
+        {
+            Timeout = TimeSpan.FromSeconds(15)
+        };
+
+        static SwapService()
+        {
+            _assetDownloadHttpClient.DefaultRequestHeaders.Add("User-Agent", "TextureSwapper/2.0");
         }
 
         public string DetectCachePath()
@@ -30,6 +39,45 @@ namespace TextureSwapper.Services
 
             Log.Debug($"Detecting cache path. Suggested: {fullPath}");
             return Directory.Exists(fullPath) ? fullPath : string.Empty;
+        }
+
+        private static bool TryDownloadMissingAsset(string filePath)
+        {
+            try
+            {
+                int texIndex = filePath.IndexOf("Textures", StringComparison.OrdinalIgnoreCase);
+                if (texIndex < 0) return false;
+
+                string relativePath = filePath[texIndex..].Replace('\\', '/');
+                string url = $"{Constants.GitHubRawUrl}/{relativePath}";
+
+                Log.Information("Attempting to auto-download missing asset from GitHub: {Url}", url);
+
+                using HttpResponseMessage response = _assetDownloadHttpClient.GetAsync(url).GetAwaiter().GetResult();
+                if (!response.IsSuccessStatusCode)
+                {
+                    Log.Warning("Asset not found on remote server ({StatusCode}): {Url}", response.StatusCode, url);
+                    return false;
+                }
+
+                byte[] data = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+                if (data.Length == 0) return false;
+
+                string? dir = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                File.WriteAllBytes(filePath, data);
+                Log.Information("Successfully downloaded missing asset: {Path}", filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to download missing asset: {Path}", filePath);
+                return false;
+            }
         }
 
         private static (string? Path, bool IsEncrypted) ResolveAssetSource(string src)
@@ -61,6 +109,13 @@ namespace TextureSwapper.Services
                 string alt = Path.ChangeExtension(src, ".png");
                 if (File.Exists(alt)) return (alt, false);
                 if (File.Exists(alt + ".enc")) return (alt + ".enc", true);
+            }
+
+            if (!src.Contains("Custom", StringComparison.OrdinalIgnoreCase) &&
+                !src.Contains("Backups", StringComparison.OrdinalIgnoreCase) &&
+                TryDownloadMissingAsset(src))
+            {
+                return (src, false);
             }
 
             return (null, false);
@@ -503,6 +558,21 @@ namespace TextureSwapper.Services
                         hasEncryptedAssets = true;
                     }
                 }
+            }
+
+            if (resolvedOperations.Count == 0)
+            {
+                Log.Error(
+                    $"No source texture files found locally for skin {skin.Category} {skin.Name} in {texturesDir}"
+                );
+                return $"Failed to apply skin: texture files for '{skin.Name}' were not found locally.";
+            }
+
+            if (resolvedOperations.Count < copyOperations.Count)
+            {
+                Log.Warning(
+                    $"Only {resolvedOperations.Count} of {copyOperations.Count} files found for skin {skin.Category} {skin.Name}."
+                );
             }
 
             byte[]? assetDecryptionKey = null;
@@ -1242,6 +1312,21 @@ namespace TextureSwapper.Services
                         hasEncryptedAssets = true;
                     }
                 }
+            }
+
+            if (resolvedOperations.Count == 0)
+            {
+                Log.Error(
+                    $"No source texture files found locally for shot effect {shotEffect.Turret} {shotEffect.Name} in {texturesDir}"
+                );
+                return $"Failed to apply shot effect: texture files for '{shotEffect.Name}' were not found locally.";
+            }
+
+            if (resolvedOperations.Count < copyOperations.Count)
+            {
+                Log.Warning(
+                    $"Only {resolvedOperations.Count} of {copyOperations.Count} files found for shot effect {shotEffect.Turret} {shotEffect.Name}."
+                );
             }
 
             byte[]? assetDecryptionKey = null;

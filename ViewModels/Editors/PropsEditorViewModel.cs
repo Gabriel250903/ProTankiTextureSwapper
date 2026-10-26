@@ -53,6 +53,9 @@ namespace TextureSwapper.ViewModels.Editors
             StringComparer.OrdinalIgnoreCase
         );
 
+        private static readonly JsonSerializerOptions jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions options = jsonSerializerOptions;
+
         #region Observable Properties
 
         private ObservableCollection<PropModel> _allProps = [];
@@ -730,9 +733,10 @@ namespace TextureSwapper.ViewModels.Editors
                 }
 
                 string json = File.ReadAllText(jsonPath);
+                
                 List<PropModel>? props = JsonSerializer.Deserialize<List<PropModel>>(
                     json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    options
                 );
 
                 if (props == null || props.Count == 0)

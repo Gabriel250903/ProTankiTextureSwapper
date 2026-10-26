@@ -568,6 +568,28 @@
   },
   {
     "Category": "Turrets",
+    "ItemName": "Thunder",
+    "Name": "Thunder Peter",
+    "SourceFolder": "Textures/Turrets/Thunder/Peter/M3",
+    "PreviewImage": "Textures/Turrets/Thunder/Peter/M3/Thunder_Peter.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvb2JqZWN0LjNkcw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Thunder",
+    "Name": "Thunder Peter on XT",
+    "SourceFolder": "Textures/Turrets/Thunder/Peter/M3",
+    "PreviewImage": "Textures/Turrets/Thunder/Peter/M3/Thunder_Peter.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvb2JqZWN0LjNkcw=="
+  },
+  {
+    "Category": "Turrets",
     "ItemName": "Twins",
     "Name": "Twins TX SP",
     "SourceFolder": "Textures/Encrypted/Turrets/Twins/TX_SP/M3",
@@ -656,18 +678,26 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlsc19hbHBoYS5qcGc=",
-    "IsPremium": true
+    "IsPremium": true,
+    "Tags": [
+      "Demonic",
+      "Old"
+    ]
   },
   {
     "Category": "Turrets",
     "ItemName": "Ricochet",
     "Name": "Ricochet DC",
-    "SourceFolder": "Textures/Turrets/Ricochet/DC/M3",
-    "PreviewImage": "Textures/Turrets/Ricochet/DC/M3/Ricochet_DC.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Ricochet/DC/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Ricochet/DC/M3/Ricochet_DC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvb2JqZWN0LjNkcw=="
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvb2JqZWN0LjNkcw==",
+    "IsPremium": true,
+    "Tags": [
+      "Demonic"
+    ]
   },
   {
     "Category": "Turrets",
@@ -684,29 +714,31 @@
     "Category": "Turrets",
     "ItemName": "Hammer",
     "Name": "Hammer SP",
-    "SourceFolder": "Textures/Turrets/Hammer/SP/M3",
-    "PreviewImage": "Textures/Turrets/Hammer/SP/M3/Hammer_SP.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Hammer/SP/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Hammer/SP/M3/Hammer_SP.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlsc19hbHBoYS5qcGc=",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvb2JqZWN0LjNkcw==",
     "Tags": [
       "SP"
-    ]
+    ],
+    "IsPremium": true
   },
   {
     "Category": "Turrets",
     "ItemName": "Hammer",
     "Name": "Hammer IC",
-    "SourceFolder": "Textures/Turrets/Hammer/IC/M3",
-    "PreviewImage": "Textures/Turrets/Hammer/IC/M3/Hammer_IC.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Hammer/IC/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Hammer/IC/M3/Hammer_IC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlsc19hbHBoYS5qcGc=",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvb2JqZWN0LjNkcw==",
     "Tags": [
       "IC"
-    ]
+    ],
+    "IsPremium": true
   },
   {
     "Category": "Turrets",
@@ -723,39 +755,30 @@
     "Category": "Turrets",
     "ItemName": "Smoky",
     "Name": "Smoky VT",
-    "SourceFolder": "Textures/Turrets/Smoky/VT/M3",
-    "PreviewImage": "Textures/Turrets/Smoky/VT/M3/Smoky_VT.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Smoky/VT/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Smoky/VT/M3/Smoky_VT.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzIwMjM1MTA0MjcyMDIvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzIwMjM1MTA0MjcyMDIvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzIwMjM1MTA0MjcyMDIvZGV0YWlsc19hbHBoYS5qcGc=",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMTYvMzIwMjM1MTA0MjcyMDIvb2JqZWN0LjNkcw==",
     "Tags": [
       "VT"
-    ]
+    ],
+    "IsPremium": true
   },
   {
     "Category": "Turrets",
     "ItemName": "Railgun",
     "Name": "Railgun RT",
-    "SourceFolder": "Textures/Turrets/Railgun/RT/M3",
-    "PreviewImage": "Textures/Turrets/Railgun/RT/M3/Railgun_RT.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Railgun/RT/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Railgun/RT/M3/Railgun_RT.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMjAyMzUxMDQyNDYxNS9kZXRhaWxzLmpwZw==",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMjAyMzUxMDQyNDYxNS9saWdodG1hcC5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMjAyMzUxMDQyNDYxNS9kZXRhaWxzX2FscGhhLmpwZw==",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC82NC8zMjAyMzUxMDQyNDYxNS9vYmplY3QuM2Rz",
     "Tags": [
       "RT"
-    ]
-  },
-  {
-    "Category": "Turrets",
-    "ItemName": "Vulcan",
-    "Name": "Vulcan LC",
-    "SourceFolder": "Textures/Turrets/Vulcan/LC/M3",
-    "PreviewImage": "Textures/Turrets/Vulcan/LC/M3/Vulcan_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzIwMjM1MTA0MzEyMTIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzIwMjM1MTA0MzEyMTIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzIwMjM1MTA0MzEyMTIvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNzYvMzIwMjM1MTA0MzEyMTIvb2JqZWN0LjNkcw=="
+    ],
+    "IsPremium": true
   }
 ]

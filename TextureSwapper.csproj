@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
 
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
