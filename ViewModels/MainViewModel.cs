@@ -820,6 +820,44 @@ namespace TextureSwapper.ViewModels
                 return;
             }
 
+            string title = LocalizationService.GetString("Loc_ClearCache_ConfirmTitle");
+            if (string.IsNullOrWhiteSpace(title) || title == "Loc_ClearCache_ConfirmTitle")
+            {
+                title = "Clear Cache";
+            }
+
+            string message = LocalizationService.GetString("Loc_ClearCache_ConfirmMessage");
+            if (string.IsNullOrWhiteSpace(message) || message == "Loc_ClearCache_ConfirmMessage")
+            {
+                message = "Are you sure you want to clear the ProTanki cache? All cached game textures will be removed.";
+            }
+
+            string yesText = LocalizationService.GetString("Loc_Common_Yes");
+            if (string.IsNullOrWhiteSpace(yesText) || yesText == "Loc_Common_Yes")
+            {
+                yesText = "Yes";
+            }
+
+            string noText = LocalizationService.GetString("Loc_Common_No");
+            if (string.IsNullOrWhiteSpace(noText) || noText == "Loc_Common_No")
+            {
+                noText = "No";
+            }
+
+            MessageBox messageBox = new()
+            {
+                Title = title,
+                Content = message,
+                PrimaryButtonText = yesText,
+                CloseButtonText = noText,
+                Owner = Application.Current?.MainWindow,
+            };
+
+            if (await messageBox.ShowDialogAsync() != MessageBoxResult.Primary)
+            {
+                return;
+            }
+
             string notificationTitle = string.Empty;
             string notificationMessage = string.Empty;
             ControlAppearance notificationAppearance = ControlAppearance.Info;

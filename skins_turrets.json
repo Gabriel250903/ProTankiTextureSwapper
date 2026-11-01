@@ -83,9 +83,9 @@
     "Name": "Thunder XT",
     "SourceFolder": "Textures/Turrets/Thunder/XT/M3",
     "PreviewImage": "Textures/Turrets/Thunder/XT/M3/Thunder_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc="
   },
   {
     "Category": "Turrets",
@@ -93,9 +93,9 @@
     "Name": "Thunder LC",
     "SourceFolder": "Textures/Turrets/Thunder/Legacy/M3",
     "PreviewImage": "Textures/Turrets/Thunder/Legacy/M3/Thunder_LC.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc="
   },
   {
     "Category": "Turrets",
@@ -338,9 +338,9 @@
     "Name": "Thunder Prime",
     "SourceFolder": "Textures/Turrets/Thunder/Prime/M3",
     "PreviewImage": "Textures/Turrets/Thunder/Prime/M3/Thunder_Prime.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc="
   },
   {
     "Category": "Turrets",
@@ -524,10 +524,10 @@
     "Name": "Thunder TX XT",
     "SourceFolder": "Textures/Encrypted/Turrets/Thunder/TX_XT/M3",
     "PreviewImage": "Textures/Encrypted/Turrets/Thunder/TX_XT/M3/Thunder_TX_XT.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvb2JqZWN0LjNkcw==",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvb2JqZWN0LjNkcw==",
     "IsPremium": true
   },
   {
@@ -548,10 +548,10 @@
     "Name": "Thunder XT HD",
     "SourceFolder": "Textures/Encrypted/Turrets/Thunder/XT_HD/M3",
     "PreviewImage": "Textures/Encrypted/Turrets/Thunder/XT_HD/M3/Thunder_XT_HD.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvb2JqZWN0LjNkcw==",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvb2JqZWN0LjNkcw==",
     "IsPremium": true
   },
   {
@@ -572,10 +572,10 @@
     "Name": "Thunder Peter",
     "SourceFolder": "Textures/Turrets/Thunder/Peter/M3",
     "PreviewImage": "Textures/Turrets/Thunder/Peter/M3/Thunder_Peter.png",
-    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlscy5qcGc=",
-    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvbGlnaHRtYXAuanBn",
-    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwMjM1MTA0MzAwNDIvb2JqZWN0LjNkcw=="
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvb2JqZWN0LjNkcw=="
   },
   {
     "Category": "Turrets",

@@ -22,6 +22,7 @@ installer.iss
 CodeDependencies.iss
 dotnet-tools.json
 Textures/Premium/
+scratch/
 
 Thumbs.db
 ehthumbs.db

@@ -28,6 +28,10 @@ namespace TextureSwapper.Services
         private bool _isUpdating;
 
         public bool IsRemoteAllowed { get; private set; } = true;
+        public bool IsThematicGoldAllowed { get; private set; } = true;
+
+        public bool IsThematicGoldActive =>
+            IsRemoteAllowed && IsThematicGoldAllowed && !Settings.DisableThematicGold;
 
         public event EventHandler<bool>? HalloweenThemeChanged;
 
@@ -37,8 +41,28 @@ namespace TextureSwapper.Services
             IsRemoteAllowed
             && (Settings.IsHalloweenThemeSelected || Settings.ForceHalloweenPreview);
 
+        private void TryLoadLocalConfig()
+        {
+            try
+            {
+                string localConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "remote_config.json");
+                if (File.Exists(localConfigPath))
+                {
+                    string json = File.ReadAllText(localConfigPath);
+                    RemoteConfigModel? cfg = JsonSerializer.Deserialize<RemoteConfigModel>(json);
+                    if (cfg != null)
+                    {
+                        IsRemoteAllowed = cfg.HalloweenEnabled;
+                        IsThematicGoldAllowed = cfg.ThematicGoldEnabled;
+                    }
+                }
+            }
+            catch { }
+        }
+
         public async Task SyncRemoteHalloweenConfigAsync(IUpdateService updateService)
         {
+            TryLoadLocalConfig();
             try
             {
                 string url =
@@ -55,9 +79,11 @@ namespace TextureSwapper.Services
                     {
                         bool changed = IsRemoteAllowed != config.HalloweenEnabled;
                         IsRemoteAllowed = config.HalloweenEnabled;
+                        IsThematicGoldAllowed = config.ThematicGoldEnabled;
                         Log.Information(
-                            "Remote Halloween configuration received: Enabled={Enabled}",
-                            IsRemoteAllowed
+                            "Remote configuration received: HalloweenEnabled={HalloweenEnabled}, ThematicGoldEnabled={ThematicGoldEnabled}",
+                            IsRemoteAllowed,
+                            IsThematicGoldAllowed
                         );
 
                         if (changed)

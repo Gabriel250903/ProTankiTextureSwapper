@@ -674,7 +674,7 @@ namespace TextureSwapper.ViewModels.Editors
             );
             RestoreCommand = new AsyncRelayCommand(
                 _ => RestoreOriginalAsync(),
-                _ => !IsWorking && SelectedProp != null
+                _ => !IsWorking
             );
             ResetFiltersCommand = new RelayCommand(_ => ResetFilters(), _ => IsAdmin);
             ImportDecalCommand = new RelayCommand(_ => ImportDecal(), _ => IsAdmin);
@@ -3661,53 +3661,105 @@ namespace TextureSwapper.ViewModels.Editors
 
         private async Task RestoreOriginalAsync()
         {
-            if (SelectedProp == null)
+            if (!await _mainVM.EnsureSafeToOperate())
             {
                 return;
             }
 
-            if (!await _mainVM.EnsureSafeToOperate())
+            string cachePath = _mainVM.CachePath;
+            if (string.IsNullOrWhiteSpace(cachePath) || !Directory.Exists(cachePath))
             {
+                await _mainVM.NotificationService.ShowAsync(
+                    "Error",
+                    "Game cache directory not found.",
+                    ControlAppearance.Danger
+                );
                 return;
             }
 
             try
             {
                 IsWorking = true;
-                LoadingMessage = $"Restoring original library for {SelectedProp.Name}...";
+                LoadingMessage = "Restoring all props to default state...";
 
-                string cachePath = _mainVM.CachePath;
-                string cacheFile = Path.Combine(cachePath, SelectedProp.LibraryBase64Url);
-                string backupFile = cacheFile + ".bak";
+                HashSet<string> propLibraries = new(
+                    _allProps?.Select(p => p.LibraryBase64Url).Where(lib => !string.IsNullOrEmpty(lib))
+                    ?? [],
+                    StringComparer.OrdinalIgnoreCase
+                );
 
-                if (!File.Exists(backupFile))
+                List<string> backupFilesToRestore = [];
+                foreach (string bakFile in Directory.EnumerateFiles(cachePath, "*.bak"))
+                {
+                    string baseName = Path.GetFileNameWithoutExtension(bakFile);
+                    if (propLibraries.Count == 0 || propLibraries.Contains(baseName))
+                    {
+                        backupFilesToRestore.Add(bakFile);
+                    }
+                }
+
+                if (backupFilesToRestore.Count == 0)
                 {
                     await _mainVM.NotificationService.ShowAsync(
-                        "No Backup",
-                        "No backup (.bak) file found for this library. It may not have been modified yet.",
+                        "No Backups Found",
+                        "No backup (.bak) files found. Props are already in their default state.",
                         ControlAppearance.Caution
                     );
                     return;
                 }
 
-                await Task.Run(() => File.Copy(backupFile, cacheFile, overwrite: true));
+                int total = backupFilesToRestore.Count;
+                int restoredCount = 0;
+
+                await Task.Run(() =>
+                {
+                    for (int i = 0; i < total; i++)
+                    {
+                        string backupFile = backupFilesToRestore[i];
+                        string cacheFile = backupFile[..^4];
+
+                        try
+                        {
+                            File.Copy(backupFile, cacheFile, overwrite: true);
+                            restoredCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(
+                                ex,
+                                "Failed to restore prop library from backup {BackupFile}",
+                                backupFile
+                            );
+                        }
+                    }
+                });
 
                 _currentTaraBase64Url = null;
                 _currentTaraEntries = null;
                 _customTextureData = null;
                 _customMeshData = null;
 
-                await LoadSelectedPropAsync();
+                if (SelectedProp != null)
+                {
+                    await LoadSelectedPropAsync();
+                }
+
+                _mainVM.BackupsTabVM.LoadBackups();
 
                 await _mainVM.NotificationService.ShowAsync(
                     "Restored",
-                    $"Original library for '{SelectedProp.Name}' has been restored.",
+                    $"Successfully restored {restoredCount} {(restoredCount == 1 ? "library" : "libraries")} back to default state.",
                     ControlAppearance.Success
                 );
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to restore original for {Prop}.", SelectedProp?.Name);
+                Log.Error(ex, "Failed to restore original props.");
+                await _mainVM.NotificationService.ShowAsync(
+                    "Error",
+                    $"Failed to restore original props: {ex.Message}",
+                    ControlAppearance.Danger
+                );
             }
             finally
             {

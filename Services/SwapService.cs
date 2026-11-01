@@ -289,6 +289,8 @@ namespace TextureSwapper.Services
                 skin.ModelTarget,
                 skin.TracksTarget,
                 skin.ImagesXmlTarget,
+                skin.SecondaryDetailsTarget,
+                skin.SecondaryModelTarget,
             ];
             foreach (string target in targets)
             {
@@ -352,6 +354,8 @@ namespace TextureSwapper.Services
                     skin.ModelTarget,
                     skin.TracksTarget,
                     skin.ImagesXmlTarget,
+                    skin.SecondaryDetailsTarget,
+                    skin.SecondaryModelTarget,
                 ];
 
                 string originalsDir = FileHelper.GetSafePath(
@@ -448,6 +452,8 @@ namespace TextureSwapper.Services
                     skin.LightmapTarget,
                     skin.AlphaTarget,
                     skin.ModelTarget,
+                    skin.SecondaryDetailsTarget,
+                    skin.SecondaryModelTarget,
                 ];
                 foreach (string target in requiredTargets)
                 {
@@ -543,6 +549,24 @@ namespace TextureSwapper.Services
                         (
                             FileHelper.GetSafePath(texturesDir, "images.xml"),
                             FileHelper.GetSafePath(cachePath, skin.ImagesXmlTarget)
+                        )
+                    );
+                }
+                if (!string.IsNullOrEmpty(skin.SecondaryDetailsTarget))
+                {
+                    copyOperations.Add(
+                        (
+                            FileHelper.GetSafePath(texturesDir, "details.jpg"),
+                            FileHelper.GetSafePath(cachePath, skin.SecondaryDetailsTarget)
+                        )
+                    );
+                }
+                if (!string.IsNullOrEmpty(skin.SecondaryModelTarget))
+                {
+                    copyOperations.Add(
+                        (
+                            FileHelper.GetSafePath(texturesDir, "object.3ds"),
+                            FileHelper.GetSafePath(cachePath, skin.SecondaryModelTarget)
                         )
                     );
                 }

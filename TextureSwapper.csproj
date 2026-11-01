@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
 
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,6 +51,9 @@
     </None>
     <None Update="Assets\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\HUD\**\*">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Textures\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

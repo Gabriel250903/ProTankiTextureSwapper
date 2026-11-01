@@ -368,9 +368,12 @@ namespace TextureSwapper.Services.Composers
                 ),
             ];
 
+            // ProTanki / Alternativa3D renders Railgun with an inverted/subtractive blend mode.
+            // Textures saved for the game must use the complementary hue (shifted 180 degrees)
+            // so that the in-game beam matches the color shown in the preview.
             RailgunShotRenderOptions gameOptions = new()
             {
-                Hue = options.Hue,
+                Hue = (options.Hue + 180.0) % 360.0,
                 Saturation = options.Saturation,
                 Brightness = options.Brightness,
                 Contrast = options.Contrast,
@@ -394,7 +397,7 @@ namespace TextureSwapper.Services.Composers
                 byte[] recoloredPixels = RecolorPixels(
                     template,
                     gameOptions,
-                    swapChannelsForGame: true
+                    isGameTexture: true
                 );
                 try
                 {
@@ -433,7 +436,7 @@ namespace TextureSwapper.Services.Composers
         private static byte[] RecolorPixels(
             CachedTextureData template,
             RailgunShotRenderOptions options,
-            bool swapChannelsForGame = false
+            bool isGameTexture = false
         )
         {
             int totalPixels = template.Width * template.Height;
@@ -495,7 +498,9 @@ namespace TextureSwapper.Services.Composers
                 double outG = pureG / 255.0 * lum;
                 double outB = pureB / 255.0 * lum;
 
-                if (lum > 0.85)
+                // Core whitening is applied only for preview rendering. In the game's inverted shader,
+                // white turns dark, so game textures should retain full color saturation.
+                if (!isGameTexture && lum > 0.85)
                 {
                     double core = (lum - 0.85) / 0.15;
                     core = core * core * 0.5;
@@ -504,12 +509,10 @@ namespace TextureSwapper.Services.Composers
                     outB += (1.0 - outB) * core;
                 }
 
-                double finalB = swapChannelsForGame ? outR : outB;
-                double finalR = swapChannelsForGame ? outB : outR;
-
-                output[offset] = (byte)Math.Clamp(finalB * 255.0, 0, 255);
+                // PixelFormats.Bgr32 layout: [offset]=B, [offset+1]=G, [offset+2]=R
+                output[offset] = (byte)Math.Clamp(outB * 255.0, 0, 255);
                 output[offset + 1] = (byte)Math.Clamp(outG * 255.0, 0, 255);
-                output[offset + 2] = (byte)Math.Clamp(finalR * 255.0, 0, 255);
+                output[offset + 2] = (byte)Math.Clamp(outR * 255.0, 0, 255);
                 output[offset + 3] = 255;
             }
 

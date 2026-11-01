@@ -6,5 +6,8 @@ namespace TextureSwapper.Core.Models
     {
         [JsonPropertyName("halloween_enabled")]
         public bool HalloweenEnabled { get; set; } = true;
+
+        [JsonPropertyName("thematic_gold_enabled")]
+        public bool ThematicGoldEnabled { get; set; } = true;
     }
 }

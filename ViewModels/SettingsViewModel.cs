@@ -25,6 +25,8 @@ public class SettingsViewModel : ViewModelBase
 
     private readonly IDeviceBanService _deviceBanService;
 
+    private readonly IHudService _hudService;
+
     private string _activationStatusText = string.Empty;
 
     private bool _isLoading;
@@ -580,12 +582,36 @@ public class SettingsViewModel : ViewModelBase
 
     public ICommand OpenLogsFolderCommand { get; }
 
+    public ICommand InstallLoaderPatchCommand { get; }
+
+    public bool EnableCenteredHud
+    {
+        get => Settings.EnableCenteredHud;
+        set
+        {
+            if (Settings.EnableCenteredHud != value)
+            {
+                Settings.EnableCenteredHud = value;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(EnableCenteredHud));
+                _ = HandleCenteredHudToggleAsync(value);
+            }
+        }
+    }
+
+    public bool IsLoaderPatched => _hudService.IsLoaderPatched();
+
+    public string LoaderPatchStatusText => IsLoaderPatched
+        ? "Patched (Local Overrides Active)"
+        : "Not Patched (Required for HUD overrides)";
+
     public SettingsViewModel(
         ISettingsService settingsService,
         MainViewModel mainViewModel,
         ILocalizationService localizationService,
         IPremiumService premiumService,
-        IDeviceBanService deviceBanService
+        IDeviceBanService deviceBanService,
+        IHudService hudService
     )
     {
         _settingsService = settingsService;
@@ -593,7 +619,16 @@ public class SettingsViewModel : ViewModelBase
         _localizationService = localizationService;
         _premiumService = premiumService;
         _deviceBanService = deviceBanService;
+        _hudService = hudService;
         Settings = mainViewModel.Settings;
+
+        // Sync setting with actual on-disk state
+        Settings.EnableCenteredHud = _hudService.IsCenteredHudEnabled();
+
+        InstallLoaderPatchCommand = new AsyncRelayCommand(
+            ExecuteInstallLoaderPatch,
+            _ => !IsLoading
+        );
         BuyPremiumCommand = new RelayCommand(
             _ =>
             {
@@ -1063,6 +1098,102 @@ public class SettingsViewModel : ViewModelBase
                 ex.Message,
                 ControlAppearance.Danger
             );
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task HandleCenteredHudToggleAsync(bool enable)
+    {
+        try
+        {
+            IsLoading = true;
+            UpdateStatus = enable ? "Applying Centered HUD..." : "Restoring Default HUD...";
+
+            if (enable)
+            {
+                if (!_hudService.IsLoaderPatched())
+                {
+                    await _mainViewModel.ShowNotificationAsync(
+                        "StandaloneLoader Not Patched",
+                        "The StandaloneLoader patch is required to load custom HUD files. Click 'Install Patch' below.",
+                        ControlAppearance.Caution
+                    );
+                }
+
+                (bool success, string? error) = await _hudService.ApplyCenteredHudAsync();
+                if (success)
+                {
+                    string msg = Helpers.Utilities.FileHelper.IsGameRunning()
+                        ? "Centered Supplies HUD applied! Restart ProTanki to see the centered supplies in battle."
+                        : "Centered Supplies HUD applied! Launch ProTanki to play with the centered HUD.";
+                    await _mainViewModel.ShowNotificationAsync("Centered HUD", msg, ControlAppearance.Success);
+                }
+                else
+                {
+                    await _mainViewModel.ShowNotificationAsync("Error", error ?? "Failed to apply Centered HUD.", ControlAppearance.Danger);
+                }
+            }
+            else
+            {
+                (bool success, string? error) = _hudService.RestoreDefaultHud();
+                if (success)
+                {
+                    await _mainViewModel.ShowNotificationAsync("Default HUD", "Default supplies HUD restored.", ControlAppearance.Info);
+                }
+                else
+                {
+                    await _mainViewModel.ShowNotificationAsync("Error", error ?? "Failed to restore HUD.", ControlAppearance.Danger);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to toggle centered HUD.");
+            await _mainViewModel.ShowNotificationAsync("Error", ex.Message, ControlAppearance.Danger);
+        }
+        finally
+        {
+            IsLoading = false;
+            OnPropertyChanged(nameof(IsLoaderPatched));
+            OnPropertyChanged(nameof(LoaderPatchStatusText));
+        }
+    }
+
+    private async Task ExecuteInstallLoaderPatch(object? parameter)
+    {
+        try
+        {
+            IsLoading = true;
+            UpdateStatus = "Installing StandaloneLoader patch...";
+
+            (bool success, string? error) = await _hudService.InstallLoaderPatchAsync();
+            OnPropertyChanged(nameof(IsLoaderPatched));
+            OnPropertyChanged(nameof(LoaderPatchStatusText));
+
+            if (success)
+            {
+                await _mainViewModel.ShowNotificationAsync(
+                    "Patch Installed",
+                    "ProTanki StandaloneLoader was successfully patched! Custom HUD overrides are now active.",
+                    ControlAppearance.Success
+                );
+            }
+            else
+            {
+                await _mainViewModel.ShowNotificationAsync(
+                    "Patch Installation",
+                    error ?? "Patch installation failed or was cancelled.",
+                    ControlAppearance.Danger
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error installing StandaloneLoader patch.");
+            await _mainViewModel.ShowNotificationAsync("Error", ex.Message, ControlAppearance.Danger);
         }
         finally
         {

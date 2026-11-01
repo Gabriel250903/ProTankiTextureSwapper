@@ -736,6 +736,7 @@
                 Command="{Binding RestoreCommand}"
                 Content="{DynamicResource Loc_Props_RestoreOriginal}"
                 FontSize="13"
+                ToolTip="{DynamicResource Loc_Props_RestoreOriginalTooltip}"
               />
             </StackPanel>
           </StackPanel>

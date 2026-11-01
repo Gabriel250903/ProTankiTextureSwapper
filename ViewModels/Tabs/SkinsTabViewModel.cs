@@ -6,6 +6,7 @@ using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.Services;
 using TextureSwapper.ViewModels.Base;
+using TextureSwapper.Views.Windows;
 using Wpf.Ui.Controls;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
@@ -605,6 +606,46 @@ namespace TextureSwapper.ViewModels.Tabs
             List<SkinModel> skinsToApply =
                 selectedSkins.Count != 0 ? selectedSkins : [SelectedSkin!];
 
+            if (skinsToApply.Any(s => s.ItemName == "Gold Box"))
+            {
+                bool isThematicGoldActive = _mainVM.HalloweenThemeService.IsThematicGoldActive
+                    && skinsToApply.Any(s => s.ItemName == "Gold Box" && !string.IsNullOrEmpty(s.SecondaryDetailsTarget));
+
+                if (isThematicGoldActive)
+                {
+                    GoldBoxTargetDialog dialog = new()
+                    {
+                        Owner = Application.Current?.MainWindow,
+                    };
+
+                    if (dialog.ShowDialog() != true)
+                    {
+                        Log.Information("User canceled gold box target selection.");
+                        return;
+                    }
+
+                    skinsToApply = [.. skinsToApply];
+                    for (int i = 0; i < skinsToApply.Count; i++)
+                    {
+                        if (skinsToApply[i].ItemName == "Gold Box")
+                        {
+                            skinsToApply[i] = CloneSkinForTargetChoice(skinsToApply[i], dialog.SelectedChoice);
+                        }
+                    }
+                }
+                else
+                {
+                    skinsToApply = [.. skinsToApply];
+                    for (int i = 0; i < skinsToApply.Count; i++)
+                    {
+                        if (skinsToApply[i].ItemName == "Gold Box")
+                        {
+                            skinsToApply[i] = CloneSkinForTargetChoice(skinsToApply[i], GoldBoxTargetChoice.NormalOnly);
+                        }
+                    }
+                }
+            }
+
             List<SkinModel> highDetailSkins = [.. skinsToApply.Where(IsHighDetailSkin)];
             if (highDetailSkins.Count > 0)
             {
@@ -747,6 +788,53 @@ namespace TextureSwapper.ViewModels.Tabs
                 || name.Contains("TX", StringComparison.OrdinalIgnoreCase);
 
             return isDemonic || isXtHd || isTankiX;
+        }
+
+        private static SkinModel CloneSkinForTargetChoice(SkinModel original, GoldBoxTargetChoice choice)
+        {
+            SkinModel copy = new()
+            {
+                Category = original.Category,
+                SubCategory = original.SubCategory,
+                ItemName = original.ItemName,
+                Name = original.Name,
+                SourceFolder = original.SourceFolder,
+                PreviewImage = original.PreviewImage,
+                LightmapTarget = original.LightmapTarget,
+                AlphaTarget = original.AlphaTarget,
+                TracksTarget = original.TracksTarget,
+                ImagesXmlTarget = original.ImagesXmlTarget,
+                IsPremium = original.IsPremium,
+                IsExperimental = original.IsExperimental,
+                SelectedModification = original.SelectedModification,
+            };
+
+            switch (choice)
+            {
+                case GoldBoxTargetChoice.NormalOnly:
+                    copy.DetailsTarget = original.DetailsTarget;
+                    copy.ModelTarget = original.ModelTarget;
+                    copy.SecondaryDetailsTarget = string.Empty;
+                    copy.SecondaryModelTarget = string.Empty;
+                    break;
+
+                case GoldBoxTargetChoice.ThematicOnly:
+                    copy.DetailsTarget = original.SecondaryDetailsTarget;
+                    copy.ModelTarget = original.SecondaryModelTarget;
+                    copy.SecondaryDetailsTarget = string.Empty;
+                    copy.SecondaryModelTarget = string.Empty;
+                    break;
+
+                case GoldBoxTargetChoice.Both:
+                default:
+                    copy.DetailsTarget = original.DetailsTarget;
+                    copy.ModelTarget = original.ModelTarget;
+                    copy.SecondaryDetailsTarget = original.SecondaryDetailsTarget;
+                    copy.SecondaryModelTarget = original.SecondaryModelTarget;
+                    break;
+            }
+
+            return copy;
         }
     }
 }

@@ -135,6 +135,7 @@ namespace TextureSwapper
             _ = services.AddSingleton<IPropArchiveService, PropArchiveService>();
             _ = services.AddSingleton<IMeshService, MeshService>();
             _ = services.AddSingleton<IAdminAuthService, AdminAuthService>();
+            _ = services.AddSingleton<IHudService, HudService>();
             _ = services.AddSingleton<MainViewModel>();
             _ = services.AddSingleton<MainWindow>();
 

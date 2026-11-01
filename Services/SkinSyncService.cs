@@ -109,7 +109,9 @@ namespace TextureSwapper.Services
                                 localSkin.DetailsTarget != remoteSkin.DetailsTarget
                                 || localSkin.LightmapTarget != remoteSkin.LightmapTarget
                                 || localSkin.AlphaTarget != remoteSkin.AlphaTarget
-                                || localSkin.ModelTarget != remoteSkin.ModelTarget;
+                                || localSkin.ModelTarget != remoteSkin.ModelTarget
+                                || localSkin.SecondaryDetailsTarget != remoteSkin.SecondaryDetailsTarget
+                                || localSkin.SecondaryModelTarget != remoteSkin.SecondaryModelTarget;
 
                             bool isLocalEncrypted = localSkin.SourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase);
 
@@ -126,6 +128,8 @@ namespace TextureSwapper.Services
                                     localSkin.LightmapTarget = remoteSkin.LightmapTarget;
                                     localSkin.AlphaTarget = remoteSkin.AlphaTarget;
                                     localSkin.ModelTarget = remoteSkin.ModelTarget;
+                                    localSkin.SecondaryDetailsTarget = remoteSkin.SecondaryDetailsTarget;
+                                    localSkin.SecondaryModelTarget = remoteSkin.SecondaryModelTarget;
                                 }
                                 else if (targetsChanged)
                                 {

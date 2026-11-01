@@ -630,6 +630,28 @@ namespace TextureSwapper.Core.Models
             set => ImagesXmlTarget = value ?? string.Empty;
         }
 
+        [JsonIgnore]
+        public string SecondaryDetailsTarget { get; set; } = string.Empty;
+
+        [JsonPropertyName("SecondaryDetailsTarget")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? SecondaryDetailsTargetForSerialization
+        {
+            get => string.IsNullOrEmpty(SecondaryDetailsTarget) ? null : SecondaryDetailsTarget;
+            set => SecondaryDetailsTarget = value ?? string.Empty;
+        }
+
+        [JsonIgnore]
+        public string SecondaryModelTarget { get; set; } = string.Empty;
+
+        [JsonPropertyName("SecondaryModelTarget")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? SecondaryModelTargetForSerialization
+        {
+            get => string.IsNullOrEmpty(SecondaryModelTarget) ? null : SecondaryModelTarget;
+            set => SecondaryModelTarget = value ?? string.Empty;
+        }
+
         private string _previewImage = string.Empty;
         public string PreviewImage
         {

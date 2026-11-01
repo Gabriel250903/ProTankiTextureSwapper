@@ -34,5 +34,7 @@ namespace TextureSwapper.Core.Models
         public string LastSeenVersion { get; set; } = string.Empty;
         public bool HasSeenV2UpdateNotice { get; set; } = false;
         public bool HasSeenDiscordInvite { get; set; } = false;
+        public bool EnableCenteredHud { get; set; } = false;
+        public bool DisableThematicGold { get; set; } = false;
     }
 }
