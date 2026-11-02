@@ -260,5 +260,27 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83My8yMzIvMzIwMjM1MTA2NzQ3NzAvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83My8yMzIvMzIwMjM1MTA2NzQ3NzAvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83My8yMzIvMzIwMjM1MTA2NzQ3NzAvZGV0YWlsc19hbHBoYS5qcGc="
+  },
+  {
+    "Category": "Hulls",
+    "ItemName": "Viking",
+    "Name": "Viking Doom",
+    "SourceFolder": "Textures/Hulls/Viking/Doom/M3",
+    "PreviewImage": "Textures/Hulls/Viking/Doom/M3/Viking_Doom.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHNfYWxwaGEuanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL29iamVjdC4zZHM="
+  },
+  {
+    "Category": "Hulls",
+    "ItemName": "Viking",
+    "Name": "Viking Doom on XT",
+    "SourceFolder": "Textures/Hulls/Viking/Doom/M3",
+    "PreviewImage": "Textures/Hulls/Viking/Doom/M3/Viking_Doom.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzY0LzMyMDIzNTEwNDIwNTM1L2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzY0LzMyMDIzNTEwNDIwNTM1L2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzY0LzMyMDIzNTEwNDIwNTM1L2RldGFpbHNfYWxwaGEuanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzY0LzMyMDIzNTEwNDIwNTM1L29iamVjdC4zZHM="
   }
 ]

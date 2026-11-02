@@ -780,5 +780,27 @@
       "RT"
     ],
     "IsPremium": true
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Thunder",
+    "Name": "Thunder Doom",
+    "SourceFolder": "Textures/Turrets/Thunder/Doom/M3",
+    "PreviewImage": "Textures/Turrets/Thunder/Doom/M3/Thunder_Doom.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNDYvMzIwNjExNzQ0NTU3NTIvb2JqZWN0LjNkcw=="
+  },
+  {
+    "Category": "Turrets",
+    "ItemName": "Thunder",
+    "Name": "Thunder Doom on XT",
+    "SourceFolder": "Textures/Turrets/Thunder/Doom/M3",
+    "PreviewImage": "Textures/Turrets/Thunder/Doom/M3/Thunder_Doom.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvZGV0YWlscy5qcGc=",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvbGlnaHRtYXAuanBn",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvZGV0YWlsc19hbHBoYS5qcGc=",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMjYvMzIwMjM1MTA0Mjc0NzQvb2JqZWN0LjNkcw=="
   }
 ]
