@@ -10,7 +10,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Special",
+    "ItemName": "Retro / Classic",
     "Name": "_Destroyed_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/_Destroyed_old.jpg"
@@ -26,7 +26,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "11_years!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/11_years!.jpg"
@@ -34,7 +34,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "450_Nanometers",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/450_Nanometers.jpg"
@@ -42,7 +42,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Acid",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Acid.jpg"
@@ -58,7 +58,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Retro / Classic",
     "Name": "Adam_and_Eve_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Adam_and_Eve_old.jpg"
@@ -66,7 +66,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Adam_and_Eve",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Adam_and_Eve.jpg"
@@ -74,7 +74,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Aero",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aero.jpg"
@@ -82,7 +82,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Alien_Chainmail",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alien_Chainmail.jpg"
@@ -90,7 +90,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Alien_Nebula",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alien_Nebula.jpg"
@@ -98,7 +98,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Alien_Regeneration",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alien_Regeneration.jpg"
@@ -106,7 +106,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "All_the_Goodies",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/All_the_Goodies.jpg"
@@ -122,7 +122,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Alloy",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alloy.jpg"
@@ -130,7 +130,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Ancient_dragon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ancient_dragon.jpg"
@@ -138,7 +138,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "And_Roll",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/And_Roll.jpg"
@@ -154,7 +154,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "Retro / Classic",
     "Name": "Aramid_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aramid_old.jpg"
@@ -162,7 +162,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Aramid",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Aramid.jpg"
@@ -186,7 +186,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Atmospheric_Conditions",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Atmospheric_Conditions.jpg"
@@ -194,7 +194,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Avant-garde",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Avant-garde.jpg"
@@ -202,7 +202,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Babushka's_Quilt",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Babushka's_Quilt.jpg"
@@ -210,7 +210,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Babushka's_Sofa",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Babushka's_Sofa.jpg"
@@ -218,7 +218,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Badger-badger",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Badger-badger.jpg"
@@ -226,7 +226,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Barricade_tape",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Barricade_tape.jpg"
@@ -234,7 +234,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Battleship",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Battleship.jpg"
@@ -242,7 +242,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Baubles_Galore",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Baubles_Galore.jpg"
@@ -250,7 +250,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "BBQ",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/BBQ.jpg"
@@ -378,7 +378,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Blue_lilac",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Blue_lilac.jpg"
@@ -386,7 +386,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Blue_marmalade",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Blue_marmalade.jpg"
@@ -394,7 +394,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Blue_planet",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Blue_planet.jpg"
@@ -402,7 +402,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Bounty_hunter",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bounty_hunter.jpg"
@@ -410,7 +410,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Breeze",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Breeze.jpg"
@@ -418,7 +418,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "Retro / Classic",
     "Name": "Bronze_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bronze_old.jpg"
@@ -426,7 +426,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Bronze",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bronze.jpg"
@@ -434,7 +434,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Bubble_gum",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bubble_gum.jpg"
@@ -450,7 +450,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Burst_of_Light",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Burst_of_Light.jpg"
@@ -458,7 +458,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Busted",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Busted.jpg"
@@ -466,7 +466,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Cake",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cake.jpg"
@@ -474,7 +474,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Campfire",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Campfire.jpg"
@@ -482,7 +482,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Carbon_stars",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Carbon_stars.jpg"
@@ -498,7 +498,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "Retro / Classic",
     "Name": "Champion_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Champion_old.jpg"
@@ -506,7 +506,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Champion",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Champion.jpg"
@@ -514,7 +514,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Charred",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Charred.jpg"
@@ -522,7 +522,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Chemical_Reaction",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Chemical_Reaction.jpg"
@@ -530,7 +530,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Christmas_Eve",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Christmas_Eve.jpg"
@@ -538,7 +538,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "City_Dweller",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/City_Dweller.jpg"
@@ -554,7 +554,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Constellation",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Constellation.jpg"
@@ -562,7 +562,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Cosmic_Blast",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cosmic_Blast.jpg"
@@ -570,7 +570,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Craft_Scissors",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Craft_Scissors.jpg"
@@ -578,7 +578,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Creative_Engineer",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Creative_Engineer.jpg"
@@ -586,7 +586,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Crop_Circles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Crop_Circles.jpg"
@@ -594,7 +594,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Cyber_Shuriken",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cyber_Shuriken.jpg"
@@ -602,7 +602,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Cyberpunk",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cyberpunk.jpg"
@@ -610,7 +610,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Darts",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Darts.jpg"
@@ -626,7 +626,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Deep_blue_pixel",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Deep_blue_pixel.jpg"
@@ -650,7 +650,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Designer_Vibe",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Designer_Vibe.jpg"
@@ -658,7 +658,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Diamond",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Diamond.jpg"
@@ -666,7 +666,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Digital_Borealis",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Digital_Borealis.jpg"
@@ -674,7 +674,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Disco_2.0",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Disco_2.0.jpg"
@@ -682,7 +682,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Eagle_eye",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Eagle_eye.jpg"
@@ -690,7 +690,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Eagle",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Eagle.jpg"
@@ -698,7 +698,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Earthling",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Earthling.jpg"
@@ -706,7 +706,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Easter_Egg",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Easter_Egg.jpg"
@@ -714,7 +714,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Easter",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Easter.jpg"
@@ -722,7 +722,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Ecofriendly",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ecofriendly.jpg"
@@ -730,7 +730,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Electric_Sheep",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Electric_Sheep.jpg"
@@ -746,7 +746,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Eternity",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Eternity.jpg"
@@ -754,7 +754,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Falling_leaves",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Falling_leaves.jpg"
@@ -762,7 +762,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Fan",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Fan.jpg"
@@ -770,7 +770,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Far_North",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Far_North.jpg"
@@ -778,7 +778,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Fire_golem",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Fire_golem.jpg"
@@ -802,7 +802,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Flash",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Flash.jpg"
@@ -810,7 +810,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Flowing_Metal",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Flowing_Metal.jpg"
@@ -818,7 +818,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Frigid_Coat",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Frigid_Coat.jpg"
@@ -826,7 +826,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Funky_medicine",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Funky_medicine.jpg"
@@ -842,7 +842,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Galaxian_Explosion",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Galaxian_Explosion.jpg"
@@ -850,7 +850,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Gamepad",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gamepad.jpg"
@@ -858,7 +858,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Gamer",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gamer.jpg"
@@ -866,7 +866,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Geometric_Blue",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Geometric_Blue.jpg"
@@ -874,7 +874,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Gift_wrap",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gift_wrap.jpg"
@@ -882,7 +882,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Gingerbread",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gingerbread.jpg"
@@ -890,7 +890,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Gladiator",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gladiator.jpg"
@@ -898,7 +898,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Glam_Croc",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Glam_Croc.jpg"
@@ -930,7 +930,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Gold_alloy",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gold_alloy.jpg"
@@ -938,7 +938,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Gold_digger",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gold_digger.jpg"
@@ -946,7 +946,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Green_Quads",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Green_Quads.jpg"
@@ -954,7 +954,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Griller",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Griller.jpg"
@@ -962,7 +962,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Groovy_Neon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Groovy_Neon.jpg"
@@ -970,7 +970,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Hand_Sanitizer",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Hand_Sanitizer.jpg"
@@ -978,7 +978,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Head_Ripper",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Head_Ripper.jpg"
@@ -986,7 +986,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Heart_of_Steel",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Heart_of_Steel.jpg"
@@ -1010,7 +1010,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Holo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Holo.jpg"
@@ -1018,7 +1018,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Horror",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Horror.png"
@@ -1026,7 +1026,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Ice_Flurry",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ice_Flurry.jpg"
@@ -1034,7 +1034,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Impulse",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Impulse.jpg"
@@ -1042,7 +1042,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Jade_Scales",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Jade_Scales.jpg"
@@ -1050,7 +1050,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Jolly_Season",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Jolly_Season.jpg"
@@ -1058,7 +1058,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Kapuljat",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Kapuljat.jpg"
@@ -1066,7 +1066,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Katakana",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Katakana.jpg"
@@ -1074,7 +1074,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Lava_Lamp",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lava_Lamp.jpg"
@@ -1082,7 +1082,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Liana",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Liana.jpg"
@@ -1090,7 +1090,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Lifesaver",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lifesaver.jpg"
@@ -1098,7 +1098,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Light_organ",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Light_organ.jpg"
@@ -1106,7 +1106,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Lightning_storm",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lightning_storm.jpg"
@@ -1114,7 +1114,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Living_Armor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Living_Armor.jpg"
@@ -1138,7 +1138,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Loving_Camo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Loving_Camo.jpg"
@@ -1146,7 +1146,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "Retro / Classic",
     "Name": "Lucky_7",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lucky_7.jpg"
@@ -1162,7 +1162,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Magic_Circles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Magic_Circles.jpg"
@@ -1170,7 +1170,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Masquerade",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masquerade.jpg"
@@ -1178,7 +1178,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Master_of_Parkour_14",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_14.jpg"
@@ -1186,7 +1186,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Master_of_Parkour_15",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_15.jpg"
@@ -1194,7 +1194,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Master_of_Parkour_2016",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2016.jpg"
@@ -1202,7 +1202,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Master_of_Parkour_2017",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2017.jpg"
@@ -1210,7 +1210,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Master_of_Parkour_2019",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Master_of_Parkour_2019.jpg"
@@ -1218,7 +1218,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Masters_of_Parkour_2020",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2020.jpg"
@@ -1226,7 +1226,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "Retro / Classic",
     "Name": "Masters_of_Parkour_2023_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2023_old.png"
@@ -1234,7 +1234,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Parkour",
+    "ItemName": "eSports & Tournaments",
     "Name": "Masters_of_Parkour_2023",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2023.jpg"
@@ -1242,7 +1242,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Microbiology",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Microbiology.jpg"
@@ -1250,7 +1250,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Microchip",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Microchip.jpg"
@@ -1266,7 +1266,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Miniature_Masonry",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Miniature_Masonry.jpg"
@@ -1370,7 +1370,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Monochrome",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Monochrome.jpg"
@@ -1386,7 +1386,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "NanoHUD",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/NanoHUD.jpg"
@@ -1394,7 +1394,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Nanosuit_Armor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Nanosuit_Armor.jpg"
@@ -1418,7 +1418,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Neural_Network",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Neural_Network.jpg"
@@ -1442,7 +1442,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Northern_Lights",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Northern_Lights.jpg"
@@ -1458,7 +1458,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Not_a_lantern",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Not_a_lantern.jpg"
@@ -1466,7 +1466,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Nuclear_sun",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Nuclear_sun.jpg"
@@ -1490,7 +1490,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Oceania",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Oceania.jpg"
@@ -1498,7 +1498,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Off-road_vehicle",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Off-road_vehicle.jpg"
@@ -1506,7 +1506,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Offensive",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Offensive.jpg"
@@ -1514,7 +1514,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Onyx",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Onyx.jpg"
@@ -1522,7 +1522,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Orange_urchin",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Orange_urchin.jpg"
@@ -1530,7 +1530,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Packed_Stocking",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Packed_Stocking.jpg"
@@ -1538,7 +1538,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "PCB",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/PCB.jpg"
@@ -1546,7 +1546,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Peace,_Work,_May!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Peace,_Work,_May!.jpg"
@@ -1554,7 +1554,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Pegasus",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pegasus.jpg"
@@ -1570,7 +1570,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Pink_Elephant",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pink_Elephant.jpg"
@@ -1578,7 +1578,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Pixel_Plasma",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pixel_Plasma.jpg"
@@ -1586,7 +1586,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Playground",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Playground.jpg"
@@ -1602,7 +1602,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Precious_Studs",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Precious_Studs.jpg"
@@ -1610,7 +1610,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Premium_paint_New_Year_16",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Premium_paint_New_Year_16.jpg"
@@ -1626,7 +1626,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Prism",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Prism.jpg"
@@ -1634,7 +1634,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Pumpkin_puree",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pumpkin_puree.png"
@@ -1650,7 +1650,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Quantum_Camo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Quantum_Camo.jpg"
@@ -1658,7 +1658,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Question",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Question.jpg"
@@ -1666,7 +1666,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Rare_Easter_Egg",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Rare_Easter_Egg.jpg"
@@ -1682,7 +1682,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Red_marmalade",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Red_marmalade.jpg"
@@ -1690,7 +1690,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Red_planet",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Red_planet.jpg"
@@ -1714,7 +1714,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Ruby",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ruby.jpg"
@@ -1738,7 +1738,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Scarier_Things",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Scarier_Things.jpg"
@@ -1746,7 +1746,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Seventies_Fun",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Seventies_Fun.jpg"
@@ -1754,7 +1754,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Shredded",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Shredded.jpg"
@@ -1770,7 +1770,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Silver_Bricks",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver_Bricks.jpg"
@@ -1778,7 +1778,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "Retro / Classic",
     "Name": "Silver_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver_old.jpg"
@@ -1786,7 +1786,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Silver",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver.jpg"
@@ -1794,7 +1794,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Singapore",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Singapore.jpg"
@@ -1810,7 +1810,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Skomorokh",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Skomorokh.jpg"
@@ -1818,7 +1818,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Smoke_Screen",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Smoke_Screen.jpg"
@@ -1826,7 +1826,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Snowman",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Snowman.jpg"
@@ -1834,7 +1834,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Snowy_Surprize",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Snowy_Surprize.png"
@@ -1842,7 +1842,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Soda",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Soda.jpg"
@@ -1850,7 +1850,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Sonar",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sonar.jpg"
@@ -1858,7 +1858,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Souls",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Souls.jpg"
@@ -1882,7 +1882,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Speeding_Star",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Speeding_Star.jpg"
@@ -1890,7 +1890,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Spirit_of_Brazil",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spirit_of_Brazil.jpg"
@@ -1898,7 +1898,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Spirit_of_LATAM",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spirit_of_LATAM.jpg"
@@ -1906,7 +1906,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Spreading_Fast",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spreading_Fast.jpg"
@@ -1914,7 +1914,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Spring_bouquet",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spring_bouquet.jpg"
@@ -1922,7 +1922,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Squid_Fingers",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Squid_Fingers.jpg"
@@ -1938,7 +1938,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Stars_and_Flames",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Stars_and_Flames.jpg"
@@ -1954,7 +1954,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Stylish_Tanker",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Stylish_Tanker.jpg"
@@ -1962,7 +1962,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Surf",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Surf.jpg"
@@ -1970,7 +1970,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Survivor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Survivor.jpg"
@@ -1986,7 +1986,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Sweet_trick",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sweet_trick.jpg"
@@ -2002,7 +2002,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Target",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Target.jpg"
@@ -2010,7 +2010,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tectonic_plates",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tectonic_plates.jpg"
@@ -2018,7 +2018,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tessaract_Camo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tessaract_Camo.jpg"
@@ -2026,7 +2026,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tetris",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tetris.jpg"
@@ -2042,7 +2042,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "The_Game_2020",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/The_Game_2020.jpg"
@@ -2058,7 +2058,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Thug",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Thug.jpg"
@@ -2066,7 +2066,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Timber_camo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Timber_camo.jpg"
@@ -2074,7 +2074,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "eSports & Tournaments",
     "Name": "Top_class",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Top_class.jpg"
@@ -2082,7 +2082,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Trapped_Inside",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Trapped_Inside.jpg"
@@ -2090,7 +2090,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tropics",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tropics.jpg"
@@ -2098,7 +2098,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "UFO",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/UFO.jpg"
@@ -2106,7 +2106,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Under_the_Tree",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Under_the_Tree.jpg"
@@ -2114,7 +2114,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Valour",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Valour.jpg"
@@ -2122,7 +2122,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Vector",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Vector.jpg"
@@ -2130,7 +2130,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "eSports",
+    "ItemName": "eSports & Tournaments",
     "Name": "Veteran",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Veteran.jpg"
@@ -2138,7 +2138,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Virus",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Virus.jpg"
@@ -2146,7 +2146,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Viscum",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Viscum.jpg"
@@ -2154,7 +2154,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Visual_Disruptor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Visual_Disruptor.jpg"
@@ -2162,7 +2162,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Volcanic_eruption",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Volcanic_eruption.jpg"
@@ -2170,7 +2170,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Walk_of_Fame",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Walk_of_Fame.jpg"
@@ -2194,7 +2194,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Watermelon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Watermelon.jpg"
@@ -2202,7 +2202,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "White_planet",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/White_planet.jpg"
@@ -2218,7 +2218,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Wonder_fish",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Wonder_fish.jpg"
@@ -2226,7 +2226,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Wonderbird",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Wonderbird.jpg"
@@ -2234,7 +2234,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "X_Noir",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/X_Noir.jpg"
@@ -2522,7 +2522,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Afterburner",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Afterburner.jpg"
@@ -2530,7 +2530,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Alien_Skin",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alien_Skin.jpg"
@@ -2538,7 +2538,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Alien_abduction",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alien_abduction.jpg"
@@ -2546,7 +2546,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "All_you_need_is...",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/All_you_need_is....jpg"
@@ -2554,7 +2554,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Amber",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Amber.jpg"
@@ -2562,7 +2562,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Arachnid",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Arachnid.jpg"
@@ -2570,7 +2570,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Barber_Shop",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Barber_Shop.jpg"
@@ -2578,7 +2578,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Beating_Hearts",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Beating_Hearts.jpg"
@@ -2586,7 +2586,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Containers",
     "Name": "Beholder",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Beholder.jpg"
@@ -2610,7 +2610,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Bunny",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Bunny.jpg"
@@ -2626,7 +2626,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Chill_bro!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Chill_bro!.jpg"
@@ -2634,7 +2634,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Cryo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cryo.jpg"
@@ -2642,7 +2642,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Cucurbita_Pepo",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cucurbita_Pepo.jpg"
@@ -2650,7 +2650,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Cyborg",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cyborg.jpg"
@@ -2658,7 +2658,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Domino",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Domino.jpg"
@@ -2666,7 +2666,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Drought",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Drought.jpg"
@@ -2674,7 +2674,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Ducks",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ducks.jpg"
@@ -2682,7 +2682,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Containers",
     "Name": "Electrohive",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Electrohive.jpg"
@@ -2690,7 +2690,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Fire_of_Valor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Fire_of_Valor.jpg"
@@ -2698,7 +2698,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "First_kiss",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/First_kiss.jpg"
@@ -2706,7 +2706,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Flow",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Flow.jpg"
@@ -2730,7 +2730,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Galaxy",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Galaxy.jpg"
@@ -2738,7 +2738,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Ginga",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Ginga.jpg"
@@ -2746,7 +2746,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Glitch",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Glitch.jpg"
@@ -2754,7 +2754,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Golden_Gears",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Golden_Gears.jpg"
@@ -2770,7 +2770,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Holi",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Holi.jpg"
@@ -2778,7 +2778,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Holiday_lights",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Holiday_lights.jpg"
@@ -2786,7 +2786,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Honor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Honor.jpg"
@@ -2794,7 +2794,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Lilac_petals",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lilac_petals.jpg"
@@ -2802,7 +2802,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Lime",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lime.jpg"
@@ -2810,7 +2810,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Liquid_Metal",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Liquid_Metal.jpg"
@@ -2818,7 +2818,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Lunar_Soil",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lunar_Soil.jpg"
@@ -2826,7 +2826,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Magnolia",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Magnolia.jpg"
@@ -2834,7 +2834,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Mint",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Mint.jpg"
@@ -2842,7 +2842,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Containers",
     "Name": "Mount_Fuji",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Mount_Fuji.jpg"
@@ -2850,7 +2850,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Neuron",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Neuron.jpg"
@@ -2858,7 +2858,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "New_Year_Gift",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/New_Year_Gift.jpg"
@@ -2874,7 +2874,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Night_City",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Night_City.jpg"
@@ -2882,7 +2882,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Nightmare",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Nightmare.jpg"
@@ -2890,7 +2890,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Oriental_Glam",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Oriental_Glam.jpg"
@@ -2898,7 +2898,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Pajamas",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pajamas.jpg"
@@ -2906,7 +2906,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Pastila",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pastila.jpg"
@@ -2914,7 +2914,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Photon",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Photon.jpg"
@@ -2922,7 +2922,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Picnic",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Picnic.jpg"
@@ -2930,7 +2930,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Prodigy_2.0",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Prodigy_2.0.jpg"
@@ -2938,7 +2938,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Radar",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Radar.jpg"
@@ -2962,7 +2962,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Retina",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Retina.jpg"
@@ -2970,7 +2970,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Rust",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Rust.jpg"
@@ -2978,7 +2978,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Samba",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Samba.jpg"
@@ -2986,7 +2986,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Scandinavia",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Scandinavia.jpg"
@@ -2994,7 +2994,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Secret_of_the_aliens",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Secret_of_the_aliens.jpg"
@@ -3002,7 +3002,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Snowflake",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Snowflake.jpg"
@@ -3010,7 +3010,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Spangles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spangles.jpg"
@@ -3018,7 +3018,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Sparks",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sparks.jpg"
@@ -3026,7 +3026,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "Spring",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spring.jpg"
@@ -3034,7 +3034,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Steak",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Steak.jpg"
@@ -3042,7 +3042,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Steam",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Steam.jpg"
@@ -3050,7 +3050,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Story",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Story.jpg"
@@ -3058,7 +3058,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Strawberry",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Strawberry.jpg"
@@ -3066,7 +3066,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Sunset_camouflage",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sunset_camouflage.jpg"
@@ -3074,7 +3074,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tanki_Online_turns_13!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tanki_Online_turns_13!.png"
@@ -3082,7 +3082,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Tanki_Trip_2019",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tanki_Trip_2019.jpg"
@@ -3090,7 +3090,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "Tanki_in_Moscow",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tanki_in_Moscow.jpg"
@@ -3098,7 +3098,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Thankos",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Thankos.jpg"
@@ -3106,7 +3106,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Tote_bag",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tote_bag.jpg"
@@ -3114,7 +3114,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Touch_of_chill",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Touch_of_chill.jpg"
@@ -3122,7 +3122,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Watercolor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Watercolor.jpg"
@@ -3130,7 +3130,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Yay_Ten!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Yay_Ten!.jpg"
@@ -3138,7 +3138,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Yellow_Bug",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Yellow_Bug.jpg"
@@ -3146,7 +3146,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "Zombie",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Zombie.jpg"
@@ -3154,7 +3154,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Shop & Bundles",
     "Name": "lol",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/lol.jpg"
@@ -3162,7 +3162,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "10_1M_Players",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_1M_Players.jpg"
@@ -3170,7 +3170,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "10_Halloween",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_Halloween.jpg"
@@ -3178,7 +3178,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "10_National_Unity_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_National_Unity_Day.jpg"
@@ -3186,7 +3186,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "10_Runet_Prize",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_Runet_Prize.jpg"
@@ -3194,7 +3194,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "10_Winter",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_Winter.jpg"
@@ -3202,7 +3202,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "10_Winter_Holidays",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/10_Winter_Holidays.jpg"
@@ -3210,7 +3210,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11-12_Halloween",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11-12_Halloween.jpg"
@@ -3218,7 +3218,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11-12_New_Year",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11-12_New_Year.jpg"
@@ -3226,7 +3226,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11-12_Valentine's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11-12_Valentine's_Day.jpg"
@@ -3234,7 +3234,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "11_2M_Players",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_2M_Players.jpg"
@@ -3242,7 +3242,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "11_Birthday",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Birthday.jpg"
@@ -3250,7 +3250,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cn_Dragonboat_Festival",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cn_Dragonboat_Festival.jpg"
@@ -3258,7 +3258,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cn_Mid-Autumn_Festival",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cn_Mid-Autumn_Festival.jpg"
@@ -3266,7 +3266,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cn_National_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cn_National_Day.jpg"
@@ -3274,7 +3274,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cn_New_Year",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cn_New_Year.jpg"
@@ -3282,7 +3282,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cn_Winter",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cn_Winter.jpg"
@@ -3290,7 +3290,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Cosmonautics_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Cosmonautics_Day.jpg"
@@ -3298,7 +3298,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "11_Iron_Days",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Iron_Days.jpg"
@@ -3306,7 +3306,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_May_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_May_Day.jpg"
@@ -3314,7 +3314,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "11_Runet_Prize",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Runet_Prize.jpg"
@@ -3322,7 +3322,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Victory_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Victory_Day.jpg"
@@ -3330,7 +3330,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "11_Women's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/11_Women's_Day.jpg"
@@ -3338,7 +3338,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_April_Fools'_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_April_Fools'_Day.jpg"
@@ -3346,7 +3346,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "12_Birthday",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Birthday.jpg"
@@ -3354,7 +3354,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_Cn_Dragonboat_Festival",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Cn_Dragonboat_Festival.jpg"
@@ -3362,7 +3362,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_Cosmonautics_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Cosmonautics_Day.jpg"
@@ -3370,7 +3370,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_EURO_2012",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_EURO_2012.jpg"
@@ -3378,7 +3378,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "12_Iron_Days",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Iron_Days.jpg"
@@ -3386,7 +3386,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_May_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_May_Day.jpg"
@@ -3394,7 +3394,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_Tanker's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Tanker's_Day.jpg"
@@ -3402,7 +3402,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "12_Women's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/12_Women's_Day.jpg"
@@ -3410,7 +3410,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "13_Birthday",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_Birthday.jpg"
@@ -3418,7 +3418,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "13_Halloween",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_Halloween.jpg"
@@ -3426,7 +3426,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "13_Iron_Days",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_Iron_Days.jpg"
@@ -3434,7 +3434,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "13_May_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_May_Day.jpg"
@@ -3442,7 +3442,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "13_New_Year",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_New_Year.jpg"
@@ -3450,7 +3450,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "13_Tanker's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_Tanker's_Day.jpg"
@@ -3458,7 +3458,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "13_Victory_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/13_Victory_Day.jpg"
@@ -3466,7 +3466,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_April_Fools'_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_April_Fools'_Day.jpg"
@@ -3474,7 +3474,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "14_Birthday",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Birthday.jpg"
@@ -3482,7 +3482,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Events",
     "Name": "14_Iron_Days",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Iron_Days.jpg"
@@ -3490,7 +3490,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_May_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_May_Day.jpg"
@@ -3498,7 +3498,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_Tanker's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Tanker's_Day.jpg"
@@ -3506,7 +3506,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_Valentine's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Valentine's_Day.jpg"
@@ -3514,7 +3514,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_Victory_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Victory_Day.jpg"
@@ -3522,7 +3522,7 @@
   {
     "IsPremium": false,
     "Category": "Paints",
-    "ItemName": "Custom Paints",
+    "ItemName": "Holiday",
     "Name": "14_Women's_Day",
     "SourceFolder": "Textures/Paints/Holiday",
     "PreviewImage": "Textures/Paints/Holiday/14_Women's_Day.jpg"
@@ -3542,5 +3542,693 @@
     "Name": "Traceur",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Traceur.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Shop & Bundles",
+    "Name": "Turbo",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Turbo.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Shop & Bundles",
+    "Name": "Barbed_Wire",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Barbed_Wire.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Shop & Bundles",
+    "Name": "Symbiote",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Symbiote.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Abstract_Lines",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Abstract_Lines.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Blue_Square",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Blue_Square.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Condensed_Milk",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Condensed_Milk.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Canyon_Hero",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Canyon_Hero.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "E236",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/E236.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Eruption",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Eruption.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Fall_Leaves",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Fall_Leaves.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Feathers",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Feathers.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Fire_Dragon",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Fire_Dragon.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Gears",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Gears.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "LEDs",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/LEDs.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Megapolis",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Megapolis.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Meteor_Shower",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Meteor_Shower.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Prestigio",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Prestigio.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Radioactive_Jelly",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Radioactive_Jelly.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Secret_Sauce",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Secret_Sauce.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Siberian_Tiger",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Siberian_Tiger.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Spinner",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Spinner.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Stained_Glass",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Stained_Glass.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Synesthesia",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Synesthesia.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Synth-pop",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Synth-pop.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Tentacles",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tentacles.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Containers",
+    "Name": "Thunderball",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Thunderball.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "eSports & Tournaments",
+    "Name": "Yin_&_Yang",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Yin_&_Yang.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "eSports & Tournaments",
+    "Name": "Best_Helper_2018",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Best_Helper_2018.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Retro / Classic",
+    "Name": "Holiday_Old",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Holiday_Old.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2010)_Winter_3",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2010)_Winter_3.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2018)_Crazy_Weekend_July",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2018)_Crazy_Weekend_July.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2018)_World_UFO_Day",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2018)_World_UFO_Day.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2018)_New_Year_2019",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2018)_New_Year_2019.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2016)_BR_Carnival_2016",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2016)_BR_Carnival_2016.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2015)_BR_Independence_Day_2015",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2015)_BR_Independence_Day_2015.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "(2013)_Fools'_Day",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/(2013)_Fools'_Day.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "Holiday",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Holiday.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Integrated_circuit",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Integrated_circuit.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Flywheel",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Flywheel.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Team_Pointers",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Team_Pointers.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Revenge",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Revenge.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Penguins2",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Penguins2.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Feechki",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Feechki.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Yang",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Yang.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Yin",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Yin.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Penguins",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Penguins.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Go_Pro",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Go_Pro.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Cant_Stop",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Cant_Stop.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Distributor",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Distributor.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "The_Elves",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/The_Elves.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "The_Snowman",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/The_Snowman.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "Santa_Claus",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Santa_Claus.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "Vampires",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Vampires.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "Undead",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Undead.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Holiday",
+    "Name": "Ghosts",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Ghosts.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Arbiter",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Arbiter.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Anniversary_Hat",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Anniversary_Hat.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Joy",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Joy.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Bubbled_Chocolate",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Bubbled_Chocolate.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Spectrum",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Spectrum.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Demolisher",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Demolisher.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Tanks_2",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tanks_2.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Tanks_1",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tanks_1.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Staries",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Staries.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Targies",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Targies.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Lannies",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Lannies.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Crusher",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Crusher.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Tarantula",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tarantula.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Cap",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Cap.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Gentleman",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Gentleman.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Lady",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Lady.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Tic_tac_toe",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Tic_tac_toe.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "Runes",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Runes.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarBears",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarBears.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarLions",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarLions.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarWolves",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarWolves.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarDistributor",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarDistributor.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarPL",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarPL.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarDE",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarDE.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarRU",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarRU.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Events",
+    "Name": "WarEN",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/WarEN.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Egypt",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Egypt.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Iceland",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Iceland.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Panama",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Panama.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Peru",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Peru.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Football",
+    "Name": "Sweden",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Sweden.jpg"
   }
 ]
