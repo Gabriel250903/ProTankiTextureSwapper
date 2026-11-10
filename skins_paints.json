@@ -1,5 +1,13 @@
 [
   {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Frost 2.0",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Frost 2.0_preview.png"
+  },
+  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
@@ -358,6 +366,14 @@
     "Name": "Best_Helper_of_2025",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Best_Helper_of_2025.png"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Moderator",
+    "Name": "Best Helper 2025",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/Best Helper 2025.jpg"
   },
   {
     "IsPremium": false,
@@ -1262,6 +1278,14 @@
     "Name": "Masters_of_Parkour_2023",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Masters_of_Parkour_2023.jpg"
+  },
+  {
+    "IsPremium": false,
+    "Category": "Paints",
+    "ItemName": "Parkour",
+    "Name": "The Game 2026",
+    "SourceFolder": "Textures/Paints",
+    "PreviewImage": "Textures/Paints/The Game 2026.jpg"
   },
   {
     "IsPremium": true,
@@ -4360,22 +4384,6 @@
     "PreviewImage": "Textures/Encrypted/Paints/Animated/Witch_preview.png"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Zeus 2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Zeus 2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Frost 2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Frost 2.0_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Tanki X",
@@ -5222,5 +5230,45 @@
     "Name": "white",
     "SourceFolder": "Textures/Paints/Tanki X",
     "PreviewImage": "Textures/Paints/Tanki X/Previews/white.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Electra 2.0",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Electra 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Zeus 2.0",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Zeus 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Inferno 2.0",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Inferno 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Spark 2.0",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Spark 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Best Helper 2025",
+    "SourceFolder": "Textures/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Paints/Noizy Paints/Best Helper 2025_preview.png"
   }
 ]

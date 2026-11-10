@@ -368,5 +368,15 @@
     "Name": "Ascension 4",
     "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC82NS8xMzIvMzIwMjM1MTA2NjUwMTAvaW1hZ2UuanBn",
     "PreviewImage": "Textures/Paints/InGame/Ascension 4.png"
+  },
+  {
+    "Name": "Best Helper 2025",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC80Ni8yNTYvMzIwMjM1MTA2MzcxNTUvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/Best Helper 2025.jpg"
+  },
+  {
+    "Name": "The Game 2026",
+    "TargetUrl": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC80NS8zNDYvMzIwMjM1MTA2MzcwNTEvaW1hZ2UuanBn",
+    "PreviewImage": "Textures/Paints/InGame/The Game 2026.jpg"
   }
 ]
