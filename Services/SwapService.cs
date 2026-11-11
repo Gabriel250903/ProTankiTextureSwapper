@@ -13,13 +13,15 @@ namespace TextureSwapper.Services
     public sealed class SwapService(IPremiumService? premiumService = null) : ISwapService
     {
         private readonly IPremiumService? _premiumService = premiumService;
-        private static readonly HttpClient _assetDownloadHttpClient = new(new SocketsHttpHandler
+        private static readonly HttpClient _assetDownloadHttpClient = new(
+            new SocketsHttpHandler
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+                ConnectTimeout = TimeSpan.FromSeconds(10),
+            }
+        )
         {
-            PooledConnectionLifetime = TimeSpan.FromMinutes(2),
-            ConnectTimeout = TimeSpan.FromSeconds(10),
-        })
-        {
-            Timeout = TimeSpan.FromSeconds(15)
+            Timeout = TimeSpan.FromSeconds(15),
         };
 
         static SwapService()
@@ -63,22 +65,35 @@ namespace TextureSwapper.Services
 
                 string url = $"{Constants.GitHubRawUrl}/{relativePath}";
 
-                Log.Information("Attempting to auto-download missing asset from GitHub: {Url}", url);
+                Log.Information(
+                    "Attempting to auto-download missing asset from GitHub: {Url}",
+                    url
+                );
 
-                using HttpResponseMessage response = _assetDownloadHttpClient.GetAsync(url).GetAwaiter().GetResult();
+                using HttpResponseMessage response = _assetDownloadHttpClient
+                    .GetAsync(url)
+                    .GetAwaiter()
+                    .GetResult();
                 if (!response.IsSuccessStatusCode)
                 {
-                    Log.Warning("Asset not found on remote server ({StatusCode}): {Url}", response.StatusCode, url);
+                    Log.Warning(
+                        "Asset not found on remote server ({StatusCode}): {Url}",
+                        response.StatusCode,
+                        url
+                    );
                     return false;
                 }
 
                 byte[] data = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
-                if (data.Length == 0) return false;
+                if (data.Length == 0)
+                {
+                    return false;
+                }
 
                 string? dir = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 File.WriteAllBytes(filePath, data);
@@ -109,25 +124,103 @@ namespace TextureSwapper.Services
                 return (src + ".enc", true);
             }
 
+            string encMirror = src.Replace("Textures/ShotEffects", "Textures/Encrypted/ShotEffects", StringComparison.OrdinalIgnoreCase)
+                .Replace("Textures\\ShotEffects", "Textures\\Encrypted\\ShotEffects", StringComparison.OrdinalIgnoreCase) + ".enc";
+            if (File.Exists(encMirror))
+            {
+                return (encMirror, true);
+            }
+
             string ext = Path.GetExtension(src);
             if (ext.Equals(".png", StringComparison.OrdinalIgnoreCase))
             {
                 string alt = Path.ChangeExtension(src, ".jpg");
-                if (File.Exists(alt)) return (alt, false);
-                if (File.Exists(alt + ".enc")) return (alt + ".enc", true);
+                if (File.Exists(alt))
+                {
+                    return (alt, false);
+                }
+
+                if (File.Exists(alt + ".enc"))
+                {
+                    return (alt + ".enc", true);
+                }
+
+                string altJpeg = Path.ChangeExtension(src, ".jpeg");
+                if (File.Exists(altJpeg))
+                {
+                    return (altJpeg, false);
+                }
+
+                if (File.Exists(altJpeg + ".enc"))
+                {
+                    return (altJpeg + ".enc", true);
+                }
             }
-            else if (ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase))
+            else if (
+                ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase)
+                || ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase)
+            )
             {
                 string alt = Path.ChangeExtension(src, ".png");
-                if (File.Exists(alt)) return (alt, false);
-                if (File.Exists(alt + ".enc")) return (alt + ".enc", true);
+                if (File.Exists(alt))
+                {
+                    return (alt, false);
+                }
+
+                if (File.Exists(alt + ".enc"))
+                {
+                    return (alt + ".enc", true);
+                }
             }
 
-            if (!src.Contains("Custom", StringComparison.OrdinalIgnoreCase) &&
-                !src.Contains("Backups", StringComparison.OrdinalIgnoreCase) &&
-                TryDownloadMissingAsset(src))
+            if (
+                !src.Contains("Custom", StringComparison.OrdinalIgnoreCase)
+                && !src.Contains("Backups", StringComparison.OrdinalIgnoreCase)
+            )
             {
-                return (src, false);
+                if (TryDownloadMissingAsset(src))
+                {
+                    return (src, false);
+                }
+
+                if (TryDownloadMissingAsset(src + ".enc"))
+                {
+                    return (src + ".enc", true);
+                }
+
+                if (src.Contains("ShotEffects", StringComparison.OrdinalIgnoreCase))
+                {
+                    string remoteEncMirror = src.Replace("Textures/ShotEffects", "Textures/Encrypted/ShotEffects", StringComparison.OrdinalIgnoreCase)
+                        .Replace("Textures\\ShotEffects", "Textures\\Encrypted\\ShotEffects", StringComparison.OrdinalIgnoreCase) + ".enc";
+                    if (TryDownloadMissingAsset(remoteEncMirror))
+                    {
+                        return (remoteEncMirror, true);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(ext))
+                {
+                    string[] altExtensions =
+                        ext.Equals(".png", StringComparison.OrdinalIgnoreCase)
+                            ? [".jpg", ".jpeg", ".png.enc", ".jpg.enc"]
+                        : ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase)
+                        || ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase)
+                            ? [".png", ".jpg.enc", ".png.enc"]
+                        : [];
+
+                    foreach (string altExt in altExtensions)
+                    {
+                        string altCandidate = Path.ChangeExtension(src, altExt);
+                        if (TryDownloadMissingAsset(altCandidate))
+                        {
+                            bool isEnc = altCandidate.EndsWith(
+                                ".enc",
+                                StringComparison.OrdinalIgnoreCase
+                            );
+                            return (altCandidate, isEnc);
+                        }
+                    }
+                }
             }
 
             return (null, false);
@@ -190,19 +283,32 @@ namespace TextureSwapper.Services
                     "Paints",
                     StringComparison.OrdinalIgnoreCase
                 )
-                    ? [$"{skin.Name}.png", $"{skin.Name}.jpg"]
+                    ? [$"{skin.Name}.png", $"{skin.Name}.jpg", $"{skin.Name}.jpeg"]
                     :
                     [
                         "details.jpg",
                         "details.png",
+                        "details.jpeg",
                         "lightmap.jpg",
                         "lightmap.png",
                         "alpha.jpg",
                         "alpha.png",
+                        "para.jpg",
+                        "para.png",
+                        "tracks.jpg",
+                        "tracks.png",
                         "object.3ds",
                     ];
 
-                if (Directory.Exists(texturesDir) && DirectoryContainsMatch(cfi, texturesDir, candidates, SearchOption.TopDirectoryOnly))
+                if (
+                    Directory.Exists(texturesDir)
+                    && DirectoryContainsMatch(
+                        cfi,
+                        texturesDir,
+                        candidates,
+                        SearchOption.TopDirectoryOnly
+                    )
+                )
                 {
                     return true;
                 }
@@ -210,16 +316,33 @@ namespace TextureSwapper.Services
                 string? parentDir = Directory.GetParent(texturesDir)?.FullName;
                 if (!string.IsNullOrEmpty(parentDir) && Directory.Exists(parentDir))
                 {
-                    if (DirectoryContainsMatch(cfi, parentDir, candidates, SearchOption.AllDirectories))
+                    if (
+                        DirectoryContainsMatch(
+                            cfi,
+                            parentDir,
+                            candidates,
+                            SearchOption.AllDirectories
+                        )
+                    )
                     {
                         return true;
                     }
 
                     string? grandParentDir = Directory.GetParent(parentDir)?.FullName;
-                    if (!string.IsNullOrEmpty(grandParentDir) && Directory.Exists(grandParentDir) &&
-                        grandParentDir.Contains("Textures", StringComparison.OrdinalIgnoreCase))
+                    if (
+                        !string.IsNullOrEmpty(grandParentDir)
+                        && Directory.Exists(grandParentDir)
+                        && grandParentDir.Contains("Textures", StringComparison.OrdinalIgnoreCase)
+                    )
                     {
-                        if (DirectoryContainsMatch(cfi, grandParentDir, candidates, SearchOption.AllDirectories))
+                        if (
+                            DirectoryContainsMatch(
+                                cfi,
+                                grandParentDir,
+                                candidates,
+                                SearchOption.AllDirectories
+                            )
+                        )
                         {
                             return true;
                         }
@@ -245,7 +368,9 @@ namespace TextureSwapper.Services
                 byte[]? cacheHash = null;
                 foreach (string candidate in candidateNames)
                 {
-                    foreach (string file in Directory.EnumerateFiles(searchDir, candidate, searchOption))
+                    foreach (
+                        string file in Directory.EnumerateFiles(searchDir, candidate, searchOption)
+                    )
                     {
                         FileInfo mfi = new(file);
                         if (cfi.Length == mfi.Length)
@@ -262,7 +387,11 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Error scanning directory {Dir} for matching mod files.", searchDir);
+                Log.Warning(
+                    ex,
+                    "Error scanning directory {Dir} for matching mod files.",
+                    searchDir
+                );
             }
             return false;
         }
@@ -363,10 +492,7 @@ namespace TextureSwapper.Services
                     Path.Combine(Constants.BackupsDir, Constants.OriginalsDir)
                 );
 
-                string texturesDir = FileHelper.GetSafePath(
-                    baseDir,
-                    skin.SourceFolder
-                );
+                string texturesDir = FileHelper.GetSafePath(baseDir, skin.SourceFolder);
 
                 using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
                 foreach (string target in targets)
@@ -498,18 +624,48 @@ namespace TextureSwapper.Services
 
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
             {
+                string paintFile = $"{skin.Name}.png";
+                if (!string.IsNullOrEmpty(skin.PreviewImage))
+                {
+                    string prevExt = Path.GetExtension(skin.PreviewImage);
+                    if (
+                        !string.IsNullOrEmpty(prevExt)
+                        && !prevExt.Contains("preview", StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        paintFile = $"{skin.Name}{prevExt}";
+                    }
+                }
+
+                if (
+                    !File.Exists(FileHelper.GetSafePath(texturesDir, paintFile))
+                    && File.Exists(FileHelper.GetSafePath(texturesDir, $"{skin.Name}.jpg"))
+                )
+                {
+                    paintFile = $"{skin.Name}.jpg";
+                }
+
                 copyOperations.Add(
                     (
-                        FileHelper.GetSafePath(texturesDir, $"{skin.Name}.png"),
+                        FileHelper.GetSafePath(texturesDir, paintFile),
                         FileHelper.GetSafePath(cachePath, skin.DetailsTarget)
                     )
                 );
             }
             else
             {
+                string detailsFile = "details.jpg";
+                if (
+                    skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
+                    && skin.Name.Contains("Parachute", StringComparison.OrdinalIgnoreCase)
+                )
+                {
+                    detailsFile = "para.jpg";
+                }
+
                 copyOperations.Add(
                     (
-                        FileHelper.GetSafePath(texturesDir, "details.jpg"),
+                        FileHelper.GetSafePath(texturesDir, detailsFile),
                         FileHelper.GetSafePath(cachePath, skin.DetailsTarget)
                     )
                 );
@@ -1128,7 +1284,14 @@ namespace TextureSwapper.Services
                 string? parentDir = Directory.GetParent(texturesDir)?.FullName;
                 if (!string.IsNullOrEmpty(parentDir) && Directory.Exists(parentDir))
                 {
-                    if (DirectoryContainsMatch(cfi, parentDir, [targetFileName], SearchOption.AllDirectories))
+                    if (
+                        DirectoryContainsMatch(
+                            cfi,
+                            parentDir,
+                            [targetFileName],
+                            SearchOption.AllDirectories
+                        )
+                    )
                     {
                         return true;
                     }
@@ -1217,10 +1380,7 @@ namespace TextureSwapper.Services
                     Path.Combine(Constants.BackupsDir, Constants.OriginalsDir)
                 );
 
-                string texturesDir = FileHelper.GetSafePath(
-                    baseDir,
-                    shotEffect.SourceFolder
-                );
+                string texturesDir = FileHelper.GetSafePath(baseDir, shotEffect.SourceFolder);
 
                 using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
                 foreach (string target in shotEffect.Targets)

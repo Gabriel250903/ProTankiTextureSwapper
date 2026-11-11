@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +7,7 @@ using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
+using TextureSwapper.Helpers.Utilities;
 
 namespace TextureSwapper.Views.Controls
 {
@@ -267,7 +267,7 @@ namespace TextureSwapper.Views.Controls
                 return;
             }
 
-            _ = TextureSwapper.Helpers.Utilities.PremiumPurchaseHelper.PromptPurchaseOptionsAsync(Window.GetWindow(this));
+            _ = PremiumPurchaseHelper.PromptPurchaseOptionsAsync(Window.GetWindow(this));
         }
 
         private void ExecuteEnterKey()

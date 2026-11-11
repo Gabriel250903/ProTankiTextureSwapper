@@ -3,15 +3,19 @@ using Serilog;
 
 namespace TextureSwapper.Helpers.Commands
 {
-    public class AsyncRelayCommand(
-        Func<object?, Task> execute,
-        Predicate<object?>? canExecute = null
-    ) : ICommand
+    public class AsyncRelayCommand : ICommand
     {
-        private readonly Func<object?, Task> _execute =
-            execute ?? throw new ArgumentNullException(nameof(execute));
-        private readonly Predicate<object?>? _canExecute = canExecute;
+        private readonly Func<object?, Task> _execute;
+        private readonly Predicate<object?>? _canExecute;
         private int _isExecuting;
+
+        public AsyncRelayCommand(Func<object?, Task> execute, Predicate<object?>? canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+
+            CommandManager.RequerySuggested += (_, _) => RaiseCanExecuteChanged();
+        }
 
         public bool CanExecute(object? parameter)
         {
@@ -25,7 +29,7 @@ namespace TextureSwapper.Helpers.Commands
                 return;
             }
 
-            CommandManager.InvalidateRequerySuggested();
+            RaiseCanExecuteChanged();
             try
             {
                 await _execute(parameter);
@@ -37,14 +41,15 @@ namespace TextureSwapper.Helpers.Commands
             finally
             {
                 _ = Interlocked.Exchange(ref _isExecuting, 0);
-                CommandManager.InvalidateRequerySuggested();
+                RaiseCanExecuteChanged();
             }
         }
 
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler? CanExecuteChanged;
+
+        private void RaiseCanExecuteChanged()
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

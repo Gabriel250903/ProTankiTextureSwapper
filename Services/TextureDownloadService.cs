@@ -40,7 +40,11 @@ namespace TextureSwapper.Services
                 string turretsDir = Path.Combine(baseDir, "Textures", "Turrets");
                 string shotEffectsDir = Path.Combine(baseDir, "Textures", "ShotEffects");
 
-                if (!Directory.Exists(hullsDir) || !Directory.Exists(turretsDir) || !Directory.Exists(shotEffectsDir))
+                if (
+                    !Directory.Exists(hullsDir)
+                    || !Directory.Exists(turretsDir)
+                    || !Directory.Exists(shotEffectsDir)
+                )
                 {
                     return false;
                 }
@@ -156,17 +160,27 @@ namespace TextureSwapper.Services
                                 cancellationToken
                             );
 
-                            if (response.StatusCode == HttpStatusCode.NotFound
-                                && downloadUrl == Constants.TexturesLatestDownloadUrl)
+                            if (
+                                response.StatusCode == HttpStatusCode.NotFound
+                                && downloadUrl == Constants.TexturesLatestDownloadUrl
+                            )
                             {
                                 Log.Warning(
                                     "Latest release download URL returned 404. Checking GitHub releases for latest textures.zip asset..."
                                 );
-                                string? resolvedUrl = await TryResolveReleaseAssetUrlAsync(cancellationToken);
-                                if (!string.IsNullOrEmpty(resolvedUrl) && resolvedUrl != downloadUrl)
+                                string? resolvedUrl = await TryResolveReleaseAssetUrlAsync(
+                                    cancellationToken
+                                );
+                                if (
+                                    !string.IsNullOrEmpty(resolvedUrl)
+                                    && resolvedUrl != downloadUrl
+                                )
                                 {
                                     downloadUrl = resolvedUrl;
-                                    Log.Information("Retrying download with resolved release URL: {Url}", downloadUrl);
+                                    Log.Information(
+                                        "Retrying download with resolved release URL: {Url}",
+                                        downloadUrl
+                                    );
                                     attempt--;
                                     continue;
                                 }
@@ -212,38 +226,38 @@ namespace TextureSwapper.Services
                                     speedStopwatch.ElapsedMilliseconds >= 150
                                     || totalRead == totalBytes
                                 )
-                            {
-                                double elapsedSec = speedStopwatch.Elapsed.TotalSeconds;
-                                double speedMbps =
-                                    elapsedSec > 0
-                                        ? (totalRead - lastReportedBytes)
-                                            / (1024.0 * 1024.0)
-                                            / elapsedSec
-                                        : 0;
-
-                                if (totalBytes > 0)
                                 {
-                                    double percent = (double)totalRead / totalBytes * 100.0;
-                                    double currentMb = totalRead / (1024.0 * 1024.0);
-                                    double totalMb = totalBytes / (1024.0 * 1024.0);
-                                    onProgress?.Invoke(
-                                        $"Downloading textures... {percent:F0}% ({currentMb:F1} / {totalMb:F1} MB - {speedMbps:F1} MB/s)",
-                                        percent
-                                    );
-                                }
-                                else
-                                {
-                                    double mbRead = totalRead / (1024.0 * 1024.0);
-                                    onProgress?.Invoke(
-                                        $"Downloading textures... ({mbRead:F1} MB - {speedMbps:F1} MB/s)",
-                                        0
-                                    );
-                                }
+                                    double elapsedSec = speedStopwatch.Elapsed.TotalSeconds;
+                                    double speedMbps =
+                                        elapsedSec > 0
+                                            ? (totalRead - lastReportedBytes)
+                                                / (1024.0 * 1024.0)
+                                                / elapsedSec
+                                            : 0;
 
-                                lastReportedBytes = totalRead;
-                                speedStopwatch.Restart();
+                                    if (totalBytes > 0)
+                                    {
+                                        double percent = (double)totalRead / totalBytes * 100.0;
+                                        double currentMb = totalRead / (1024.0 * 1024.0);
+                                        double totalMb = totalBytes / (1024.0 * 1024.0);
+                                        onProgress?.Invoke(
+                                            $"Downloading textures... {percent:F0}% ({currentMb:F1} / {totalMb:F1} MB - {speedMbps:F1} MB/s)",
+                                            percent
+                                        );
+                                    }
+                                    else
+                                    {
+                                        double mbRead = totalRead / (1024.0 * 1024.0);
+                                        onProgress?.Invoke(
+                                            $"Downloading textures... ({mbRead:F1} MB - {speedMbps:F1} MB/s)",
+                                            0
+                                        );
+                                    }
+
+                                    lastReportedBytes = totalRead;
+                                    speedStopwatch.Restart();
+                                }
                             }
-                        }
 
                             downloadSucceeded = true;
                             break;
@@ -330,7 +344,12 @@ namespace TextureSwapper.Services
 
                             string entryPath = entry.FullName.Replace('\\', '/').TrimStart('/');
 
-                            if (entryPath.StartsWith("Textures/", StringComparison.OrdinalIgnoreCase))
+                            if (
+                                entryPath.StartsWith(
+                                    "Textures/",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
                             {
                                 entryPath = entryPath["Textures/".Length..];
                             }
@@ -339,7 +358,7 @@ namespace TextureSwapper.Services
                             {
                                 continue;
                             }
-                            
+
                             string destPath = Path.GetFullPath(
                                 Path.Combine(safeTargetRoot, entryPath)
                             );
@@ -379,14 +398,28 @@ namespace TextureSwapper.Services
                                 catch { }
                             }
 
-                            entry.ExtractToFile(destPath, overwrite: true);
+                            try
+                            {
+                                entry.ExtractToFile(destPath, overwrite: true);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(
+                                    ex,
+                                    "Failed to extract '{Entry}' to '{Dest}'; skipping.",
+                                    entry.FullName,
+                                    destPath
+                                );
+                                continue;
+                            }
 
                             processedEntries++;
                             if (processedEntries % 25 == 0 || processedEntries == totalEntries)
                             {
-                                double percent = totalEntries > 0
-                                    ? (double)processedEntries / totalEntries * 100.0
-                                    : 100.0;
+                                double percent =
+                                    totalEntries > 0
+                                        ? (double)processedEntries / totalEntries * 100.0
+                                        : 100.0;
                                 onProgress?.Invoke(
                                     $"Extracting textures... {percent:F0}% ({processedEntries}/{totalEntries})",
                                     percent
@@ -431,7 +464,9 @@ namespace TextureSwapper.Services
             }
         }
 
-        private static async Task<string?> TryResolveReleaseAssetUrlAsync(CancellationToken cancellationToken)
+        private static async Task<string?> TryResolveReleaseAssetUrlAsync(
+            CancellationToken cancellationToken
+        )
         {
             try
             {
@@ -447,17 +482,19 @@ namespace TextureSwapper.Services
                 }
 
                 using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-                List<GitHubReleaseModel>? releases = await JsonSerializer.DeserializeAsync<List<GitHubReleaseModel>>(
-                    stream,
-                    cancellationToken: cancellationToken
-                );
+                List<GitHubReleaseModel>? releases = await JsonSerializer.DeserializeAsync<
+                    List<GitHubReleaseModel>
+                >(stream, cancellationToken: cancellationToken);
 
                 if (releases != null)
                 {
                     foreach (GitHubReleaseModel release in releases)
                     {
                         GitHubAssetModel? asset = release.Assets.FirstOrDefault(a =>
-                            a.Name.Equals(Constants.TexturesZipFileName, StringComparison.OrdinalIgnoreCase)
+                            a.Name.Equals(
+                                Constants.TexturesZipFileName,
+                                StringComparison.OrdinalIgnoreCase
+                            )
                         );
 
                         if (asset != null && !string.IsNullOrEmpty(asset.BrowserDownloadUrl))

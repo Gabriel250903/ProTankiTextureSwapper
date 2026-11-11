@@ -29,7 +29,8 @@ namespace TextureSwapper.ViewModels.Tabs
         public ObservableCollection<List<SkinModel>> FilteredSkinsRows { get; } = [];
 
         public ObservableCollection<string> AvailableTags { get; } = ["All"];
-        public ObservableCollection<string> SortOptions { get; } = ["Name (A-Z)", "Name (Z-A)", "Tag / Theme", "Premium First"];
+        public ObservableCollection<string> SortOptions { get; } =
+        ["Name (A-Z)", "Name (Z-A)", "Tag / Theme", "Premium First"];
 
         private string _selectedTagFilter = "All";
         public string SelectedTagFilter
@@ -100,10 +101,10 @@ namespace TextureSwapper.ViewModels.Tabs
                 if (
                     SetProperty(ref _selectedSkin, value)
                     && value != null
-                    && _mainVM.IsHalloweenThemeActive
+                    && _mainVM.IsSeasonalThemeActive
                 )
                 {
-                    _mainVM.HalloweenSoundService.PlayCardSelect();
+                    _mainVM.SeasonalAudioService.PlayCardSelect();
                 }
             }
         }
@@ -288,10 +289,13 @@ namespace TextureSwapper.ViewModels.Tabs
 
         private void RefreshAvailableTags()
         {
-            if (_mainVM.AllSkins == null) return;
+            if (_mainVM.AllSkins == null)
+            {
+                return;
+            }
 
             string allLabel = $"All {SelectedCategory}";
-            var categorySkins = _mainVM.AllSkins.Where(s =>
+            IEnumerable<SkinModel> categorySkins = _mainVM.AllSkins.Where(s =>
                 s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
                 && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
             );
@@ -301,7 +305,7 @@ namespace TextureSwapper.ViewModels.Tabs
             {
                 foreach (string tag in skin.ComputedTags)
                 {
-                    tagsInView.Add(tag);
+                    _ = tagsInView.Add(tag);
                 }
             }
 
@@ -328,7 +332,7 @@ namespace TextureSwapper.ViewModels.Tabs
                 if (tagsInView.Contains(std))
                 {
                     orderedTags.Add(std);
-                    tagsInView.Remove(std);
+                    _ = tagsInView.Remove(std);
                 }
             }
 
@@ -366,27 +370,35 @@ namespace TextureSwapper.ViewModels.Tabs
                 string allLabel = $"All {SelectedCategory}";
                 string currentQuery = SearchQuery?.Trim() ?? string.Empty;
 
-                IEnumerable<SkinModel> matching = _mainVM
-                    .AllSkins.Where(s =>
-                        s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
-                        && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
-                        && (
-                            string.IsNullOrEmpty(currentQuery)
-                            || s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
-                            || s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
-                            || s.ComputedTags.Any(t => t.Contains(currentQuery, StringComparison.OrdinalIgnoreCase))
+                IEnumerable<SkinModel> matching = _mainVM.AllSkins.Where(s =>
+                    s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
+                    && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
+                    && (
+                        string.IsNullOrEmpty(currentQuery)
+                        || s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                        || s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                        || s.ComputedTags.Any(t =>
+                            t.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
                         )
-                        && (
-                            SelectedTagFilter == "All"
-                            || s.ComputedTags.Contains(SelectedTagFilter, StringComparer.OrdinalIgnoreCase)
+                    )
+                    && (
+                        SelectedTagFilter == "All"
+                        || s.ComputedTags.Contains(
+                            SelectedTagFilter,
+                            StringComparer.OrdinalIgnoreCase
                         )
-                    );
+                    )
+                );
 
                 matching = SelectedSortOption switch
                 {
                     "Name (Z-A)" => matching.OrderByDescending(s => s.Name),
-                    "Tag / Theme" => matching.OrderBy(s => s.PrimaryThemeTag ?? "zzz").ThenBy(s => s.Name),
-                    "Premium First" => matching.OrderByDescending(s => s.IsPremium).ThenBy(s => s.Name),
+                    "Tag / Theme" => matching
+                        .OrderBy(s => s.PrimaryThemeTag ?? "zzz")
+                        .ThenBy(s => s.Name),
+                    "Premium First" => matching
+                        .OrderByDescending(s => s.IsPremium)
+                        .ThenBy(s => s.Name),
                     _ => matching.OrderBy(s => s.Name),
                 };
 
@@ -411,6 +423,13 @@ namespace TextureSwapper.ViewModels.Tabs
                 _columns = cols;
                 UpdateFilteredSkinsRows();
             }
+        }
+
+        private static bool TargetsOverlap(SkinModel a, SkinModel b)
+        {
+            return (!string.IsNullOrEmpty(a.DetailsTarget) && a.DetailsTarget == b.DetailsTarget)
+                || (!string.IsNullOrEmpty(a.LightmapTarget) && a.LightmapTarget == b.LightmapTarget)
+                || (!string.IsNullOrEmpty(a.AlphaTarget) && a.AlphaTarget == b.AlphaTarget);
         }
 
         public void UpdateFilteredSkinsRows()
@@ -451,11 +470,7 @@ namespace TextureSwapper.ViewModels.Tabs
                             && otherSkin.Category == skin.Category
                             && otherSkin.ItemName == skin.ItemName
                             && otherSkin.IsSelected
-                            && (
-                                otherSkin.DetailsTarget == skin.DetailsTarget
-                                || otherSkin.LightmapTarget == skin.LightmapTarget
-                                || otherSkin.AlphaTarget == skin.AlphaTarget
-                            )
+                            && TargetsOverlap(skin, otherSkin)
                         )
                         {
                             otherSkin.IsSelected = false;
@@ -503,40 +518,90 @@ namespace TextureSwapper.ViewModels.Tabs
 
                 foreach (var group in groups)
                 {
-                    SkinModel? targetSkin = null;
+                    List<SkinModel> matches;
 
                     if (mode == "Legacy")
                     {
-                        targetSkin = group.FirstOrDefault(s =>
-                            (
-                                s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase)
-                                || s.Name.EndsWith(" Legacy", StringComparison.OrdinalIgnoreCase)
-                            ) && !s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
-                        );
+                        matches =
+                        [
+                            .. group.Where(s =>
+                                (
+                                    s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase)
+                                    || s.Name.EndsWith(
+                                        " Legacy",
+                                        StringComparison.OrdinalIgnoreCase
+                                    )
+                                )
+                                && !s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
+                            ),
+                        ];
                     }
                     else if (mode == "XT")
                     {
-                        targetSkin = group.FirstOrDefault(s =>
-                            s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase)
-                        );
+                        matches =
+                        [
+                            .. group.Where(s =>
+                                s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase)
+                            ),
+                        ];
                     }
-                    else if (mode == "LC on XT")
+                    else
                     {
-                        targetSkin = group.FirstOrDefault(s =>
-                            s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
-                        );
-                    }
-                    else if (mode == "Demonic")
-                    {
-                        targetSkin = group.FirstOrDefault(s =>
-                            s.Name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
-                            || s.Name.Contains(" DC", StringComparison.OrdinalIgnoreCase)
-                        );
+                        matches =
+                            mode == "LC on XT"
+                                ?
+                                [
+                                    .. group.Where(s =>
+                                        s.Name.EndsWith(
+                                            " LC on XT",
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                    ),
+                                ]
+                            : mode == "Demonic"
+                                ?
+                                [
+                                    .. group.Where(s =>
+                                        s.Name.Contains(
+                                            "Demonic",
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                        || s.Name.Contains(
+                                            " DC",
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                    ),
+                                ]
+                            : mode == "Old"
+                                ? group.Key.Category == "Supplies"
+                                        ?
+                                        [
+                                            .. group.Where(s =>
+                                                s.Name.Contains(
+                                                    "Old",
+                                                    StringComparison.OrdinalIgnoreCase
+                                                )
+                                            ),
+                                        ]
+                                    : []
+                            : mode == "New"
+                                ? group.Key.Category == "Supplies"
+                                        ?
+                                        [
+                                            .. group.Where(s =>
+                                                !s.Name.Contains(
+                                                    "Old",
+                                                    StringComparison.OrdinalIgnoreCase
+                                                )
+                                            ),
+                                        ]
+                                    : []
+                            : [];
                     }
 
-                    if (targetSkin != null)
+                    if (matches.Count > 0)
                     {
-                        toSelect.Add(targetSkin);
+                        toSelect.AddRange(matches);
                     }
                 }
 
@@ -550,11 +615,7 @@ namespace TextureSwapper.ViewModels.Tabs
                             && otherSkin.Category == skin.Category
                             && otherSkin.ItemName == skin.ItemName
                             && otherSkin.IsSelected
-                            && (
-                                otherSkin.DetailsTarget == skin.DetailsTarget
-                                || otherSkin.LightmapTarget == skin.LightmapTarget
-                                || otherSkin.AlphaTarget == skin.AlphaTarget
-                            )
+                            && TargetsOverlap(skin, otherSkin)
                         )
                         {
                             otherSkin.IsSelected = false;
@@ -608,15 +669,15 @@ namespace TextureSwapper.ViewModels.Tabs
 
             if (skinsToApply.Any(s => s.ItemName == "Gold Box"))
             {
-                bool isThematicGoldActive = _mainVM.HalloweenThemeService.IsThematicGoldActive
-                    && skinsToApply.Any(s => s.ItemName == "Gold Box" && !string.IsNullOrEmpty(s.SecondaryDetailsTarget));
+                bool isThematicGoldActive =
+                    _mainVM.SeasonalThemeService.IsThematicGoldActive
+                    && skinsToApply.Any(s =>
+                        s.ItemName == "Gold Box" && !string.IsNullOrEmpty(s.SecondaryDetailsTarget)
+                    );
 
                 if (isThematicGoldActive)
                 {
-                    GoldBoxTargetDialog dialog = new()
-                    {
-                        Owner = Application.Current?.MainWindow,
-                    };
+                    GoldBoxTargetDialog dialog = new() { Owner = Application.Current?.MainWindow };
 
                     if (dialog.ShowDialog() != true)
                     {
@@ -629,7 +690,10 @@ namespace TextureSwapper.ViewModels.Tabs
                     {
                         if (skinsToApply[i].ItemName == "Gold Box")
                         {
-                            skinsToApply[i] = CloneSkinForTargetChoice(skinsToApply[i], dialog.SelectedChoice);
+                            skinsToApply[i] = CloneSkinForTargetChoice(
+                                skinsToApply[i],
+                                dialog.SelectedChoice
+                            );
                         }
                     }
                 }
@@ -640,7 +704,10 @@ namespace TextureSwapper.ViewModels.Tabs
                     {
                         if (skinsToApply[i].ItemName == "Gold Box")
                         {
-                            skinsToApply[i] = CloneSkinForTargetChoice(skinsToApply[i], GoldBoxTargetChoice.NormalOnly);
+                            skinsToApply[i] = CloneSkinForTargetChoice(
+                                skinsToApply[i],
+                                GoldBoxTargetChoice.NormalOnly
+                            );
                         }
                     }
                 }
@@ -649,9 +716,11 @@ namespace TextureSwapper.ViewModels.Tabs
             List<SkinModel> highDetailSkins = [.. skinsToApply.Where(IsHighDetailSkin)];
             if (highDetailSkins.Count > 0)
             {
-                string skinList = highDetailSkins.Count > 5
-                    ? string.Join("\n• ", highDetailSkins.Take(5).Select(s => s.Name)) + $"\n• ...and {highDetailSkins.Count - 5} more"
-                    : string.Join("\n• ", highDetailSkins.Select(s => s.Name));
+                string skinList =
+                    highDetailSkins.Count > 5
+                        ? string.Join("\n• ", highDetailSkins.Take(5).Select(s => s.Name))
+                            + $"\n• ...and {highDetailSkins.Count - 5} more"
+                        : string.Join("\n• ", highDetailSkins.Select(s => s.Name));
 
                 MessageBox warnBox = new()
                 {
@@ -715,9 +784,9 @@ namespace TextureSwapper.ViewModels.Tabs
                         "Loc_Msg_SwapSuccess"
                     );
                     notificationAppearance = ControlAppearance.Success;
-                    if (_mainVM.IsHalloweenThemeActive)
+                    if (_mainVM.IsSeasonalThemeActive)
                     {
-                        _mainVM.HalloweenSoundService.PlayApplySuccess();
+                        _mainVM.SeasonalAudioService.PlayApplySuccess();
                     }
 
                     foreach (SkinModel skin in _mainVM.AllSkins)
@@ -775,22 +844,34 @@ namespace TextureSwapper.ViewModels.Tabs
             string name = s.Name ?? string.Empty;
             IReadOnlyList<string> tags = s.ComputedTags;
 
-            bool isDemonic = tags.Contains("Demonic", StringComparer.OrdinalIgnoreCase)
+            bool isDemonic =
+                tags.Contains("Demonic", StringComparer.OrdinalIgnoreCase)
                 || name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
                 || name.Contains(" DC", StringComparison.OrdinalIgnoreCase);
 
-            bool isXtHd = name.Contains("XT HD", StringComparison.OrdinalIgnoreCase)
-                || (tags.Contains("XT", StringComparer.OrdinalIgnoreCase) && tags.Contains("HD", StringComparer.OrdinalIgnoreCase))
-                || (name.Contains("XT", StringComparison.OrdinalIgnoreCase) && name.Contains("HD", StringComparison.OrdinalIgnoreCase));
+            bool isXtHd =
+                name.Contains("XT HD", StringComparison.OrdinalIgnoreCase)
+                || (
+                    tags.Contains("XT", StringComparer.OrdinalIgnoreCase)
+                    && tags.Contains("HD", StringComparer.OrdinalIgnoreCase)
+                )
+                || (
+                    name.Contains("XT", StringComparison.OrdinalIgnoreCase)
+                    && name.Contains("HD", StringComparison.OrdinalIgnoreCase)
+                );
 
-            bool isTankiX = tags.Contains("Tanki X", StringComparer.OrdinalIgnoreCase)
+            bool isTankiX =
+                tags.Contains("Tanki X", StringComparer.OrdinalIgnoreCase)
                 || name.Contains("Tanki X", StringComparison.OrdinalIgnoreCase)
                 || name.Contains("TX", StringComparison.OrdinalIgnoreCase);
 
             return isDemonic || isXtHd || isTankiX;
         }
 
-        private static SkinModel CloneSkinForTargetChoice(SkinModel original, GoldBoxTargetChoice choice)
+        private static SkinModel CloneSkinForTargetChoice(
+            SkinModel original,
+            GoldBoxTargetChoice choice
+        )
         {
             SkinModel copy = new()
             {

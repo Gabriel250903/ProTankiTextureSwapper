@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -35,9 +33,9 @@ namespace TextureSwapper.Views.Windows
 
             InitializeComponent();
 
-            if (_mainViewModel.IsHalloweenThemeActive)
+            if (_mainViewModel.IsSeasonalThemeActive)
             {
-                _mainViewModel.HalloweenThemeService.CheckAndApply(notify: false, force: true);
+                _mainViewModel.SeasonalThemeService.CheckAndApply(notify: false, force: true);
             }
             else
             {
@@ -47,10 +45,10 @@ namespace TextureSwapper.Views.Windows
 
             Loaded += async (_, _) =>
             {
-                if (_mainViewModel.IsHalloweenThemeActive)
+                if (_mainViewModel.IsSeasonalThemeActive)
                 {
-                    _mainViewModel.HalloweenSoundService.PlayLaunchGreeting();
-                    _mainViewModel.HalloweenSoundService.SetAmbientDrone(true);
+                    _mainViewModel.SeasonalAudioService.PlayLaunchGreeting();
+                    _mainViewModel.SeasonalAudioService.SetAmbientDrone(true);
                 }
 
                 await CheckAndShowDiscordInviteAsync();
@@ -95,7 +93,7 @@ namespace TextureSwapper.Views.Windows
                         || (current is FrameworkElement fe && fe.Cursor == Cursors.Hand)
                     )
                     {
-                        _mainViewModel.HalloweenSoundService.PlayHollowClick();
+                        _mainViewModel.SeasonalAudioService.PlayClick();
                         break;
                     }
                     current = VisualTreeHelper.GetParent(current);
@@ -103,7 +101,7 @@ namespace TextureSwapper.Views.Windows
             }
             catch
             {
-                Log.Warning("Error processing global mouse click for Halloween sound effect.");
+                Log.Warning("Error processing global mouse click for seasonal sound effect.");
             }
         }
 
@@ -247,9 +245,9 @@ namespace TextureSwapper.Views.Windows
         private void OnLogoMouseDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            if (e.ClickCount == 1 && _mainViewModel.IsHalloweenThemeActive)
+            if (e.ClickCount == 1 && _mainViewModel.IsSeasonalThemeActive)
             {
-                _mainViewModel.HalloweenSoundService.PlayEvilLaugh(force: true);
+                _mainViewModel.SeasonalAudioService.PlaySpecialCue(force: true);
                 _ = HandleThemeInteractionAsync();
             }
         }
@@ -367,22 +365,23 @@ namespace TextureSwapper.Views.Windows
                     return;
                 }
 
-                string title = _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Title")
+                string title =
+                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Title")
                     ?? "Join the Discord Server";
-                string header = _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Header")
+                string header =
+                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Header")
                     ?? "Welcome to Texture Swapper V2!";
-                string body = _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Body")
+                string body =
+                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Body")
                     ?? "Join the official Discord server to follow the latest news, announcements, texture updates, and sneak peeks.\n\nConnect with other swappers, get support, and share your suggestions!";
-                string joinText = _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Join")
+                string joinText =
+                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Join")
                     ?? "Join Discord Server";
-                string laterText = _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Later")
+                string laterText =
+                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Later")
                     ?? "Maybe Later";
 
-                StackPanel panel = new()
-                {
-                    Margin = new Thickness(0, 10, 0, 10),
-                    MaxWidth = 500
-                };
+                StackPanel panel = new() { Margin = new Thickness(0, 10, 0, 10), MaxWidth = 500 };
 
                 TextBlock headerBlock = new()
                 {
@@ -390,7 +389,7 @@ namespace TextureSwapper.Views.Windows
                     FontSize = 18,
                     FontWeight = FontWeights.Bold,
                     Margin = new Thickness(0, 0, 0, 12),
-                    TextWrapping = TextWrapping.Wrap
+                    TextWrapping = TextWrapping.Wrap,
                 };
 
                 TextBlock bodyBlock = new()
@@ -399,11 +398,11 @@ namespace TextureSwapper.Views.Windows
                     FontSize = 13.5,
                     Opacity = 0.85,
                     LineHeight = 20,
-                    TextWrapping = TextWrapping.Wrap
+                    TextWrapping = TextWrapping.Wrap,
                 };
 
-                panel.Children.Add(headerBlock);
-                panel.Children.Add(bodyBlock);
+                _ = panel.Children.Add(headerBlock);
+                _ = panel.Children.Add(bodyBlock);
 
                 MessageBox messageBox = new()
                 {
@@ -419,11 +418,13 @@ namespace TextureSwapper.Views.Windows
                 {
                     try
                     {
-                        _ = Process.Start(new ProcessStartInfo
-                        {
-                            FileName = Constants.DiscordInviteUrl,
-                            UseShellExecute = true
-                        });
+                        _ = Process.Start(
+                            new ProcessStartInfo
+                            {
+                                FileName = Constants.DiscordInviteUrl,
+                                UseShellExecute = true,
+                            }
+                        );
                     }
                     catch (Exception ex)
                     {

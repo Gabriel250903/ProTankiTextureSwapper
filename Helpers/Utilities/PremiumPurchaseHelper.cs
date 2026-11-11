@@ -1,7 +1,4 @@
-using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Serilog;
 using TextureSwapper.Core;
@@ -22,7 +19,8 @@ namespace TextureSwapper.Helpers.Utilities
                 MessageBox messageBox = new()
                 {
                     Title = "Get TextureSwapper Premium",
-                    Content = "Buy Directly via Discord (Recommended)\n\n"
+                    Content =
+                        "Buy Directly via Discord (Recommended)\n\n"
                         + "Join the Discord server and open a ticket (or DM 'noizy3345') to discuss details.\n"
                         + "Instant key generation & delivery directly from the developer\n\n"
                         + "Automated Web Store\n\n"
@@ -33,7 +31,8 @@ namespace TextureSwapper.Helpers.Utilities
                     MaxWidth = 520,
                 };
 
-                Window? targetOwner = owner
+                Window? targetOwner =
+                    owner
                     ?? Application.Current?.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)
                     ?? Application.Current?.MainWindow;
 
@@ -61,11 +60,9 @@ namespace TextureSwapper.Helpers.Utilities
 
                     try
                     {
-                        _ = Process.Start(new ProcessStartInfo
-                        {
-                            FileName = targetUrl,
-                            UseShellExecute = true
-                        });
+                        _ = Process.Start(
+                            new ProcessStartInfo { FileName = targetUrl, UseShellExecute = true }
+                        );
                     }
                     catch (Exception procEx)
                     {
@@ -79,7 +76,10 @@ namespace TextureSwapper.Helpers.Utilities
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to display Premium purchase options dialog, falling back to Gumroad.");
+                Log.Error(
+                    ex,
+                    "Failed to display Premium purchase options dialog, falling back to Gumroad."
+                );
                 OpenGumroad();
             }
         }
@@ -98,7 +98,10 @@ namespace TextureSwapper.Helpers.Utilities
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Direct browser start failed for Gumroad, attempting cmd fallback.");
+                Log.Warning(
+                    ex,
+                    "Direct browser start failed for Gumroad, attempting cmd fallback."
+                );
                 try
                 {
                     _ = Process.Start(

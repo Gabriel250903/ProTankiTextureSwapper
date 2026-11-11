@@ -111,7 +111,7 @@ namespace TextureSwapper.Core.Models
                 {
                     if (!string.IsNullOrWhiteSpace(tag))
                     {
-                        tags.Add(tag.Trim());
+                        _ = tags.Add(tag.Trim());
                     }
                 }
 
@@ -119,83 +119,88 @@ namespace TextureSwapper.Core.Models
 
                 if (TankiXRegex().IsMatch(combined))
                 {
-                    tags.Add("Tanki X");
+                    _ = tags.Add("Tanki X");
                 }
 
                 if (DemonicRegex().IsMatch(combined))
                 {
-                    tags.Add("Demonic");
+                    _ = tags.Add("Demonic");
                 }
 
                 if (LegacyRegex().IsMatch(combined))
                 {
-                    tags.Add("Legacy");
+                    _ = tags.Add("Legacy");
                 }
 
                 if (XtRegex().IsMatch(combined))
                 {
-                    tags.Add("XT");
+                    _ = tags.Add("XT");
                 }
 
                 if (PrimeRegex().IsMatch(combined))
                 {
-                    tags.Add("Prime");
+                    _ = tags.Add("Prime");
                 }
 
                 if (HdRegex().IsMatch(combined))
                 {
-                    tags.Add("HD");
+                    _ = tags.Add("HD");
                 }
 
-                if (OldRegex().IsMatch(combined))
+                if (OldRegex().IsMatch(combined) && Category != "Supplies")
                 {
-                    tags.Add("Old");
+                    _ = tags.Add("Old");
                 }
 
                 if (IcRegex().IsMatch(combined))
                 {
-                    tags.Add("IC");
+                    _ = tags.Add("IC");
                 }
 
                 if (SpRegex().IsMatch(combined))
                 {
-                    tags.Add("SP");
+                    _ = tags.Add("SP");
                 }
 
                 if (VtRegex().IsMatch(combined))
                 {
-                    tags.Add("VT");
+                    _ = tags.Add("VT");
                 }
 
                 if (RtRegex().IsMatch(combined))
                 {
-                    tags.Add("RT");
+                    _ = tags.Add("RT");
                 }
 
                 if (CsRegex().IsMatch(combined))
                 {
-                    tags.Add("CS");
+                    _ = tags.Add("CS");
                 }
 
                 if (IsExperimental)
                 {
-                    tags.Add("Experimental");
+                    _ = tags.Add("Experimental");
                 }
 
                 if (tags.Count == 0 && (Category is "Turrets" or "Hulls"))
                 {
-                    if (!string.IsNullOrWhiteSpace(ItemName) && Name.StartsWith(ItemName, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        !string.IsNullOrWhiteSpace(ItemName)
+                        && Name.StartsWith(ItemName, StringComparison.OrdinalIgnoreCase)
+                    )
                     {
                         string remainder = Name[ItemName.Length..].Trim();
-                        string cleanRemainder = OnXtSuffixRegex().Replace(remainder, string.Empty).Trim();
+                        string cleanRemainder = OnXtSuffixRegex()
+                            .Replace(remainder, string.Empty)
+                            .Trim();
                         if (!string.IsNullOrWhiteSpace(cleanRemainder))
                         {
-                            tags.Add(cleanRemainder);
+                            _ = tags.Add(cleanRemainder);
                         }
                     }
                     if (tags.Count == 0)
                     {
-                        tags.Add("Standard");
+                        _ = tags.Add("Standard");
                     }
                 }
 
@@ -209,22 +214,73 @@ namespace TextureSwapper.Core.Models
             get
             {
                 IReadOnlyList<string> all = ComputedTags;
-                if (all.Contains("Demonic", StringComparer.OrdinalIgnoreCase)) return "Demonic";
-                if (all.Contains("Tanki X", StringComparer.OrdinalIgnoreCase)) return "Tanki X";
-                if (all.Contains("HD", StringComparer.OrdinalIgnoreCase)) return "HD";
-                if (all.Contains("Prime", StringComparer.OrdinalIgnoreCase)) return "Prime";
-                if (all.Contains("XT", StringComparer.OrdinalIgnoreCase)) return "XT";
-                if (all.Contains("Legacy", StringComparer.OrdinalIgnoreCase)) return "Legacy";
-                if (all.Contains("IC", StringComparer.OrdinalIgnoreCase)) return "IC";
-                if (all.Contains("SP", StringComparer.OrdinalIgnoreCase)) return "SP";
-                if (all.Contains("VT", StringComparer.OrdinalIgnoreCase)) return "VT";
-                if (all.Contains("RT", StringComparer.OrdinalIgnoreCase)) return "RT";
-                if (all.Contains("CS", StringComparer.OrdinalIgnoreCase)) return "CS";
-                if (all.Contains("Old", StringComparer.OrdinalIgnoreCase)) return "Old";
-                string? firstNonExp = all.FirstOrDefault(t => !t.Equals("Experimental", StringComparison.OrdinalIgnoreCase));
-                if (!string.IsNullOrEmpty(firstNonExp)) return firstNonExp;
-                if (all.Count > 0) return all[0];
-                return (Category is "Turrets" or "Hulls") ? "Standard" : null;
+                if (all.Contains("Demonic", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "Demonic";
+                }
+
+                if (all.Contains("Tanki X", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "Tanki X";
+                }
+
+                if (all.Contains("HD", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "HD";
+                }
+
+                if (all.Contains("Prime", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "Prime";
+                }
+
+                if (all.Contains("XT", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "XT";
+                }
+
+                if (all.Contains("Legacy", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "Legacy";
+                }
+
+                if (all.Contains("IC", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "IC";
+                }
+
+                if (all.Contains("SP", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "SP";
+                }
+
+                if (all.Contains("VT", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "VT";
+                }
+
+                if (all.Contains("RT", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "RT";
+                }
+
+                if (all.Contains("CS", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "CS";
+                }
+
+                if (all.Contains("Old", StringComparer.OrdinalIgnoreCase))
+                {
+                    return "Old";
+                }
+
+                string? firstNonExp = all.FirstOrDefault(t =>
+                    !t.Equals("Experimental", StringComparison.OrdinalIgnoreCase)
+                );
+                return !string.IsNullOrEmpty(firstNonExp) ? firstNonExp
+                    : all.Count > 0 ? all[0]
+                    : (Category is "Turrets" or "Hulls") ? "Standard"
+                    : null;
             }
         }
 
@@ -828,24 +884,29 @@ namespace TextureSwapper.Core.Models
                 return path;
             }
 
-            string ext = Path.GetExtension(path).ToLower();
-            string[] altExts = [".png", ".jpg", ".jpeg"];
-            if (altExts.Contains(ext))
-            {
-                foreach (string alt in altExts)
-                {
-                    if (alt == ext)
-                    {
-                        continue;
-                    }
+            string dir = Path.GetDirectoryName(path) ?? string.Empty;
+            string fn = Path.GetFileNameWithoutExtension(path);
 
-                    string altPath = Path.ChangeExtension(path, alt);
-                    if (File.Exists(altPath))
-                    {
-                        return altPath;
-                    }
+            string[] candidates =
+            [
+                Path.ChangeExtension(path, ".png"),
+                Path.ChangeExtension(path, ".jpg"),
+                Path.ChangeExtension(path, ".jpeg"),
+                Path.Combine(dir, $"{fn}_preview.png"),
+                Path.Combine(dir, $"{fn}_preview.jpg"),
+                Path.Combine(dir, "Animated", $"{fn}_preview.png"),
+                Path.Combine(dir, "Animated", $"{fn}.png"),
+                Path.Combine(dir, "Animated", $"{fn}.jpg"),
+            ];
+
+            foreach (string candidate in candidates)
+            {
+                if (File.Exists(candidate))
+                {
+                    return candidate;
                 }
             }
+
             return null;
         }
 

@@ -76,5 +76,77 @@
       "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
       "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw=="
     ]
+  },
+  {
+    "Turret": "Railgun",
+    "Name": "Classic 2010",
+    "SourceFolder": "Textures/ShotEffects/Turrets/Railgun/Classic_2010",
+    "PreviewImage": "Textures/ShotEffects/Turrets/Railgun/Classic_2010/preview.jpg",
+    "IsPremium": true,
+    "Targets": [
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2FscGhhLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2FscGhhLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2FscGhhLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2FscGhhLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw==",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2FscGhhLmpwZw=="
+    ]
+  },
+  {
+    "Turret": "Isida",
+    "Name": "Classic 2010",
+    "SourceFolder": "Textures/ShotEffects/Turrets/Isida/Classic_2010",
+    "PreviewImage": "Textures/ShotEffects/Turrets/Isida/Classic_2010/preview.jpg",
+    "IsPremium": true,
+    "Targets": [
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI3Ni8zMjAyMzUxMDM2MjAxNS9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI3Ny8zMjAyMzUxMDM2MjEwMy9pbWFnZS5qcGc=",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI3Ny8zMjAyMzUxMDM2MjEwMy9hbHBoYS5qcGc=",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMwMS8zMjAyMzUxMDM2MjEyNC9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMwMi8zMjAyMzUxMDM2MjIxNC9pbWFnZS5qcGc=",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMwMi8zMjAyMzUxMDM2MjIxNC9hbHBoYS5qcGc=",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMxMi8zMjAyMzUxMDM2MjM3NS9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMxNC8zMjAyMzUxMDM2MjQ0My9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMxNy8zMjAyMzUxMDM2MjUwMS9pbWFnZS5qcGc=",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMxNy8zMjAyMzUxMDM2MjUwMS9hbHBoYS5qcGc="
+    ]
+  },
+  {
+    "Turret": "Twins",
+    "Name": "Classic 2010",
+    "SourceFolder": "Textures/ShotEffects/Turrets/Twins/Classic_2010",
+    "PreviewImage": "Textures/ShotEffects/Turrets/Twins/Classic_2010/preview.jpg",
+    "IsPremium": true,
+    "Targets": [
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzM3NS8zMjAyMzUxMDM2MDIyNS9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzEvMzIwMjM1MTAzNjA0MDIvaW1hZ2UudGFyYQ=="
+    ]
+  },
+  {
+    "Turret": "Firebird",
+    "Name": "Classic 2010",
+    "SourceFolder": "Textures/ShotEffects/Turrets/Firebird/Classic_2010",
+    "PreviewImage": "Textures/ShotEffects/Turrets/Firebird/Classic_2010/preview.jpg",
+    "IsPremium": true,
+    "Targets": [
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM2LzMyMDIzNTEwMzYxMjUyL2ltYWdlLnRhcmE",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM3LzMyMDIzNTEwMzYxNDA2L2ltYWdlLnRhcmE",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMzLzMyMDIzNTEwMzYxMjA1L2ltYWdlLnRhcmE"
+    ]
+  },
+  {
+    "Turret": "Freeze",
+    "Name": "Classic 2010",
+    "SourceFolder": "Textures/ShotEffects/Turrets/Freeze/Classic_2010",
+    "PreviewImage": "Textures/ShotEffects/Turrets/Freeze/Classic_2010/preview.jpg",
+    "IsPremium": true,
+    "Targets": [
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI3My8zMjAyMzUxMDM2MTY1NS9pbWFnZS50YXJh",
+      "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI3NC8zMjAyMzUxMDM2MTcxNy9pbWFnZS50YXJh"
+    ]
   }
 ]

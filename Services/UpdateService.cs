@@ -27,7 +27,7 @@ namespace TextureSwapper.Services
             {
                 PooledConnectionLifetime = TimeSpan.FromMinutes(2),
             };
-            _httpClient = new HttpClient(handler);
+            _httpClient = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "ProTankiTextureSwapper");
         }
 
@@ -113,6 +113,13 @@ namespace TextureSwapper.Services
                 List<SkinModel>? skins = JsonSerializer.Deserialize<List<SkinModel>>(json);
 
                 return (skins, json);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                Log.Warning(
+                    $"Remote {fileName} not found on GitHub (404). Falling back to local data."
+                );
+                return (null, null);
             }
             catch (Exception ex)
             {
@@ -227,7 +234,10 @@ namespace TextureSwapper.Services
                 foreach (string file in localFiles)
                 {
                     string ext = Path.GetExtension(file).ToLower();
-                    if (validExtensions.Contains(ext) || file.EndsWith(".enc", StringComparison.OrdinalIgnoreCase))
+                    if (
+                        validExtensions.Contains(ext)
+                        || file.EndsWith(".enc", StringComparison.OrdinalIgnoreCase)
+                    )
                     {
                         Log.Debug($"Asset already exists locally: {file}");
                         return;
@@ -291,10 +301,20 @@ namespace TextureSwapper.Services
             }
             else
             {
-                bool isEncryptedFolder = sourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase);
-                string[] extensionsToTry = filePrefix.Equals("object", StringComparison.OrdinalIgnoreCase)
+                bool isEncryptedFolder = sourceFolder.StartsWith(
+                    "Textures/Encrypted",
+                    StringComparison.OrdinalIgnoreCase
+                );
+                string[] extensionsToTry = filePrefix.Equals(
+                    "object",
+                    StringComparison.OrdinalIgnoreCase
+                )
                     ? (isEncryptedFolder ? [".3ds.enc", ".3ds"] : [".3ds", ".3ds.enc"])
-                    : (isEncryptedFolder ? [".png.enc", ".jpg.enc", ".png", ".jpg", ".jpeg"] : [".png", ".jpg", ".jpeg", ".png.enc", ".jpg.enc"]);
+                    : (
+                        isEncryptedFolder
+                            ? [".png.enc", ".jpg.enc", ".png", ".jpg", ".jpeg"]
+                            : [".png", ".jpg", ".jpeg", ".png.enc", ".jpg.enc"]
+                    );
 
                 foreach (string ext in extensionsToTry)
                 {
@@ -430,145 +450,194 @@ namespace TextureSwapper.Services
 
             Log.Information($"Downloading installer from {downloadUrl} to {tempPath}");
 
-            string? expectedHash = null;
+            bool launched = false;
             try
             {
-                using HttpResponseMessage hashResponse = await _httpClient.GetAsync(
-                    downloadUrl + ".sha256"
-                );
-                if (hashResponse.IsSuccessStatusCode)
+                string? expectedHash = null;
+                try
                 {
-                    string hashText = await hashResponse.Content.ReadAsStringAsync();
-                    expectedHash = hashText
-                        .Split([' ', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
-                        .FirstOrDefault()
-                        ?.Trim();
-                    Log.Information($"Found expected SHA256 hash for installer: {expectedHash}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warning($"Could not fetch companion installer SHA256: {ex.Message}");
-            }
-
-            using (
-                HttpResponseMessage response = await _httpClient.GetAsync(
-                    downloadUrl,
-                    HttpCompletionOption.ResponseHeadersRead
-                )
-            )
-            {
-                _ = response.EnsureSuccessStatusCode();
-                long totalBytes = response.Content.Headers.ContentLength ?? -1L;
-
-                using Stream contentStream = await response.Content.ReadAsStreamAsync();
-                using FileStream fileStream = new(
-                    tempPath,
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.None,
-                    8192,
-                    true
-                );
-                byte[] buffer = new byte[8192];
-                long totalRead = 0L;
-                int read;
-
-                while ((read = await contentStream.ReadAsync(buffer)) != 0)
-                {
-                    await fileStream.WriteAsync(buffer.AsMemory(0, read));
-                    totalRead += read;
-
-                    if (totalBytes != -1)
+                    using HttpResponseMessage hashResponse = await _httpClient.GetAsync(
+                        downloadUrl + ".sha256"
+                    );
+                    if (hashResponse.IsSuccessStatusCode)
                     {
-                        onProgress?.Invoke((double)totalRead / totalBytes * 100);
+                        string hashText = await hashResponse.Content.ReadAsStringAsync();
+                        expectedHash = hashText
+                            .Split([' ', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+                            .FirstOrDefault()
+                            ?.Trim();
+                        Log.Information(
+                            $"Found expected SHA256 hash for installer: {expectedHash}"
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"Could not fetch companion installer SHA256: {ex.Message}");
+                }
+
+                using (
+                    HttpResponseMessage response = await _httpClient.GetAsync(
+                        downloadUrl,
+                        HttpCompletionOption.ResponseHeadersRead
+                    )
+                )
+                {
+                    _ = response.EnsureSuccessStatusCode();
+                    long totalBytes = response.Content.Headers.ContentLength ?? -1L;
+
+                    using Stream contentStream = await response.Content.ReadAsStreamAsync();
+                    using FileStream fileStream = new(
+                        tempPath,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.None,
+                        8192,
+                        true
+                    );
+                    byte[] buffer = new byte[8192];
+                    long totalRead = 0L;
+                    int read;
+
+                    while ((read = await contentStream.ReadAsync(buffer)) != 0)
+                    {
+                        await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                        totalRead += read;
+
+                        if (totalBytes != -1)
+                        {
+                            onProgress?.Invoke((double)totalRead / totalBytes * 100);
+                        }
+                    }
+                }
+
+                using (FileStream fs = new(tempPath, FileMode.Open, FileAccess.Read))
+                {
+                    if (fs.Length < 2)
+                    {
+                        throw new InvalidDataException(
+                            "Downloaded installer is too small to be valid."
+                        );
+                    }
+                    int b1 = fs.ReadByte();
+                    int b2 = fs.ReadByte();
+                    if (b1 != 0x4D || b2 != 0x5A)
+                    {
+                        throw new InvalidDataException(
+                            "Downloaded installer is not a valid executable file."
+                        );
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(expectedHash))
+                {
+                    await using FileStream hashStream = File.OpenRead(tempPath);
+                    byte[] hashBytes = await SHA256.HashDataAsync(hashStream);
+                    string computedHash = Convert.ToHexString(hashBytes).ToLowerInvariant();
+                    if (!computedHash.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new CryptographicException(
+                            $"Installer hash mismatch! Expected: {expectedHash}, Computed: {computedHash}"
+                        );
+                    }
+                    Log.Information("Installer hash integrity check passed successfully.");
+                }
+
+                string signatureUrl = downloadUrl + ".sig";
+                byte[] signatureBytes;
+                try
+                {
+                    Log.Information($"Fetching cryptographic signature from {signatureUrl}");
+                    using HttpResponseMessage sigResponse = await _httpClient.GetAsync(
+                        signatureUrl
+                    );
+                    if (!sigResponse.IsSuccessStatusCode)
+                    {
+                        throw new CryptographicException(
+                            "Failed to fetch installer cryptographic signature (.sig)."
+                        );
+                    }
+                    signatureBytes = await sigResponse.Content.ReadAsByteArrayAsync();
+                }
+                catch (Exception ex) when (ex is not CryptographicException)
+                {
+                    throw new CryptographicException(
+                        $"Could not download installer security signature: {ex.Message}"
+                    );
+                }
+
+                try
+                {
+                    using ECDsa ecdsa = ECDsa.Create();
+                    ecdsa.ImportSubjectPublicKeyInfo(
+                        Convert.FromBase64String(Constants.PublisherPublicKey),
+                        out _
+                    );
+
+                    await using FileStream verifyStream = File.OpenRead(tempPath);
+                    bool isSignatureValid = ecdsa.VerifyData(
+                        verifyStream,
+                        signatureBytes,
+                        HashAlgorithmName.SHA256
+                    );
+                    if (!isSignatureValid)
+                    {
+                        throw new CryptographicException("Installer digital signature is invalid!");
+                    }
+                    Log.Information("Installer digital signature verified successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Digital signature verification failed.");
+                    throw;
+                }
+
+                Log.Information($"Launching installer: {tempPath}");
+                Log.CloseAndFlush();
+                launched = true;
+                try
+                {
+                    _ = Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+                }
+                catch (Exception startEx)
+                {
+                    Log.Error(startEx, "Failed to launch installer {TempPath}.", tempPath);
+                    throw;
+                }
+                Application.Current?.Dispatcher.Invoke(Application.Current.Shutdown);
+            }
+            catch (IOException ioEx)
+                when (ioEx.Message.Contains("virus", StringComparison.OrdinalIgnoreCase)
+                    || ioEx.Message.Contains(
+                        "potentially unwanted",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+            {
+                Log.Error(ioEx, "Windows Defender blocked the installer download.");
+                throw;
+            }
+            finally
+            {
+                if (!launched)
+                {
+                    try
+                    {
+                        if (File.Exists(tempPath))
+                        {
+                            File.Delete(tempPath);
+                        }
+                    }
+                    catch (Exception cleanupEx)
+                    {
+                        Log.Warning(
+                            cleanupEx,
+                            "Could not clean up installer temp file {TempPath}.",
+                            tempPath
+                        );
                     }
                 }
             }
-
-            using (FileStream fs = new(tempPath, FileMode.Open, FileAccess.Read))
-            {
-                if (fs.Length < 2)
-                {
-                    throw new InvalidDataException(
-                        "Downloaded installer is too small to be valid."
-                    );
-                }
-                int b1 = fs.ReadByte();
-                int b2 = fs.ReadByte();
-                if (b1 != 0x4D || b2 != 0x5A)
-                {
-                    throw new InvalidDataException(
-                        "Downloaded installer is not a valid executable file."
-                    );
-                }
-            }
-
-            if (!string.IsNullOrEmpty(expectedHash))
-            {
-                await using FileStream hashStream = File.OpenRead(tempPath);
-                byte[] hashBytes = await SHA256.HashDataAsync(hashStream);
-                string computedHash = Convert.ToHexString(hashBytes).ToLowerInvariant();
-                if (!computedHash.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
-                {
-                    throw new CryptographicException(
-                        $"Installer hash mismatch! Expected: {expectedHash}, Computed: {computedHash}"
-                    );
-                }
-                Log.Information("Installer hash integrity check passed successfully.");
-            }
-
-            string signatureUrl = downloadUrl + ".sig";
-            byte[] signatureBytes;
-            try
-            {
-                Log.Information($"Fetching cryptographic signature from {signatureUrl}");
-                using HttpResponseMessage sigResponse = await _httpClient.GetAsync(signatureUrl);
-                if (!sigResponse.IsSuccessStatusCode)
-                {
-                    throw new CryptographicException(
-                        "Failed to fetch installer cryptographic signature (.sig)."
-                    );
-                }
-                signatureBytes = await sigResponse.Content.ReadAsByteArrayAsync();
-            }
-            catch (Exception ex) when (ex is not CryptographicException)
-            {
-                throw new CryptographicException(
-                    $"Could not download installer security signature: {ex.Message}"
-                );
-            }
-
-            try
-            {
-                using ECDsa ecdsa = ECDsa.Create();
-                ecdsa.ImportSubjectPublicKeyInfo(
-                    Convert.FromBase64String(Constants.PublisherPublicKey),
-                    out _
-                );
-
-                await using FileStream verifyStream = File.OpenRead(tempPath);
-                bool isSignatureValid = ecdsa.VerifyData(
-                    verifyStream,
-                    signatureBytes,
-                    HashAlgorithmName.SHA256
-                );
-                if (!isSignatureValid)
-                {
-                    throw new CryptographicException("Installer digital signature is invalid!");
-                }
-                Log.Information("Installer digital signature verified successfully.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Digital signature verification failed.");
-                throw;
-            }
-
-            Log.Information($"Launching installer: {tempPath}");
-            Log.CloseAndFlush();
-            _ = Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
-            Application.Current?.Dispatcher.Invoke(Application.Current.Shutdown);
         }
     }
 }

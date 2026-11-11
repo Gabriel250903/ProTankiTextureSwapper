@@ -23,6 +23,8 @@ CodeDependencies.iss
 dotnet-tools.json
 Textures/Premium/
 scratch/
+Docs/
+Assets/HUD.zip
 
 Thumbs.db
 ehthumbs.db

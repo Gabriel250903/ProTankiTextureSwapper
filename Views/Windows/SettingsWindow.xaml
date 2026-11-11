@@ -487,12 +487,12 @@
                 <ui:TextBlock
                     Margin="0,15,0,10"
                     FontTypography="Subtitle"
-                    Text="🎃 Halloween Seasonal Customization"
-                    Visibility="{Binding IsHalloweenCustomizationVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Text="{Binding SeasonalSettingsHeader, FallbackValue='Seasonal Customization'}"
+                    Visibility="{Binding IsSeasonalCustomizationVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <ui:Card
                     Margin="0,0,0,20"
                     Padding="15"
-                    Visibility="{Binding IsHalloweenCustomizationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding IsSeasonalCustomizationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel>
                         <ui:TextBlock
                             Margin="0,0,0,10"
@@ -523,7 +523,7 @@
                                     <ui:TextBlock
                                         FontTypography="Caption"
                                         Opacity="0.75"
-                                        Text="The Halloween theme renders real-time visual effects. It actively uses your GPU and a bit more CPU and RAM to keep animations smooth!"
+                                        Text="The seasonal theme renders real-time visual effects. It actively uses your GPU and a bit more CPU and RAM to keep animations smooth!"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                             </Grid>
@@ -539,12 +539,12 @@
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Canvas animation with floating bats, embers, wandering spirits, and glowing eyes" />
+                                    Text="Live seasonal particle animations and visual ambience" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding EnableHalloweenAtmosphereAnimation, Mode=TwoWay}" />
+                                IsChecked="{Binding EnableSeasonalAtmosphereAnimation, Mode=TwoWay}" />
                         </Grid>
 
                         <Grid Margin="0,0,0,12">
@@ -553,16 +553,16 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="Gothic Display Font" />
+                                <ui:TextBlock FontWeight="SemiBold" Text="Custom Display Font" />
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Use the halloween font on headers and navigation tabs" />
+                                    Text="Use the seasonal font on headers and navigation tabs" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding EnableHalloweenSpookyFont, Mode=TwoWay}" />
+                                IsChecked="{Binding EnableSeasonalCustomFont, Mode=TwoWay}" />
                         </Grid>
 
                         <Grid Margin="0,0,0,15">
@@ -575,12 +575,12 @@
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Display 🎃 pumpkin logo and seasonal icon in the title bar" />
+                                    Text="Display seasonal title icon and branding in the title bar" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding EnableHalloweenAppLogo, Mode=TwoWay}" />
+                                IsChecked="{Binding EnableSeasonalAppLogo, Mode=TwoWay}" />
                         </Grid>
 
                         <Border
@@ -601,69 +601,48 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="Master Spooky Audio" />
+                                <ui:TextBlock FontWeight="SemiBold" Text="Master Seasonal Audio" />
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Enable eerie sounds, button bone-clicks, ambient drone, and Easter egg effects" />
+                                    Text="Enable seasonal audio cues, UI clicks, ambient sound, and surprise effects" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding EnableHalloweenSound, Mode=TwoWay}" />
+                                IsChecked="{Binding EnableSeasonalSound, Mode=TwoWay}" />
                         </Grid>
 
-                        <Grid Margin="0,0,0,5" IsEnabled="{Binding EnableHalloweenSound}">
+                        <Grid Margin="0,0,0,5" IsEnabled="{Binding EnableSeasonalSound}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="Random Ambient Scares" />
+                                <ui:TextBlock FontWeight="SemiBold" Text="Random Ambient Audio Cues" />
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Occasional ghost wails, laughs, and monster roars in the background" />
+                                    Text="Occasional seasonal audio cues in the background" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding EnableHalloweenRandomScares, Mode=TwoWay}" />
+                                IsChecked="{Binding EnableSeasonalRandomAudio, Mode=TwoWay}" />
                         </Grid>
                     </StackPanel>
                 </ui:Card>
 
-                <StackPanel Margin="0,15,0,2" Orientation="Horizontal">
-                    <ui:TextBlock
-                        VerticalAlignment="Center"
-                        FontTypography="Subtitle"
-                        Text="ProTanki HUD Modifications" />
-                    <Border
-                        Margin="10,0,0,0"
-                        Padding="8,2"
-                        VerticalAlignment="Center"
-                        Background="#2500B4D8"
-                        BorderBrush="#00B4D8"
-                        BorderThickness="1"
-                        CornerRadius="10">
-                        <ui:TextBlock
-                            FontSize="11"
-                            FontWeight="SemiBold"
-                            Foreground="#00B4D8"
-                            Text="Soon..." />
-                    </Border>
-                </StackPanel>
+                <ui:TextBlock
+                    Margin="0,15,0,2"
+                    FontTypography="Subtitle"
+                    Text="ProTanki Modifications" />
                 <ui:TextBlock
                     Margin="0,0,0,10"
                     FontTypography="Caption"
                     Opacity="0.7"
-                    Text="Customize in-game battle interfaces, supplies positions, and visual overlays (coming soon)." />
-                <ui:Card
-                    Margin="0,0,0,20"
-                    Padding="15"
-                    IsEnabled="False"
-                    Opacity="0.6"
-                    ToolTip="This feature is in development and will be available in an upcoming update.">
+                    Text="Customize in-game battle interfaces, supplies positions, and animate paints." />
+                <ui:Card Margin="0,0,0,20" Padding="15">
                     <StackPanel>
                         <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
@@ -671,16 +650,15 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="Centered Supplies HUD" />
+                                <ui:TextBlock FontWeight="SemiBold" Text="Enable Custom .swf" />
                                 <ui:TextBlock
                                     FontTypography="Caption"
                                     Opacity="0.6"
-                                    Text="Positions the battle supplies bar in the bottom-center of the screen." />
+                                    Text="Enable the custom .swf" />
                             </StackPanel>
                             <ui:ToggleSwitch
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
-                                IsEnabled="False"
                                 IsChecked="{Binding EnableCenteredHud, Mode=TwoWay}" />
                         </Grid>
 
@@ -700,7 +678,6 @@
                             </StackPanel>
                             <ui:Button
                                 Grid.Column="1"
-                                IsEnabled="False"
                                 Command="{Binding InstallLoaderPatchCommand}"
                                 Content="Install Patch"
                                 Icon="{ui:SymbolIcon ShieldCheckmark24}" />

@@ -1,4 +1,5 @@
 {
-  "halloween_enabled": true,
-  "thematic_gold_enabled": true
+  "seasonal_enabled": false,
+  "halloween_enabled": false,
+  "thematic_gold_enabled": false
 }

@@ -8,6 +8,7 @@ namespace TextureSwapper.Core
         public const string TurretsSkinsJson = "skins_turrets.json";
         public const string SuppliesSkinsJson = "skins_supplies.json";
         public const string PaintsSkinsJson = "skins_paints.json";
+        public const string AnimatedPaintsSkinsJson = "skins_animated_paints.json";
         public const string InGamePaintsJson = "ingame_paints.json";
         public const string ShotEffectsJson = "shot_effects.json";
         public const string BackupsDir = "Backups";
@@ -31,7 +32,7 @@ namespace TextureSwapper.Core
         public const string SpawnersSkinsJson = "skins_spawners.json";
         public const string GatekeeperWorkerUrl =
             "https://textureswapper-gatekeeper.flytoxp.workers.dev";
-        public const string GatekeeperApiKey = "ts-gk-a7f3e9d1c4b8205f6e1a9c3d7b4f8e2a";
+        public const string GatekeeperApiKey = "ts-gk-84823a89d9c0c6d91365df8241ce7ba8";
         public const string GumroadBuyUrl = "https://flytoxp.gumroad.com/l/mfdjom";
         public const string DiscordInviteUrl = "https://discord.gg/3Bgs7Jd9xk";
         public const string DiscordContactUsername = "noizy3345";
@@ -62,14 +63,24 @@ namespace TextureSwapper.Core
 
         public const string RailgunCharge1Target =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2ltYWdlLmpwZw==";
+        public const string RailgunCharge1AlphaTarget =
+            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMyMDIzNTEwMzYxMDc0L2FscGhhLmpwZw==";
         public const string RailgunCharge2Target =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2ltYWdlLmpwZw==";
+        public const string RailgunCharge2AlphaTarget =
+            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI1LzMyMDIzNTEwMzYxMTEwL2FscGhhLmpwZw==";
         public const string RailgunChargeSphereTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2ltYWdlLmpwZw==";
+        public const string RailgunChargeSphereAlphaTarget =
+            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzIzLzMyMDIzNTEwMzYxMDYwL2FscGhhLmpwZw==";
         public const string RailgunBeamCoreTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2ltYWdlLmpwZw==";
+        public const string RailgunBeamCoreAlphaTarget =
+            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzM0LzMyMDIzNTEwMzYxMjMwL2FscGhhLmpwZw==";
         public const string RailgunBeamSpiralTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2ltYWdlLmpwZw==";
+        public const string RailgunBeamSpiralAlphaTarget =
+            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzMyLzMyMDIzNTEwMzYxMTc0L2FscGhhLmpwZw==";
 
         public const string RailgunLegacyCharge1Target =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzI0LzMxNDY0MTQzMDExNzAxL2ltYWdlLmpwZw==";

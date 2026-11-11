@@ -8,7 +8,10 @@ namespace TextureSwapper.Core.Interfaces
         event EventHandler? DeviceUnbanned;
         void StartPeriodicVerification(TimeSpan interval);
         void StopPeriodicVerification();
-        Task<DeviceBanCheckResult> VerifyDeviceStatusAsync(bool forceRefresh = false);
+        Task<DeviceBanCheckResult> VerifyDeviceStatusAsync(
+            bool forceRefresh = false,
+            CancellationToken cancellationToken = default
+        );
         string GetDeviceHardwareId();
         Task<List<AdminDeviceItem>> GetAllDevicesAsync(bool forceRefresh = false);
         Task<bool> BanDeviceAsync(string hwid, string reason, int durationHours = 0);

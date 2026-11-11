@@ -1,0 +1,12 @@
+<UserControl
+    x:Class="TextureSwapper.Seasonal.SeasonalAtmosphereCanvas"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:seasonal="clr-namespace:TextureSwapper.Seasonal"
+    ClipToBounds="True"
+    Focusable="False"
+    IsHitTestVisible="False">
+    <Grid IsHitTestVisible="False">
+        <seasonal:SeasonalVisualHost x:Name="VisualHost" IsHitTestVisible="False" />
+    </Grid>
+</UserControl>

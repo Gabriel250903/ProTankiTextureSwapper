@@ -14,9 +14,8 @@
       </ResourceDictionary.MergedDictionaries>
 
       <FontFamily x:Key="ActiveDisplayFont">Segoe UI</FontFamily>
-      <FontFamily x:Key="HalloweenSpookyFont">
-        pack://application:,,,/TextureSwapper;component/Assets/Themes/Halloween/#Creepster, ./Assets/Themes/Halloween/#Creepster, Creepster
-      </FontFamily>
+      <FontFamily x:Key="SeasonalDisplayFont">Segoe UI</FontFamily>
+      <FontFamily x:Key="HalloweenSpookyFont">Segoe UI</FontFamily>
 
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
       <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />

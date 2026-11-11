@@ -99,25 +99,29 @@
                     Content="{DynamicResource Loc_ShotEffects_InvertColors}"
                     IsChecked="{Binding Invert}" />
 
-                <StackPanel
+                <WrapPanel
                     Margin="0,10,0,0"
                     HorizontalAlignment="Stretch"
                     Orientation="Horizontal">
                     <Button
-                        Width="150"
-                        Padding="15,8"
+                        Width="140"
+                        Padding="12,8"
                         Background="#4CAF50"
                         Command="{Binding SaveCommand}"
                         Content="{DynamicResource Loc_ShotEffects_ApplyToGame}"
                         FontWeight="Bold"
                         Foreground="White" />
-                    <Button
-                        Width="150"
-                        Margin="10,0,0,0"
-                        Padding="15,8"
-                        Command="{Binding RestoreCommand}"
-                        Content="{DynamicResource Loc_ShotEffects_RestoreOriginal}" />
-                </StackPanel>
+                    <ui:Button
+                        Width="160"
+                        Margin="8,0,0,0"
+                        Padding="12,8"
+                        Background="#E67E22"
+                        Command="{Binding ApplyClassicCommand}"
+                        Content="{DynamicResource Loc_ShotEffects_Classic2010}"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Icon="{ui:SymbolIcon LockClosed24}" />
+                </WrapPanel>
             </StackPanel>
         </ScrollViewer>
 

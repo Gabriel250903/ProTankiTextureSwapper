@@ -7,6 +7,7 @@
     xmlns:helpers="clr-namespace:TextureSwapper.Helpers.Converters"
     xmlns:local="clr-namespace:TextureSwapper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:seasonal="clr-namespace:TextureSwapper.Seasonal"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:TextureSwapper.ViewModels"
     xmlns:windows="clr-namespace:TextureSwapper.Views.Windows"
@@ -68,10 +69,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <controls:HalloweenAtmosphereCanvas
+            <seasonal:SeasonalAtmosphereCanvas
                 Grid.ColumnSpan="2"
                 Panel.ZIndex="0"
-                Visibility="{Binding IsHalloweenAtmosphereVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                Visibility="{Binding IsSeasonalAtmosphereVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <ui:NavigationView
                 x:Name="RootNavigation"

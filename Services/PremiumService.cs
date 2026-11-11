@@ -35,8 +35,14 @@ namespace TextureSwapper.Services
         private static HttpClient CreateDefaultHttpClient()
         {
             HttpClient client = new() { Timeout = TimeSpan.FromSeconds(20) };
-            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "TextureSwapper/2.0");
-            client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", Constants.GatekeeperApiKey);
+            _ = client.DefaultRequestHeaders.TryAddWithoutValidation(
+                "User-Agent",
+                "TextureSwapper/2.0"
+            );
+            _ = client.DefaultRequestHeaders.TryAddWithoutValidation(
+                "X-Api-Key",
+                Constants.GatekeeperApiKey
+            );
             return client;
         }
 
@@ -178,7 +184,8 @@ namespace TextureSwapper.Services
                 );
 
                 if (
-                    _lastSettings != null
+                    response.IsSuccessStatusCode
+                    && _lastSettings != null
                     && targetKey.Equals(
                         _lastSettings.PremiumLicenseKey,
                         StringComparison.OrdinalIgnoreCase
@@ -495,7 +502,10 @@ namespace TextureSwapper.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string currentHwid = HardwareFingerprintHelper.GetMachineHwid();
-                    if (!string.IsNullOrEmpty(cleanHwid) && cleanHwid.Equals(currentHwid, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        !string.IsNullOrEmpty(cleanHwid)
+                        && cleanHwid.Equals(currentHwid, StringComparison.OrdinalIgnoreCase)
+                    )
                     {
                         _lastSettings ??= _settingsService.Load();
                         _lastSettings.UserNickname = cleanNickname;
@@ -506,7 +516,11 @@ namespace TextureSwapper.Services
 
                 if (!string.IsNullOrEmpty(cleanKey) && !string.IsNullOrEmpty(cleanHwid))
                 {
-                    PremiumActivationResult fallbackRes = await AssignKeyToDeviceAsync(cleanKey, cleanHwid, cleanNickname);
+                    PremiumActivationResult fallbackRes = await AssignKeyToDeviceAsync(
+                        cleanKey,
+                        cleanHwid,
+                        cleanNickname
+                    );
                     if (fallbackRes.Success)
                     {
                         return (true, $"Nickname updated to '{cleanNickname}'.");
@@ -933,8 +947,16 @@ namespace TextureSwapper.Services
                         }
 
                         bool isHalloweenPermanent =
-                            (key?.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase) ?? false)
-                            || (settings.PremiumLicenseKey?.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase) ?? false);
+                            (
+                                key?.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase)
+                                ?? false
+                            )
+                            || (
+                                settings.PremiumLicenseKey?.StartsWith(
+                                    "HALLOWEEN-",
+                                    StringComparison.OrdinalIgnoreCase
+                                ) ?? false
+                            );
 
                         if (
                             !isHalloweenPermanent
@@ -965,7 +987,8 @@ namespace TextureSwapper.Services
                             StringComparison.OrdinalIgnoreCase
                         );
 
-                        settings.PremiumLicenseKey = key ?? settings.PremiumLicenseKey ?? string.Empty;
+                        settings.PremiumLicenseKey =
+                            key ?? settings.PremiumLicenseKey ?? string.Empty;
                         if (
                             !string.IsNullOrWhiteSpace(nickname)
                             && !string.Equals(
@@ -1140,11 +1163,19 @@ namespace TextureSwapper.Services
                     if (!string.IsNullOrWhiteSpace(settings.PremiumExpiresAtUtc))
                     {
                         bool isHalloweenPermanent =
-                            settings.PremiumLicenseKey?.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase) == true;
+                            settings.PremiumLicenseKey?.StartsWith(
+                                "HALLOWEEN-",
+                                StringComparison.OrdinalIgnoreCase
+                            ) == true;
 
                         if (!isHalloweenPermanent)
                         {
-                            if (!TryParseIso8601(settings.PremiumExpiresAtUtc, out DateTime expiresAt))
+                            if (
+                                !TryParseIso8601(
+                                    settings.PremiumExpiresAtUtc,
+                                    out DateTime expiresAt
+                                )
+                            )
                             {
                                 Log.Warning(
                                     "Invalid expiration date stored locally. Forcing online verification."
@@ -1579,7 +1610,7 @@ namespace TextureSwapper.Services
                 Dictionary<string, string> payload = new()
                 {
                     { "action", "seasonal_sync" },
-                    { "eventType", "halloween_title_click" },
+                    { "eventType", "seasonal_logo_click" },
                     { "hwid", hwid },
                     { "nickname", cleanNickname },
                 };
@@ -1672,10 +1703,17 @@ namespace TextureSwapper.Services
                 {
                     string safeExpiresAt = expiresAt ?? string.Empty;
                     string expectedPayload = $"{hwid}:PREMIUM_UNLOCKED:{safeExpiresAt}";
-                    bool isHalloweenKey = key.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase);
-                    bool isExpired = !isHalloweenKey
+                    bool isHalloweenKey = key.StartsWith(
+                        "HALLOWEEN-",
+                        StringComparison.OrdinalIgnoreCase
+                    );
+                    bool isExpired =
+                        !isHalloweenKey
                         && !string.IsNullOrEmpty(safeExpiresAt)
-                        && (!TryParseIso8601(safeExpiresAt, out DateTime expUtc) || DateTime.UtcNow >= expUtc);
+                        && (
+                            !TryParseIso8601(safeExpiresAt, out DateTime expUtc)
+                            || DateTime.UtcNow >= expUtc
+                        );
 
                     if (VerifyRsaSignature(expectedPayload, sig) && !isExpired)
                     {
@@ -1865,14 +1903,9 @@ namespace TextureSwapper.Services
         {
             _lastSettings ??= _settingsService.Load();
 
-            if (
-                _lastSettings == null
-                || !IsPremiumUnlocked
-            )
+            if (_lastSettings == null || !IsPremiumUnlocked)
             {
-                Log.Warning(
-                    "AssetKey: Cannot request key - Premium is not unlocked."
-                );
+                Log.Warning("AssetKey: Cannot request key - Premium is not unlocked.");
                 return null;
             }
 
@@ -1910,7 +1943,10 @@ namespace TextureSwapper.Services
                 }
                 if (!_httpClient.DefaultRequestHeaders.Contains("X-Api-Key"))
                 {
-                    _ = req.Headers.TryAddWithoutValidation("X-Api-Key", Constants.GatekeeperApiKey);
+                    _ = req.Headers.TryAddWithoutValidation(
+                        "X-Api-Key",
+                        Constants.GatekeeperApiKey
+                    );
                 }
 
                 using HttpResponseMessage response = await _httpClient.SendAsync(req);

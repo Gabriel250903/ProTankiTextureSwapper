@@ -308,7 +308,7 @@ namespace TextureSwapper.ViewModels.Tabs
         }
 
         public ICommand SaveCommand { get; }
-        public ICommand RestoreCommand { get; }
+        public ICommand ApplyClassicCommand { get; }
 
         public IsidaShotViewModel(IIsidaShotComposer composer, MainViewModel mainVM)
         {
@@ -319,12 +319,111 @@ namespace TextureSwapper.ViewModels.Tabs
                 _ => SaveIsidaEffectAsync(),
                 _ => !_mainVM.IsLoading
             );
-            RestoreCommand = new AsyncRelayCommand(
-                _ => RestoreOriginalsAsync(),
+            ApplyClassicCommand = new AsyncRelayCommand(
+                _ => ApplyClassic2010Async(),
                 _ => !_mainVM.IsLoading
             );
 
             UpdatePreview();
+        }
+
+        private async Task ApplyClassic2010Async()
+        {
+            if (!await _mainVM.EnsureSafeToOperate())
+            {
+                return;
+            }
+
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
+            try
+            {
+                _mainVM.IsLoading = true;
+                _mainVM.UpdateStatus = "Applying Classic 2010 Isida shot effect...";
+
+                List<string> potentialTargets =
+                [
+                    Constants.IsidaDamageBallTarget,
+                    Constants.IsidaDamageBeamImageTarget,
+                    Constants.IsidaDamageBeamAlphaTarget,
+                    Constants.IsidaDamageImpactTarget,
+                    Constants.IsidaDamageFlareTarget,
+                    Constants.IsidaHealBallTarget,
+                    Constants.IsidaHealBeamImageTarget,
+                    Constants.IsidaHealBeamAlphaTarget,
+                    Constants.IsidaHealShaftImageTarget,
+                    Constants.IsidaHealShaftAlphaTarget,
+                ];
+
+                List<string> activeTargets = [];
+                foreach (string target in potentialTargets)
+                {
+                    string cachePath = FileHelper.GetSafePath(_mainVM.CachePath, target);
+                    if (File.Exists(cachePath))
+                    {
+                        activeTargets.Add(target);
+                    }
+                }
+
+                if (activeTargets.Count == 0)
+                {
+                    activeTargets = potentialTargets;
+                }
+
+                ShotEffectModel classicEffect = new()
+                {
+                    Turret = "Isida",
+                    Name = "Classic 2010",
+                    SourceFolder = "Textures/ShotEffects/Turrets/Isida/Classic_2010",
+                    PreviewImage = "Textures/ShotEffects/Turrets/Isida/Classic_2010/preview.jpg",
+                    Targets = activeTargets,
+                };
+
+                string? result = await Task.Run(() =>
+                    _mainVM.SwapService.SwapShotEffect(_mainVM.CachePath, classicEffect)
+                );
+
+                await Task.Delay(1000);
+
+                if (result == null)
+                {
+                    notificationTitle = "Success";
+                    notificationMessage = "Classic 2010 Isida shot effect applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+                    _mainVM.BackupsTabVM.LoadBackups();
+                }
+                else if (result == "NotCached")
+                {
+                    notificationTitle = "Notice";
+                    notificationMessage =
+                        "The shot effect assets for Isida are not cached by the loader yet. Please launch the game with Isida equipped first.";
+                    notificationAppearance = ControlAppearance.Caution;
+                }
+                else
+                {
+                    notificationTitle = "Error";
+                    notificationMessage = $"Failed to apply Classic 2010 Isida effect: {result}";
+                    notificationAppearance = ControlAppearance.Danger;
+                }
+            }
+            catch (Exception ex)
+            {
+                notificationTitle = "Error";
+                notificationMessage = $"Error: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
+            }
+            finally
+            {
+                _mainVM.IsLoading = false;
+                _mainVM.UpdateStatus = string.Empty;
+                await _mainVM.NotificationService.ShowAsync(
+                    notificationTitle,
+                    notificationMessage,
+                    notificationAppearance
+                );
+            }
         }
 
         public IsidaShotRenderOptions ToDamageRenderOptions()
@@ -576,31 +675,6 @@ namespace TextureSwapper.ViewModels.Tabs
                     notificationTitle,
                     notificationMessage,
                     notificationAppearance
-                );
-            }
-        }
-
-        private async Task RestoreOriginalsAsync()
-        {
-            if (!await _mainVM.EnsureSafeToOperate())
-            {
-                return;
-            }
-
-            try
-            {
-                await _mainVM.NotificationService.ShowAsync(
-                    "Backups",
-                    "Please use the 'Backups' tab to restore vanilla textures.",
-                    ControlAppearance.Info
-                );
-            }
-            catch (Exception ex)
-            {
-                await _mainVM.NotificationService.ShowAsync(
-                    "Error",
-                    $"Error restoring: {ex.Message}",
-                    ControlAppearance.Danger
                 );
             }
         }

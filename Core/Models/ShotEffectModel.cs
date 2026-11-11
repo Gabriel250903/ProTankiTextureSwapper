@@ -27,6 +27,7 @@ namespace TextureSwapper.Core.Models
         public string Name { get; set; } = string.Empty;
         public string SourceFolder { get; set; } = string.Empty;
         public string PreviewImage { get; set; } = string.Empty;
+        public bool IsPremium { get; set; }
         public List<string> Targets { get; set; } = [];
 
         private string? _cachedFullPreviewPath;

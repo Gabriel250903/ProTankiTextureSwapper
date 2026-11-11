@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
+using TextureSwapper.Seasonal;
 using TextureSwapper.Services;
 using TextureSwapper.Services.Composers;
 using TextureSwapper.ViewModels;
@@ -16,38 +16,12 @@ namespace TextureSwapper
 {
     public partial class App : Application
     {
-        [DllImport("gdi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern int AddFontResourceEx(string lpszFilename, uint fl, IntPtr pdv);
-
-        [DllImport("gdi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern bool RemoveFontResourceEx(string lpFileName, uint fl, IntPtr pdv);
-
-        private static string? _loadedFontPath;
         public static string CurrentLogFilePath { get; private set; } = string.Empty;
         public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            try
-            {
-                string fontPath = Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "Assets",
-                    "Themes",
-                    "Halloween",
-                    "Creepster-Regular.ttf"
-                );
-                if (File.Exists(fontPath))
-                {
-                    if (AddFontResourceEx(fontPath, 0x10, IntPtr.Zero) != 0)
-                    {
-                        _loadedFontPath = fontPath;
-                    }
-                }
-            }
-            catch { }
 
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             CurrentLogFilePath = Path.Combine(
@@ -126,8 +100,8 @@ namespace TextureSwapper
             _ = services.AddSingleton<IVulcanShotComposer, VulcanShotComposer>();
             _ = services.AddSingleton<IThunderShotComposer, ThunderShotComposer>();
             _ = services.AddSingleton<IDustEffectComposer, DustEffectComposer>();
-            _ = services.AddSingleton<HalloweenThemeService>();
-            _ = services.AddSingleton<HalloweenSoundService>();
+            _ = services.AddSingleton<SeasonalThemeService>();
+            _ = services.AddSingleton<SeasonalAudioService>();
             _ = services.AddSingleton<ISmokyShotComposer, SmokyShotComposer>();
             _ = services.AddSingleton<IParachuteComposer, ParachuteComposer>();
             _ = services.AddSingleton<IPropComposer, PropComposer>();
@@ -146,14 +120,6 @@ namespace TextureSwapper
 
         protected override void OnExit(ExitEventArgs e)
         {
-            if (!string.IsNullOrEmpty(_loadedFontPath))
-            {
-                try
-                {
-                    _ = RemoveFontResourceEx(_loadedFontPath, 0x10, IntPtr.Zero);
-                }
-                catch { }
-            }
             Log.Information("Application Closing...");
             Log.CloseAndFlush();
             base.OnExit(e);

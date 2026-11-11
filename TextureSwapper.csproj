@@ -7,14 +7,14 @@
     <UseWPF>true</UseWPF>
 
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
-    <Version>2.1.2</Version>
+    <Version>3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
     <PackageReference Include="Serilog" Version="4.4.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="10.0.13" />
+    <PackageReference Include="System.Management" Version="10.0.14" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
   </ItemGroup>
 
@@ -29,6 +29,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="skins_paints.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="skins_animated_paints.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="skins_spawners.json">
@@ -52,9 +55,6 @@
     <None Update="Assets\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\HUD\**\*">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="Textures\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -64,6 +64,7 @@
     <Resource Include="Assets\halloween_logo.png" />
     <None Remove="Assets\mystery_hmm.png" />
     <Resource Include="Assets\mystery_hmm.png" />
+    <Resource Include="Assets\Themes\Seasonal\**\*" />
     <Resource Include="Assets\Themes\Halloween\**\*" />
   </ItemGroup>
 

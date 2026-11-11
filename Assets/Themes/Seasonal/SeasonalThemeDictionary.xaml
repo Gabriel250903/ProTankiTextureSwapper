@@ -1,0 +1,20 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <FontFamily x:Key="ActiveDisplayFont">Segoe UI</FontFamily>
+    <FontFamily x:Key="SeasonalDisplayFont">Segoe UI</FontFamily>
+
+    <Color x:Key="SeasonalPrimaryColor">#FFD42426</Color>
+    <Color x:Key="SeasonalSecondaryColor">#FF2ECC71</Color>
+    <Color x:Key="SeasonalCardSelectedStrokeColor">#FF00FF7F</Color>
+
+    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SeasonalPrimaryColor}" />
+    <SolidColorBrush x:Key="SeasonalAccentBrush" Color="{StaticResource SeasonalPrimaryColor}" />
+    <SolidColorBrush x:Key="SeasonalSecondaryBrush" Color="{StaticResource SeasonalSecondaryColor}" />
+    <SolidColorBrush x:Key="CardSelectedBorderBrush" Color="{StaticResource SeasonalCardSelectedStrokeColor}" />
+
+    <SolidColorBrush x:Key="HalloweenAccentBrush" Color="{StaticResource SeasonalPrimaryColor}" />
+    <SolidColorBrush x:Key="HalloweenSecondaryBrush" Color="{StaticResource SeasonalSecondaryColor}" />
+    <FontFamily x:Key="HalloweenSpookyFont">Segoe UI</FontFamily>
+</ResourceDictionary>

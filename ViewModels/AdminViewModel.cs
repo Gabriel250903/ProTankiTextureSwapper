@@ -11,6 +11,7 @@ using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.Helpers.Utilities;
+using TextureSwapper.Seasonal;
 using TextureSwapper.ViewModels.Base;
 using Wpf.Ui.Controls;
 
@@ -48,58 +49,74 @@ namespace TextureSwapper.ViewModels
             }
         }
 
-        public bool EnableHalloweenSound
+        public bool EnableSeasonalSound
         {
-            get => _mainViewModel.Settings.EnableHalloweenSound;
+            get => _mainViewModel.Settings.EnableSeasonalSound;
             set
             {
-                if (_mainViewModel.Settings.EnableHalloweenSound != value)
+                if (_mainViewModel.Settings.EnableSeasonalSound != value)
                 {
-                    _mainViewModel.Settings.EnableHalloweenSound = value;
+                    _mainViewModel.Settings.EnableSeasonalSound = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(EnableHalloweenSound));
                     _mainViewModel.SaveSettings();
                     if (value)
                     {
-                        _mainViewModel.HalloweenSoundService.PlayHollowClick();
-                        if (_mainViewModel.IsHalloweenThemeActive)
+                        _mainViewModel.SeasonalAudioService.PlayClick();
+                        if (_mainViewModel.IsSeasonalThemeActive)
                         {
-                            _mainViewModel.HalloweenSoundService.SetAmbientDrone(true);
+                            _mainViewModel.SeasonalAudioService.SetAmbientDrone(true);
                         }
                     }
                     else
                     {
-                        _mainViewModel.HalloweenSoundService.SetAmbientDrone(false);
+                        _mainViewModel.SeasonalAudioService.SetAmbientDrone(false);
                     }
                 }
             }
         }
-
-        public bool ForceHalloweenPreview
+        public bool EnableHalloweenSound
         {
-            get => _mainViewModel.Settings.ForceHalloweenPreview;
+            get => EnableSeasonalSound;
+            set => EnableSeasonalSound = value;
+        }
+
+        public bool ForceSeasonalPreview
+        {
+            get => _mainViewModel.Settings.ForceSeasonalPreview;
             set
             {
-                if (_mainViewModel.Settings.ForceHalloweenPreview != value)
+                if (_mainViewModel.Settings.ForceSeasonalPreview != value)
                 {
-                    _mainViewModel.Settings.ForceHalloweenPreview = value;
+                    _mainViewModel.Settings.ForceSeasonalPreview = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(ForceHalloweenPreview));
                     _mainViewModel.SaveSettings();
-                    _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
+                    _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
+                    OnPropertyChanged(nameof(IsSeasonalThemeActive));
                     OnPropertyChanged(nameof(IsHalloweenThemeActive));
+                    OnPropertyChanged(nameof(SeasonalStatusText));
                     OnPropertyChanged(nameof(HalloweenStatusText));
                 }
             }
         }
+        public bool ForceHalloweenPreview
+        {
+            get => ForceSeasonalPreview;
+            set => ForceSeasonalPreview = value;
+        }
 
-        public bool IsHalloweenThemeActive =>
-            _mainViewModel.HalloweenThemeService.IsHalloweenActive;
+        public bool IsSeasonalThemeActive => _mainViewModel.SeasonalThemeService.IsSeasonalActive;
+        public bool IsHalloweenThemeActive => IsSeasonalThemeActive;
 
-        public string HalloweenStatusText =>
-            _mainViewModel.HalloweenThemeService.IsHalloweenActive
-                ? _mainViewModel.Settings.ForceHalloweenPreview
-                    ? "Active (Preview Mode)"
-                    : "Active (Halloween Week Window)"
-                : "Inactive (Outside Oct 31 - Nov 7 Window)";
+        public string SeasonalStatusText =>
+            _mainViewModel.SeasonalThemeService.IsSeasonalActive
+                ? _mainViewModel.Settings.ForceSeasonalPreview
+                    ? $"Active ({SeasonalThemeConfig.Current.DisplayName} Preview Mode)"
+                    : $"Active ({SeasonalThemeConfig.Current.DisplayName} Window)"
+                : "Inactive (Outside Seasonal Window)";
+
+        public string HalloweenStatusText => SeasonalStatusText;
 
         public bool SkipRemoteTargetSync
         {
@@ -545,8 +562,10 @@ namespace TextureSwapper.ViewModels
                 AdminSession.ClearSession();
                 IsAuthenticated = false;
                 _mainViewModel.Settings.SavedAdminSecretEncrypted = string.Empty;
-                _mainViewModel.HalloweenThemeService.CheckAndApply();
+                _mainViewModel.SeasonalThemeService.CheckAndApply();
+                OnPropertyChanged(nameof(IsSeasonalThemeActive));
                 OnPropertyChanged(nameof(IsHalloweenThemeActive));
+                OnPropertyChanged(nameof(SeasonalStatusText));
                 OnPropertyChanged(nameof(HalloweenStatusText));
                 _mainViewModel.SaveSettings();
             });
@@ -707,9 +726,16 @@ namespace TextureSwapper.ViewModels
             ConfirmAssignKeyCommand = new AsyncRelayCommand(ExecuteConfirmAssignKey);
 
             OpenEditNicknameCommand = new RelayCommand(ExecuteOpenEditNicknameModal);
-            CloseEditNicknameModalCommand = new RelayCommand(_ => IsEditNicknameModalVisible = false);
-            ConfirmEditNicknameCommand = new AsyncRelayCommand(ExecuteConfirmEditNickname, _ => !IsUpdatingNickname);
-            EditNicknameUseWindowsUsernameCommand = new RelayCommand(_ => EditNicknameText = Environment.UserName);
+            CloseEditNicknameModalCommand = new RelayCommand(_ =>
+                IsEditNicknameModalVisible = false
+            );
+            ConfirmEditNicknameCommand = new AsyncRelayCommand(
+                ExecuteConfirmEditNickname,
+                _ => !IsUpdatingNickname
+            );
+            EditNicknameUseWindowsUsernameCommand = new RelayCommand(_ =>
+                EditNicknameText = Environment.UserName
+            );
 
             RevokeTrialCommand = new AsyncRelayCommand(ExecuteRevokeTrialAsync);
             ResetTrialCommand = new AsyncRelayCommand(ExecuteResetTrialAsync);
@@ -775,11 +801,19 @@ namespace TextureSwapper.ViewModels
             try
             {
                 string? secret = AdminSecretStorageHelper.DecryptSecret(
-                    _mainViewModel.Settings.SavedAdminSecretEncrypted
+                    _mainViewModel.Settings.SavedAdminSecretEncrypted,
+                    out bool migrated
                 );
                 if (string.IsNullOrEmpty(secret))
                 {
                     return false;
+                }
+
+                if (migrated)
+                {
+                    _mainViewModel.Settings.SavedAdminSecretEncrypted =
+                        AdminSecretStorageHelper.EncryptSecret(secret);
+                    Log.Information("Admin secret migrated to new DPAPI entropy.");
                 }
 
                 (bool success, string _) =
@@ -788,8 +822,10 @@ namespace TextureSwapper.ViewModels
                 {
                     AdminSession.SetSession(secret);
                     IsAuthenticated = true;
-                    _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
+                    _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
+                    OnPropertyChanged(nameof(IsSeasonalThemeActive));
                     OnPropertyChanged(nameof(IsHalloweenThemeActive));
+                    OnPropertyChanged(nameof(SeasonalStatusText));
                     OnPropertyChanged(nameof(HalloweenStatusText));
                     Log.Information("Admin auto-login successful via saved credentials.");
                     return true;
@@ -845,8 +881,10 @@ namespace TextureSwapper.ViewModels
 
                     IsAuthenticated = true;
                     PasswordInput = string.Empty;
-                    _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
+                    _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
+                    OnPropertyChanged(nameof(IsSeasonalThemeActive));
                     OnPropertyChanged(nameof(IsHalloweenThemeActive));
+                    OnPropertyChanged(nameof(SeasonalStatusText));
                     OnPropertyChanged(nameof(HalloweenStatusText));
                     Log.Information("Admin successfully authenticated.");
                 }
@@ -1447,13 +1485,17 @@ namespace TextureSwapper.ViewModels
             if (parameter is ServerLicenseKeyItem key)
             {
                 TargetAssignKeyItem = key;
-                AssignNickname = (!string.IsNullOrWhiteSpace(key.Nickname) && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
-                    ? key.Nickname
-                    : (
-                        !string.IsNullOrWhiteSpace(_mainViewModel.Settings.UserNickname)
-                            ? _mainViewModel.Settings.UserNickname
-                            : Environment.UserName
-                    );
+                AssignNickname =
+                    (
+                        !string.IsNullOrWhiteSpace(key.Nickname)
+                        && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    )
+                        ? key.Nickname
+                        : (
+                            !string.IsNullOrWhiteSpace(_mainViewModel.Settings.UserNickname)
+                                ? _mainViewModel.Settings.UserNickname
+                                : Environment.UserName
+                        );
 
                 FilterAssignDevices();
 
@@ -1662,46 +1704,86 @@ namespace TextureSwapper.ViewModels
             {
                 EditNicknameTargetKey = key.LicenseKey;
                 EditNicknameTargetHwid = key.Hwid;
-                EditNicknameText = (!string.IsNullOrWhiteSpace(key.Nickname) && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
-                    ? key.Nickname
-                    : string.Empty;
+                EditNicknameText =
+                    (
+                        !string.IsNullOrWhiteSpace(key.Nickname)
+                        && !key.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    )
+                        ? key.Nickname
+                        : string.Empty;
                 EditNicknameTargetTitle = $"License Key: {key.LicenseKey}";
             }
             else if (parameter is AdminDeviceItem dev)
             {
-                var matchedKey = _allServerKeys.FirstOrDefault(k => !string.IsNullOrEmpty(k.Hwid) && k.Hwid.Equals(dev.Hwid, StringComparison.OrdinalIgnoreCase));
-                EditNicknameTargetKey = !string.IsNullOrEmpty(dev.LicenseKey) ? dev.LicenseKey : (matchedKey?.LicenseKey ?? string.Empty);
+                ServerLicenseKeyItem? matchedKey = _allServerKeys.FirstOrDefault(k =>
+                    !string.IsNullOrEmpty(k.Hwid)
+                    && k.Hwid.Equals(dev.Hwid, StringComparison.OrdinalIgnoreCase)
+                );
+                EditNicknameTargetKey = !string.IsNullOrEmpty(dev.LicenseKey)
+                    ? dev.LicenseKey
+                    : (matchedKey?.LicenseKey ?? string.Empty);
                 EditNicknameTargetHwid = dev.Hwid;
-                string currentNick = !string.IsNullOrWhiteSpace(dev.Nickname) && !dev.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
-                    ? dev.Nickname
-                    : (matchedKey?.Nickname ?? string.Empty);
-                EditNicknameText = (!string.IsNullOrWhiteSpace(currentNick) && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
-                    ? currentNick
-                    : string.Empty;
+                string currentNick =
+                    !string.IsNullOrWhiteSpace(dev.Nickname)
+                    && !dev.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                        ? dev.Nickname
+                        : (matchedKey?.Nickname ?? string.Empty);
+                EditNicknameText =
+                    (
+                        !string.IsNullOrWhiteSpace(currentNick)
+                        && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    )
+                        ? currentNick
+                        : string.Empty;
                 string hwidShort = dev.Hwid.Length > 12 ? dev.Hwid[..12] + "..." : dev.Hwid;
                 EditNicknameTargetTitle = $"Device: {hwidShort}";
             }
             else if (SelectedProfileKey != null)
             {
                 EditNicknameTargetKey = SelectedProfileKey.LicenseKey;
-                EditNicknameTargetHwid = SelectedProfileKey.Hwid ?? SelectedProfileDevice?.Hwid ?? string.Empty;
-                EditNicknameText = (!string.IsNullOrWhiteSpace(SelectedProfileKey.Nickname) && !SelectedProfileKey.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
-                    ? SelectedProfileKey.Nickname
-                    : string.Empty;
+                EditNicknameTargetHwid =
+                    SelectedProfileKey.Hwid ?? SelectedProfileDevice?.Hwid ?? string.Empty;
+                EditNicknameText =
+                    (
+                        !string.IsNullOrWhiteSpace(SelectedProfileKey.Nickname)
+                        && !SelectedProfileKey.Nickname.Equals(
+                            "Supporter",
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
+                        ? SelectedProfileKey.Nickname
+                        : string.Empty;
                 EditNicknameTargetTitle = $"License Key: {SelectedProfileKey.LicenseKey}";
             }
             else if (SelectedProfileDevice != null)
             {
-                var matchedKey = _allServerKeys.FirstOrDefault(k => !string.IsNullOrEmpty(k.Hwid) && k.Hwid.Equals(SelectedProfileDevice.Hwid, StringComparison.OrdinalIgnoreCase));
-                EditNicknameTargetKey = !string.IsNullOrEmpty(SelectedProfileDevice.LicenseKey) ? SelectedProfileDevice.LicenseKey : (matchedKey?.LicenseKey ?? string.Empty);
+                ServerLicenseKeyItem? matchedKey = _allServerKeys.FirstOrDefault(k =>
+                    !string.IsNullOrEmpty(k.Hwid)
+                    && k.Hwid.Equals(SelectedProfileDevice.Hwid, StringComparison.OrdinalIgnoreCase)
+                );
+                EditNicknameTargetKey = !string.IsNullOrEmpty(SelectedProfileDevice.LicenseKey)
+                    ? SelectedProfileDevice.LicenseKey
+                    : (matchedKey?.LicenseKey ?? string.Empty);
                 EditNicknameTargetHwid = SelectedProfileDevice.Hwid;
-                string currentNick = !string.IsNullOrWhiteSpace(SelectedProfileDevice.Nickname) && !SelectedProfileDevice.Nickname.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
-                    ? SelectedProfileDevice.Nickname
-                    : (matchedKey?.Nickname ?? string.Empty);
-                EditNicknameText = (!string.IsNullOrWhiteSpace(currentNick) && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase))
-                    ? currentNick
-                    : string.Empty;
-                string hwidShort = SelectedProfileDevice.Hwid.Length > 12 ? SelectedProfileDevice.Hwid[..12] + "..." : SelectedProfileDevice.Hwid;
+                string currentNick =
+                    !string.IsNullOrWhiteSpace(SelectedProfileDevice.Nickname)
+                    && !SelectedProfileDevice.Nickname.Equals(
+                        "Supporter",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                        ? SelectedProfileDevice.Nickname
+                        : (matchedKey?.Nickname ?? string.Empty);
+                EditNicknameText =
+                    (
+                        !string.IsNullOrWhiteSpace(currentNick)
+                        && !currentNick.Equals("Supporter", StringComparison.OrdinalIgnoreCase)
+                    )
+                        ? currentNick
+                        : string.Empty;
+                string hwidShort =
+                    SelectedProfileDevice.Hwid.Length > 12
+                        ? SelectedProfileDevice.Hwid[..12] + "..."
+                        : SelectedProfileDevice.Hwid;
                 EditNicknameTargetTitle = $"Device: {hwidShort}";
             }
             else
@@ -1717,55 +1799,115 @@ namespace TextureSwapper.ViewModels
             string newNickname = EditNicknameText?.Trim() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(newNickname))
             {
-                ShowNotificationSafe("Validation Error", "Nickname cannot be empty.", ControlAppearance.Danger);
+                ShowNotificationSafe(
+                    "Validation Error",
+                    "Nickname cannot be empty.",
+                    ControlAppearance.Danger
+                );
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(EditNicknameTargetKey) && string.IsNullOrWhiteSpace(EditNicknameTargetHwid))
+            if (
+                string.IsNullOrWhiteSpace(EditNicknameTargetKey)
+                && string.IsNullOrWhiteSpace(EditNicknameTargetHwid)
+            )
             {
-                ShowNotificationSafe("Error", "No license key or device HWID specified.", ControlAppearance.Danger);
+                ShowNotificationSafe(
+                    "Error",
+                    "No license key or device HWID specified.",
+                    ControlAppearance.Danger
+                );
                 return;
             }
 
             try
             {
                 IsUpdatingNickname = true;
-                (bool success, string message) = await _mainViewModel.PremiumService.UpdateNicknameAsync(
-                    newNickname,
-                    EditNicknameTargetKey,
-                    EditNicknameTargetHwid
-                );
+                (bool success, string message) =
+                    await _mainViewModel.PremiumService.UpdateNicknameAsync(
+                        newNickname,
+                        EditNicknameTargetKey,
+                        EditNicknameTargetHwid
+                    );
 
                 if (success)
                 {
-                    ShowNotificationSafe("Success", $"Nickname updated to '{newNickname}'.", ControlAppearance.Success);
+                    ShowNotificationSafe(
+                        "Success",
+                        $"Nickname updated to '{newNickname}'.",
+                        ControlAppearance.Success
+                    );
                     IsEditNicknameModalVisible = false;
 
                     if (!string.IsNullOrEmpty(EditNicknameTargetKey))
                     {
-                        var keyItem = _allServerKeys.FirstOrDefault(k => k.LicenseKey.Equals(EditNicknameTargetKey, StringComparison.OrdinalIgnoreCase));
-                        if (keyItem != null) keyItem.Nickname = newNickname;
-                    }
-                    if (!string.IsNullOrEmpty(EditNicknameTargetHwid))
-                    {
-                        foreach (var keyItem in _allServerKeys.Where(k => k.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase)))
+                        ServerLicenseKeyItem? keyItem = _allServerKeys.FirstOrDefault(k =>
+                            k.LicenseKey.Equals(
+                                EditNicknameTargetKey,
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        );
+                        if (keyItem != null)
                         {
                             keyItem.Nickname = newNickname;
                         }
-                        var devItem = _allDevices.FirstOrDefault(d => d.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase));
-                        if (devItem != null) devItem.Nickname = newNickname;
+                    }
+                    if (!string.IsNullOrEmpty(EditNicknameTargetHwid))
+                    {
+                        foreach (
+                            ServerLicenseKeyItem? keyItem in _allServerKeys.Where(k =>
+                                k.Hwid.Equals(
+                                    EditNicknameTargetHwid,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                        )
+                        {
+                            keyItem.Nickname = newNickname;
+                        }
+                        AdminDeviceItem? devItem = _allDevices.FirstOrDefault(d =>
+                            d.Hwid.Equals(
+                                EditNicknameTargetHwid,
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        );
+                        if (devItem != null)
+                        {
+                            devItem.Nickname = newNickname;
+                        }
                     }
 
-                    if (SelectedProfileKey != null &&
-                        ((!string.IsNullOrEmpty(EditNicknameTargetKey) && SelectedProfileKey.LicenseKey.Equals(EditNicknameTargetKey, StringComparison.OrdinalIgnoreCase)) ||
-                         (!string.IsNullOrEmpty(EditNicknameTargetHwid) && SelectedProfileKey.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase))))
+                    if (
+                        SelectedProfileKey != null
+                        && (
+                            (
+                                !string.IsNullOrEmpty(EditNicknameTargetKey)
+                                && SelectedProfileKey.LicenseKey.Equals(
+                                    EditNicknameTargetKey,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                            || (
+                                !string.IsNullOrEmpty(EditNicknameTargetHwid)
+                                && SelectedProfileKey.Hwid.Equals(
+                                    EditNicknameTargetHwid,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                        )
+                    )
                     {
                         SelectedProfileKey.Nickname = newNickname;
                     }
 
-                    if (SelectedProfileDevice != null &&
-                        !string.IsNullOrEmpty(EditNicknameTargetHwid) &&
-                        SelectedProfileDevice.Hwid.Equals(EditNicknameTargetHwid, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        SelectedProfileDevice != null
+                        && !string.IsNullOrEmpty(EditNicknameTargetHwid)
+                        && SelectedProfileDevice.Hwid.Equals(
+                            EditNicknameTargetHwid,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
                     {
                         SelectedProfileDevice.Nickname = newNickname;
                     }
@@ -1776,7 +1918,11 @@ namespace TextureSwapper.ViewModels
                 }
                 else
                 {
-                    ShowNotificationSafe("Error", $"Failed to update nickname: {message}", ControlAppearance.Danger);
+                    ShowNotificationSafe(
+                        "Error",
+                        $"Failed to update nickname: {message}",
+                        ControlAppearance.Danger
+                    );
                 }
             }
             catch (Exception ex)
@@ -1826,7 +1972,13 @@ namespace TextureSwapper.ViewModels
                         DateTime.UtcNow
                     );
 
-                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        string.Equals(
+                            key,
+                            _mainViewModel.Settings.PremiumLicenseKey,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
                     {
                         _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
                     }
@@ -1886,7 +2038,13 @@ namespace TextureSwapper.ViewModels
                         DateTime.UtcNow
                     );
 
-                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        string.Equals(
+                            key,
+                            _mainViewModel.Settings.PremiumLicenseKey,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
                     {
                         _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
                     }
@@ -1936,7 +2094,13 @@ namespace TextureSwapper.ViewModels
 
                     _locallyDeletedKeys[key] = DateTime.UtcNow;
 
-                    if (string.Equals(key, _mainViewModel.Settings.PremiumLicenseKey, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        string.Equals(
+                            key,
+                            _mainViewModel.Settings.PremiumLicenseKey,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
                     {
                         _mainViewModel.PremiumService.ClearPremiumState(_mainViewModel.Settings);
                     }

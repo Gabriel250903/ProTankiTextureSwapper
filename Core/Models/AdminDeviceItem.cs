@@ -175,13 +175,22 @@ namespace TextureSwapper.Core.Models
         {
             get
             {
-                if (!string.IsNullOrEmpty(_nickname)) return _nickname;
+                if (!string.IsNullOrEmpty(_nickname))
+                {
+                    return _nickname;
+                }
+
                 if (!string.IsNullOrEmpty(_ipAddress))
                 {
                     if (_ipAddress.StartsWith("Trial: ", StringComparison.OrdinalIgnoreCase))
+                    {
                         return _ipAddress[7..].Trim();
+                    }
+
                     if (_ipAddress.StartsWith("User: ", StringComparison.OrdinalIgnoreCase))
+                    {
                         return _ipAddress[6..].Trim();
+                    }
                 }
                 return string.Empty;
             }
@@ -217,17 +226,21 @@ namespace TextureSwapper.Core.Models
         [JsonPropertyName("tier")]
         public string Tier
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(_tier)) return _tier;
-                if (IsTrial || (!string.IsNullOrEmpty(_ipAddress) && _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase)))
-                    return "3-Day Free Trial";
-                if (!string.IsNullOrEmpty(_ipAddress) && _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase))
-                    return "Lifetime Supporter";
-                if (string.Equals(_lastSeen, "Free User", StringComparison.OrdinalIgnoreCase) || string.Equals(_ipAddress, "Free User", StringComparison.OrdinalIgnoreCase))
-                    return "Free User";
-                return "Free User";
-            }
+            get =>
+                !string.IsNullOrEmpty(_tier) ? _tier
+                : IsTrial
+                || (
+                    !string.IsNullOrEmpty(_ipAddress)
+                    && _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase)
+                )
+                    ? "3-Day Free Trial"
+                : !string.IsNullOrEmpty(_ipAddress)
+                && _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase)
+                    ? "Lifetime Supporter"
+                : string.Equals(_lastSeen, "Free User", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(_ipAddress, "Free User", StringComparison.OrdinalIgnoreCase)
+                    ? "Free User"
+                : "Free User";
             set
             {
                 if (_tier != value)
@@ -256,49 +269,40 @@ namespace TextureSwapper.Core.Models
         }
 
         [JsonIgnore]
-        public string DisplayIpAddress
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_ipAddress) ||
-                    _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase) ||
-                    _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase) ||
-                    _ipAddress.Equals("Free User", StringComparison.OrdinalIgnoreCase) ||
-                    _ipAddress.Equals("Banned Device", StringComparison.OrdinalIgnoreCase))
-                {
-                    return "Unknown";
-                }
-                return _ipAddress;
-            }
-        }
+        public string DisplayIpAddress =>
+            string.IsNullOrWhiteSpace(_ipAddress)
+            || _ipAddress.StartsWith("User:", StringComparison.OrdinalIgnoreCase)
+            || _ipAddress.StartsWith("Trial:", StringComparison.OrdinalIgnoreCase)
+            || _ipAddress.Equals("Free User", StringComparison.OrdinalIgnoreCase)
+            || _ipAddress.Equals("Banned Device", StringComparison.OrdinalIgnoreCase)
+                ? "Unknown"
+                : _ipAddress;
 
         [JsonIgnore]
-        public string DisplayLastSeen
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_lastSeen) ||
-                    _lastSeen.Equals("Free User", StringComparison.OrdinalIgnoreCase) ||
-                    _lastSeen.Equals("Active", StringComparison.OrdinalIgnoreCase) ||
-                    _lastSeen.Equals("Banned", StringComparison.OrdinalIgnoreCase) ||
-                    _lastSeen.StartsWith("Expires:", StringComparison.OrdinalIgnoreCase) ||
-                    _lastSeen.StartsWith("Ban Exp:", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!string.IsNullOrWhiteSpace(_firstSeen) &&
-                        DateTime.TryParse(_firstSeen, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out DateTime fsUtc))
-                    {
-                        return FormatTimestamp(fsUtc);
-                    }
-                    return "Recent";
-                }
-
-                if (DateTime.TryParse(_lastSeen, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out DateTime dtUtc))
-                {
-                    return FormatTimestamp(dtUtc);
-                }
-                return _lastSeen;
-            }
-        }
+        public string DisplayLastSeen =>
+            string.IsNullOrWhiteSpace(_lastSeen)
+            || _lastSeen.Equals("Free User", StringComparison.OrdinalIgnoreCase)
+            || _lastSeen.Equals("Active", StringComparison.OrdinalIgnoreCase)
+            || _lastSeen.Equals("Banned", StringComparison.OrdinalIgnoreCase)
+            || _lastSeen.StartsWith("Expires:", StringComparison.OrdinalIgnoreCase)
+            || _lastSeen.StartsWith("Ban Exp:", StringComparison.OrdinalIgnoreCase)
+                ? !string.IsNullOrWhiteSpace(_firstSeen)
+                && DateTime.TryParse(
+                    _firstSeen,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
+                    out DateTime fsUtc
+                )
+                    ? FormatTimestamp(fsUtc)
+                    : "Recent"
+                : DateTime.TryParse(
+                    _lastSeen,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
+                    out DateTime dtUtc
+                )
+                    ? FormatTimestamp(dtUtc)
+                    : _lastSeen;
 
         [JsonIgnore]
         public string UserDisplay
@@ -307,22 +311,18 @@ namespace TextureSwapper.Core.Models
             {
                 string nick = Nickname;
                 string t = Tier;
-                if (!string.IsNullOrWhiteSpace(nick))
-                {
-                    return $"{nick} • {t}";
-                }
-                return t;
+                return !string.IsNullOrWhiteSpace(nick) ? $"{nick} • {t}" : t;
             }
         }
 
         private static string FormatTimestamp(DateTime utc)
         {
             TimeSpan elapsed = DateTime.UtcNow - utc;
-            if (elapsed.TotalMinutes < 1) return "Just now";
-            if (elapsed.TotalMinutes < 60) return $"{(int)elapsed.TotalMinutes}m ago";
-            if (elapsed.TotalHours < 24) return $"{(int)elapsed.TotalHours}h ago";
-            if (elapsed.TotalDays < 7) return $"{(int)elapsed.TotalDays}d ago";
-            return utc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            return elapsed.TotalMinutes < 1 ? "Just now"
+                : elapsed.TotalMinutes < 60 ? $"{(int)elapsed.TotalMinutes}m ago"
+                : elapsed.TotalHours < 24 ? $"{(int)elapsed.TotalHours}h ago"
+                : elapsed.TotalDays < 7 ? $"{(int)elapsed.TotalDays}d ago"
+                : utc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
         }
 
         [JsonIgnore]

@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net.Http;
 using System.Windows.Media;
@@ -12,13 +13,15 @@ namespace TextureSwapper.Services.Composers
 {
     public abstract class BaseShotEffectComposer
     {
-        private static readonly HttpClient _templateHttpClient = new(new SocketsHttpHandler
+        private static readonly HttpClient _templateHttpClient = new(
+            new SocketsHttpHandler
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+                ConnectTimeout = TimeSpan.FromSeconds(10),
+            }
+        )
         {
-            PooledConnectionLifetime = TimeSpan.FromMinutes(2),
-            ConnectTimeout = TimeSpan.FromSeconds(10),
-        })
-        {
-            Timeout = TimeSpan.FromSeconds(15)
+            Timeout = TimeSpan.FromSeconds(15),
         };
 
         static BaseShotEffectComposer()
@@ -55,12 +58,22 @@ namespace TextureSwapper.Services.Composers
 
                 string url = $"{Constants.GitHubRawUrl}/{relativePath}";
 
-                Log.Information("Attempting to auto-download missing shot effect template: {Url}", url);
+                Log.Information(
+                    "Attempting to auto-download missing shot effect template: {Url}",
+                    url
+                );
 
-                using HttpResponseMessage response = _templateHttpClient.GetAsync(url).GetAwaiter().GetResult();
+                using HttpResponseMessage response = _templateHttpClient
+                    .GetAsync(url)
+                    .GetAwaiter()
+                    .GetResult();
                 if (!response.IsSuccessStatusCode)
                 {
-                    Log.Warning("Failed to download template ({StatusCode}): {Url}", response.StatusCode, url);
+                    Log.Warning(
+                        "Failed to download template ({StatusCode}): {Url}",
+                        response.StatusCode,
+                        url
+                    );
                     return false;
                 }
 
@@ -73,7 +86,7 @@ namespace TextureSwapper.Services.Composers
                 string? dir = Path.GetDirectoryName(fullPath);
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 File.WriteAllBytes(fullPath, data);
@@ -87,6 +100,9 @@ namespace TextureSwapper.Services.Composers
             }
         }
 
+        private static readonly ConcurrentDictionary<string, CachedTextureData?> _textureCache =
+            new();
+
         protected static CachedTextureData? LoadTextureData(string path)
         {
             try
@@ -95,11 +111,17 @@ namespace TextureSwapper.Services.Composers
                     ? path
                     : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 
+                if (_textureCache.TryGetValue(fullPath, out CachedTextureData? cached))
+                {
+                    return cached;
+                }
+
                 if (!File.Exists(fullPath))
                 {
                     if (!TryDownloadTemplate(fullPath))
                     {
                         Log.Debug("Template file not found: {Path}", fullPath);
+                        _textureCache[fullPath] = null;
                         return null;
                     }
                 }
@@ -118,12 +140,14 @@ namespace TextureSwapper.Services.Composers
                 byte[] pixels = new byte[height * stride];
                 formatted.CopyPixels(pixels, stride, 0);
 
-                return new CachedTextureData
+                CachedTextureData result = new()
                 {
                     Width = width,
                     Height = height,
                     Pixels = pixels,
                 };
+                _textureCache[fullPath] = result;
+                return result;
             }
             catch (Exception ex)
             {

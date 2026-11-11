@@ -1,13 +1,5 @@
 [
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Frost 2.0",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Frost 2.0_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
@@ -56,14 +48,6 @@
     "PreviewImage": "Textures/Paints/Acid.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Active_viewer",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Active_viewer_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Retro / Classic",
@@ -96,46 +80,6 @@
     "PreviewImage": "Textures/Paints/Alien_Chainmail.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Alien_Nebula",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Alien_Nebula_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Neon_Vortex",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Neon_Vortex_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Molten_Core",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Molten_Core_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Aurora_Borealis",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Aurora_Borealis_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Alien_Regeneration",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Alien_Regeneration_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -150,14 +94,6 @@
     "Name": "Alligator",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Alligator.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Alloy",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Alloy_preview.png"
   },
   {
     "IsPremium": false,
@@ -216,14 +152,6 @@
     "PreviewImage": "Textures/Paints/Armor_Blocks.png"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Atmospheric_Conditions",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Atmospheric_Conditions_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -246,14 +174,6 @@
     "Name": "Babushka's_Sofa",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Babushka's_Sofa.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Badger-badger",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Badger-badger_preview.png"
   },
   {
     "IsPremium": false,
@@ -392,14 +312,6 @@
     "PreviewImage": "Textures/Paints/Best_helper_of_the_Year_19.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Black_Ruby",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Black_Ruby_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
@@ -414,14 +326,6 @@
     "Name": "Blaze",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Blaze.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Blue_lilac",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Blue_lilac_preview.png"
   },
   {
     "IsPremium": false,
@@ -464,22 +368,6 @@
     "PreviewImage": "Textures/Paints/Bronze_old.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Bronze",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Bronze_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Bubble_gum",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Bubble_gum_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
@@ -488,44 +376,12 @@
     "PreviewImage": "Textures/Paints/Buckwheat.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Burst_of_Light",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Burst_of_Light_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Busted",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Busted_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Cake",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Cake.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Campfire",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Campfire_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Carbon_stars",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Carbon_stars_preview.png"
   },
   {
     "IsPremium": false,
@@ -544,28 +400,12 @@
     "PreviewImage": "Textures/Paints/Champion_old.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Champion",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Champion_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Charred",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Charred.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Chemical_Reaction",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Chemical_Reaction_preview.png"
   },
   {
     "IsPremium": false,
@@ -592,30 +432,6 @@
     "PreviewImage": "Textures/Paints/Cobalt.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Constellation",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Constellation_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cosmic_Blast",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cosmic_Blast_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Craft_Scissors",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Craft_Scissors_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -630,22 +446,6 @@
     "Name": "Crop_Circles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Crop_Circles.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cyber_Shuriken",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cyber_Shuriken_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cyberpunk",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cyberpunk_preview.png"
   },
   {
     "IsPremium": false,
@@ -696,30 +496,6 @@
     "PreviewImage": "Textures/Paints/Designer_Vibe.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Diamond",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Diamond_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Digital_Borealis",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Digital_Borealis_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Disco_2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Disco_2.0_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -734,14 +510,6 @@
     "Name": "Eagle",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Eagle.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Earthling",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Earthling_preview.png"
   },
   {
     "IsPremium": false,
@@ -768,14 +536,6 @@
     "PreviewImage": "Textures/Paints/Ecofriendly.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Electric_Sheep",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Electric_Sheep_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Moderator",
@@ -800,38 +560,6 @@
     "PreviewImage": "Textures/Paints/Falling_leaves.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Fan",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Fan_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Far_North",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Far_North_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Fire_golem",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Fire_golem_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Flame_2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Flame_2.0_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Admin",
@@ -848,44 +576,12 @@
     "PreviewImage": "Textures/Paints/Flash.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Flowing_Metal",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Flowing_Metal_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Frigid_Coat",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Frigid_Coat_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Funky_medicine",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Funky_medicine_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
     "Name": "Galacticus",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Galacticus.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Galaxian_Explosion",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Galaxian_Explosion_preview.png"
   },
   {
     "IsPremium": false,
@@ -936,14 +632,6 @@
     "PreviewImage": "Textures/Paints/Gladiator.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Glam_Croc",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Glam_Croc_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Special",
@@ -968,28 +656,12 @@
     "PreviewImage": "Textures/Paints/Gloss.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Gold_alloy",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Gold_alloy_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Gold_digger",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Gold_digger.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Green_Quads",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Green_Quads_preview.png"
   },
   {
     "IsPremium": false,
@@ -1000,36 +672,12 @@
     "PreviewImage": "Textures/Paints/Griller.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Groovy_Neon",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Groovy_Neon_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Hand_Sanitizer",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Hand_Sanitizer.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Head_Ripper",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Head_Ripper_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Heart_of_Steel",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Heart_of_Steel_preview.png"
   },
   {
     "IsPremium": false,
@@ -1048,28 +696,12 @@
     "PreviewImage": "Textures/Paints/Helper.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Holo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Holo_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Holiday",
     "Name": "Horror",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Horror.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Ice_Flurry",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Ice_Flurry_preview.png"
   },
   {
     "IsPremium": false,
@@ -1088,76 +720,12 @@
     "PreviewImage": "Textures/Paints/Jade_Scales.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Jolly_Season",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Jolly_Season_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Kapuljat",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Kapuljat_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Katakana",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Katakana_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Lava_Lamp",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Lava_Lamp_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Liana",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Liana_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Lifesaver",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lifesaver.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Light_organ",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Light_organ_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Lightning_storm",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Lightning_storm_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Living_Armor",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Living_Armor_preview.png"
   },
   {
     "IsPremium": false,
@@ -1176,14 +744,6 @@
     "PreviewImage": "Textures/Paints/Lord.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Loving_Camo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Loving_Camo_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Retro / Classic",
@@ -1198,14 +758,6 @@
     "Name": "Lucky_Coin",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lucky_Coin.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Magic_Circles",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Magic_Circles_preview.png"
   },
   {
     "IsPremium": false,
@@ -1286,14 +838,6 @@
     "Name": "The Game 2026",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/The Game 2026.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Microbiology",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Microbiology_preview.png"
   },
   {
     "IsPremium": false,
@@ -1416,44 +960,12 @@
     "PreviewImage": "Textures/Paints/Mono_Yellow.png"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Monochrome",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Monochrome_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
     "Name": "Mucus",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Mucus.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "NanoHUD",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/NanoHUD_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Nanosuit_Armor",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Nanosuit_Armor_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Neon_Geometry",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Neon_Geometry_preview.png"
   },
   {
     "IsPremium": false,
@@ -1488,28 +1000,12 @@
     "PreviewImage": "Textures/Paints/Newspaper.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Northern_Lights",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Northern_Lights_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
     "Name": "Nostalgia",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Nostalgia.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Not_a_lantern",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Not_a_lantern_preview.png"
   },
   {
     "IsPremium": false,
@@ -1584,14 +1080,6 @@
     "PreviewImage": "Textures/Paints/Packed_Stocking.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "PCB",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/PCB_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -1622,14 +1110,6 @@
     "Name": "Pink_Elephant",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pink_Elephant.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Pixel_Plasma",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Pixel_Plasma_preview.png"
   },
   {
     "IsPremium": false,
@@ -1694,14 +1174,6 @@
     "Name": "Puzzles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Puzzles.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Quantum_Camo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Quantum_Camo_preview.png"
   },
   {
     "IsPremium": false,
@@ -1792,14 +1264,6 @@
     "PreviewImage": "Textures/Paints/Scarier_Things.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Seventies_Fun",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Seventies_Fun_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -1816,28 +1280,12 @@
     "PreviewImage": "Textures/Paints/Sight.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Silver_Bricks",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Silver_Bricks_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Retro / Classic",
     "Name": "Silver_old",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Silver_old.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Silver",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Silver_preview.png"
   },
   {
     "IsPremium": false,
@@ -1862,14 +1310,6 @@
     "Name": "Skomorokh",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Skomorokh.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Smoke_Screen",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Smoke_Screen_preview.png"
   },
   {
     "IsPremium": false,
@@ -1902,14 +1342,6 @@
     "Name": "Sonar",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sonar.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Souls",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Souls_preview.png"
   },
   {
     "IsPremium": false,
@@ -1950,14 +1382,6 @@
     "Name": "Spirit_of_LATAM",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spirit_of_LATAM.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Spreading_Fast",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Spreading_Fast_preview.png"
   },
   {
     "IsPremium": false,
@@ -2008,14 +1432,6 @@
     "PreviewImage": "Textures/Paints/Stylish_Tanker.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Surf",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Surf_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -2040,14 +1456,6 @@
     "PreviewImage": "Textures/Paints/Sweet_trick.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tankoin_Tank",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tankoin_Tank_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -2056,36 +1464,12 @@
     "PreviewImage": "Textures/Paints/Target.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tectonic_plates",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tectonic_plates_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tessaract_Camo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tessaract_Camo_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
     "Name": "Tetris",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tetris.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Thankos'_Armor",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Thankos'_Armor_preview.png"
   },
   {
     "IsPremium": false,
@@ -2128,14 +1512,6 @@
     "PreviewImage": "Textures/Paints/Top_class.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Trapped_Inside",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Trapped_Inside_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -2150,22 +1526,6 @@
     "Name": "UFO",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/UFO.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Under_the_Tree",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Under_the_Tree_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Valour",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Valour_preview.png"
   },
   {
     "IsPremium": false,
@@ -2198,14 +1558,6 @@
     "Name": "Viscum",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Viscum.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Visual_Disruptor",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Visual_Disruptor_preview.png"
   },
   {
     "IsPremium": false,
@@ -2278,14 +1630,6 @@
     "Name": "Wonderbird",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Wonderbird.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "X_Noir",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/X_Noir_preview.png"
   },
   {
     "IsPremium": false,
@@ -2560,36 +1904,12 @@
     "PreviewImage": "Textures/Paints/Wales.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Adversity",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Adversity_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Afterburner",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Afterburner.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Alien_Skin",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Alien_Skin_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Alien_abduction",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Alien_abduction_preview.png"
   },
   {
     "IsPremium": false,
@@ -2624,30 +1944,6 @@
     "PreviewImage": "Textures/Paints/Barber_Shop.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Beating_Hearts",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Beating_Hearts_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Beholder",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Beholder_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Black_Sea",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Black_Sea_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
@@ -2656,52 +1952,12 @@
     "PreviewImage": "Textures/Paints/Br_1º_Níver_do_Tanki.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Bunny",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Bunny_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cathode_Ray_Tube",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cathode_Ray_Tube_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Chill_bro!",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Chill_bro!.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cryo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cryo_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cucurbita_Pepo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cucurbita_Pepo_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Cyborg",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Cyborg_preview.png"
   },
   {
     "IsPremium": false,
@@ -2720,44 +1976,12 @@
     "PreviewImage": "Textures/Paints/Drought.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Ducks",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Ducks_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Electrohive",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Electrohive_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Fire_of_Valor",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Fire_of_Valor.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "First_kiss",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/First_kiss_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Flow",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Flow_preview.png"
   },
   {
     "IsPremium": false,
@@ -2768,76 +1992,12 @@
     "PreviewImage": "Textures/Paints/Fragment.png"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Fried_egg",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Fried_egg_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Galaxy",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Galaxy_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Ginga",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Ginga_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Glitch",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Glitch.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Golden_Gears",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Golden_Gears_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Green_Zircon",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Green_Zircon_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Holi",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Holi_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Holiday_lights",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Holiday_lights_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Honor",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Honor_preview.png"
   },
   {
     "IsPremium": false,
@@ -2872,28 +2032,12 @@
     "PreviewImage": "Textures/Paints/Lunar_Soil.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Magnolia",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Magnolia_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Mint",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Mint.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Mount_Fuji",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Mount_Fuji_preview.png"
   },
   {
     "IsPremium": false,
@@ -2912,30 +2056,6 @@
     "PreviewImage": "Textures/Paints/New_Year_Gift.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Nickel",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Nickel_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Night_City",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Night_City_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Nightmare",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Nightmare_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
@@ -2950,14 +2070,6 @@
     "Name": "Pajamas",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Pajamas.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Pastila",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Pastila_preview.png"
   },
   {
     "IsPremium": false,
@@ -2976,36 +2088,12 @@
     "PreviewImage": "Textures/Paints/Picnic.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Prodigy_2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Prodigy_2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Radar",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Radar_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Custom Paints",
     "Name": "Recruit",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Recruit.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Red_smoke",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Red_smoke_preview.png"
   },
   {
     "IsPremium": false,
@@ -3062,22 +2150,6 @@
     "Name": "Spangles",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Spangles.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Sparks",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Sparks_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Spring",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Spring_preview.png"
   },
   {
     "IsPremium": false,
@@ -3144,28 +2216,12 @@
     "PreviewImage": "Textures/Paints/Tanki_in_Moscow.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Thankos",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Thankos_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Tote_bag",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Tote_bag.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Touch_of_chill",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Touch_of_chill_preview.png"
   },
   {
     "IsPremium": false,
@@ -3184,28 +2240,12 @@
     "PreviewImage": "Textures/Paints/Yay_Ten!.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Yellow_Bug",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Yellow_Bug_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Shop & Bundles",
     "Name": "Zombie",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Zombie.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "lol",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/lol_preview.png"
   },
   {
     "IsPremium": false,
@@ -3592,30 +2632,6 @@
     "PreviewImage": "Textures/Paints/Traceur.png"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Turbo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Turbo_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Barbed_Wire",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Barbed_Wire_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Symbiote",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Symbiote_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Containers",
@@ -3640,36 +2656,12 @@
     "PreviewImage": "Textures/Paints/Condensed_Milk.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Canyon_Hero",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Canyon_Hero_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Containers",
     "Name": "E236",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/E236.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Eruption",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Eruption_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Fall_Leaves",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Fall_Leaves_preview.png"
   },
   {
     "IsPremium": false,
@@ -3688,22 +2680,6 @@
     "PreviewImage": "Textures/Paints/Fire_Dragon.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Gears",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Gears_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "LEDs",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/LEDs_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Containers",
@@ -3712,84 +2688,12 @@
     "PreviewImage": "Textures/Paints/Megapolis.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Meteor_Shower",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Meteor_Shower_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Prestigio",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Prestigio_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Radioactive_Jelly",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Radioactive_Jelly_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Secret_Sauce",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Secret_Sauce_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Siberian_Tiger",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Siberian_Tiger_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Spinner",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Spinner_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Containers",
     "Name": "Stained_Glass",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Stained_Glass.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Synesthesia",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Synesthesia_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Synth-pop",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Synth-pop_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tentacles",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tentacles_preview.png"
   },
   {
     "IsPremium": false,
@@ -3886,22 +2790,6 @@
     "Name": "Holiday",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Holiday.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Integrated_circuit",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Integrated_circuit_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Flywheel",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Flywheel_preview.png"
   },
   {
     "IsPremium": false,
@@ -4064,14 +2952,6 @@
     "PreviewImage": "Textures/Paints/Bubbled_Chocolate.jpg"
   },
   {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Spectrum",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Spectrum_preview.png"
-  },
-  {
     "IsPremium": false,
     "Category": "Paints",
     "ItemName": "Events",
@@ -4158,22 +3038,6 @@
     "Name": "Lady",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Lady.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tic_tac_toe",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tic_tac_toe_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Runes",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Runes_preview.png"
   },
   {
     "IsPremium": false,
@@ -4278,110 +3142,6 @@
     "Name": "Sweden",
     "SourceFolder": "Textures/Paints",
     "PreviewImage": "Textures/Paints/Sweden.jpg"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Best_Helper_2019",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Best_Helper_2019_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Bronze_Colors",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Bronze_Colors_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Demolisher_2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Demolisher_2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Drive",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Drive_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Fidget_Toy",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Fidget_Toy_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Glow",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Glow_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Matrix",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Matrix_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Mosaic",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Mosaic_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Tanks_2.0",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Tanks_2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Vertigo",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Vertigo_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "War_Domination_Winner",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/War_Domination_Winner_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "War_EN_Winner",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/War_EN_Winner_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Animated",
-    "Name": "Witch",
-    "SourceFolder": "Textures/Encrypted/Paints/Animated",
-    "PreviewImage": "Textures/Encrypted/Paints/Animated/Witch_preview.png"
   },
   {
     "IsPremium": false,
@@ -5230,45 +3990,5 @@
     "Name": "white",
     "SourceFolder": "Textures/Paints/Tanki X",
     "PreviewImage": "Textures/Paints/Tanki X/Previews/white.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Electra 2.0",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Electra 2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Zeus 2.0",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Zeus 2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Inferno 2.0",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Inferno 2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Spark 2.0",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Spark 2.0_preview.png"
-  },
-  {
-    "IsPremium": true,
-    "Category": "Paints",
-    "ItemName": "Noizy Paints",
-    "Name": "Best Helper 2025",
-    "SourceFolder": "Textures/Paints/Noizy Paints",
-    "PreviewImage": "Textures/Paints/Noizy Paints/Best Helper 2025_preview.png"
   }
 ]

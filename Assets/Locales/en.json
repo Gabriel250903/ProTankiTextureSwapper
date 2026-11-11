@@ -42,7 +42,7 @@
   "Loc_Paints_SearchInGamePaints": "Search in-game paints...",
   "Loc_Paints_Folders": "FOLDERS",
   "Loc_Paints_ReplacePrefix": "Replace",
-  "Loc_Paints_ReplaceDesc": "Choose a custom paint to swap onto this paint. (NON-ANIMATED PAINTS)",
+  "Loc_Paints_ReplaceDesc": "Choose a custom paint to swap onto this paint.",
   "Loc_Paints_SearchCustomPaints": "Search custom paints...",
   "Loc_Paints_PaintTexture": "Paint Texture",
   "Loc_Paints_UploadCustomPaint": "Upload Custom Paint",
@@ -380,5 +380,6 @@
   "Loc_DiscordInvite_Header": "Welcome to Texture Swapper V2! 🚀",
   "Loc_DiscordInvite_Body": "Join our official Discord server to follow the latest news, announcements, texture updates, and sneak peeks.\n\nConnect with other players, get support, and share your suggestions!",
   "Loc_DiscordInvite_Join": "Join Discord Server",
-  "Loc_DiscordInvite_Later": "Maybe Later"
+  "Loc_DiscordInvite_Later": "Maybe Later",
+  "Loc_ShotEffects_Classic2010": "Apply Classic 2010"
 }

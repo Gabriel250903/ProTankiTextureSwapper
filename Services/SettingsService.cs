@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
 using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -58,7 +56,7 @@ namespace TextureSwapper.Services
 
                     if (File.Exists(SettingsPath))
                     {
-                        var attrs = File.GetAttributes(SettingsPath);
+                        FileAttributes attrs = File.GetAttributes(SettingsPath);
                         if (attrs.HasFlag(FileAttributes.ReadOnly))
                         {
                             File.SetAttributes(SettingsPath, attrs & ~FileAttributes.ReadOnly);
@@ -80,7 +78,10 @@ namespace TextureSwapper.Services
                         {
                             if (attempt == 5)
                             {
-                                Log.Warning(ex, "Failed to atomically replace Settings.json via File.Move after 5 attempts. Falling back to direct write.");
+                                Log.Warning(
+                                    ex,
+                                    "Failed to atomically replace Settings.json via File.Move after 5 attempts. Falling back to direct write."
+                                );
                             }
                             else
                             {
@@ -91,8 +92,13 @@ namespace TextureSwapper.Services
 
                     if (!moved)
                     {
-                        using var stream = new FileStream(SettingsPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        using var writer = new StreamWriter(stream);
+                        using FileStream stream = new(
+                            SettingsPath,
+                            FileMode.Create,
+                            FileAccess.Write,
+                            FileShare.ReadWrite
+                        );
+                        using StreamWriter writer = new(stream);
                         writer.Write(json);
                     }
                 }

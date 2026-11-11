@@ -53,7 +53,10 @@ namespace TextureSwapper.ViewModels.Editors
             StringComparer.OrdinalIgnoreCase
         );
 
-        private static readonly JsonSerializerOptions jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions jsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+        };
         private static readonly JsonSerializerOptions options = jsonSerializerOptions;
 
         #region Observable Properties
@@ -672,10 +675,7 @@ namespace TextureSwapper.ViewModels.Editors
                 _ => ApplyToGameAsync(),
                 _ => !IsWorking && SelectedProp != null && _originalTextureData != null
             );
-            RestoreCommand = new AsyncRelayCommand(
-                _ => RestoreOriginalAsync(),
-                _ => !IsWorking
-            );
+            RestoreCommand = new AsyncRelayCommand(_ => RestoreOriginalAsync(), _ => !IsWorking);
             ResetFiltersCommand = new RelayCommand(_ => ResetFilters(), _ => IsAdmin);
             ImportDecalCommand = new RelayCommand(_ => ImportDecal(), _ => IsAdmin);
             RemoveDecalCommand = new RelayCommand(
@@ -733,11 +733,8 @@ namespace TextureSwapper.ViewModels.Editors
                 }
 
                 string json = File.ReadAllText(jsonPath);
-                
-                List<PropModel>? props = JsonSerializer.Deserialize<List<PropModel>>(
-                    json,
-                    options
-                );
+
+                List<PropModel>? props = JsonSerializer.Deserialize<List<PropModel>>(json, options);
 
                 if (props == null || props.Count == 0)
                 {
@@ -3683,8 +3680,10 @@ namespace TextureSwapper.ViewModels.Editors
                 LoadingMessage = "Restoring all props to default state...";
 
                 HashSet<string> propLibraries = new(
-                    _allProps?.Select(p => p.LibraryBase64Url).Where(lib => !string.IsNullOrEmpty(lib))
-                    ?? [],
+                    _allProps
+                        ?.Select(p => p.LibraryBase64Url)
+                        .Where(lib => !string.IsNullOrEmpty(lib))
+                        ?? [],
                     StringComparer.OrdinalIgnoreCase
                 );
 

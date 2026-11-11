@@ -58,7 +58,11 @@ namespace TextureSwapper.Services
                     {
                         if (await timer.WaitForNextTickAsync(_heartbeatCts.Token))
                         {
-                            DeviceBanCheckResult result = await VerifyDeviceStatusAsync();
+                            CancellationToken token =
+                                _heartbeatCts?.Token ?? CancellationToken.None;
+                            DeviceBanCheckResult result = await VerifyDeviceStatusAsync(
+                                cancellationToken: token
+                            );
 
                             if (result.IsBanned)
                             {
@@ -112,7 +116,10 @@ namespace TextureSwapper.Services
             StopPeriodicVerification();
         }
 
-        public async Task<DeviceBanCheckResult> VerifyDeviceStatusAsync(bool forceRefresh = false)
+        public async Task<DeviceBanCheckResult> VerifyDeviceStatusAsync(
+            bool forceRefresh = false,
+            CancellationToken cancellationToken = default
+        )
         {
             if (
                 !forceRefresh
@@ -142,8 +149,11 @@ namespace TextureSwapper.Services
                     MustRevalidate = true,
                 };
 
-                using HttpResponseMessage response = await _httpClient.SendAsync(request);
-                string body = await response.Content.ReadAsStringAsync();
+                using HttpResponseMessage response = await _httpClient.SendAsync(
+                    request,
+                    cancellationToken
+                );
+                string body = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                 {
@@ -385,10 +395,7 @@ namespace TextureSwapper.Services
                 _lastCheckTime = DateTime.MinValue;
 
                 string requestUrl = $"{Constants.GatekeeperWorkerUrl}/admin/unban";
-                Dictionary<string, string> payload = new()
-                {
-                    ["hwid"] = hwid.Trim(),
-                };
+                Dictionary<string, string> payload = new() { ["hwid"] = hwid.Trim() };
                 string jsonPayload = JsonSerializer.Serialize(payload);
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);

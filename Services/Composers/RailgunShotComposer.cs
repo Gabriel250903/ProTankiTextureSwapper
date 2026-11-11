@@ -368,9 +368,6 @@ namespace TextureSwapper.Services.Composers
                 ),
             ];
 
-            // ProTanki / Alternativa3D renders Railgun with an inverted/subtractive blend mode.
-            // Textures saved for the game must use the complementary hue (shifted 180 degrees)
-            // so that the in-game beam matches the color shown in the preview.
             RailgunShotRenderOptions gameOptions = new()
             {
                 Hue = (options.Hue + 180.0) % 360.0,
@@ -394,11 +391,7 @@ namespace TextureSwapper.Services.Composers
                     continue;
                 }
 
-                byte[] recoloredPixels = RecolorPixels(
-                    template,
-                    gameOptions,
-                    isGameTexture: true
-                );
+                byte[] recoloredPixels = RecolorPixels(template, gameOptions, isGameTexture: true);
                 try
                 {
                     BitmapSource bmp = BitmapSource.Create(
@@ -427,10 +420,14 @@ namespace TextureSwapper.Services.Composers
             if (savedCount == 0)
             {
                 Log.Error("Failed to save custom Railgun textures: no templates could be loaded.");
-                throw new InvalidOperationException("Failed to generate custom Railgun textures: shot effect templates could not be loaded.");
+                throw new InvalidOperationException(
+                    "Failed to generate custom Railgun textures: shot effect templates could not be loaded."
+                );
             }
 
-            Log.Information($"Successfully saved custom Railgun textures ({savedCount} files) to {outputDirectory}");
+            Log.Information(
+                $"Successfully saved custom Railgun textures ({savedCount} files) to {outputDirectory}"
+            );
         }
 
         private static byte[] RecolorPixels(
@@ -498,8 +495,6 @@ namespace TextureSwapper.Services.Composers
                 double outG = pureG / 255.0 * lum;
                 double outB = pureB / 255.0 * lum;
 
-                // Core whitening is applied only for preview rendering. In the game's inverted shader,
-                // white turns dark, so game textures should retain full color saturation.
                 if (!isGameTexture && lum > 0.85)
                 {
                     double core = (lum - 0.85) / 0.15;
@@ -509,7 +504,6 @@ namespace TextureSwapper.Services.Composers
                     outB += (1.0 - outB) * core;
                 }
 
-                // PixelFormats.Bgr32 layout: [offset]=B, [offset+1]=G, [offset+2]=R
                 output[offset] = (byte)Math.Clamp(outB * 255.0, 0, 255);
                 output[offset + 1] = (byte)Math.Clamp(outG * 255.0, 0, 255);
                 output[offset + 2] = (byte)Math.Clamp(outR * 255.0, 0, 255);

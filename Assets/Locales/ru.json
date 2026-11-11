@@ -42,7 +42,7 @@
   "Loc_Paints_SearchInGamePaints": "Поиск внутриигровых красок...",
   "Loc_Paints_Folders": "ПАПКИ",
   "Loc_Paints_ReplacePrefix": "Заменить",
-  "Loc_Paints_ReplaceDesc": "Выберите кастомную краску для замены. (НЕАНИМИРОВАННЫЕ КРАСКИ)",
+  "Loc_Paints_ReplaceDesc": "Выберите кастомную краску для замены.",
   "Loc_Paints_SearchCustomPaints": "Поиск кастомных красок...",
   "Loc_Paints_PaintTexture": "Текстура краски",
   "Loc_Paints_UploadCustomPaint": "Загрузить свою краску",
@@ -381,5 +381,6 @@
   "Loc_DiscordInvite_Header": "Добро пожаловать в Texture Swapper V2! 🚀",
   "Loc_DiscordInvite_Body": "Присоединяйтесь к нашему официальному серверу Discord, чтобы следить за последними новостями, анонсами, обновлениями текстур и эксклюзивными материалами.\n\nОбщайтесь с игроками, получайте помощь и делитесь предложениями!",
   "Loc_DiscordInvite_Join": "Перейти в Discord",
-  "Loc_DiscordInvite_Later": "Позже"
+  "Loc_DiscordInvite_Later": "Позже",
+  "Loc_ShotEffects_Classic2010": "Применить Классический 2010"
 }

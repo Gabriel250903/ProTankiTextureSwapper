@@ -31,24 +31,24 @@
         <TabControl Margin="0,0,0,15" SelectedIndex="{Binding SelectedTabIndex}">
           <TabItem Header="{DynamicResource Loc_ShotEffects_DamageBeamTitle}">
             <StackPanel Margin="0,15,0,0">
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+              <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource Loc_ShotEffects_Hue}" />
                 <TextBlock Text=": " />
                 <TextBlock
-                  Text="{Binding DamageHue, StringFormat={}{0:F0}°}"
                   FontWeight="SemiBold"
+                  Text="{Binding DamageHue, StringFormat={}{0:F0}°}"
                 />
               </StackPanel>
               <Border Height="6" Margin="2,0,2,4" CornerRadius="3">
                 <Border.Background>
                   <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Color="#FF0000" Offset="0.0" />
-                    <GradientStop Color="#FFFF00" Offset="0.167" />
-                    <GradientStop Color="#00FF00" Offset="0.333" />
-                    <GradientStop Color="#00FFFF" Offset="0.5" />
-                    <GradientStop Color="#0000FF" Offset="0.667" />
-                    <GradientStop Color="#FF00FF" Offset="0.833" />
-                    <GradientStop Color="#FF0000" Offset="1.0" />
+                    <GradientStop Offset="0.0" Color="#FF0000" />
+                    <GradientStop Offset="0.167" Color="#FFFF00" />
+                    <GradientStop Offset="0.333" Color="#00FF00" />
+                    <GradientStop Offset="0.5" Color="#00FFFF" />
+                    <GradientStop Offset="0.667" Color="#0000FF" />
+                    <GradientStop Offset="0.833" Color="#FF00FF" />
+                    <GradientStop Offset="1.0" Color="#FF0000" />
                   </LinearGradientBrush>
                 </Border.Background>
               </Border>
@@ -61,12 +61,12 @@
                 Value="{Binding DamageHue}"
               />
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+              <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource Loc_ShotEffects_Saturation}" />
                 <TextBlock Text=": " />
                 <TextBlock
-                  Text="{Binding DamageSaturation, StringFormat={}{0:F0}%}"
                   FontWeight="SemiBold"
+                  Text="{Binding DamageSaturation, StringFormat={}{0:F0}%}"
                 />
               </StackPanel>
               <Slider
@@ -78,12 +78,12 @@
                 Value="{Binding DamageSaturation}"
               />
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+              <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource Loc_ShotEffects_Brightness}" />
                 <TextBlock Text=": " />
                 <TextBlock
-                  Text="{Binding DamageBrightness, StringFormat={}{0:F0}%}"
                   FontWeight="SemiBold"
+                  Text="{Binding DamageBrightness, StringFormat={}{0:F0}%}"
                 />
               </StackPanel>
               <Slider
@@ -95,12 +95,12 @@
                 Value="{Binding DamageBrightness}"
               />
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+              <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource Loc_ShotEffects_Contrast}" />
                 <TextBlock Text=": " />
                 <TextBlock
-                  Text="{Binding DamageContrast, StringFormat={}{0:F2}}"
                   FontWeight="SemiBold"
+                  Text="{Binding DamageContrast, StringFormat={}{0:F2}}"
                 />
               </StackPanel>
               <Slider
@@ -129,24 +129,24 @@
               />
 
               <StackPanel IsEnabled="{Binding CanEditHeal}">
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <TextBlock Text="{DynamicResource Loc_ShotEffects_Hue}" />
                   <TextBlock Text=": " />
                   <TextBlock
-                    Text="{Binding HealHue, StringFormat={}{0:F0}°}"
                     FontWeight="SemiBold"
+                    Text="{Binding HealHue, StringFormat={}{0:F0}°}"
                   />
                 </StackPanel>
                 <Border Height="6" Margin="2,0,2,4" CornerRadius="3">
                   <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                      <GradientStop Color="#FF0000" Offset="0.0" />
-                      <GradientStop Color="#FFFF00" Offset="0.167" />
-                      <GradientStop Color="#00FF00" Offset="0.333" />
-                      <GradientStop Color="#00FFFF" Offset="0.5" />
-                      <GradientStop Color="#0000FF" Offset="0.667" />
-                      <GradientStop Color="#FF00FF" Offset="0.833" />
-                      <GradientStop Color="#FF0000" Offset="1.0" />
+                      <GradientStop Offset="0.0" Color="#FF0000" />
+                      <GradientStop Offset="0.167" Color="#FFFF00" />
+                      <GradientStop Offset="0.333" Color="#00FF00" />
+                      <GradientStop Offset="0.5" Color="#00FFFF" />
+                      <GradientStop Offset="0.667" Color="#0000FF" />
+                      <GradientStop Offset="0.833" Color="#FF00FF" />
+                      <GradientStop Offset="1.0" Color="#FF0000" />
                     </LinearGradientBrush>
                   </Border.Background>
                 </Border>
@@ -159,12 +159,12 @@
                   Value="{Binding HealHue}"
                 />
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <TextBlock Text="{DynamicResource Loc_ShotEffects_Saturation}" />
                   <TextBlock Text=": " />
                   <TextBlock
-                    Text="{Binding HealSaturation, StringFormat={}{0:F0}%}"
                     FontWeight="SemiBold"
+                    Text="{Binding HealSaturation, StringFormat={}{0:F0}%}"
                   />
                 </StackPanel>
                 <Slider
@@ -176,12 +176,12 @@
                   Value="{Binding HealSaturation}"
                 />
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <TextBlock Text="{DynamicResource Loc_ShotEffects_Brightness}" />
                   <TextBlock Text=": " />
                   <TextBlock
-                    Text="{Binding HealBrightness, StringFormat={}{0:F0}%}"
                     FontWeight="SemiBold"
+                    Text="{Binding HealBrightness, StringFormat={}{0:F0}%}"
                   />
                 </StackPanel>
                 <Slider
@@ -193,12 +193,12 @@
                   Value="{Binding HealBrightness}"
                 />
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <TextBlock Text="{DynamicResource Loc_ShotEffects_Contrast}" />
                   <TextBlock Text=": " />
                   <TextBlock
-                    Text="{Binding HealContrast, StringFormat={}{0:F2}}"
                     FontWeight="SemiBold"
+                    Text="{Binding HealContrast, StringFormat={}{0:F2}}"
                   />
                 </StackPanel>
                 <Slider
@@ -220,10 +220,10 @@
           </TabItem>
         </TabControl>
 
-        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Stretch" Orientation="Horizontal">
+        <WrapPanel Margin="0,10,0,0" HorizontalAlignment="Stretch" Orientation="Horizontal">
           <Button
-            Width="150"
-            Padding="15,8"
+            Width="140"
+            Padding="12,8"
             Background="#4CAF50"
             Command="{Binding SaveCommand}"
             Content="{DynamicResource Loc_ShotEffects_ApplyToGame}"
@@ -232,12 +232,15 @@
           />
           <Button
             Width="150"
-            Margin="10,0,0,0"
-            Padding="15,8"
-            Command="{Binding RestoreCommand}"
-            Content="{DynamicResource Loc_ShotEffects_RestoreOriginal}"
+            Margin="8,0,0,0"
+            Padding="12,8"
+            Background="#E67E22"
+            Command="{Binding ApplyClassicCommand}"
+            Content="{DynamicResource Loc_ShotEffects_Classic2010}"
+            FontWeight="Bold"
+            Foreground="White"
           />
-        </StackPanel>
+        </WrapPanel>
       </StackPanel>
     </ScrollViewer>
 
@@ -257,8 +260,8 @@
             Text="{DynamicResource Loc_ShotEffects_LivePreview}"
           />
           <ComboBox
-            HorizontalAlignment="Right"
             Width="180"
+            HorizontalAlignment="Right"
             ItemsSource="{Binding ComponentOptions}"
             SelectedItem="{Binding SelectedComponentOption}"
           />

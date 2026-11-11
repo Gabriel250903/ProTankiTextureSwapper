@@ -282,7 +282,7 @@ namespace TextureSwapper.ViewModels.Tabs
             }
 
             if (
-                !selectedEffect.Turret.Equals("Railgun", StringComparison.OrdinalIgnoreCase)
+                (selectedEffect.IsPremium || !selectedEffect.Turret.Equals("Railgun", StringComparison.OrdinalIgnoreCase))
                 && !_mainVM.Settings.IsPremiumUnlocked
             )
             {
@@ -315,9 +315,9 @@ namespace TextureSwapper.ViewModels.Tabs
                         "Loc_Msg_ShotEffectAppliedSuccess"
                     );
                     notificationAppearance = ControlAppearance.Success;
-                    if (_mainVM.IsHalloweenThemeActive)
+                    if (_mainVM.IsSeasonalThemeActive)
                     {
-                        _mainVM.HalloweenSoundService.PlayApplySuccess();
+                        _mainVM.SeasonalAudioService.PlayApplySuccess();
                     }
                     _mainVM.BackupsTabVM.LoadBackups();
                 }

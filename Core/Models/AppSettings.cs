@@ -24,13 +24,49 @@ namespace TextureSwapper.Core.Models
         public bool SkipRemoteTargetSync { get; set; } = true;
         public bool IsTrialLicense { get; set; } = false;
         public bool HasClaimedTrial { get; set; } = false;
-        public bool ForceHalloweenPreview { get; set; } = false;
-        public bool EnableHalloweenSound { get; set; } = true;
-        public bool IsHalloweenThemeSelected { get; set; } = true;
-        public bool EnableHalloweenRandomScares { get; set; } = true;
-        public bool EnableHalloweenAtmosphereAnimation { get; set; } = true;
-        public bool EnableHalloweenSpookyFont { get; set; } = true;
-        public bool EnableHalloweenAppLogo { get; set; } = true;
+        public bool ForceSeasonalPreview { get; set; } = false;
+        public bool EnableSeasonalSound { get; set; } = true;
+        public bool IsSeasonalThemeSelected { get; set; } = false;
+        public bool EnableSeasonalRandomAudio { get; set; } = true;
+        public bool EnableSeasonalAtmosphereAnimation { get; set; } = true;
+        public bool EnableSeasonalCustomFont { get; set; } = true;
+        public bool EnableSeasonalAppLogo { get; set; } = true;
+
+        public bool ForceHalloweenPreview
+        {
+            get => ForceSeasonalPreview;
+            set => ForceSeasonalPreview = value;
+        }
+        public bool EnableHalloweenSound
+        {
+            get => EnableSeasonalSound;
+            set => EnableSeasonalSound = value;
+        }
+        public bool IsHalloweenThemeSelected
+        {
+            get => IsSeasonalThemeSelected;
+            set => IsSeasonalThemeSelected = value;
+        }
+        public bool EnableHalloweenRandomScares
+        {
+            get => EnableSeasonalRandomAudio;
+            set => EnableSeasonalRandomAudio = value;
+        }
+        public bool EnableHalloweenAtmosphereAnimation
+        {
+            get => EnableSeasonalAtmosphereAnimation;
+            set => EnableSeasonalAtmosphereAnimation = value;
+        }
+        public bool EnableHalloweenSpookyFont
+        {
+            get => EnableSeasonalCustomFont;
+            set => EnableSeasonalCustomFont = value;
+        }
+        public bool EnableHalloweenAppLogo
+        {
+            get => EnableSeasonalAppLogo;
+            set => EnableSeasonalAppLogo = value;
+        }
         public string LastSeenVersion { get; set; } = string.Empty;
         public bool HasSeenV2UpdateNotice { get; set; } = false;
         public bool HasSeenDiscordInvite { get; set; } = false;

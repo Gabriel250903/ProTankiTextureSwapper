@@ -117,7 +117,9 @@ namespace TextureSwapper.Services.Composers
 
         private static BitmapSource ComposePixelArray(TextureRenderOptions options)
         {
-            Log.Warning("GenericTextureComposer: Unsupported or legacy mask strategy requested for composition.");
+            Log.Warning(
+                "GenericTextureComposer: Unsupported or legacy mask strategy requested for composition."
+            );
             RenderTargetBitmap fallback = new(512, 512, 96, 96, PixelFormats.Pbgra32);
             fallback.Freeze();
             return fallback;

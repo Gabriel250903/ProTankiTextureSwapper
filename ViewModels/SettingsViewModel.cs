@@ -7,6 +7,7 @@ using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
+using TextureSwapper.Seasonal;
 using TextureSwapper.ViewModels.Base;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -113,39 +114,31 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
-    public string PremiumExpirationDisplay
-    {
-        get
-        {
-            if (!IsPremiumUnlocked)
-            {
-                return string.Empty;
-            }
-
-            if (IsTrialActive)
-            {
-                return "Free Trial (" + TrialRemainingDisplay + ")";
-            }
-
-            if (string.IsNullOrWhiteSpace(Settings.PremiumExpiresAtUtc)
-                || (Settings.PremiumLicenseKey?.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase) == true))
-            {
-                return string.Empty;
-            }
-
-            if (DateTime.TryParse(Settings.PremiumExpiresAtUtc, out DateTime result2))
-            {
-                return _localizationService.GetString(
-                    "Loc_Settings_ExpiresFormat",
-                    result2.ToLocalTime().ToString("g")
-                );
-            }
-
-            return _localizationService.GetString(
+    public string PremiumExpirationDisplay =>
+        !IsPremiumUnlocked ? string.Empty
+        : IsTrialActive ? "Free Trial (" + TrialRemainingDisplay + ")"
+        : string.IsNullOrWhiteSpace(Settings.PremiumExpiresAtUtc)
+        || IsLifetimeSeasonalKey(Settings.PremiumLicenseKey)
+            ? string.Empty
+        : DateTime.TryParse(Settings.PremiumExpiresAtUtc, out DateTime result2)
+            ? _localizationService.GetString(
                 "Loc_Settings_ExpiresFormat",
-                Settings.PremiumExpiresAtUtc
+                result2.ToLocalTime().ToString("g")
+            )
+        : _localizationService.GetString(
+            "Loc_Settings_ExpiresFormat",
+            Settings.PremiumExpiresAtUtc
+        );
+
+    private static bool IsLifetimeSeasonalKey(string? key)
+    {
+        return !string.IsNullOrEmpty(key)
+            && (
+                key.StartsWith("HALLOWEEN-", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith("XMAS-", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith("CHRISTMAS-", StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith("SEASONAL-", StringComparison.OrdinalIgnoreCase)
             );
-        }
     }
 
     public bool HasExpirationDisplay => !string.IsNullOrWhiteSpace(PremiumExpirationDisplay);
@@ -156,35 +149,12 @@ public class SettingsViewModel : ViewModelBase
         set => SetProperty(ref _activationStatusText, value, nameof(ActivationStatusText));
     }
 
-    public string LicenseTierDisplay
-    {
-        get
-        {
-            if (!IsPremiumUnlocked)
-            {
-                return "Free Tier";
-            }
-            if (IsTrialActive)
-            {
-                return "3-Day Free Trial";
-            }
-            if (
-                !string.IsNullOrEmpty(Settings.PremiumLicenseKey)
-                && Settings.PremiumLicenseKey.StartsWith(
-                    "HALLOWEEN-",
-                    StringComparison.OrdinalIgnoreCase
-                )
-            )
-            {
-                return "Lifetime Supporter";
-            }
-            if (!string.IsNullOrWhiteSpace(Settings.PremiumExpiresAtUtc))
-            {
-                return "Time-Limited Premium";
-            }
-            return "Lifetime Supporter";
-        }
-    }
+    public string LicenseTierDisplay =>
+        !IsPremiumUnlocked ? "Free Tier"
+        : IsTrialActive ? "3-Day Free Trial"
+        : IsLifetimeSeasonalKey(Settings.PremiumLicenseKey) ? "Lifetime Supporter"
+        : !string.IsNullOrWhiteSpace(Settings.PremiumExpiresAtUtc) ? "Time-Limited Premium"
+        : "Lifetime Supporter";
 
     private bool _isKeyRevealed;
     public bool IsKeyRevealed
@@ -204,19 +174,10 @@ public class SettingsViewModel : ViewModelBase
         get
         {
             string key = Settings.PremiumLicenseKey;
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                return "—";
-            }
-            if (IsKeyRevealed)
-            {
-                return key;
-            }
-            if (key.Length <= 8)
-            {
-                return "••••••••";
-            }
-            return key[..4] + "-••••-••••-" + key[^4..];
+            return string.IsNullOrWhiteSpace(key) ? "—"
+                : IsKeyRevealed ? key
+                : key.Length <= 8 ? "••••••••"
+                : key[..4] + "-••••-••••-" + key[^4..];
         }
     }
 
@@ -233,21 +194,11 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
-    public string LastVerifiedDisplay
-    {
-        get
-        {
-            if (string.IsNullOrWhiteSpace(Settings.LastVerifiedUtc))
-            {
-                return "Not verified online";
-            }
-            if (DateTime.TryParse(Settings.LastVerifiedUtc, out DateTime dt))
-            {
-                return dt.ToLocalTime().ToString("g");
-            }
-            return Settings.LastVerifiedUtc;
-        }
-    }
+    public string LastVerifiedDisplay =>
+        string.IsNullOrWhiteSpace(Settings.LastVerifiedUtc) ? "Not verified online"
+        : DateTime.TryParse(Settings.LastVerifiedUtc, out DateTime dt)
+            ? dt.ToLocalTime().ToString("g")
+        : Settings.LastVerifiedUtc;
 
     public bool HasCryptographicSignature =>
         !string.IsNullOrEmpty(Settings.PremiumActivationSignature);
@@ -271,17 +222,14 @@ public class SettingsViewModel : ViewModelBase
 
     public LanguageInfo? SelectedLanguage
     {
-        get
-        {
-            return AvailableLanguages.FirstOrDefault(
-                l => l.Code.Equals(Settings.Language, StringComparison.OrdinalIgnoreCase)
+        get =>
+            AvailableLanguages.FirstOrDefault(l =>
+                l.Code.Equals(Settings.Language, StringComparison.OrdinalIgnoreCase)
             )
-            ?? AvailableLanguages.FirstOrDefault(
-                l => l.Code.Equals("en", StringComparison.OrdinalIgnoreCase)
+            ?? AvailableLanguages.FirstOrDefault(l =>
+                l.Code.Equals("en", StringComparison.OrdinalIgnoreCase)
             )
             ?? (AvailableLanguages.Count > 0 ? AvailableLanguages[0] : null);
-        }
-
         set
         {
             if (value != null && Settings.Language != value.Code)
@@ -298,7 +246,8 @@ public class SettingsViewModel : ViewModelBase
     public string SelectedTheme
     {
         get =>
-            _mainViewModel.HalloweenThemeService.IsHalloweenActive ? "Halloween"
+            _mainViewModel.SeasonalThemeService.IsSeasonalActive
+                ? SeasonalThemeConfig.Current.DisplayName
             : Settings.Theme == ApplicationTheme.Light ? "Light"
             : "Dark";
         set
@@ -311,22 +260,28 @@ public class SettingsViewModel : ViewModelBase
                 return;
             }
 
-            if (string.Equals(value, "Halloween", StringComparison.OrdinalIgnoreCase))
+            string currentSeasonName = SeasonalThemeConfig.Current.DisplayName;
+            if (
+                string.Equals(value, currentSeasonName, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(value, "Seasonal", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(value, "Halloween", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(value, "Christmas", StringComparison.OrdinalIgnoreCase)
+            )
             {
-                Settings.IsHalloweenThemeSelected = true;
+                Settings.IsSeasonalThemeSelected = true;
                 _settingsService.Save(Settings);
-                _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
-                Log.Information("Theme changed to Halloween.");
+                _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
+                Log.Information("Theme changed to {Season}.", currentSeasonName);
                 _ = _mainViewModel.NotificationService.ShowAsync(
-                    "Halloween Theme Active 🎃",
-                    "Live visual effects are active. Higher CPU, RAM, and GPU usage is normal for animations.",
+                    $"{SeasonalThemeConfig.Current.AppTitle} Active",
+                    "Live seasonal effects are active. Higher CPU, RAM, and GPU usage is normal for animations.",
                     Wpf.Ui.Controls.ControlAppearance.Info
                 );
             }
             else
             {
-                Settings.IsHalloweenThemeSelected = false;
-                Settings.ForceHalloweenPreview = false;
+                Settings.IsSeasonalThemeSelected = false;
+                Settings.ForceSeasonalPreview = false;
                 ApplicationTheme theme = string.Equals(
                     value,
                     "Light",
@@ -336,11 +291,13 @@ public class SettingsViewModel : ViewModelBase
                     : ApplicationTheme.Dark;
                 Settings.Theme = theme;
                 _settingsService.Save(Settings);
-                _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
+                _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
                 Log.Information("Theme changed to {Theme}.", theme);
             }
             OnPropertyChanged(nameof(SelectedTheme));
+            OnPropertyChanged(nameof(CanConfigureSeasonalSound));
             OnPropertyChanged(nameof(CanConfigureHalloweenSound));
+            OnPropertyChanged(nameof(IsSeasonalCustomizationVisible));
             OnPropertyChanged(nameof(IsHalloweenCustomizationVisible));
             ExecuteRefreshLogs(null);
         }
@@ -351,102 +308,138 @@ public class SettingsViewModel : ViewModelBase
         get
         {
             List<string> list = ["Dark", "Light"];
-            if (_mainViewModel.HalloweenThemeService.IsWithinHalloweenWindow)
+            if (_mainViewModel.SeasonalThemeService.IsWithinSeasonalWindow)
             {
-                list.Add("Halloween");
+                list.Add(SeasonalThemeConfig.Current.DisplayName);
             }
             return list;
         }
     }
 
-    public bool IsWithinHalloweenPeriod =>
-        _mainViewModel.HalloweenThemeService.IsWithinHalloweenWindow;
+    public string SeasonalSettingsHeader => SeasonalThemeConfig.Current.SettingsHeader;
+    public string SeasonalSettingsDescription => SeasonalThemeConfig.Current.SettingsDescription;
 
-    public bool IsHalloweenCustomizationVisible =>
-        _mainViewModel.HalloweenThemeService.IsHalloweenActive;
+    public bool IsWithinSeasonalPeriod =>
+        _mainViewModel.SeasonalThemeService.IsWithinSeasonalWindow;
+    public bool IsWithinHalloweenPeriod => IsWithinSeasonalPeriod;
 
-    public bool CanConfigureHalloweenSound => IsHalloweenCustomizationVisible;
+    public bool IsSeasonalCustomizationVisible =>
+        _mainViewModel.SeasonalThemeService.IsSeasonalActive;
+    public bool IsHalloweenCustomizationVisible => IsSeasonalCustomizationVisible;
 
+    public bool CanConfigureSeasonalSound => IsSeasonalCustomizationVisible;
+    public bool CanConfigureHalloweenSound => CanConfigureSeasonalSound;
+
+    public bool EnableSeasonalAtmosphereAnimation
+    {
+        get => Settings.EnableSeasonalAtmosphereAnimation;
+        set
+        {
+            if (Settings.EnableSeasonalAtmosphereAnimation != value)
+            {
+                Settings.EnableSeasonalAtmosphereAnimation = value;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(EnableSeasonalAtmosphereAnimation));
+                OnPropertyChanged(nameof(EnableHalloweenAtmosphereAnimation));
+                _mainViewModel.NotifySeasonalVisualsChanged();
+            }
+        }
+    }
     public bool EnableHalloweenAtmosphereAnimation
     {
-        get => Settings.EnableHalloweenAtmosphereAnimation;
+        get => EnableSeasonalAtmosphereAnimation;
+        set => EnableSeasonalAtmosphereAnimation = value;
+    }
+
+    public bool EnableSeasonalCustomFont
+    {
+        get => Settings.EnableSeasonalCustomFont;
         set
         {
-            if (Settings.EnableHalloweenAtmosphereAnimation != value)
+            if (Settings.EnableSeasonalCustomFont != value)
             {
-                Settings.EnableHalloweenAtmosphereAnimation = value;
+                Settings.EnableSeasonalCustomFont = value;
                 _settingsService.Save(Settings);
-                OnPropertyChanged(nameof(EnableHalloweenAtmosphereAnimation));
-                _mainViewModel.NotifyHalloweenVisualsChanged();
+                OnPropertyChanged(nameof(EnableSeasonalCustomFont));
+                OnPropertyChanged(nameof(EnableHalloweenSpookyFont));
+                _mainViewModel.SeasonalThemeService.CheckAndApply(notify: true, force: true);
             }
         }
     }
-
     public bool EnableHalloweenSpookyFont
     {
-        get => Settings.EnableHalloweenSpookyFont;
+        get => EnableSeasonalCustomFont;
+        set => EnableSeasonalCustomFont = value;
+    }
+
+    public bool EnableSeasonalAppLogo
+    {
+        get => Settings.EnableSeasonalAppLogo;
         set
         {
-            if (Settings.EnableHalloweenSpookyFont != value)
+            if (Settings.EnableSeasonalAppLogo != value)
             {
-                Settings.EnableHalloweenSpookyFont = value;
+                Settings.EnableSeasonalAppLogo = value;
                 _settingsService.Save(Settings);
-                OnPropertyChanged(nameof(EnableHalloweenSpookyFont));
-                _mainViewModel.HalloweenThemeService.CheckAndApply(notify: true, force: true);
+                OnPropertyChanged(nameof(EnableSeasonalAppLogo));
+                OnPropertyChanged(nameof(EnableHalloweenAppLogo));
+                _mainViewModel.NotifySeasonalVisualsChanged();
             }
         }
     }
-
     public bool EnableHalloweenAppLogo
     {
-        get => Settings.EnableHalloweenAppLogo;
-        set
-        {
-            if (Settings.EnableHalloweenAppLogo != value)
-            {
-                Settings.EnableHalloweenAppLogo = value;
-                _settingsService.Save(Settings);
-                OnPropertyChanged(nameof(EnableHalloweenAppLogo));
-                _mainViewModel.NotifyHalloweenVisualsChanged();
-            }
-        }
+        get => EnableSeasonalAppLogo;
+        set => EnableSeasonalAppLogo = value;
     }
 
-    public bool EnableHalloweenSound
+    public bool EnableSeasonalSound
     {
-        get => Settings.EnableHalloweenSound;
+        get => Settings.EnableSeasonalSound;
         set
         {
-            if (Settings.EnableHalloweenSound != value)
+            if (Settings.EnableSeasonalSound != value)
             {
-                Settings.EnableHalloweenSound = value;
+                Settings.EnableSeasonalSound = value;
                 _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(EnableSeasonalSound));
                 OnPropertyChanged(nameof(EnableHalloweenSound));
-                if (value && _mainViewModel.IsHalloweenThemeActive)
+                if (value && _mainViewModel.IsSeasonalThemeActive)
                 {
-                    _mainViewModel.HalloweenSoundService.PlayHollowClick();
-                    _mainViewModel.HalloweenSoundService.SetAmbientDrone(true);
+                    _mainViewModel.SeasonalAudioService.PlayClick();
+                    _mainViewModel.SeasonalAudioService.SetAmbientDrone(true);
                 }
                 else
                 {
-                    _mainViewModel.HalloweenSoundService.SetAmbientDrone(false);
+                    _mainViewModel.SeasonalAudioService.SetAmbientDrone(false);
                 }
             }
         }
     }
-
-    public bool EnableHalloweenRandomScares
+    public bool EnableHalloweenSound
     {
-        get => Settings.EnableHalloweenRandomScares;
+        get => EnableSeasonalSound;
+        set => EnableSeasonalSound = value;
+    }
+
+    public bool EnableSeasonalRandomAudio
+    {
+        get => Settings.EnableSeasonalRandomAudio;
         set
         {
-            if (Settings.EnableHalloweenRandomScares != value)
+            if (Settings.EnableSeasonalRandomAudio != value)
             {
-                Settings.EnableHalloweenRandomScares = value;
+                Settings.EnableSeasonalRandomAudio = value;
                 _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(EnableSeasonalRandomAudio));
                 OnPropertyChanged(nameof(EnableHalloweenRandomScares));
             }
         }
+    }
+    public bool EnableHalloweenRandomScares
+    {
+        get => EnableSeasonalRandomAudio;
+        set => EnableSeasonalRandomAudio = value;
     }
 
     public double UIScale
@@ -471,7 +464,7 @@ public class SettingsViewModel : ViewModelBase
     }
 
     public string AppVersion =>
-        $"v{Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.0.0"}";
+        $"v{MainViewModel.FormatVersion(Assembly.GetExecutingAssembly().GetName().Version)}";
 
     private string _latestGitHubVersion = "Checking...";
     public string LatestGitHubVersion
@@ -506,40 +499,28 @@ public class SettingsViewModel : ViewModelBase
         get
         {
             string lastUpdateStatus = Settings.LastUpdateStatus;
-            string result;
-            if (
+            string result =
                 string.IsNullOrEmpty(lastUpdateStatus)
                 || lastUpdateStatus.Equals("Idle", StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                result = _localizationService.GetString("Loc_Msg_Idle");
-            }
-            else if (
-                lastUpdateStatus.Equals("You are up to date!", StringComparison.OrdinalIgnoreCase)
-            )
-            {
-                result = _localizationService.GetString("Loc_Msg_UpToDate");
-            }
-            else
-            {
-                result =
-                    lastUpdateStatus.Equals(
-                        "Connecting to GitHub...",
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                        ? _localizationService.GetString("Loc_Msg_ConnectingGitHub")
-                    : lastUpdateStatus.Equals(
-                        "Checking for updates...",
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                        ? _localizationService.GetString("Loc_Msg_CheckingUpdates")
-                    : lastUpdateStatus.Equals(
-                        "Error: Check connection.",
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                        ? _localizationService.GetString("Loc_Msg_UpdateErrorShort")
-                    : lastUpdateStatus;
-            }
+                    ? _localizationService.GetString("Loc_Msg_Idle")
+                : lastUpdateStatus.Equals("You are up to date!", StringComparison.OrdinalIgnoreCase)
+                    ? _localizationService.GetString("Loc_Msg_UpToDate")
+                : lastUpdateStatus.Equals(
+                    "Connecting to GitHub...",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                    ? _localizationService.GetString("Loc_Msg_ConnectingGitHub")
+                : lastUpdateStatus.Equals(
+                    "Checking for updates...",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                    ? _localizationService.GetString("Loc_Msg_CheckingUpdates")
+                : lastUpdateStatus.Equals(
+                    "Error: Check connection.",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                    ? _localizationService.GetString("Loc_Msg_UpdateErrorShort")
+                : lastUpdateStatus;
             return result;
         }
         set
@@ -601,9 +582,10 @@ public class SettingsViewModel : ViewModelBase
 
     public bool IsLoaderPatched => _hudService.IsLoaderPatched();
 
-    public string LoaderPatchStatusText => IsLoaderPatched
-        ? "Patched (Local Overrides Active)"
-        : "Not Patched (Required for HUD overrides)";
+    public string LoaderPatchStatusText =>
+        IsLoaderPatched
+            ? "Patched (Local Overrides Active)"
+            : "Not Patched (Required for HUD overrides)";
 
     public SettingsViewModel(
         ISettingsService settingsService,
@@ -622,87 +604,67 @@ public class SettingsViewModel : ViewModelBase
         _hudService = hudService;
         Settings = mainViewModel.Settings;
 
-        // Sync setting with actual on-disk state
         Settings.EnableCenteredHud = _hudService.IsCenteredHudEnabled();
 
         InstallLoaderPatchCommand = new AsyncRelayCommand(
             ExecuteInstallLoaderPatch,
             _ => !IsLoading
         );
-        BuyPremiumCommand = new RelayCommand(
-            _ =>
-            {
-                ExecuteBuyPremium();
-            }
-        );
-        UseWindowsUsernameCommand = new RelayCommand(
-            _ =>
-            {
-                UserNickname = Environment.UserName;
-            }
-        );
-        ActivatePremiumCommand = new AsyncRelayCommand(
-            ExecuteActivatePremium,
-            _ => !IsLoading
-        );
+        BuyPremiumCommand = new RelayCommand(_ =>
+        {
+            ExecuteBuyPremium();
+        });
+        UseWindowsUsernameCommand = new RelayCommand(_ =>
+        {
+            UserNickname = Environment.UserName;
+        });
+        ActivatePremiumCommand = new AsyncRelayCommand(ExecuteActivatePremium, _ => !IsLoading);
         StartFreeTrialCommand = new AsyncRelayCommand(
             ExecuteStartFreeTrial,
             _ => !IsLoading && CanStartTrial
         );
-        CheckForUpdatesCommand = new AsyncRelayCommand(
-            ExecuteCheckForUpdates,
-            _ => !IsLoading
-        );
+        CheckForUpdatesCommand = new AsyncRelayCommand(ExecuteCheckForUpdates, _ => !IsLoading);
         RefreshLogsCommand = new RelayCommand(ExecuteRefreshLogs);
         OpenLogsFolderCommand = new RelayCommand(ExecuteOpenLogsFolder);
-        ToggleKeyVisibilityCommand = new RelayCommand(
-            _ => IsKeyRevealed = !IsKeyRevealed
-        );
-        CopyLicenseKeyCommand = new RelayCommand(
-            _ =>
+        ToggleKeyVisibilityCommand = new RelayCommand(_ => IsKeyRevealed = !IsKeyRevealed);
+        CopyLicenseKeyCommand = new RelayCommand(_ =>
+        {
+            try
             {
-                try
+                if (!string.IsNullOrWhiteSpace(Settings.PremiumLicenseKey))
                 {
-                    if (!string.IsNullOrWhiteSpace(Settings.PremiumLicenseKey))
-                    {
-                        Clipboard.SetText(Settings.PremiumLicenseKey);
-                        _ = _mainViewModel.ShowNotificationAsync(
-                            "License Key Copied",
-                            "Your license key has been copied to clipboard.",
-                            ControlAppearance.Success
-                        );
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to copy license key.");
-                }
-            }
-        );
-        SyncLicenseCommand = new AsyncRelayCommand(
-            ExecuteSyncLicense,
-            _ => !IsLoading
-        );
-        
-        CopyHardwareIdCommand = new RelayCommand(
-            _ =>
-            {
-                try
-                {
-                    string deviceHardwareId = _deviceBanService.GetDeviceHardwareId();
-                    Clipboard.SetText(deviceHardwareId);
+                    Clipboard.SetText(Settings.PremiumLicenseKey);
                     _ = _mainViewModel.ShowNotificationAsync(
-                        "Hardware ID Copied",
-                        "Your device hardware ID has been copied to clipboard.",
+                        "License Key Copied",
+                        "Your license key has been copied to clipboard.",
                         ControlAppearance.Success
                     );
                 }
-                catch (Exception exception)
-                {
-                    Log.Error(exception, "Failed to copy Hardware ID.");
-                }
             }
-        );
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to copy license key.");
+            }
+        });
+        SyncLicenseCommand = new AsyncRelayCommand(ExecuteSyncLicense, _ => !IsLoading);
+
+        CopyHardwareIdCommand = new RelayCommand(_ =>
+        {
+            try
+            {
+                string deviceHardwareId = _deviceBanService.GetDeviceHardwareId();
+                Clipboard.SetText(deviceHardwareId);
+                _ = _mainViewModel.ShowNotificationAsync(
+                    "Hardware ID Copied",
+                    "Your device hardware ID has been copied to clipboard.",
+                    ControlAppearance.Success
+                );
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception, "Failed to copy Hardware ID.");
+            }
+        });
         _localizationService.LanguageChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(UpdateStatus));
@@ -731,12 +693,17 @@ public class SettingsViewModel : ViewModelBase
             });
         };
 
-        _mainViewModel.HalloweenThemeService.HalloweenThemeChanged += (sender, active) =>
+        _mainViewModel.SeasonalThemeService.SeasonalThemeChanged += (sender, active) =>
         {
             OnPropertyChanged(nameof(AvailableThemes));
             OnPropertyChanged(nameof(SelectedTheme));
+            OnPropertyChanged(nameof(SeasonalSettingsHeader));
+            OnPropertyChanged(nameof(SeasonalSettingsDescription));
+            OnPropertyChanged(nameof(CanConfigureSeasonalSound));
             OnPropertyChanged(nameof(CanConfigureHalloweenSound));
+            OnPropertyChanged(nameof(IsSeasonalCustomizationVisible));
             OnPropertyChanged(nameof(IsHalloweenCustomizationVisible));
+            OnPropertyChanged(nameof(IsWithinSeasonalPeriod));
             OnPropertyChanged(nameof(IsWithinHalloweenPeriod));
         };
 
@@ -940,13 +907,19 @@ public class SettingsViewModel : ViewModelBase
             LastCheckedTime = DateTime.Now.ToString("g");
             Log.Information("User initiated manual app update check. Querying API...");
 
-            GitHubReleaseModel? release = await _mainViewModel.UpdateService.CheckForAppUpdatesAsync();
+            GitHubReleaseModel? release =
+                await _mainViewModel.UpdateService.CheckForAppUpdatesAsync();
             if (release != null)
             {
                 _mainViewModel.LatestGitHubRelease = release.TagName;
-                string currentVerStr = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.0.0";
+                string currentVerStr = MainViewModel.FormatVersion(
+                    Assembly.GetExecutingAssembly().GetName().Version
+                );
                 string latestVerStr = release.TagName.TrimStart('v');
-                LatestGitHubVersion = release.TagName.StartsWith("v", StringComparison.OrdinalIgnoreCase)
+                LatestGitHubVersion = release.TagName.StartsWith(
+                    "v",
+                    StringComparison.OrdinalIgnoreCase
+                )
                     ? release.TagName
                     : $"v{release.TagName}";
 
@@ -958,7 +931,7 @@ public class SettingsViewModel : ViewModelBase
                 if (newer)
                 {
                     UpdateStatus = $"Update available: {release.TagName}";
-                    await _mainViewModel.PerformUpdateCheckAsync(p => UpdateStatus = p);
+                    _ = await _mainViewModel.PerformUpdateCheckAsync(p => UpdateStatus = p);
                 }
                 else
                 {
@@ -995,10 +968,7 @@ public class SettingsViewModel : ViewModelBase
     {
         try
         {
-            await _premiumService.CheckAndSyncAssignedLicenseAsync(
-                Settings,
-                forceSync: true
-            );
+            _ = await _premiumService.CheckAndSyncAssignedLicenseAsync(Settings, forceSync: true);
             OnPropertyChanged(nameof(IsPremiumUnlocked));
             OnPropertyChanged(nameof(IsPremiumLocked));
             OnPropertyChanged(nameof(IsTrialActive));
@@ -1021,10 +991,15 @@ public class SettingsViewModel : ViewModelBase
         {
             if (_mainViewModel.LatestGitHubRelease != null)
             {
-                LatestGitHubVersion = _mainViewModel.LatestGitHubRelease.StartsWith("v", StringComparison.OrdinalIgnoreCase)
+                LatestGitHubVersion = _mainViewModel.LatestGitHubRelease.StartsWith(
+                    "v",
+                    StringComparison.OrdinalIgnoreCase
+                )
                     ? _mainViewModel.LatestGitHubRelease
                     : $"v{_mainViewModel.LatestGitHubRelease}";
-                string currentVerStr = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.0.0";
+                string currentVerStr = MainViewModel.FormatVersion(
+                    Assembly.GetExecutingAssembly().GetName().Version
+                );
                 string latestVerStr = _mainViewModel.LatestGitHubRelease.TrimStart('v');
                 bool newer = MainViewModel.IsNewerVersion(currentVerStr, latestVerStr);
                 IsUpdateAvailable = newer;
@@ -1032,14 +1007,20 @@ public class SettingsViewModel : ViewModelBase
             }
             else
             {
-                GitHubReleaseModel? release = await _mainViewModel.UpdateService.CheckForAppUpdatesAsync();
+                GitHubReleaseModel? release =
+                    await _mainViewModel.UpdateService.CheckForAppUpdatesAsync();
                 if (release != null)
                 {
                     _mainViewModel.LatestGitHubRelease = release.TagName;
-                    LatestGitHubVersion = release.TagName.StartsWith("v", StringComparison.OrdinalIgnoreCase)
+                    LatestGitHubVersion = release.TagName.StartsWith(
+                        "v",
+                        StringComparison.OrdinalIgnoreCase
+                    )
                         ? release.TagName
                         : $"v{release.TagName}";
-                    string currentVerStr = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.0.0";
+                    string currentVerStr = MainViewModel.FormatVersion(
+                        Assembly.GetExecutingAssembly().GetName().Version
+                    );
                     string latestVerStr = release.TagName.TrimStart('v');
                     bool newer = MainViewModel.IsNewerVersion(currentVerStr, latestVerStr);
                     IsUpdateAvailable = newer;
@@ -1061,7 +1042,11 @@ public class SettingsViewModel : ViewModelBase
 
     private async Task ExecuteSyncLicense(object? parameter)
     {
-        if (IsLoading) return;
+        if (IsLoading)
+        {
+            return;
+        }
+
         try
         {
             IsLoading = true;
@@ -1129,11 +1114,19 @@ public class SettingsViewModel : ViewModelBase
                     string msg = Helpers.Utilities.FileHelper.IsGameRunning()
                         ? "Centered Supplies HUD applied! Restart ProTanki to see the centered supplies in battle."
                         : "Centered Supplies HUD applied! Launch ProTanki to play with the centered HUD.";
-                    await _mainViewModel.ShowNotificationAsync("Centered HUD", msg, ControlAppearance.Success);
+                    await _mainViewModel.ShowNotificationAsync(
+                        "Centered HUD",
+                        msg,
+                        ControlAppearance.Success
+                    );
                 }
                 else
                 {
-                    await _mainViewModel.ShowNotificationAsync("Error", error ?? "Failed to apply Centered HUD.", ControlAppearance.Danger);
+                    await _mainViewModel.ShowNotificationAsync(
+                        "Error",
+                        error ?? "Failed to apply Centered HUD.",
+                        ControlAppearance.Danger
+                    );
                 }
             }
             else
@@ -1141,18 +1134,30 @@ public class SettingsViewModel : ViewModelBase
                 (bool success, string? error) = _hudService.RestoreDefaultHud();
                 if (success)
                 {
-                    await _mainViewModel.ShowNotificationAsync("Default HUD", "Default supplies HUD restored.", ControlAppearance.Info);
+                    await _mainViewModel.ShowNotificationAsync(
+                        "Default HUD",
+                        "Default supplies HUD restored.",
+                        ControlAppearance.Info
+                    );
                 }
                 else
                 {
-                    await _mainViewModel.ShowNotificationAsync("Error", error ?? "Failed to restore HUD.", ControlAppearance.Danger);
+                    await _mainViewModel.ShowNotificationAsync(
+                        "Error",
+                        error ?? "Failed to restore HUD.",
+                        ControlAppearance.Danger
+                    );
                 }
             }
         }
         catch (Exception ex)
         {
             Log.Error(ex, "Failed to toggle centered HUD.");
-            await _mainViewModel.ShowNotificationAsync("Error", ex.Message, ControlAppearance.Danger);
+            await _mainViewModel.ShowNotificationAsync(
+                "Error",
+                ex.Message,
+                ControlAppearance.Danger
+            );
         }
         finally
         {
@@ -1193,7 +1198,11 @@ public class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             Log.Error(ex, "Error installing StandaloneLoader patch.");
-            await _mainViewModel.ShowNotificationAsync("Error", ex.Message, ControlAppearance.Danger);
+            await _mainViewModel.ShowNotificationAsync(
+                "Error",
+                ex.Message,
+                ControlAppearance.Danger
+            );
         }
         finally
         {

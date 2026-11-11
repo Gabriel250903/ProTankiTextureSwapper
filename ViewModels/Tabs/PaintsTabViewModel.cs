@@ -265,6 +265,13 @@ namespace TextureSwapper.ViewModels.Tabs
             });
         }
 
+        private static bool TargetsOverlap(SkinModel a, SkinModel b)
+        {
+            return (!string.IsNullOrEmpty(a.DetailsTarget) && a.DetailsTarget == b.DetailsTarget)
+                || (!string.IsNullOrEmpty(a.LightmapTarget) && a.LightmapTarget == b.LightmapTarget)
+                || (!string.IsNullOrEmpty(a.AlphaTarget) && a.AlphaTarget == b.AlphaTarget);
+        }
+
         private void ExecuteToggleSkinSelection(object? parameter)
         {
             if (parameter is SkinModel skin)
@@ -283,11 +290,7 @@ namespace TextureSwapper.ViewModels.Tabs
                             && otherSkin.Category == skin.Category
                             && otherSkin.ItemName == skin.ItemName
                             && otherSkin.IsSelected
-                            && (
-                                otherSkin.DetailsTarget == skin.DetailsTarget
-                                || otherSkin.LightmapTarget == skin.LightmapTarget
-                                || otherSkin.AlphaTarget == skin.AlphaTarget
-                            )
+                            && TargetsOverlap(skin, otherSkin)
                         )
                         {
                             otherSkin.IsSelected = false;
@@ -519,11 +522,19 @@ namespace TextureSwapper.ViewModels.Tabs
                 List<SkinModel> skinsToApply =
                     selectedSkins.Count != 0 ? selectedSkins : [SelectedSkin!];
 
-                if (skinsToApply.Any(s => s.IsPremium) && !_mainVM.PremiumService.IsPremiumUnlocked)
+                if (
+                    skinsToApply.Any(s =>
+                        s.IsPremium
+                        || s.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
+                    ) && !_mainVM.PremiumService.IsPremiumUnlocked
+                )
                 {
                     _mainVM.IsLoading = false;
                     IEnumerable<string> premiumSkinNames = skinsToApply
-                        .Where(s => s.IsPremium)
+                        .Where(s =>
+                            s.IsPremium
+                            || s.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
+                        )
                         .Select(s => s.Name);
                     await _mainVM.NotificationService.ShowAsync(
                         "Premium Required",
@@ -531,6 +542,27 @@ namespace TextureSwapper.ViewModels.Tabs
                         ControlAppearance.Caution
                     );
                     return;
+                }
+
+                if (
+                    skinsToApply.Any(s =>
+                        s.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
+                    )
+                )
+                {
+                    if (
+                        !_mainVM.HudService.IsLoaderPatched()
+                        || !_mainVM.HudService.IsCenteredHudEnabled()
+                    )
+                    {
+                        _mainVM.IsLoading = false;
+                        await _mainVM.NotificationService.ShowAsync(
+                            "Patch Required",
+                            "Animated paints require the Custom HUD patch to be installed\n\nPlease install the patch and use it in HUD settings to use animated paints.",
+                            ControlAppearance.Caution
+                        );
+                        return;
+                    }
                 }
 
                 List<SkinModel> swapCopies = [];
@@ -579,9 +611,9 @@ namespace TextureSwapper.ViewModels.Tabs
                         "Loc_Msg_SwapSuccess"
                     );
                     notificationAppearance = ControlAppearance.Success;
-                    if (_mainVM.IsHalloweenThemeActive)
+                    if (_mainVM.IsSeasonalThemeActive)
                     {
-                        _mainVM.HalloweenSoundService.PlayApplySuccess();
+                        _mainVM.SeasonalAudioService.PlayApplySuccess();
                     }
 
                     foreach (SkinModel skin in _mainVM.AllSkins)

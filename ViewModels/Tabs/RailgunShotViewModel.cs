@@ -90,6 +90,7 @@ namespace TextureSwapper.ViewModels.Tabs
 
         public ICommand SaveCommand { get; }
         public ICommand RestoreCommand { get; }
+        public ICommand ApplyClassicCommand { get; }
 
         public RailgunShotViewModel(IRailgunShotComposer composer, MainViewModel mainVM)
         {
@@ -104,8 +105,126 @@ namespace TextureSwapper.ViewModels.Tabs
                 _ => RestoreOriginalsAsync(),
                 _ => !_mainVM.IsLoading
             );
+            ApplyClassicCommand = new AsyncRelayCommand(
+                _ => ApplyClassic2010Async(),
+                _ => !_mainVM.IsLoading
+            );
 
             UpdatePreview();
+        }
+
+        private async Task ApplyClassic2010Async()
+        {
+            if (!await _mainVM.EnsureSafeToOperate())
+            {
+                return;
+            }
+
+            if (!_mainVM.Settings.IsPremiumUnlocked)
+            {
+                await _mainVM.NotificationService.ShowAsync(
+                    _mainVM.LocalizationService.GetString("Loc_Msg_PremiumRequired"),
+                    _mainVM.LocalizationService.GetString("Loc_Msg_PremiumRequiredDesc"),
+                    ControlAppearance.Danger
+                );
+                return;
+            }
+
+            string notificationTitle = string.Empty;
+            string notificationMessage = string.Empty;
+            ControlAppearance notificationAppearance = ControlAppearance.Info;
+
+            try
+            {
+                _mainVM.IsLoading = true;
+                _mainVM.UpdateStatus = "Applying Classic 2010 Railgun shot effect...";
+
+                List<string> targetList =
+                [
+                    Constants.RailgunCharge1Target,
+                    Constants.RailgunCharge1AlphaTarget,
+                    Constants.RailgunCharge2Target,
+                    Constants.RailgunCharge2AlphaTarget,
+                    Constants.RailgunChargeSphereTarget,
+                    Constants.RailgunChargeSphereAlphaTarget,
+                    Constants.RailgunBeamCoreTarget,
+                    Constants.RailgunBeamCoreAlphaTarget,
+                    Constants.RailgunBeamSpiralTarget,
+                    Constants.RailgunBeamSpiralAlphaTarget,
+                ];
+
+                string legacySample = Path.Combine(
+                    _mainVM.CachePath,
+                    Constants.RailgunLegacyCharge1Target
+                );
+                string standardSample = Path.Combine(
+                    _mainVM.CachePath,
+                    Constants.RailgunCharge1Target
+                );
+
+                if (File.Exists(legacySample) && !File.Exists(standardSample))
+                {
+                    targetList =
+                    [
+                        Constants.RailgunLegacyCharge1Target,
+                        Constants.RailgunLegacyCharge2Target,
+                        Constants.RailgunLegacyChargeSphereTarget,
+                        Constants.RailgunLegacyBeamCoreTarget,
+                        Constants.RailgunLegacyBeamSpiralTarget,
+                    ];
+                }
+
+                ShotEffectModel classicEffect = new()
+                {
+                    Turret = "Railgun",
+                    Name = "Classic 2010",
+                    SourceFolder = "Textures/ShotEffects/Turrets/Railgun/Classic_2010",
+                    PreviewImage = "Textures/ShotEffects/Turrets/Railgun/Classic_2010/preview.jpg",
+                    Targets = targetList,
+                };
+
+                string? result = await Task.Run(() =>
+                    _mainVM.SwapService.SwapShotEffect(_mainVM.CachePath, classicEffect)
+                );
+
+                await Task.Delay(1000);
+
+                if (result == null)
+                {
+                    notificationTitle = "Success";
+                    notificationMessage = "Classic 2010 Railgun shot effect applied successfully!";
+                    notificationAppearance = ControlAppearance.Success;
+                    _mainVM.BackupsTabVM.LoadBackups();
+                }
+                else if (result == "NotCached")
+                {
+                    notificationTitle = "Notice";
+                    notificationMessage =
+                        "The shot effect assets for Railgun are not cached by the loader yet. Please launch the game with Railgun equipped first.";
+                    notificationAppearance = ControlAppearance.Caution;
+                }
+                else
+                {
+                    notificationTitle = "Error";
+                    notificationMessage = $"Failed to apply Classic 2010 Railgun effect: {result}";
+                    notificationAppearance = ControlAppearance.Danger;
+                }
+            }
+            catch (Exception ex)
+            {
+                notificationTitle = "Error";
+                notificationMessage = $"Error: {ex.Message}";
+                notificationAppearance = ControlAppearance.Danger;
+            }
+            finally
+            {
+                _mainVM.IsLoading = false;
+                await _mainVM.NotificationService.ShowAsync(
+                    notificationTitle,
+                    notificationMessage,
+                    notificationAppearance
+                );
+            }
         }
 
         public RailgunShotRenderOptions ToRenderOptions()
@@ -177,10 +296,15 @@ namespace TextureSwapper.ViewModels.Tabs
                 List<string> targetList =
                 [
                     Constants.RailgunCharge1Target,
+                    Constants.RailgunCharge1AlphaTarget,
                     Constants.RailgunCharge2Target,
+                    Constants.RailgunCharge2AlphaTarget,
                     Constants.RailgunChargeSphereTarget,
+                    Constants.RailgunChargeSphereAlphaTarget,
                     Constants.RailgunBeamCoreTarget,
+                    Constants.RailgunBeamCoreAlphaTarget,
                     Constants.RailgunBeamSpiralTarget,
+                    Constants.RailgunBeamSpiralAlphaTarget,
                 ];
 
                 string legacySample = Path.Combine(

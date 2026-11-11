@@ -32,58 +32,86 @@ namespace TextureSwapper.Services
                 Environment.SpecialFolder.ProgramFilesX86
             );
             string x86Path = Path.Combine(programFilesX86, "ProTanki Online");
-            if (Directory.Exists(x86Path))
-            {
-                return x86Path;
-            }
-
-            return standardPath;
+            return Directory.Exists(x86Path) ? x86Path : standardPath;
         }
 
-        private static string GetSourceCenteredLibraryPath()
+        private static string? GetSourceCenteredLibraryPath()
         {
-            string primaryPath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Assets",
-                "HUD",
-                "Centered",
-                "library.swf"
-            );
-            if (File.Exists(primaryPath))
+            string[] candidates =
+            [
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Assets",
+                    "HUD",
+                    "Centered",
+                    "library.swf"
+                ),
+                Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "Assets",
+                    "HUD",
+                    "Centered",
+                    "library.swf"
+                ),
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "..",
+                    "..",
+                    "..",
+                    "Assets",
+                    "HUD",
+                    "Centered",
+                    "library.swf"
+                ),
+            ];
+
+            foreach (string path in candidates)
             {
-                return primaryPath;
+                if (File.Exists(path))
+                {
+                    return Path.GetFullPath(path);
+                }
             }
 
-            string fallbackPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Assets",
-                "HUD",
-                "Centered",
-                "library.swf"
-            );
-            return fallbackPath;
+            return null;
         }
 
-        private static string GetInstallBatchScriptPath()
+        private static string? GetInstallBatchScriptPath()
         {
-            string primaryPath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Assets",
-                "HUD",
-                "InstallLoaderPatch.bat"
-            );
-            if (File.Exists(primaryPath))
+            string[] candidates =
+            [
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Assets",
+                    "HUD",
+                    "InstallLoaderPatch.bat"
+                ),
+                Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "Assets",
+                    "HUD",
+                    "InstallLoaderPatch.bat"
+                ),
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "..",
+                    "..",
+                    "..",
+                    "Assets",
+                    "HUD",
+                    "InstallLoaderPatch.bat"
+                ),
+            ];
+
+            foreach (string path in candidates)
             {
-                return primaryPath;
+                if (File.Exists(path))
+                {
+                    return Path.GetFullPath(path);
+                }
             }
 
-            string fallbackPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Assets",
-                "HUD",
-                "InstallLoaderPatch.bat"
-            );
-            return fallbackPath;
+            return null;
         }
 
         public bool IsCenteredHudEnabled()
@@ -134,8 +162,8 @@ namespace TextureSwapper.Services
                 {
                     try
                     {
-                        string sourcePath = GetSourceCenteredLibraryPath();
-                        if (!File.Exists(sourcePath))
+                        string? sourcePath = GetSourceCenteredLibraryPath();
+                        if (sourcePath is null || !File.Exists(sourcePath))
                         {
                             string err = $"Centered HUD asset not found at '{sourcePath}'.";
                             Log.Error(err);
@@ -145,7 +173,7 @@ namespace TextureSwapper.Services
                         string targetDir = GetLocalStorePath();
                         if (!Directory.Exists(targetDir))
                         {
-                            Directory.CreateDirectory(targetDir);
+                            _ = Directory.CreateDirectory(targetDir);
                         }
 
                         string targetPath = Path.Combine(targetDir, "library.swf");
@@ -182,7 +210,10 @@ namespace TextureSwapper.Services
                 if (File.Exists(targetPath))
                 {
                     File.Delete(targetPath);
-                    Log.Information("Centered HUD removed from Local Store: {TargetPath}", targetPath);
+                    Log.Information(
+                        "Centered HUD removed from Local Store: {TargetPath}",
+                        targetPath
+                    );
                 }
                 return (true, null);
             }
@@ -195,58 +226,53 @@ namespace TextureSwapper.Services
 
         public async Task<(bool Success, string? ErrorMessage)> InstallLoaderPatchAsync()
         {
-            return await Task.Run<(bool Success, string? ErrorMessage)>(
-                () =>
+            try
+            {
+                string? scriptPath = GetInstallBatchScriptPath();
+                if (scriptPath is null || !File.Exists(scriptPath))
                 {
-                    try
-                    {
-                        string scriptPath = GetInstallBatchScriptPath();
-                        if (!File.Exists(scriptPath))
-                        {
-                            string err = $"Installer script not found at '{scriptPath}'.";
-                            Log.Error(err);
-                            return (false, err);
-                        }
-
-                        if (FileHelper.IsGameRunning())
-                        {
-                            string err =
-                                "ProTanki is running! Please close the game before patching StandaloneLoader.";
-                            Log.Warning(err);
-                            return (false, err);
-                        }
-
-                        ProcessStartInfo psi = new()
-                        {
-                            FileName = "cmd.exe",
-                            Arguments = $"/c \"\"{scriptPath}\"\"",
-                            UseShellExecute = true,
-                            Verb = "runas"
-                        };
-
-                        using Process? proc = Process.Start(psi);
-                        if (proc == null)
-                        {
-                            return (false, "Could not launch elevated patch installer.");
-                        }
-
-                        proc.WaitForExit();
-
-                        if (IsLoaderPatched())
-                        {
-                            Log.Information("StandaloneLoader patch verified successfully.");
-                            return (true, null);
-                        }
-
-                        return (false, "StandaloneLoader patch did not complete or was cancelled.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to execute patch installer.");
-                        return (false, ex.Message);
-                    }
+                    string err = $"Installer script not found at '{scriptPath}'.";
+                    Log.Error(err);
+                    return (false, err);
                 }
-            );
+
+                if (FileHelper.IsGameRunning())
+                {
+                    string err =
+                        "ProTanki is running! Please close the game before patching StandaloneLoader.";
+                    Log.Warning(err);
+                    return (false, err);
+                }
+
+                ProcessStartInfo psi = new()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c \"\"{scriptPath}\"\"",
+                    UseShellExecute = true,
+                    Verb = "runas",
+                };
+
+                using Process? proc = Process.Start(psi);
+                if (proc == null)
+                {
+                    return (false, "Could not launch elevated patch installer.");
+                }
+
+                await proc.WaitForExitAsync();
+
+                if (IsLoaderPatched())
+                {
+                    Log.Information("StandaloneLoader patch verified successfully.");
+                    return (true, null);
+                }
+
+                return (false, "StandaloneLoader patch did not complete or was cancelled.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to execute patch installer.");
+                return (false, ex.Message);
+            }
         }
     }
 }

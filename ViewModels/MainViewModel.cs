@@ -11,7 +11,7 @@ using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.Helpers.Utilities;
-using TextureSwapper.Services;
+using TextureSwapper.Seasonal;
 using TextureSwapper.ViewModels.Base;
 using TextureSwapper.ViewModels.Tabs;
 using Wpf.Ui.Appearance;
@@ -53,15 +53,23 @@ namespace TextureSwapper.ViewModels
         public ISmokyShotComposer SmokyShotComposer => ShotEffectComposers.Smoky;
         public IParachuteComposer ParachuteComposer { get; }
         public IPropComposer PropComposer { get; }
-        public HalloweenThemeService HalloweenThemeService { get; }
-        public HalloweenSoundService HalloweenSoundService { get; }
-        public bool IsHalloweenThemeActive => HalloweenThemeService.IsHalloweenActive;
-        public bool IsHalloweenAtmosphereVisible =>
-            IsHalloweenThemeActive && Settings.EnableHalloweenAtmosphereAnimation;
+        public IHudService HudService { get; }
+        public SeasonalThemeService SeasonalThemeService { get; }
+        public SeasonalAudioService SeasonalAudioService { get; }
+
+        public SeasonalThemeService HalloweenThemeService => SeasonalThemeService;
+        public SeasonalAudioService HalloweenSoundService => SeasonalAudioService;
+
+        public bool IsSeasonalThemeActive => SeasonalThemeService.IsSeasonalActive;
+        public bool IsHalloweenThemeActive => IsSeasonalThemeActive;
+
+        public bool IsSeasonalAtmosphereVisible =>
+            IsSeasonalThemeActive && Settings.EnableSeasonalAtmosphereAnimation;
+        public bool IsHalloweenAtmosphereVisible => IsSeasonalAtmosphereVisible;
 
         public string AppLogoSource =>
-            (IsHalloweenThemeActive && Settings.EnableHalloweenAppLogo)
-                ? "pack://application:,,,/Assets/halloween_logo.png"
+            (IsSeasonalThemeActive && Settings.EnableSeasonalAppLogo)
+                ? SeasonalThemeConfig.Current.AppLogoSource
                 : "pack://application:,,,/Assets/logo.png";
 
         public string NavSkinsText => LocalizationService.GetString("Loc_Nav_Skins") ?? "Skins";
@@ -80,15 +88,21 @@ namespace TextureSwapper.ViewModels
             LocalizationService.GetString("Loc_Nav_Settings") ?? "Settings";
 
         public string AppTitleText =>
-            (IsHalloweenThemeActive && Settings.EnableHalloweenAppLogo)
-                ? "🎃 ProTanki Texture Swapper 🎃"
+            (IsSeasonalThemeActive && Settings.EnableSeasonalAppLogo)
+                ? SeasonalThemeConfig.Current.AppTitle
                 : "ProTanki Texture Swapper";
 
-        public void NotifyHalloweenVisualsChanged()
+        public void NotifySeasonalVisualsChanged()
         {
+            OnPropertyChanged(nameof(IsSeasonalAtmosphereVisible));
             OnPropertyChanged(nameof(IsHalloweenAtmosphereVisible));
             OnPropertyChanged(nameof(AppLogoSource));
             OnPropertyChanged(nameof(AppTitleText));
+        }
+
+        public void NotifyHalloweenVisualsChanged()
+        {
+            NotifySeasonalVisualsChanged();
         }
 
         public string DeviceHwidDisplay => DeviceBanService.GetDeviceHardwareId();
@@ -203,8 +217,9 @@ namespace TextureSwapper.ViewModels
             IShotEffectComposerRegistry shotEffectComposers,
             IParachuteComposer parachuteComposer,
             IPropComposer propComposer,
-            HalloweenThemeService halloweenThemeService,
-            HalloweenSoundService halloweenSoundService
+            IHudService hudService,
+            SeasonalThemeService seasonalThemeService,
+            SeasonalAudioService seasonalAudioService
         )
         {
             NotificationService = notificationService;
@@ -221,23 +236,26 @@ namespace TextureSwapper.ViewModels
             ShotEffectComposers = shotEffectComposers;
             ParachuteComposer = parachuteComposer;
             PropComposer = propComposer;
-            HalloweenThemeService = halloweenThemeService;
-            HalloweenSoundService = halloweenSoundService;
-            HalloweenThemeService.HalloweenThemeChanged += (_, active) =>
+            HudService = hudService;
+            SeasonalThemeService = seasonalThemeService;
+            SeasonalAudioService = seasonalAudioService;
+            SeasonalThemeService.SeasonalThemeChanged += (_, active) =>
             {
                 if (active)
                 {
-                    HalloweenSoundService.PlayGhostWail();
-                    HalloweenSoundService.SetAmbientDrone(true);
+                    SeasonalAudioService.PlaySpecialCue();
+                    SeasonalAudioService.SetAmbientDrone(true);
                 }
                 else
                 {
-                    HalloweenSoundService.SetAmbientDrone(false);
+                    SeasonalAudioService.SetAmbientDrone(false);
                 }
             };
-            HalloweenThemeService.HalloweenThemeChanged += (_, _) =>
+            SeasonalThemeService.SeasonalThemeChanged += (_, _) =>
             {
+                OnPropertyChanged(nameof(IsSeasonalThemeActive));
                 OnPropertyChanged(nameof(IsHalloweenThemeActive));
+                OnPropertyChanged(nameof(IsSeasonalAtmosphereVisible));
                 OnPropertyChanged(nameof(IsHalloweenAtmosphereVisible));
                 OnPropertyChanged(nameof(AppLogoSource));
                 OnPropertyChanged(nameof(AppTitleText));
@@ -252,7 +270,7 @@ namespace TextureSwapper.ViewModels
             };
 
             Settings = SettingsService.Load();
-            HalloweenThemeService.CheckAndApply(notify: false);
+            SeasonalThemeService.CheckAndApply(notify: false);
 
             SkinsTabVM = new SkinsTabViewModel(this);
             PaintsTabVM = new PaintsTabViewModel(this);
@@ -641,8 +659,9 @@ namespace TextureSwapper.ViewModels
             if (release != null)
             {
                 LatestGitHubRelease = release.TagName;
-                string currentVersion =
-                    Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "Unknown";
+                string currentVersion = FormatVersion(
+                    Assembly.GetExecutingAssembly().GetName().Version
+                );
                 string latestVersion = release.TagName.TrimStart('v');
 
                 Log.Information(
@@ -718,12 +737,24 @@ namespace TextureSwapper.ViewModels
             return false;
         }
 
+        public static string FormatVersion(Version? version)
+        {
+            if (version == null)
+            {
+                return "3.0";
+            }
+
+            return version.Build > 0
+                ? $"{version.Major}.{version.Minor}.{version.Build}"
+                : $"{version.Major}.{version.Minor}";
+        }
+
         internal static bool IsNewerVersion(string currentVersion, string latestVersion)
         {
             try
             {
-                Version current = new(currentVersion);
-                Version latest = new(latestVersion);
+                Version current = NormalizeVersion(new Version(currentVersion));
+                Version latest = NormalizeVersion(new Version(latestVersion));
                 return latest > current;
             }
             catch (Exception ex)
@@ -731,6 +762,11 @@ namespace TextureSwapper.ViewModels
                 Log.Warning(ex, $"Failed to parse versions: {currentVersion} vs {latestVersion}");
                 return false;
             }
+        }
+
+        private static Version NormalizeVersion(Version v)
+        {
+            return new Version(v.Major, v.Minor, Math.Max(0, v.Build), Math.Max(0, v.Revision));
         }
 
         private void ExecuteBrowse(object? parameter)
@@ -829,7 +865,8 @@ namespace TextureSwapper.ViewModels
             string message = LocalizationService.GetString("Loc_ClearCache_ConfirmMessage");
             if (string.IsNullOrWhiteSpace(message) || message == "Loc_ClearCache_ConfirmMessage")
             {
-                message = "Are you sure you want to clear the ProTanki cache? All cached game textures will be removed.";
+                message =
+                    "Are you sure you want to clear the ProTanki cache? All cached game textures will be removed.";
             }
 
             string yesText = LocalizationService.GetString("Loc_Common_Yes");

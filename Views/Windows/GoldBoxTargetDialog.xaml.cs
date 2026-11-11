@@ -8,7 +8,7 @@ namespace TextureSwapper.Views.Windows
     {
         NormalOnly,
         ThematicOnly,
-        Both
+        Both,
     }
 
     public partial class GoldBoxTargetDialog : FluentWindow
@@ -22,18 +22,10 @@ namespace TextureSwapper.Views.Windows
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NormalRadioButton.IsChecked == true)
-            {
-                SelectedChoice = GoldBoxTargetChoice.NormalOnly;
-            }
-            else if (PumpkinRadioButton.IsChecked == true)
-            {
-                SelectedChoice = GoldBoxTargetChoice.ThematicOnly;
-            }
-            else
-            {
-                SelectedChoice = GoldBoxTargetChoice.Both;
-            }
+            SelectedChoice =
+                NormalRadioButton.IsChecked == true ? GoldBoxTargetChoice.NormalOnly
+                : PumpkinRadioButton.IsChecked == true ? GoldBoxTargetChoice.ThematicOnly
+                : GoldBoxTargetChoice.Both;
 
             DialogResult = true;
             Close();

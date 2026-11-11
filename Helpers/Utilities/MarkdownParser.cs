@@ -11,10 +11,18 @@ namespace TextureSwapper.Helpers.Utilities
 {
     public static partial class MarkdownParser
     {
-        [GeneratedRegex(@"(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)", RegexOptions.None, matchTimeoutMilliseconds: 1000)]
+        [GeneratedRegex(
+            @"(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)",
+            RegexOptions.None,
+            matchTimeoutMilliseconds: 1000
+        )]
         private static partial Regex InlinePatternRegex();
 
-        [GeneratedRegex(@"^\[([^\]]+)\]\(([^)]+)\)$", RegexOptions.None, matchTimeoutMilliseconds: 1000)]
+        [GeneratedRegex(
+            @"^\[([^\]]+)\]\(([^)]+)\)$",
+            RegexOptions.None,
+            matchTimeoutMilliseconds: 1000
+        )]
         private static partial Regex LinkMatchRegex();
 
         [GeneratedRegex(@"^\d+\.\s+", RegexOptions.None, matchTimeoutMilliseconds: 1000)]

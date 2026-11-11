@@ -30,6 +30,10 @@ namespace TextureSwapper.Services
             string localSuppliesPath = Path.Combine(baseDir, Constants.SuppliesSkinsJson);
             string localSpawnersPath = Path.Combine(baseDir, Constants.SpawnersSkinsJson);
             string localPaintsPath = Path.Combine(baseDir, Constants.PaintsSkinsJson);
+            string localAnimatedPaintsPath = Path.Combine(
+                baseDir,
+                Constants.AnimatedPaintsSkinsJson
+            );
 
             (string Name, string LocalPath, string RemoteFileName)[] categories =
             [
@@ -57,6 +61,11 @@ namespace TextureSwapper.Services
                     Name: "Paints",
                     LocalPath: localPaintsPath,
                     RemoteFileName: Constants.PaintsSkinsJson
+                ),
+                (
+                    Name: "Animated Paints",
+                    LocalPath: localAnimatedPaintsPath,
+                    RemoteFileName: Constants.AnimatedPaintsSkinsJson
                 ),
             ];
 
@@ -100,8 +109,30 @@ namespace TextureSwapper.Services
                     bool merged = false;
                     foreach (SkinModel remoteSkin in remoteSkins)
                     {
+                        if (
+                            RemoteFileName == Constants.PaintsSkinsJson
+                            && remoteSkin.ItemName != null
+                            && (
+                                remoteSkin.ItemName.Equals(
+                                    "Animated",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                                || remoteSkin.ItemName.Equals(
+                                    "Noizy Paints",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                        )
+                        {
+                            continue;
+                        }
+
                         SkinModel? localSkin = catSkins.FirstOrDefault(s =>
                             s.Name.Equals(remoteSkin.Name, StringComparison.OrdinalIgnoreCase)
+                            && (s.ItemName ?? string.Empty).Equals(
+                                remoteSkin.ItemName ?? string.Empty,
+                                StringComparison.OrdinalIgnoreCase
+                            )
                         );
                         if (localSkin != null)
                         {
@@ -110,17 +141,50 @@ namespace TextureSwapper.Services
                                 || localSkin.LightmapTarget != remoteSkin.LightmapTarget
                                 || localSkin.AlphaTarget != remoteSkin.AlphaTarget
                                 || localSkin.ModelTarget != remoteSkin.ModelTarget
-                                || localSkin.SecondaryDetailsTarget != remoteSkin.SecondaryDetailsTarget
-                                || localSkin.SecondaryModelTarget != remoteSkin.SecondaryModelTarget;
+                                || localSkin.SecondaryDetailsTarget
+                                    != remoteSkin.SecondaryDetailsTarget
+                                || localSkin.SecondaryModelTarget
+                                    != remoteSkin.SecondaryModelTarget;
 
-                            bool isLocalEncrypted = localSkin.SourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase);
-
-                            bool metaChanged = !isLocalEncrypted && (
-                                localSkin.SourceFolder != remoteSkin.SourceFolder
-                                || localSkin.PreviewImage != remoteSkin.PreviewImage
+                            bool isLocalEncrypted = localSkin.SourceFolder.StartsWith(
+                                "Textures/Encrypted",
+                                StringComparison.OrdinalIgnoreCase
                             );
+                            bool isAnimatedCategory =
+                                (
+                                    localSkin.ItemName != null
+                                    && localSkin.ItemName.Equals(
+                                        "Animated",
+                                        StringComparison.OrdinalIgnoreCase
+                                    )
+                                )
+                                || (
+                                    remoteSkin.ItemName != null
+                                    && remoteSkin.ItemName.Equals(
+                                        "Animated",
+                                        StringComparison.OrdinalIgnoreCase
+                                    )
+                                );
 
-                            if (targetsChanged || metaChanged)
+                            bool isAnimated =
+                                isAnimatedCategory
+                                || localSkin.SourceFolder.StartsWith(
+                                    "Textures/Paints/Animated",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                                || localSkin.SourceFolder.StartsWith(
+                                    "Textures/Encrypted/Paints/Animated",
+                                    StringComparison.OrdinalIgnoreCase
+                                );
+
+                            bool metaChanged =
+                                !isLocalEncrypted
+                                && (
+                                    localSkin.SourceFolder != remoteSkin.SourceFolder
+                                    || localSkin.PreviewImage != remoteSkin.PreviewImage
+                                );
+
+                            if (targetsChanged || metaChanged || isAnimated)
                             {
                                 if (!skipTargets)
                                 {
@@ -128,8 +192,10 @@ namespace TextureSwapper.Services
                                     localSkin.LightmapTarget = remoteSkin.LightmapTarget;
                                     localSkin.AlphaTarget = remoteSkin.AlphaTarget;
                                     localSkin.ModelTarget = remoteSkin.ModelTarget;
-                                    localSkin.SecondaryDetailsTarget = remoteSkin.SecondaryDetailsTarget;
-                                    localSkin.SecondaryModelTarget = remoteSkin.SecondaryModelTarget;
+                                    localSkin.SecondaryDetailsTarget =
+                                        remoteSkin.SecondaryDetailsTarget;
+                                    localSkin.SecondaryModelTarget =
+                                        remoteSkin.SecondaryModelTarget;
                                 }
                                 else if (targetsChanged)
                                 {
@@ -139,7 +205,14 @@ namespace TextureSwapper.Services
                                     );
                                 }
 
-                                if (!isLocalEncrypted)
+                                if (isAnimatedCategory)
+                                {
+                                    localSkin.SourceFolder = "Textures/Encrypted/Paints/Animated";
+                                    localSkin.PreviewImage =
+                                        $"Textures/Encrypted/Paints/Animated/{localSkin.Name}_preview.png";
+                                    localSkin.IsPremium = true;
+                                }
+                                else if (!isLocalEncrypted)
                                 {
                                     localSkin.SourceFolder = remoteSkin.SourceFolder;
                                     localSkin.PreviewImage = remoteSkin.PreviewImage;
@@ -149,19 +222,35 @@ namespace TextureSwapper.Services
                         }
                         else
                         {
+                            if (
+                                remoteSkin.ItemName != null
+                                && remoteSkin.ItemName.Equals(
+                                    "Animated",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                            {
+                                remoteSkin.SourceFolder = "Textures/Encrypted/Paints/Animated";
+                                remoteSkin.PreviewImage =
+                                    $"Textures/Encrypted/Paints/Animated/{remoteSkin.Name}_preview.png";
+                                remoteSkin.IsPremium = true;
+                            }
                             catSkins.Add(remoteSkin);
                             merged = true;
                         }
                     }
 
-                    HashSet<string> remoteNames = new(
-                        remoteSkins.Select(s => s.Name),
+                    HashSet<string> remoteKeys = new(
+                        remoteSkins.Select(s => $"{(s.ItemName ?? string.Empty)}:{s.Name}"),
                         StringComparer.OrdinalIgnoreCase
                     );
                     int removed = catSkins.RemoveAll(s =>
-                        !remoteNames.Contains(s.Name)
+                        !remoteKeys.Contains($"{(s.ItemName ?? string.Empty)}:{s.Name}")
                         && s.ItemName != "Uploaded"
-                        && !s.SourceFolder.StartsWith("Textures/Encrypted", StringComparison.OrdinalIgnoreCase)
+                        && !s.SourceFolder.StartsWith(
+                            "Textures/Encrypted",
+                            StringComparison.OrdinalIgnoreCase
+                        )
                         && !s.IsPremium
                         && IsSkinMissingAssets(s)
                     );
@@ -173,7 +262,7 @@ namespace TextureSwapper.Services
                     if (merged)
                     {
                         string mergedJson = JsonSerializer.Serialize(catSkins, options);
-                        await File.WriteAllTextAsync(LocalPath, mergedJson, cancellationToken);
+                        await AtomicWriteAllTextAsync(LocalPath, mergedJson, cancellationToken);
                     }
                 }
 
@@ -199,49 +288,52 @@ namespace TextureSwapper.Services
                     foreach (SkinModel skin in missing)
                     {
                         downloadTasks.Add(
-                            Task.Run(async () =>
-                            {
-                                await semaphore.WaitAsync();
-                                try
+                            Task.Run(
+                                async () =>
                                 {
-                                    lock (progressLock)
+                                    await semaphore.WaitAsync();
+                                    try
                                     {
-                                        ProgressChanged?.Invoke(
-                                            $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}..."
-                                        );
-                                    }
-
-                                    await _updateService.EnsureAssetsExistAsync(
-                                        skin,
-                                        p =>
+                                        lock (progressLock)
                                         {
-                                            lock (progressLock)
-                                            {
-                                                ProgressChanged?.Invoke(
-                                                    $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}"
-                                                );
-                                            }
+                                            ProgressChanged?.Invoke(
+                                                $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name}..."
+                                            );
                                         }
-                                    );
 
-                                    Application.Current?.Dispatcher.Invoke(() =>
-                                    {
-                                        skin.NotifyPreviewChanged();
-                                        SkinPreviewUpdated?.Invoke(skin);
-                                    });
-                                }
-                                finally
-                                {
-                                    int currentCompleted = Interlocked.Increment(ref completed);
-                                    lock (progressLock)
-                                    {
-                                        ProgressChanged?.Invoke(
-                                            $"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})..."
+                                        await _updateService.EnsureAssetsExistAsync(
+                                            skin,
+                                            p =>
+                                            {
+                                                lock (progressLock)
+                                                {
+                                                    ProgressChanged?.Invoke(
+                                                        $"Syncing {Name.ToLower()} ({completed + 1}/{missing.Count}): {skin.Name} - {p}"
+                                                    );
+                                                }
+                                            }
                                         );
+
+                                        Application.Current?.Dispatcher.Invoke(() =>
+                                        {
+                                            skin.NotifyPreviewChanged();
+                                            SkinPreviewUpdated?.Invoke(skin);
+                                        });
                                     }
-                                    _ = semaphore.Release();
-                                }
-                            }, cancellationToken)
+                                    finally
+                                    {
+                                        int currentCompleted = Interlocked.Increment(ref completed);
+                                        lock (progressLock)
+                                        {
+                                            ProgressChanged?.Invoke(
+                                                $"Syncing {Name.ToLower()} ({currentCompleted}/{missing.Count})..."
+                                            );
+                                        }
+                                        _ = semaphore.Release();
+                                    }
+                                },
+                                cancellationToken
+                            )
                         );
                     }
 
@@ -280,7 +372,11 @@ namespace TextureSwapper.Services
                     Log.Information(
                         "Remote ingame_paints.json is different from local. Updating..."
                     );
-                    await File.WriteAllTextAsync(localInGamePath, remoteInGameJson!, cancellationToken);
+                    await AtomicWriteAllTextAsync(
+                        localInGamePath,
+                        remoteInGameJson!,
+                        cancellationToken
+                    );
                     remoteInGamePaints = fetchedPaints;
                 }
             }
@@ -353,12 +449,14 @@ namespace TextureSwapper.Services
                                 || !localEffect.PreviewImage.Equals(
                                     remoteEffect.PreviewImage,
                                     StringComparison.OrdinalIgnoreCase
-                                );
+                                )
+                                || localEffect.IsPremium != remoteEffect.IsPremium;
 
                             if (targetsChanged || metaChanged)
                             {
                                 localEffect.SourceFolder = remoteEffect.SourceFolder;
                                 localEffect.PreviewImage = remoteEffect.PreviewImage;
+                                localEffect.IsPremium = remoteEffect.IsPremium;
                                 if (!skipTargets)
                                 {
                                     localEffect.Targets = remoteEffect.Targets;
@@ -396,7 +494,7 @@ namespace TextureSwapper.Services
                     if (merged)
                     {
                         string mergedJson = JsonSerializer.Serialize(shotEffects, options);
-                        await File.WriteAllTextAsync(localPath, mergedJson, cancellationToken);
+                        await AtomicWriteAllTextAsync(localPath, mergedJson, cancellationToken);
                     }
                 }
             }
@@ -524,6 +622,23 @@ namespace TextureSwapper.Services
             return list;
         }
 
+        private static async Task AtomicWriteAllTextAsync(
+            string path,
+            string contents,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string directory = Path.GetDirectoryName(path) ?? string.Empty;
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                _ = Directory.CreateDirectory(directory);
+            }
+
+            string tempPath = path + ".tmp";
+            await File.WriteAllTextAsync(tempPath, contents, cancellationToken);
+            File.Move(tempPath, path, overwrite: true);
+        }
+
         private bool IsSkinMissingAssets(SkinModel skin)
         {
             if (
@@ -549,7 +664,15 @@ namespace TextureSwapper.Services
                 bool found = false;
                 if (Directory.Exists(folder))
                 {
-                    string[] allowedExts = [".png", ".jpg", ".jpeg"];
+                    string[] allowedExts =
+                    [
+                        ".png",
+                        ".jpg",
+                        ".jpeg",
+                        ".png.enc",
+                        ".jpg.enc",
+                        ".jpeg.enc",
+                    ];
                     foreach (string ext in allowedExts)
                     {
                         if (File.Exists(Path.Combine(folder, $"{skin.Name}{ext}")))
@@ -565,7 +688,12 @@ namespace TextureSwapper.Services
             List<string> suffixes =
                 skin.Category.Equals("Supplies", StringComparison.OrdinalIgnoreCase)
                 || skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
-                    ? (skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase) && skin.Name.Contains("Parachute", StringComparison.OrdinalIgnoreCase) ? ["para"] : ["details"])
+                    ? (
+                        skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
+                        && skin.Name.Contains("Parachute", StringComparison.OrdinalIgnoreCase)
+                            ? ["para"]
+                            : ["details"]
+                    )
                     : ["details", "lightmap"];
 
             if (!string.IsNullOrEmpty(skin.AlphaTarget))
