@@ -163,6 +163,17 @@ namespace TextureSwapper.Services
         {
             try
             {
+                if (!string.IsNullOrEmpty(skin.PreviewImage)
+                    && !skin.PreviewImage.StartsWith("pack:", StringComparison.OrdinalIgnoreCase))
+                {
+                    await EnsureFileExistsAsync(
+                        skin.PreviewImage,
+                        "Preview",
+                        skin.SourceFolder,
+                        onProgress
+                    );
+                }
+
                 if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
                 {
                     await EnsureFileExistsAsync(
@@ -171,15 +182,38 @@ namespace TextureSwapper.Services
                         skin.SourceFolder,
                         onProgress
                     );
+
+                    bool isAnimatedOrEncrypted =
+                        skin.SourceFolder.StartsWith(
+                            "Textures/Encrypted/Paints",
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                        || skin.SourceFolder.StartsWith(
+                            "Textures/Paints/Animated",
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                        || (skin.ItemName != null && skin.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase))
+                        || (skin.ItemName != null && skin.ItemName.Equals("Noizy Paints", StringComparison.OrdinalIgnoreCase));
+
+                    if (isAnimatedOrEncrypted)
+                    {
+                        await EnsureFileExistsAsync(
+                            Path.Combine(skin.SourceFolder, $"{skin.Name}.json").Replace("\\", "/"),
+                            string.Empty,
+                            skin.SourceFolder,
+                            onProgress,
+                            isOptional: true
+                        );
+                        await EnsureFileExistsAsync(
+                            Path.Combine(skin.SourceFolder, $"{skin.Name}.jpg.enc").Replace("\\", "/"),
+                            string.Empty,
+                            skin.SourceFolder,
+                            onProgress,
+                            isOptional: true
+                        );
+                    }
                     return;
                 }
-
-                await EnsureFileExistsAsync(
-                    skin.PreviewImage,
-                    "Preview",
-                    skin.SourceFolder,
-                    onProgress
-                );
 
                 List<string> prefixes =
                     skin.Category.Equals("Spawners", StringComparison.OrdinalIgnoreCase)
@@ -220,30 +254,12 @@ namespace TextureSwapper.Services
             string exactRelativePath,
             string filePrefix,
             string sourceFolder,
-            Action<string>? onProgress = null
+            Action<string>? onProgress = null,
+            bool isOptional = false
         )
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string localFolder = FileHelper.GetSafePath(baseDir, sourceFolder.Replace("\\", "/"));
-
-            string[] validExtensions = [".png", ".jpg", ".jpeg", ".3ds", ".enc"];
-
-            if (Directory.Exists(localFolder))
-            {
-                string[] localFiles = Directory.GetFiles(localFolder, $"{filePrefix}.*");
-                foreach (string file in localFiles)
-                {
-                    string ext = Path.GetExtension(file).ToLower();
-                    if (
-                        validExtensions.Contains(ext)
-                        || file.EndsWith(".enc", StringComparison.OrdinalIgnoreCase)
-                    )
-                    {
-                        Log.Debug($"Asset already exists locally: {file}");
-                        return;
-                    }
-                }
-            }
+            string[] validExtensions = [".png", ".jpg", ".jpeg", ".3ds", ".enc", ".json"];
 
             if (!string.IsNullOrEmpty(exactRelativePath))
             {
@@ -278,90 +294,122 @@ namespace TextureSwapper.Services
                         }
                     }
                 }
-            }
 
-            string downloadLocalPath = string.Empty;
-            byte[]? data = null;
-
-            string fileNameWithDefaultExtension;
-            string normalizedRelativePath;
-            if (!string.IsNullOrEmpty(exactRelativePath))
-            {
-                fileNameWithDefaultExtension = Path.GetFileName(exactRelativePath);
-                normalizedRelativePath = exactRelativePath.Replace("\\", "/");
-                downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
+                string fileNameWithDefaultExtension = Path.GetFileName(exactRelativePath);
+                string normalizedRelativePath = exactRelativePath.Replace("\\", "/");
+                string downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
 
                 Log.Information("Asset missing. Starting download: {Path}", downloadLocalPath);
                 string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
                 onProgress?.Invoke($"Downloading {fileNameWithDefaultExtension}...");
 
-                _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
-                using HttpResponseMessage response = await GetWithRetryAsync(url);
-                data = await response.Content.ReadAsByteArrayAsync();
-            }
-            else
-            {
-                bool isEncryptedFolder = sourceFolder.StartsWith(
-                    "Textures/Encrypted",
-                    StringComparison.OrdinalIgnoreCase
-                );
-                string[] extensionsToTry = filePrefix.Equals(
-                    "object",
-                    StringComparison.OrdinalIgnoreCase
-                )
-                    ? (isEncryptedFolder ? [".3ds.enc", ".3ds"] : [".3ds", ".3ds.enc"])
-                    : (
-                        isEncryptedFolder
-                            ? [".png.enc", ".jpg.enc", ".png", ".jpg", ".jpeg"]
-                            : [".png", ".jpg", ".jpeg", ".png.enc", ".jpg.enc"]
-                    );
-
-                foreach (string ext in extensionsToTry)
+                try
                 {
-                    fileNameWithDefaultExtension = $"{filePrefix}{ext}";
-                    normalizedRelativePath = Path.Combine(
-                            sourceFolder,
-                            fileNameWithDefaultExtension
-                        )
-                        .Replace("\\", "/");
-                    downloadLocalPath = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
-                    string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
-
-                    try
+                    _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
+                    using HttpResponseMessage response = await GetWithRetryAsync(url);
+                    if (!response.IsSuccessStatusCode)
                     {
-                        Log.Information($"Trying download: {downloadLocalPath}");
-                        using HttpResponseMessage response = await GetWithRetryAsync(url);
-                        if (response.IsSuccessStatusCode)
+                        if (isOptional)
                         {
-                            data = await response.Content.ReadAsByteArrayAsync();
-                            break;
+                            Log.Debug("Optional asset not found on remote (status {StatusCode}): {Url}", response.StatusCode, url);
+                            return;
                         }
+                        _ = response.EnsureSuccessStatusCode();
                     }
-                    catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+
+                    byte[] data = await response.Content.ReadAsByteArrayAsync();
+                    await VerifyAndSaveFileAsync(data, downloadLocalPath);
+                    Log.Information($"Asset downloaded and saved: {downloadLocalPath}");
+                    return;
+                }
+                catch (HttpRequestException ex) when (isOptional && ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    Log.Debug("Optional asset not found (404): {Url}", url);
+                    return;
+                }
+            }
+
+            string localFolder = FileHelper.GetSafePath(baseDir, sourceFolder.Replace("\\", "/"));
+            if (Directory.Exists(localFolder))
+            {
+                string[] localFiles = Directory.GetFiles(localFolder, $"{filePrefix}.*");
+                foreach (string file in localFiles)
+                {
+                    string ext = Path.GetExtension(file).ToLower();
+                    if (
+                        validExtensions.Contains(ext)
+                        || file.EndsWith(".enc", StringComparison.OrdinalIgnoreCase)
+                    )
                     {
-                        Log.Warning(
-                            $"Resource not found (404): {url}. Status: {HttpStatusCode.NotFound}."
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(
-                            $"Non-404 error trying to download {downloadLocalPath}: {ex.Message}"
-                        );
+                        Log.Debug($"Asset already exists locally: {file}");
+                        return;
                     }
                 }
+            }
 
-                if (data == null)
+            string downloadLocalPathPrefix = string.Empty;
+            byte[]? prefixData = null;
+
+            bool isEncryptedFolder = sourceFolder.StartsWith(
+                "Textures/Encrypted",
+                StringComparison.OrdinalIgnoreCase
+            );
+            string[] extensionsToTry = filePrefix.Equals(
+                "object",
+                StringComparison.OrdinalIgnoreCase
+            )
+                ? (isEncryptedFolder ? [".3ds.enc", ".3ds"] : [".3ds", ".3ds.enc"])
+                : (
+                    isEncryptedFolder
+                        ? [".png.enc", ".jpg.enc", ".png", ".jpg", ".jpeg"]
+                        : [".png", ".jpg", ".jpeg", ".png.enc", ".jpg.enc"]
+                );
+
+            foreach (string ext in extensionsToTry)
+            {
+                string fileNameWithDefaultExtension = $"{filePrefix}{ext}";
+                string normalizedRelativePath = Path.Combine(
+                        sourceFolder,
+                        fileNameWithDefaultExtension
+                    )
+                    .Replace("\\", "/");
+                downloadLocalPathPrefix = FileHelper.GetSafePath(baseDir, normalizedRelativePath);
+                string url = $"{Constants.GitHubRawUrl}/{normalizedRelativePath}";
+
+                try
                 {
-                    throw new FileNotFoundException(
-                        $"Could not find remote asset with prefix '{filePrefix}' in folder '{sourceFolder}' on GitHub."
+                    Log.Information($"Trying download: {downloadLocalPathPrefix}");
+                    using HttpResponseMessage response = await GetWithRetryAsync(url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        prefixData = await response.Content.ReadAsByteArrayAsync();
+                        break;
+                    }
+                }
+                catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    Log.Warning(
+                        $"Resource not found (404): {url}. Status: {HttpStatusCode.NotFound}."
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(
+                        $"Non-404 error trying to download {downloadLocalPathPrefix}: {ex.Message}"
                     );
                 }
             }
 
-            _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPath)!);
-            await VerifyAndSaveFileAsync(data, downloadLocalPath);
-            Log.Information($"Asset downloaded and saved: {downloadLocalPath}");
+            if (prefixData == null)
+            {
+                throw new FileNotFoundException(
+                    $"Could not find remote asset with prefix '{filePrefix}' in folder '{sourceFolder}' on GitHub."
+                );
+            }
+
+            _ = Directory.CreateDirectory(Path.GetDirectoryName(downloadLocalPathPrefix)!);
+            await VerifyAndSaveFileAsync(prefixData, downloadLocalPathPrefix);
+            Log.Information($"Asset downloaded and saved: {downloadLocalPathPrefix}");
         }
 
         private async Task VerifyAndSaveFileAsync(

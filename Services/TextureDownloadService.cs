@@ -39,11 +39,21 @@ namespace TextureSwapper.Services
                 string hullsDir = Path.Combine(baseDir, "Textures", "Hulls");
                 string turretsDir = Path.Combine(baseDir, "Textures", "Turrets");
                 string shotEffectsDir = Path.Combine(baseDir, "Textures", "ShotEffects");
+                string paintsDir = Path.Combine(baseDir, "Textures", "Paints");
+                string animatedPaintsDir = Path.Combine(
+                    baseDir,
+                    "Textures",
+                    "Encrypted",
+                    "Paints",
+                    "Animated"
+                );
 
                 if (
                     !Directory.Exists(hullsDir)
                     || !Directory.Exists(turretsDir)
                     || !Directory.Exists(shotEffectsDir)
+                    || !Directory.Exists(paintsDir)
+                    || !Directory.Exists(animatedPaintsDir)
                 )
                 {
                     return false;
@@ -58,8 +68,14 @@ namespace TextureSwapper.Services
                 bool hasShotEffects = Directory
                     .EnumerateFiles(shotEffectsDir, "*.*", SearchOption.AllDirectories)
                     .Any();
+                bool hasPaints = Directory
+                    .EnumerateFiles(paintsDir, "*.*", SearchOption.AllDirectories)
+                    .Any();
+                bool hasAnimatedPaints = Directory
+                    .EnumerateFiles(animatedPaintsDir, "*.*", SearchOption.AllDirectories)
+                    .Any();
 
-                return hasHulls && hasTurrets && hasShotEffects;
+                return hasHulls && hasTurrets && hasShotEffects && hasPaints && hasAnimatedPaints;
             }
             catch (Exception ex)
             {

@@ -10,11 +10,13 @@ namespace TextureSwapper.Services
 {
     public sealed class SkinSyncService(
         IUpdateService updateService,
-        ISettingsService settingsService
+        ISettingsService settingsService,
+        ITextureDownloadService textureDownloadService
     ) : ISkinSyncService
     {
         private readonly IUpdateService _updateService = updateService;
         private readonly ISettingsService _settingsService = settingsService;
+        private readonly ITextureDownloadService _textureDownloadService = textureDownloadService;
         public event Action<string>? ProgressChanged;
         public event Action<SkinModel>? SkinPreviewUpdated;
         private readonly JsonSerializerOptions options = new() { WriteIndented = true };
@@ -71,6 +73,7 @@ namespace TextureSwapper.Services
 
             List<SkinModel> combinedSkins = [];
             List<InGamePaintModel>? remoteInGamePaints = null;
+            bool hasTriggeredBulkDownload = false;
 
             foreach ((string Name, string LocalPath, string RemoteFileName) in categories)
             {
@@ -277,8 +280,41 @@ namespace TextureSwapper.Services
                         missing.Count,
                         Name
                     );
+
+                    if (!hasTriggeredBulkDownload && !_updateService.IsOffline)
+                    {
+                        hasTriggeredBulkDownload = true;
+                        Log.Information(
+                            "Triggering bulk texture pack download to restore {Count} missing {Category} skins.",
+                            missing.Count,
+                            Name
+                        );
+                        ProgressChanged?.Invoke($"Updating textures pack ({missing.Count} skins missing)...");
+                        bool downloaded = await _textureDownloadService.DownloadAndExtractTexturesAsync(
+                            (status, _) => ProgressChanged?.Invoke(status),
+                            cancellationToken
+                        );
+                        if (downloaded)
+                        {
+                            missing =
+                            [
+                                .. catSkins.Where(s =>
+                                    s.ItemName != "Uploaded" && IsSkinMissingAssets(s)
+                                ),
+                            ];
+                            Application.Current?.Dispatcher.Invoke(() =>
+                            {
+                                foreach (SkinModel s in catSkins)
+                                {
+                                    s.NotifyPreviewChanged();
+                                    SkinPreviewUpdated?.Invoke(s);
+                                }
+                            });
+                        }
+                    }
                 }
-                else if (missing.Count > 0 && !_updateService.IsOffline)
+
+                if (missing.Count > 0 && missing.Count <= 25 && !_updateService.IsOffline)
                 {
                     int completed = 0;
                     object progressLock = new();

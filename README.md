@@ -2,7 +2,7 @@
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20(64--bit)-0078D6?logo=windows)](https://microsoft.com/windows)
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/3Bgs7Jd9xk)
-[![Release](https://img.shields.io/badge/Release-v2.2.0-success)](https://github.com/Gabriel250903/ProTankiTextureSwapper/releases)
+[![Release](https://img.shields.io/badge/Release-v3.1-success)](https://github.com/Gabriel250903/ProTankiTextureSwapper/releases)
 
 A client-side texture and asset manager for ProTanki. Swap hull skins, turret models, shot effects, animated and custom paints, custom HUD modifications, supply boxes, parachutes, and map props directly in your game cache without touching the game client or executables.
 
@@ -11,9 +11,10 @@ A client-side texture and asset manager for ProTanki. Swap hull skins, turret mo
 ## Features
 
 - **Hulls & Turrets**: Swap default models with Legacy, Prime, XT, XT HD, Demonic, and Tanki X skins.
-- **Custom & Animated Paints**: Swap custom textures onto in-game paints and enjoy animated paints with seamless frame cycles.
+- **Classic 2010 Shot Effects**: Old visual presets for Railgun, Isida, Firebird, Freeze, and Twins.
+- **Shot Effects & Dust Editors**: Custom colors, hues, contrast, lasers, flames, and dust particles for all turrets.
+- **Custom & Animated Paints**: Swap custom textures onto in-game paints and enjoy animated paints with smooth frame cycles.
 - **ProTanki Modifications & Custom HUD**: Centered supplies bar and custom `.swf` support powered by an automated StandaloneLoader patch.
-- **Shot Effects & Dust**: Customize shot effects, lasers, flames, and dust particles for all turrets.
 - **Props & Parachutes**: Edit map props, buildings, terrain textures, and supply drop parachutes.
 - **Supplies & Gold Boxes**: Holiday gold boxes (2011–2023), new supply boxes, and LC flag pedestals with target selection dialogs.
 - **Seasonal Experience**: Dynamic seasonal visual themes and ambient audio tailored to holidays throughout the year.
@@ -44,7 +45,7 @@ A client-side texture and asset manager for ProTanki. Swap hull skins, turret mo
 
 ## Premium & Free Trial
 
-TextureSwapper includes free textures for everyone, along with optional Premium features for advanced editors (Props, Parachutes, Shot Effects, Custom HUD and Animated Paints) and exclusive high-tier skins.
+TextureSwapper includes free textures for everyone, along with optional Premium features for advanced editors (Props, Parachutes, Shot Effects & Classic 2010 presets, Custom HUD and Animated Paints) and exclusive high-tier skins.
 
 - **Free Trial**: You can activate a free trial directly inside Settings in the app to try all features with no commitment.
 - **Lifetime License**:
@@ -62,4 +63,4 @@ TextureSwapper includes free textures for everyone, along with optional Premium 
 
 ## Disclaimer
 
-TextureSwapper modifies local client cache files only (`StandaloneLoader\Local Store\cache`). All visual changes are client-side and only visible on your machine. Not affiliated with ProTanki.
+TextureSwapper modifies local client and its cache files only. All visual changes are client-side and only visible on your machine. Not affiliated with ProTanki.

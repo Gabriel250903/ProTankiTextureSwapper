@@ -112,15 +112,14 @@
                         FontWeight="Bold"
                         Foreground="White" />
                     <ui:Button
-                        Width="160"
+                        Width="190"
                         Margin="8,0,0,0"
                         Padding="12,8"
                         Background="#E67E22"
                         Command="{Binding ApplyClassicCommand}"
                         Content="{DynamicResource Loc_ShotEffects_Classic2010}"
                         FontWeight="Bold"
-                        Foreground="White"
-                        Icon="{ui:SymbolIcon LockClosed24}" />
+                        Foreground="White" />
                 </WrapPanel>
             </StackPanel>
         </ScrollViewer>

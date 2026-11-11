@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Security.Cryptography;
 using Serilog;
 using TextureSwapper.Core;
@@ -76,6 +77,48 @@ namespace TextureSwapper.Services
             return null;
         }
 
+        private static async Task<string?> EnsureCenteredLibraryPathAsync()
+        {
+            string? sourcePath = GetSourceCenteredLibraryPath();
+            if (sourcePath != null && File.Exists(sourcePath))
+            {
+                return sourcePath;
+            }
+
+            string defaultPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Assets",
+                "HUD",
+                "Centered",
+                "library.swf"
+            );
+
+            try
+            {
+                string dir = Path.GetDirectoryName(defaultPath)!;
+                _ = Directory.CreateDirectory(dir);
+
+                using HttpClient client = new() { Timeout = TimeSpan.FromSeconds(30) };
+                client.DefaultRequestHeaders.Add("User-Agent", "ProTankiTextureSwapper");
+
+                string swfUrl = $"{Constants.GitHubRawUrl}/Assets/HUD/Centered/library.swf";
+                Log.Information("Downloading missing Centered library.swf from {Url}", swfUrl);
+                byte[] swfBytes = await client.GetByteArrayAsync(swfUrl);
+                await File.WriteAllBytesAsync(defaultPath, swfBytes);
+
+                if (File.Exists(defaultPath))
+                {
+                    return defaultPath;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to download missing Centered library.swf from GitHub.");
+            }
+
+            return sourcePath;
+        }
+
         private static string? GetInstallBatchScriptPath()
         {
             string[] candidates =
@@ -112,6 +155,58 @@ namespace TextureSwapper.Services
             }
 
             return null;
+        }
+
+        private static async Task<string?> EnsureInstallBatchScriptAsync()
+        {
+            string? scriptPath = GetInstallBatchScriptPath();
+            if (scriptPath != null && File.Exists(scriptPath))
+            {
+                string dir = Path.GetDirectoryName(scriptPath)!;
+                string siblingSwf = Path.Combine(dir, "StandaloneLoader_patched.swf");
+                if (File.Exists(siblingSwf))
+                {
+                    return scriptPath;
+                }
+            }
+
+            string defaultDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "HUD");
+            string defaultBat = Path.Combine(defaultDir, "InstallLoaderPatch.bat");
+            string defaultSwf = Path.Combine(defaultDir, "StandaloneLoader_patched.swf");
+
+            try
+            {
+                _ = Directory.CreateDirectory(defaultDir);
+                using HttpClient client = new() { Timeout = TimeSpan.FromSeconds(30) };
+                client.DefaultRequestHeaders.Add("User-Agent", "ProTankiTextureSwapper");
+
+                if (!File.Exists(defaultBat))
+                {
+                    string batUrl = $"{Constants.GitHubRawUrl}/Assets/HUD/InstallLoaderPatch.bat";
+                    Log.Information("Downloading missing InstallLoaderPatch.bat from {Url}", batUrl);
+                    byte[] batBytes = await client.GetByteArrayAsync(batUrl);
+                    await File.WriteAllBytesAsync(defaultBat, batBytes);
+                }
+
+                if (!File.Exists(defaultSwf))
+                {
+                    string swfUrl = $"{Constants.GitHubRawUrl}/Assets/HUD/StandaloneLoader_patched.swf";
+                    Log.Information("Downloading missing StandaloneLoader_patched.swf from {Url}", swfUrl);
+                    byte[] swfBytes = await client.GetByteArrayAsync(swfUrl);
+                    await File.WriteAllBytesAsync(defaultSwf, swfBytes);
+                }
+
+                if (File.Exists(defaultBat) && File.Exists(defaultSwf))
+                {
+                    return defaultBat;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to download missing HUD patch assets from GitHub.");
+            }
+
+            return scriptPath;
         }
 
         public bool IsCenteredHudEnabled()
@@ -157,49 +252,43 @@ namespace TextureSwapper.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await Task.Run<(bool Success, string? ErrorMessage)>(
-                () =>
+            try
+            {
+                string? sourcePath = await EnsureCenteredLibraryPathAsync();
+                if (sourcePath is null || !File.Exists(sourcePath))
                 {
-                    try
-                    {
-                        string? sourcePath = GetSourceCenteredLibraryPath();
-                        if (sourcePath is null || !File.Exists(sourcePath))
-                        {
-                            string err = $"Centered HUD asset not found at '{sourcePath}'.";
-                            Log.Error(err);
-                            return (false, err);
-                        }
+                    string err = $"Centered HUD asset not found at '{sourcePath}'.";
+                    Log.Error(err);
+                    return (false, err);
+                }
 
-                        string targetDir = GetLocalStorePath();
-                        if (!Directory.Exists(targetDir))
-                        {
-                            _ = Directory.CreateDirectory(targetDir);
-                        }
+                string targetDir = GetLocalStorePath();
+                if (!Directory.Exists(targetDir))
+                {
+                    _ = Directory.CreateDirectory(targetDir);
+                }
 
-                        string targetPath = Path.Combine(targetDir, "library.swf");
+                string targetPath = Path.Combine(targetDir, "library.swf");
 
-                        if (FileHelper.IsGameRunning())
-                        {
-                            Log.Warning(
-                                "ProTanki is currently running. Centered HUD will apply on next restart."
-                            );
-                        }
+                if (FileHelper.IsGameRunning())
+                {
+                    Log.Warning(
+                        "ProTanki is currently running. Centered HUD will apply on next restart."
+                    );
+                }
 
-                        File.Copy(sourcePath, targetPath, overwrite: true);
-                        Log.Information(
-                            "Centered HUD successfully applied to Local Store: {TargetPath}",
-                            targetPath
-                        );
-                        return (true, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to apply Centered HUD.");
-                        return (false, ex.Message);
-                    }
-                },
-                cancellationToken
-            );
+                File.Copy(sourcePath, targetPath, overwrite: true);
+                Log.Information(
+                    "Centered HUD successfully applied to Local Store: {TargetPath}",
+                    targetPath
+                );
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to apply Centered HUD.");
+                return (false, ex.Message);
+            }
         }
 
         public (bool Success, string? ErrorMessage) RestoreDefaultHud()
@@ -228,7 +317,7 @@ namespace TextureSwapper.Services
         {
             try
             {
-                string? scriptPath = GetInstallBatchScriptPath();
+                string? scriptPath = await EnsureInstallBatchScriptAsync();
                 if (scriptPath is null || !File.Exists(scriptPath))
                 {
                     string err = $"Installer script not found at '{scriptPath}'.";
