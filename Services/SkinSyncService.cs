@@ -1,7 +1,7 @@
+using Serilog;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -10,13 +10,11 @@ namespace TextureSwapper.Services
 {
     public sealed class SkinSyncService(
         IUpdateService updateService,
-        ISettingsService settingsService,
-        ITextureDownloadService textureDownloadService
+        ISettingsService settingsService
     ) : ISkinSyncService
     {
         private readonly IUpdateService _updateService = updateService;
         private readonly ISettingsService _settingsService = settingsService;
-        private readonly ITextureDownloadService _textureDownloadService = textureDownloadService;
         public event Action<string>? ProgressChanged;
         public event Action<SkinModel>? SkinPreviewUpdated;
         private readonly JsonSerializerOptions options = new() { WriteIndented = true };
@@ -73,7 +71,6 @@ namespace TextureSwapper.Services
 
             List<SkinModel> combinedSkins = [];
             List<InGamePaintModel>? remoteInGamePaints = null;
-            bool hasTriggeredBulkDownload = false;
 
             foreach ((string Name, string LocalPath, string RemoteFileName) in categories)
             {
@@ -222,6 +219,18 @@ namespace TextureSwapper.Services
                                 }
                                 merged = true;
                             }
+
+                            if (localSkin.IsExperimental != remoteSkin.IsExperimental)
+                            {
+                                localSkin.IsExperimental = remoteSkin.IsExperimental;
+                                merged = true;
+                            }
+
+                            if (localSkin.IsPremium != remoteSkin.IsPremium)
+                            {
+                                localSkin.IsPremium = remoteSkin.IsPremium;
+                                merged = true;
+                            }
                         }
                         else
                         {
@@ -244,11 +253,11 @@ namespace TextureSwapper.Services
                     }
 
                     HashSet<string> remoteKeys = new(
-                        remoteSkins.Select(s => $"{(s.ItemName ?? string.Empty)}:{s.Name}"),
+                        remoteSkins.Select(s => $"{s.ItemName ?? string.Empty}:{s.Name}"),
                         StringComparer.OrdinalIgnoreCase
                     );
                     int removed = catSkins.RemoveAll(s =>
-                        !remoteKeys.Contains($"{(s.ItemName ?? string.Empty)}:{s.Name}")
+                        !remoteKeys.Contains($"{s.ItemName ?? string.Empty}:{s.Name}")
                         && s.ItemName != "Uploaded"
                         && !s.SourceFolder.StartsWith(
                             "Textures/Encrypted",
@@ -280,38 +289,6 @@ namespace TextureSwapper.Services
                         missing.Count,
                         Name
                     );
-
-                    if (!hasTriggeredBulkDownload && !_updateService.IsOffline)
-                    {
-                        hasTriggeredBulkDownload = true;
-                        Log.Information(
-                            "Triggering bulk texture pack download to restore {Count} missing {Category} skins.",
-                            missing.Count,
-                            Name
-                        );
-                        ProgressChanged?.Invoke($"Updating textures pack ({missing.Count} skins missing)...");
-                        bool downloaded = await _textureDownloadService.DownloadAndExtractTexturesAsync(
-                            (status, _) => ProgressChanged?.Invoke(status),
-                            cancellationToken
-                        );
-                        if (downloaded)
-                        {
-                            missing =
-                            [
-                                .. catSkins.Where(s =>
-                                    s.ItemName != "Uploaded" && IsSkinMissingAssets(s)
-                                ),
-                            ];
-                            Application.Current?.Dispatcher.Invoke(() =>
-                            {
-                                foreach (SkinModel s in catSkins)
-                                {
-                                    s.NotifyPreviewChanged();
-                                    SkinPreviewUpdated?.Invoke(s);
-                                }
-                            });
-                        }
-                    }
                 }
 
                 if (missing.Count > 0 && missing.Count <= 25 && !_updateService.IsOffline)
@@ -379,10 +356,21 @@ namespace TextureSwapper.Services
                 foreach (SkinModel skin in catSkins)
                 {
                     if (
-                        skin.Name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
-                        || skin.SourceFolder.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
-                        || skin.Name.Contains(" DC", StringComparison.OrdinalIgnoreCase)
-                        || skin.SourceFolder.Contains("/DC/", StringComparison.OrdinalIgnoreCase)
+                        (
+                            skin.Name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
+                            || skin.SourceFolder.Contains(
+                                "Demonic",
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                            || skin.Name.Contains(" DC", StringComparison.OrdinalIgnoreCase)
+                            || skin.SourceFolder.Contains(
+                                "/DC/",
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        )
+                        && !skin.Name.Equals("Titan Demonic", StringComparison.OrdinalIgnoreCase)
+                        && !skin.Name.Equals("Hammer DC Old", StringComparison.OrdinalIgnoreCase)
+                        && !skin.Name.Equals("Ricochet DC Old", StringComparison.OrdinalIgnoreCase)
                     )
                     {
                         skin.IsPremium = true;
@@ -544,10 +532,18 @@ namespace TextureSwapper.Services
 
         public List<BackupModel> LoadBackups()
         {
-            string backupsRoot = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                Constants.BackupsDir
-            );
+            ClientType activeClient = _settingsService.Load().ActiveClient;
+            string backupsRoot =
+                activeClient == ClientType.Html5
+                    ? Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        Constants.BackupsDir,
+                        "Html5"
+                    )
+                    : Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        Constants.BackupsDir
+                    );
             if (!Directory.Exists(backupsRoot))
             {
                 return [];

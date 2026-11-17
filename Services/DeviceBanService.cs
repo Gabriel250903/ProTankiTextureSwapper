@@ -1,8 +1,9 @@
+using Serilog;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -141,8 +142,8 @@ namespace TextureSwapper.Services
                     $"{Constants.GatekeeperWorkerUrl}/check/{Uri.EscapeDataString(hwid)}?t={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
 
                 using HttpRequestMessage request = new(HttpMethod.Get, requestUrl);
-                request.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
-                request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+                request.Headers.Add("X-Api-Key", Constants.GatekeeperClientAppId);
+                request.Headers.CacheControl = new CacheControlHeaderValue
                 {
                     NoCache = true,
                     NoStore = true,
@@ -289,10 +290,9 @@ namespace TextureSwapper.Services
                 string requestUrl =
                     $"{Constants.GatekeeperWorkerUrl}/admin/devices?t={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
                 using HttpRequestMessage request = new(HttpMethod.Get, requestUrl);
-                request.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
                 request.Headers.Add("X-Admin-Secret", AdminSession.CurrentSecret ?? string.Empty);
                 request.Headers.Add("X-Admin-Hwid", GetDeviceHardwareId());
-                request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+                request.Headers.CacheControl = new CacheControlHeaderValue
                 {
                     NoCache = true,
                     NoStore = true,
@@ -365,7 +365,6 @@ namespace TextureSwapper.Services
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                request.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
                 request.Headers.Add("X-Admin-Secret", AdminSession.CurrentSecret ?? string.Empty);
                 request.Headers.Add("X-Admin-Hwid", GetDeviceHardwareId());
 
@@ -400,7 +399,6 @@ namespace TextureSwapper.Services
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                request.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
                 request.Headers.Add("X-Admin-Secret", AdminSession.CurrentSecret ?? string.Empty);
                 request.Headers.Add("X-Admin-Hwid", GetDeviceHardwareId());
 
@@ -434,7 +432,6 @@ namespace TextureSwapper.Services
 
                 using HttpRequestMessage request = new(HttpMethod.Post, requestUrl);
                 request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                request.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
                 request.Headers.Add("X-Admin-Secret", password.Trim());
                 request.Headers.Add("X-Admin-Hwid", hwid);
 

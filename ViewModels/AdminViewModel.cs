@@ -1,11 +1,13 @@
+using Microsoft.Win32;
+using Serilog;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -25,7 +27,7 @@ namespace TextureSwapper.ViewModels
         private readonly JsonSerializerOptions _jsonOptions = new()
         {
             WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         };
 
         public event Action? CloseRequested;
@@ -772,8 +774,8 @@ namespace TextureSwapper.ViewModels
                 );
                 if (Directory.Exists(logFolder))
                 {
-                    _ = System.Diagnostics.Process.Start(
-                        new System.Diagnostics.ProcessStartInfo
+                    _ = Process.Start(
+                        new ProcessStartInfo
                         {
                             FileName = logFolder,
                             UseShellExecute = true,
@@ -844,7 +846,7 @@ namespace TextureSwapper.ViewModels
                 parameter switch
                 {
                     System.Windows.Controls.PasswordBox pb => pb.Password,
-                    Wpf.Ui.Controls.PasswordBox wpb => wpb.Password,
+                    PasswordBox wpb => wpb.Password,
                     string s => s,
                     _ => PasswordInput,
                 } ?? string.Empty;

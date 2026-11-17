@@ -153,16 +153,16 @@ namespace TextureSwapper.ViewModels.Tabs
                     Constants.RailgunBeamSpiralAlphaTarget,
                 ];
 
-                string legacySample = Path.Combine(
-                    _mainVM.CachePath,
-                    Constants.RailgunLegacyCharge1Target
-                );
-                string standardSample = Path.Combine(
-                    _mainVM.CachePath,
-                    Constants.RailgunCharge1Target
-                );
-
-                if (File.Exists(legacySample) && !File.Exists(standardSample))
+                if (
+                    _mainVM.SwapService.IsTargetCached(
+                        _mainVM.CachePath,
+                        Constants.RailgunLegacyCharge1Target
+                    )
+                    && !_mainVM.SwapService.IsTargetCached(
+                        _mainVM.CachePath,
+                        Constants.RailgunCharge1Target
+                    )
+                )
                 {
                     targetList =
                     [
@@ -307,16 +307,16 @@ namespace TextureSwapper.ViewModels.Tabs
                     Constants.RailgunBeamSpiralAlphaTarget,
                 ];
 
-                string legacySample = Path.Combine(
-                    _mainVM.CachePath,
-                    Constants.RailgunLegacyCharge1Target
-                );
-                string standardSample = Path.Combine(
-                    _mainVM.CachePath,
-                    Constants.RailgunCharge1Target
-                );
-
-                if (File.Exists(legacySample) && !File.Exists(standardSample))
+                if (
+                    _mainVM.SwapService.IsTargetCached(
+                        _mainVM.CachePath,
+                        Constants.RailgunLegacyCharge1Target
+                    )
+                    && !_mainVM.SwapService.IsTargetCached(
+                        _mainVM.CachePath,
+                        Constants.RailgunCharge1Target
+                    )
+                )
                 {
                     targetList =
                     [

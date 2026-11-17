@@ -1,7 +1,7 @@
+using Serilog;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Serilog;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.ViewModels.Base;

@@ -1,9 +1,9 @@
+using Microsoft.Win32;
+using Serilog;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Win32;
-using Serilog;
 
 namespace TextureSwapper.Helpers.Utilities
 {
@@ -78,23 +78,6 @@ namespace TextureSwapper.Helpers.Utilities
                 return false;
             }
 #endif
-        }
-
-        public static void ResetStoredHash()
-        {
-            try
-            {
-                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(
-                    RegistrySubKey,
-                    writable: true
-                );
-                key?.DeleteValue(HashRegistryValue, throwOnMissingValue: false);
-                Log.Debug("Assembly integrity hash reset.");
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to reset assembly integrity hash.");
-            }
         }
 
         private static string ComputeFileHash(string filePath)

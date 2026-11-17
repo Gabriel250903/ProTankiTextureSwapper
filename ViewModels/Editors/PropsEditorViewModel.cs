@@ -1,3 +1,5 @@
+using Microsoft.Win32;
+using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -8,8 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using Microsoft.Win32;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -715,6 +715,16 @@ namespace TextureSwapper.ViewModels.Editors
             );
             SelectLcCommand = SelectLcNormalCommand;
 
+            _mainVM.ActiveClientChanged += (_, _) =>
+            {
+                _currentTaraBase64Url = null;
+                _currentTaraEntries = null;
+                if (SelectedProp != null)
+                {
+                    _ = LoadSelectedPropAsync();
+                }
+            };
+
             LoadPropsCatalog();
         }
 
@@ -787,6 +797,221 @@ namespace TextureSwapper.ViewModels.Editors
 
         #region Prop Selection & Texture Loading
 
+        private bool IsHtml5Mode(string cachePath)
+        {
+            return _mainVM.SwapService.IsHtml5CachePath(cachePath) || _mainVM.IsHtml5Client;
+        }
+
+        private bool IsLibraryCached(string cachePath, string libraryBase64Url)
+        {
+            return _mainVM.SwapService.IsTargetCached(cachePath, libraryBase64Url);
+        }
+
+        private string GetLibraryBackupFilePath(string cachePath, string libraryBase64Url)
+        {
+            if (IsHtml5Mode(cachePath))
+            {
+                string dir = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    Constants.BackupsDir,
+                    "Html5PropsOrig"
+                );
+                _ = Directory.CreateDirectory(dir);
+                return Path.Combine(dir, libraryBase64Url + ".bak");
+            }
+
+            return Path.Combine(cachePath, libraryBase64Url + ".bak");
+        }
+
+        private byte[]? TryExtractHtml5LibraryTaraBytes(string cachePath, string libraryBase64Url)
+        {
+            if (
+                !Html5ResourceMapper.TryDecodeBase64Target(
+                    libraryBase64Url,
+                    out Html5ResourceTarget? target
+                )
+                || target == null
+            )
+            {
+                return null;
+            }
+
+            List<TaraEntry>? bntEntries = _mainVM.Html5CacheService.ReadResourceEntries(
+                cachePath,
+                target.ResourceId
+            );
+            if (bntEntries == null || bntEntries.Count == 0)
+            {
+                return null;
+            }
+
+            TaraEntry? taraEntry = bntEntries.FirstOrDefault(e =>
+                e.FileName.Equals(target.EntryFileName, StringComparison.OrdinalIgnoreCase)
+                || e.FileName.EndsWith(".tara", StringComparison.OrdinalIgnoreCase)
+            );
+            return taraEntry?.Data ?? bntEntries[0].Data;
+        }
+
+        private List<TaraEntry> UnpackLibraryFromCache(string cachePath, string libraryBase64Url)
+        {
+            if (!IsHtml5Mode(cachePath))
+            {
+                string cacheFile = Path.Combine(cachePath, libraryBase64Url);
+                return _taraService.Unpack(cacheFile);
+            }
+
+            byte[]? taraBytes = TryExtractHtml5LibraryTaraBytes(cachePath, libraryBase64Url);
+            if (taraBytes == null)
+            {
+                return [];
+            }
+
+            string tempFile = Path.Combine(Path.GetTempPath(), $"ts_prop_{Guid.NewGuid():N}.tara");
+            try
+            {
+                File.WriteAllBytes(tempFile, taraBytes);
+                return _taraService.Unpack(tempFile);
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(tempFile))
+                    {
+                        File.Delete(tempFile);
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void EnsureLibraryBackup(string cachePath, string libraryBase64Url)
+        {
+            string backupFile = GetLibraryBackupFilePath(cachePath, libraryBase64Url);
+            if (File.Exists(backupFile))
+            {
+                return;
+            }
+
+            if (!IsHtml5Mode(cachePath))
+            {
+                string cacheFile = Path.Combine(cachePath, libraryBase64Url);
+                if (File.Exists(cacheFile))
+                {
+                    File.Copy(cacheFile, backupFile);
+                    Log.Information("Created .tara backup: {Path}", backupFile);
+                }
+                return;
+            }
+
+            byte[]? taraBytes = TryExtractHtml5LibraryTaraBytes(cachePath, libraryBase64Url);
+            if (taraBytes != null)
+            {
+                File.WriteAllBytes(backupFile, taraBytes);
+                Log.Information("Created HTML5 .tara backup: {Path}", backupFile);
+            }
+        }
+
+        private bool WriteRawTaraBytesToHtml5Library(
+            string cachePath,
+            string libraryBase64Url,
+            byte[] newTaraBytes
+        )
+        {
+            if (
+                !Html5ResourceMapper.TryDecodeBase64Target(
+                    libraryBase64Url,
+                    out Html5ResourceTarget? target
+                )
+                || target == null
+            )
+            {
+                return false;
+            }
+
+            List<TaraEntry>? bntEntries = _mainVM.Html5CacheService.ReadResourceEntries(
+                cachePath,
+                target.ResourceId
+            );
+            if (bntEntries == null)
+            {
+                return false;
+            }
+
+            bool replaced = false;
+            for (int i = 0; i < bntEntries.Count; i++)
+            {
+                if (
+                    bntEntries[i]
+                        .FileName.Equals(target.EntryFileName, StringComparison.OrdinalIgnoreCase)
+                    || bntEntries[i].FileName.EndsWith(".tara", StringComparison.OrdinalIgnoreCase)
+                )
+                {
+                    bntEntries[i].Data = newTaraBytes;
+                    replaced = true;
+                    break;
+                }
+            }
+
+            if (!replaced)
+            {
+                if (bntEntries.Count > 0)
+                {
+                    bntEntries[0].Data = newTaraBytes;
+                }
+                else
+                {
+                    bntEntries.Add(
+                        new TaraEntry { FileName = target.EntryFileName, Data = newTaraBytes }
+                    );
+                }
+            }
+
+            return _mainVM.Html5CacheService.WriteResourceEntries(
+                cachePath,
+                target.ResourceId,
+                bntEntries
+            );
+        }
+
+        private void PackLibraryToCache(
+            string cachePath,
+            string libraryBase64Url,
+            List<TaraEntry> entries
+        )
+        {
+            if (!IsHtml5Mode(cachePath))
+            {
+                string cacheFile = Path.Combine(cachePath, libraryBase64Url);
+                _taraService.Pack(entries, cacheFile);
+                return;
+            }
+
+            string tempFile = Path.Combine(Path.GetTempPath(), $"ts_prop_{Guid.NewGuid():N}.tara");
+            try
+            {
+                _taraService.Pack(entries, tempFile);
+                byte[] newTaraBytes = File.ReadAllBytes(tempFile);
+                if (!WriteRawTaraBytesToHtml5Library(cachePath, libraryBase64Url, newTaraBytes))
+                {
+                    throw new IOException(
+                        $"Failed to write HTML5 prop library '{libraryBase64Url}' to IndexedDB."
+                    );
+                }
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(tempFile))
+                    {
+                        File.Delete(tempFile);
+                    }
+                }
+                catch { }
+            }
+        }
+
         private async Task LoadSelectedPropAsync()
         {
             if (SelectedProp == null)
@@ -819,9 +1044,8 @@ namespace TextureSwapper.ViewModels.Editors
                 IsWorking = true;
 
                 string cachePath = _mainVM.CachePath;
-                string cacheFile = Path.Combine(cachePath, SelectedProp.LibraryBase64Url);
 
-                if (!File.Exists(cacheFile))
+                if (!IsLibraryCached(cachePath, SelectedProp.LibraryBase64Url))
                 {
                     _originalTextureData = null;
                     _originalMeshData = null;
@@ -846,7 +1070,10 @@ namespace TextureSwapper.ViewModels.Editors
                     return;
                 }
 
-                string backupFile = cacheFile + ".bak";
+                string backupFile = GetLibraryBackupFilePath(
+                    cachePath,
+                    SelectedProp.LibraryBase64Url
+                );
                 byte[]? backupTextureData = null;
                 byte[]? backupMeshData = null;
 
@@ -868,7 +1095,9 @@ namespace TextureSwapper.ViewModels.Editors
 
                 if (_currentTaraBase64Url != SelectedProp.LibraryBase64Url)
                 {
-                    _currentTaraEntries = await Task.Run(() => _taraService.Unpack(cacheFile));
+                    _currentTaraEntries = await Task.Run(() =>
+                        UnpackLibraryFromCache(cachePath, SelectedProp.LibraryBase64Url)
+                    );
                     _currentTaraBase64Url = SelectedProp.LibraryBase64Url;
                 }
 
@@ -2472,14 +2701,14 @@ namespace TextureSwapper.ViewModels.Editors
                 LoadingMessage = $"Applying modifications for {SelectedProp.Name}...";
 
                 string cachePath = _mainVM.CachePath;
-                string cacheFile = Path.Combine(cachePath, SelectedProp.LibraryBase64Url);
+                string backupFile = GetLibraryBackupFilePath(
+                    cachePath,
+                    SelectedProp.LibraryBase64Url
+                );
 
-                string backupFile = cacheFile + ".bak";
-                if (!File.Exists(backupFile))
-                {
-                    await Task.Run(() => File.Copy(cacheFile, backupFile));
-                    Log.Information("Created .tara backup: {Path}", backupFile);
-                }
+                await Task.Run(() =>
+                    EnsureLibraryBackup(cachePath, SelectedProp.LibraryBase64Url)
+                );
 
                 TaraEntry? matchingTex = FindMatchingTextureEntry(
                     _currentTaraEntries,
@@ -2823,7 +3052,9 @@ namespace TextureSwapper.ViewModels.Editors
                     }
                 }
 
-                await Task.Run(() => _taraService.Pack(updatedEntries, cacheFile));
+                await Task.Run(() =>
+                    PackLibraryToCache(cachePath, SelectedProp.LibraryBase64Url, updatedEntries)
+                );
                 _currentTaraEntries = updatedEntries;
 
                 CurrentInGameVariant = _selectedVariant;
@@ -2968,19 +3199,14 @@ namespace TextureSwapper.ViewModels.Editors
 
                         try
                         {
-                            string cacheFile = Path.Combine(
-                                _mainVM.CachePath,
-                                prop.LibraryBase64Url
-                            );
-                            if (File.Exists(cacheFile))
+                            if (IsLibraryCached(_mainVM.CachePath, prop.LibraryBase64Url))
                             {
-                                string backupFile = cacheFile + ".bak";
-                                if (!File.Exists(backupFile))
-                                {
-                                    File.Copy(cacheFile, backupFile);
-                                }
+                                EnsureLibraryBackup(_mainVM.CachePath, prop.LibraryBase64Url);
 
-                                List<TaraEntry> entries = _taraService.Unpack(cacheFile);
+                                List<TaraEntry> entries = UnpackLibraryFromCache(
+                                    _mainVM.CachePath,
+                                    prop.LibraryBase64Url
+                                );
                                 TaraEntry? entry = FindMatchingTextureEntry(
                                     entries,
                                     prop.TextureFilename
@@ -2994,7 +3220,11 @@ namespace TextureSwapper.ViewModels.Editors
                                         targetFilename: entry.FileName
                                     );
                                     entry.Data = modifiedBytes;
-                                    _taraService.Pack(entries, cacheFile);
+                                    PackLibraryToCache(
+                                        _mainVM.CachePath,
+                                        prop.LibraryBase64Url,
+                                        entries
+                                    );
                                     success++;
                                 }
                             }
@@ -3089,7 +3319,6 @@ namespace TextureSwapper.ViewModels.Editors
                         }
 
                         IGrouping<string, PropModel> group = libraryGroups[i];
-                        string cacheFile = Path.Combine(_mainVM.CachePath, group.Key);
 
                         Application.Current.Dispatcher.Invoke(() =>
                         {
@@ -3097,7 +3326,7 @@ namespace TextureSwapper.ViewModels.Editors
                                 $"Applying {modeName} props to library ({i + 1}/{totalLibraries})...";
                         });
 
-                        if (!File.Exists(cacheFile))
+                        if (!IsLibraryCached(_mainVM.CachePath, group.Key))
                         {
                             _ = Application.Current.Dispatcher.Invoke(() =>
                                 BatchProgress = (double)(i + 1) / totalLibraries * 100
@@ -3107,7 +3336,10 @@ namespace TextureSwapper.ViewModels.Editors
 
                         try
                         {
-                            List<TaraEntry> entries = _taraService.Unpack(cacheFile);
+                            List<TaraEntry> entries = UnpackLibraryFromCache(
+                                _mainVM.CachePath,
+                                group.Key
+                            );
                             bool modified = false;
 
                             string? primaryFolder = GetPrimaryLcFolderForLibrary(group.Key, lcDir);
@@ -3600,17 +3832,8 @@ namespace TextureSwapper.ViewModels.Editors
 
                             if (modified)
                             {
-                                string backupFile = cacheFile + ".bak";
-                                if (!File.Exists(backupFile))
-                                {
-                                    File.Copy(cacheFile, backupFile);
-                                    Log.Information(
-                                        "Created .tara backup before batch LC: {Path}",
-                                        backupFile
-                                    );
-                                }
-
-                                _taraService.Pack(entries, cacheFile);
+                                EnsureLibraryBackup(_mainVM.CachePath, group.Key);
+                                PackLibraryToCache(_mainVM.CachePath, group.Key, entries);
                                 librariesModified++;
                             }
                         }
@@ -3687,13 +3910,25 @@ namespace TextureSwapper.ViewModels.Editors
                     StringComparer.OrdinalIgnoreCase
                 );
 
+                bool html5Mode = IsHtml5Mode(cachePath);
+                string backupSearchDir = html5Mode
+                    ? Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        Constants.BackupsDir,
+                        "Html5PropsOrig"
+                    )
+                    : cachePath;
+
                 List<string> backupFilesToRestore = [];
-                foreach (string bakFile in Directory.EnumerateFiles(cachePath, "*.bak"))
+                if (Directory.Exists(backupSearchDir))
                 {
-                    string baseName = Path.GetFileNameWithoutExtension(bakFile);
-                    if (propLibraries.Count == 0 || propLibraries.Contains(baseName))
+                    foreach (string bakFile in Directory.EnumerateFiles(backupSearchDir, "*.bak"))
                     {
-                        backupFilesToRestore.Add(bakFile);
+                        string baseName = Path.GetFileNameWithoutExtension(bakFile);
+                        if (propLibraries.Count == 0 || propLibraries.Contains(baseName))
+                        {
+                            backupFilesToRestore.Add(bakFile);
+                        }
                     }
                 }
 
@@ -3715,12 +3950,30 @@ namespace TextureSwapper.ViewModels.Editors
                     for (int i = 0; i < total; i++)
                     {
                         string backupFile = backupFilesToRestore[i];
-                        string cacheFile = backupFile[..^4];
+                        string baseName = Path.GetFileNameWithoutExtension(backupFile);
 
                         try
                         {
-                            File.Copy(backupFile, cacheFile, overwrite: true);
-                            restoredCount++;
+                            if (html5Mode)
+                            {
+                                byte[] originalTaraBytes = File.ReadAllBytes(backupFile);
+                                if (
+                                    WriteRawTaraBytesToHtml5Library(
+                                        cachePath,
+                                        baseName,
+                                        originalTaraBytes
+                                    )
+                                )
+                                {
+                                    restoredCount++;
+                                }
+                            }
+                            else
+                            {
+                                string cacheFile = backupFile[..^4];
+                                File.Copy(backupFile, cacheFile, overwrite: true);
+                                restoredCount++;
+                            }
                         }
                         catch (Exception ex)
                         {

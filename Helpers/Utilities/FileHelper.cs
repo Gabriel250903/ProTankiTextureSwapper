@@ -1,7 +1,7 @@
-using System.Diagnostics;
-using System.IO;
 using Microsoft.Win32;
 using Serilog;
+using System.Diagnostics;
+using System.IO;
 using TextureSwapper.Core;
 
 namespace TextureSwapper.Helpers.Utilities
@@ -38,7 +38,12 @@ namespace TextureSwapper.Helpers.Utilities
 
         public static bool IsGameRunning()
         {
-            string[] processNames = [Constants.GameProcessName, "ProTanki Standalone"];
+            string[] processNames =
+            [
+                Constants.GameProcessName,
+                "ProTanki Standalone",
+                "StandaloneLoader",
+            ];
             foreach (string name in processNames)
             {
                 Process[] processes = Process.GetProcessesByName(name);
@@ -101,6 +106,39 @@ namespace TextureSwapper.Helpers.Utilities
 
             try
             {
+                string html5Lock1 = Path.Combine(
+                    cachePath,
+                    Constants.Html5IndexedDbDir,
+                    Constants.Html5LevelDbDir,
+                    "LOCK"
+                );
+                string html5Lock2 = Path.Combine(
+                    cachePath,
+                    Constants.Html5LevelDbDir,
+                    "LOCK"
+                );
+                string html5Lock3 = Path.Combine(cachePath, "LOCK");
+
+                if (File.Exists(html5Lock1) && IsFileLocked(html5Lock1))
+                {
+                    return true;
+                }
+                if (File.Exists(html5Lock2) && IsFileLocked(html5Lock2))
+                {
+                    return true;
+                }
+                if (
+                    cachePath.EndsWith(
+                        Constants.Html5LevelDbDir,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    && File.Exists(html5Lock3)
+                    && IsFileLocked(html5Lock3)
+                )
+                {
+                    return true;
+                }
+
                 if (targetFiles != null && targetFiles.Any())
                 {
                     foreach (string target in targetFiles)
@@ -159,35 +197,6 @@ namespace TextureSwapper.Helpers.Utilities
                 );
                 return false;
             }
-        }
-
-        public static string GetHardwareId()
-        {
-            try
-            {
-                using RegistryKey baseKey = RegistryKey.OpenBaseKey(
-                    RegistryHive.LocalMachine,
-                    RegistryView.Registry64
-                );
-                using RegistryKey? key = baseKey.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography");
-
-                if (key != null)
-                {
-                    object? val = key.GetValue("MachineGuid");
-                    if (val != null && !string.IsNullOrWhiteSpace(val.ToString()))
-                    {
-                        return val.ToString()!;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(
-                    ex,
-                    "Failed to retrieve MachineGuid from Registry. Falling back to MachineName."
-                );
-            }
-            return Environment.MachineName;
         }
 
         public static async Task CopyWithRetryAsync(

@@ -207,13 +207,9 @@
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="20,0,0,15">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
                     <ui:TextBox
-                        Grid.Column="1"
                         Width="300"
+                        HorizontalAlignment="Right"
                         Icon="{ui:SymbolIcon Search24}"
                         PlaceholderText="{DynamicResource Loc_Paints_SearchCustomPaints}"
                         Text="{Binding CustomPaintSearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />

@@ -6,7 +6,6 @@ using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
-using TextureSwapper.Helpers.Utilities;
 using TextureSwapper.ViewModels.Base;
 using Wpf.Ui.Controls;
 
@@ -223,11 +222,12 @@ namespace TextureSwapper.ViewModels.Tabs
                     Constants.RicochetBounceBallTarget,
                 ];
 
-                string sparksCache = FileHelper.GetSafePath(
-                    _mainVM.CachePath,
-                    Constants.RicochetSparksTarget
-                );
-                if (File.Exists(sparksCache))
+                if (
+                    _mainVM.SwapService.IsTargetCached(
+                        _mainVM.CachePath,
+                        Constants.RicochetSparksTarget
+                    )
+                )
                 {
                     targets.Add(Constants.RicochetSparksTarget);
                 }

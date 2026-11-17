@@ -9,7 +9,9 @@ namespace TextureSwapper.Core.Models
         public int MaxBackupRetentionDays { get; set; } = 30;
         public string LastCheckedTime { get; set; } = "Never";
         public string LastUpdateStatus { get; set; } = "Idle";
+        public ClientType ActiveClient { get; set; } = ClientType.Flash;
         public string? CustomCachePath { get; set; }
+        public string? CustomHtml5CachePath { get; set; }
         public string? LastSelectedCategory { get; set; }
         public string? LastSelectedItemName { get; set; }
         public double UIScale { get; set; } = 1.0;
@@ -32,45 +34,24 @@ namespace TextureSwapper.Core.Models
         public bool EnableSeasonalCustomFont { get; set; } = true;
         public bool EnableSeasonalAppLogo { get; set; } = true;
 
-        public bool ForceHalloweenPreview
+        public string PreferredTextureMirror { get; set; } = "Cloudflare";
+        public bool EnableProTankiPack { get; set; } = false;
+        private string _proTankiPackHotkey = "F8";
+        public string ProTankiPackHotkey
         {
-            get => ForceSeasonalPreview;
-            set => ForceSeasonalPreview = value;
+            get => _proTankiPackHotkey;
+            set => _proTankiPackHotkey = Constants.NormalizeShaderHotkey(value);
         }
-        public bool EnableHalloweenSound
+        public bool EnableSkinAnimations { get; set; } = false;
+        private string _skinAnimMenuHotkey = "F9";
+        public string SkinAnimMenuHotkey
         {
-            get => EnableSeasonalSound;
-            set => EnableSeasonalSound = value;
+            get => _skinAnimMenuHotkey;
+            set => _skinAnimMenuHotkey = Constants.NormalizeShaderHotkey(value);
         }
-        public bool IsHalloweenThemeSelected
-        {
-            get => IsSeasonalThemeSelected;
-            set => IsSeasonalThemeSelected = value;
-        }
-        public bool EnableHalloweenRandomScares
-        {
-            get => EnableSeasonalRandomAudio;
-            set => EnableSeasonalRandomAudio = value;
-        }
-        public bool EnableHalloweenAtmosphereAnimation
-        {
-            get => EnableSeasonalAtmosphereAnimation;
-            set => EnableSeasonalAtmosphereAnimation = value;
-        }
-        public bool EnableHalloweenSpookyFont
-        {
-            get => EnableSeasonalCustomFont;
-            set => EnableSeasonalCustomFont = value;
-        }
-        public bool EnableHalloweenAppLogo
-        {
-            get => EnableSeasonalAppLogo;
-            set => EnableSeasonalAppLogo = value;
-        }
-        public string LastSeenVersion { get; set; } = string.Empty;
-        public bool HasSeenV2UpdateNotice { get; set; } = false;
-        public bool HasSeenDiscordInvite { get; set; } = false;
-        public bool EnableCenteredHud { get; set; } = false;
         public bool DisableThematicGold { get; set; } = false;
+        public bool EnablePackLogListener { get; set; } = false;
+        public string PackIpcToken { get; set; } = string.Empty;
+        public bool HasSelectedClient { get; set; } = false;
     }
 }

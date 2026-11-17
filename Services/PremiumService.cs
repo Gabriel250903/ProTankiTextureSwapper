@@ -1,3 +1,4 @@
+using Serilog;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -7,7 +8,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -41,7 +41,7 @@ namespace TextureSwapper.Services
             );
             _ = client.DefaultRequestHeaders.TryAddWithoutValidation(
                 "X-Api-Key",
-                Constants.GatekeeperApiKey
+                Constants.GatekeeperClientAppId
             );
             return client;
         }
@@ -82,33 +82,68 @@ namespace TextureSwapper.Services
         private byte[]? _cachedAssetKey;
         private readonly SemaphoreSlim _assetKeyLock = new(1, 1);
 
-        public bool IsPremiumUnlocked
+        private string? _verifiedSignatureKey;
+        private bool _verifiedSignatureResult;
+
+        internal bool HasValidLocalSignature(AppSettings settings)
         {
-            get
+            if (
+                settings == null
+                || !settings.IsPremiumUnlocked
+                || string.IsNullOrEmpty(settings.PremiumActivationSignature)
+            )
             {
-                if (_lastSettings == null || !_lastSettings.IsPremiumUnlocked)
+                return false;
+            }
+
+            if (settings.IsTrialLicense)
+            {
+                if (
+                    !TryParseIso8601(settings.PremiumExpiresAtUtc, out DateTime expiresAt)
+                    || DateTime.UtcNow >= expiresAt
+                )
                 {
                     return false;
                 }
+            }
+            else if (!string.IsNullOrWhiteSpace(settings.PremiumExpiresAtUtc))
+            {
+                bool isHalloweenPermanent =
+                    settings.PremiumLicenseKey?.StartsWith(
+                        "HALLOWEEN-",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true;
 
-                if (_lastSettings.IsTrialLicense)
+                if (
+                    !isHalloweenPermanent
+                    && (
+                        !TryParseIso8601(settings.PremiumExpiresAtUtc, out DateTime expiresAt)
+                        || DateTime.UtcNow > expiresAt
+                    )
+                )
                 {
-                    if (TryParseIso8601(_lastSettings.PremiumExpiresAtUtc, out DateTime expiresAt))
-                    {
-                        if (DateTime.UtcNow >= expiresAt)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
+            }
 
+            string hwid = HardwareFingerprintHelper.GetMachineHwid();
+            string cacheKey = $"{hwid}|{settings.PremiumExpiresAtUtc}|{settings.PremiumActivationSignature}";
+            if (
+                string.Equals(_verifiedSignatureKey, cacheKey, StringComparison.Ordinal)
+                && _verifiedSignatureResult
+            )
+            {
                 return true;
             }
+
+            string expectedPayload = $"{hwid}:PREMIUM_UNLOCKED:{settings.PremiumExpiresAtUtc}";
+            bool isValid = VerifyRsaSignature(expectedPayload, settings.PremiumActivationSignature);
+            _verifiedSignatureKey = cacheKey;
+            _verifiedSignatureResult = isValid;
+            return isValid;
         }
+
+        public bool IsPremiumUnlocked => _lastSettings != null && HasValidLocalSignature(_lastSettings) && IntegrityChecker.ValidateAssemblyIntegrity();
 
         public bool IsTrialActive =>
             _lastSettings != null
@@ -153,7 +188,7 @@ namespace TextureSwapper.Services
             {
                 Content = JsonContent.Create(payload),
             };
-            req.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
+            req.Headers.Add("X-Api-Key", Constants.GatekeeperClientAppId);
             req.Headers.Add("X-Admin-Secret", AdminSession.CurrentSecret ?? string.Empty);
             req.Headers.Add("X-Admin-Hwid", HardwareFingerprintHelper.GetMachineHwid());
             return await _httpClient.SendAsync(req);
@@ -568,7 +603,7 @@ namespace TextureSwapper.Services
                 {
                     Content = JsonContent.Create(payload),
                 };
-                req.Headers.Add("X-Api-Key", Constants.GatekeeperApiKey);
+                req.Headers.Add("X-Api-Key", Constants.GatekeeperClientAppId);
                 req.Headers.Add("X-Admin-Secret", AdminSession.CurrentSecret ?? string.Empty);
                 req.Headers.Add("X-Admin-Hwid", HardwareFingerprintHelper.GetMachineHwid());
                 req.Headers.CacheControl = new CacheControlHeaderValue
@@ -845,7 +880,7 @@ namespace TextureSwapper.Services
 
             if (Interlocked.CompareExchange(ref _isSyncingAssignedLicense, 1, 0) != 0)
             {
-                return settings.IsPremiumUnlocked;
+                return HasValidLocalSignature(settings);
             }
 
             try
@@ -861,17 +896,15 @@ namespace TextureSwapper.Services
                 }
 
                 if (
-                    settings.IsPremiumUnlocked
-                    && !string.IsNullOrEmpty(settings.PremiumActivationSignature)
+                    !forceSync
+                    && IntegrityChecker.ValidateAssemblyIntegrity()
+                    && HasValidLocalSignature(settings)
+                    && TryParseIso8601(settings.LastVerifiedUtc, out DateTime lastOnline)
+                    && lastOnline <= DateTime.UtcNow + ClockDriftTolerance
+                    && (DateTime.UtcNow - lastOnline) < OnlineRecheckInterval
                 )
                 {
-                    if (
-                        TryParseIso8601(settings.LastVerifiedUtc, out DateTime lastOnline)
-                        && (DateTime.UtcNow - lastOnline) < OnlineRecheckInterval
-                    )
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 string myHwid = HardwareFingerprintHelper.GetMachineHwid();
@@ -892,7 +925,7 @@ namespace TextureSwapper.Services
                 {
                     _ = req.Headers.TryAddWithoutValidation(
                         "X-Api-Key",
-                        Constants.GatekeeperApiKey
+                        Constants.GatekeeperClientAppId
                     );
                 }
 
@@ -1083,8 +1116,8 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error syncing assigned license with server.");
-                return settings.IsPremiumUnlocked;
+                Log.Error(ex, "Error syncing assigned license with server. Falling back to strict local verification.");
+                return await VerifyPremiumStatusAsync(settings);
             }
             finally
             {
@@ -1266,7 +1299,7 @@ namespace TextureSwapper.Services
                         {
                             _ = req.Headers.TryAddWithoutValidation(
                                 "X-Api-Key",
-                                Constants.GatekeeperApiKey
+                                Constants.GatekeeperClientAppId
                             );
                         }
 
@@ -1379,7 +1412,7 @@ namespace TextureSwapper.Services
                     }
                 }
 
-                return settings.IsPremiumUnlocked;
+                return HasValidLocalSignature(settings);
             }
             catch (Exception ex)
             {
@@ -1446,7 +1479,7 @@ namespace TextureSwapper.Services
                 {
                     _ = req.Headers.TryAddWithoutValidation(
                         "X-Api-Key",
-                        Constants.GatekeeperApiKey
+                        Constants.GatekeeperClientAppId
                     );
                 }
 
@@ -1623,7 +1656,7 @@ namespace TextureSwapper.Services
                 {
                     _ = req.Headers.TryAddWithoutValidation(
                         "X-Api-Key",
-                        Constants.GatekeeperApiKey
+                        Constants.GatekeeperClientAppId
                     );
                 }
 
@@ -1891,6 +1924,8 @@ namespace TextureSwapper.Services
             settings.PremiumExpiresAtUtc = string.Empty;
             settings.IsTrialLicense = false;
             _cachedAssetKey = null;
+            _verifiedSignatureKey = null;
+            _verifiedSignatureResult = false;
             _lastSettings = settings;
             _settingsService?.Save(settings);
             if (wasUnlocked)
@@ -1945,7 +1980,7 @@ namespace TextureSwapper.Services
                 {
                     _ = req.Headers.TryAddWithoutValidation(
                         "X-Api-Key",
-                        Constants.GatekeeperApiKey
+                        Constants.GatekeeperClientAppId
                     );
                 }
 

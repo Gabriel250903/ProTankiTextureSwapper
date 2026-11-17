@@ -1,8 +1,8 @@
+using Serilog;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.IO;
 using System.Text;
-using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 

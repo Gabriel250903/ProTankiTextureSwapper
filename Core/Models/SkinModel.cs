@@ -66,10 +66,7 @@ namespace TextureSwapper.Core.Models
         private bool _isExperimental;
         public bool IsExperimental
         {
-            get =>
-                _isExperimental
-                || (Category == "Hulls" && (Name.Contains("TX") || SourceFolder.Contains("TX")))
-                || Tags.Any(t => t.Equals("Experimental", StringComparison.OrdinalIgnoreCase));
+            get => _isExperimental;
             set
             {
                 if (_isExperimental != value)
@@ -95,7 +92,6 @@ namespace TextureSwapper.Core.Models
                     OnPropertyChanged(nameof(ComputedTags));
                     OnPropertyChanged(nameof(PrimaryThemeTag));
                     OnPropertyChanged(nameof(TagsDisplayText));
-                    OnPropertyChanged(nameof(IsExperimental));
                 }
             }
         }

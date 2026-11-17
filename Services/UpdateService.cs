@@ -1,3 +1,4 @@
+using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -7,7 +8,6 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Windows;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -97,6 +97,28 @@ namespace TextureSwapper.Services
             }
             IsOffline = true;
             throw new HttpRequestException("Max retries exceeded.");
+        }
+
+        public async Task<string?> FetchRemoteTextFileAsync(string relativePath)
+        {
+            string normalized = relativePath.Replace('\\', '/').TrimStart('/');
+            try
+            {
+                string url = $"{Constants.GitHubRawUrl}/{normalized}?t={DateTime.Now.Ticks}";
+                using HttpResponseMessage response = await GetWithRetryAsync(url);
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                Log.Warning($"Remote {normalized} not found on GitHub (404). Using local copy.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                IsOffline = true;
+                Log.Warning($"Network error while fetching remote {normalized}: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<(List<SkinModel>? Skins, string? RawJson)> FetchRemoteSkinsFileAsync(

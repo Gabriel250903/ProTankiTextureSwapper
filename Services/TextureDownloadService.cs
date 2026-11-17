@@ -1,20 +1,21 @@
+using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 
 namespace TextureSwapper.Services
 {
-    public sealed class TextureDownloadService() : ITextureDownloadService
+    public sealed class TextureDownloadService(ISettingsService? settingsService = null) : ITextureDownloadService
     {
         private static readonly HttpClient _httpClient;
         private const int StreamBufferSize = 131072;
+        private readonly ISettingsService? _settingsService = settingsService;
 
         static TextureDownloadService()
         {
@@ -31,11 +32,67 @@ namespace TextureSwapper.Services
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "ProTankiTextureSwapper");
         }
 
+        public static void CleanupOrphanedTempFiles()
+        {
+            try
+            {
+                string tempDir = Path.GetTempPath();
+                foreach (string file in Directory.EnumerateFiles(tempDir, "textures_*.*"))
+                {
+                    string ext = Path.GetExtension(file).ToLowerInvariant();
+                    if (
+                        ext == ".zip"
+                        || ext == ".part"
+                        || ext == ".tmp"
+                        || file.EndsWith(".zip.part", StringComparison.OrdinalIgnoreCase)
+                    )
+                    {
+                        try
+                        {
+                            File.Delete(file);
+                        }
+                        catch
+                        {
+                            Log.Error(
+                                "Failed to delete orphaned temporary textures file: {Path}",
+                                file
+                            );
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(ex, "Failed to clean orphaned textures temp files.");
+            }
+        }
+
         public bool AreTexturesInstalled()
         {
             try
             {
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string versionFile = Path.Combine(
+                    baseDir,
+                    "Textures",
+                    Constants.TexturesVersionFileName
+                );
+                if (!File.Exists(versionFile))
+                {
+                    return false;
+                }
+
+                string versionContent = File.ReadAllText(versionFile);
+                if (
+                    !versionContent.Contains(
+                        $"Version={Constants.RequiredTexturesPackVersion}",
+                        StringComparison.Ordinal
+                    )
+                )
+                {
+                    return false;
+                }
+
                 string hullsDir = Path.Combine(baseDir, "Textures", "Hulls");
                 string turretsDir = Path.Combine(baseDir, "Textures", "Turrets");
                 string shotEffectsDir = Path.Combine(baseDir, "Textures", "ShotEffects");
@@ -89,10 +146,13 @@ namespace TextureSwapper.Services
             CancellationToken cancellationToken = default
         )
         {
+            CleanupOrphanedTempFiles();
+
             string tempZipPath = Path.Combine(
                 Path.GetTempPath(),
                 $"textures_{Guid.NewGuid():N}.zip"
             );
+            string tempPartPath = tempZipPath + ".part";
             bool isLocalFileOverride = false;
 
             try
@@ -151,167 +211,245 @@ namespace TextureSwapper.Services
 
                 if (!isLocalFileOverride)
                 {
-                    string downloadUrl = !string.IsNullOrEmpty(envOverride)
-                        ? envOverride
-                        : Constants.TexturesLatestDownloadUrl;
-
-                    const int maxAttempts = 3;
+                    string preferredMirror = _settingsService?.Load()?.PreferredTextureMirror ?? "Cloudflare";
+                    string[] candidateMirrors = !string.IsNullOrEmpty(envOverride)
+                        ? [envOverride]
+                        : string.Equals(preferredMirror, "GitHub", StringComparison.OrdinalIgnoreCase)
+                            ? [
+                            Constants.TexturesLatestDownloadUrl,
+                            Constants.TexturesWorkerDownloadUrl,
+                        ]
+                            : Constants.TexturesDownloadMirrors;
                     bool downloadSucceeded = false;
+                    Exception? lastException = null;
 
-                    for (int attempt = 1; attempt <= maxAttempts; attempt++)
+                    for (int mirrorIndex = 0; mirrorIndex < candidateMirrors.Length; mirrorIndex++)
                     {
-                        try
+                        string downloadUrl = candidateMirrors[mirrorIndex];
+                        const int maxAttemptsPerMirror = 2;
+
+                        for (int attempt = 1; attempt <= maxAttemptsPerMirror; attempt++)
                         {
-                            onProgress?.Invoke("Connecting to download server...", 0);
-                            Log.Information(
-                                "Downloading textures (Attempt {Attempt}/{MaxAttempts}) from {Url}",
-                                attempt,
-                                maxAttempts,
-                                downloadUrl
-                            );
-
-                            using HttpResponseMessage response = await _httpClient.GetAsync(
-                                downloadUrl,
-                                HttpCompletionOption.ResponseHeadersRead,
-                                cancellationToken
-                            );
-
-                            if (
-                                response.StatusCode == HttpStatusCode.NotFound
-                                && downloadUrl == Constants.TexturesLatestDownloadUrl
-                            )
+                            try
                             {
-                                Log.Warning(
-                                    "Latest release download URL returned 404. Checking GitHub releases for latest textures.zip asset..."
+                                onProgress?.Invoke("Connecting to download server...", 0);
+                                Log.Information(
+                                    "Downloading textures (Mirror {MirrorIndex}/{TotalMirrors}, Attempt {Attempt}/{MaxAttempts}) from {Url}",
+                                    mirrorIndex + 1,
+                                    candidateMirrors.Length,
+                                    attempt,
+                                    maxAttemptsPerMirror,
+                                    downloadUrl
                                 );
-                                string? resolvedUrl = await TryResolveReleaseAssetUrlAsync(
+
+                                using HttpResponseMessage response = await _httpClient.GetAsync(
+                                    downloadUrl,
+                                    HttpCompletionOption.ResponseHeadersRead,
                                     cancellationToken
                                 );
+
                                 if (
-                                    !string.IsNullOrEmpty(resolvedUrl)
-                                    && resolvedUrl != downloadUrl
+                                    response.StatusCode == HttpStatusCode.NotFound
+                                    && downloadUrl == Constants.TexturesLatestDownloadUrl
                                 )
                                 {
-                                    downloadUrl = resolvedUrl;
-                                    Log.Information(
-                                        "Retrying download with resolved release URL: {Url}",
-                                        downloadUrl
+                                    Log.Warning(
+                                        "Latest release download URL returned 404. Checking GitHub releases for latest textures.zip asset..."
                                     );
-                                    attempt--;
-                                    continue;
-                                }
-                            }
-
-                            _ = response.EnsureSuccessStatusCode();
-                            long totalBytes = response.Content.Headers.ContentLength ?? -1L;
-
-                            using Stream contentStream = await response.Content.ReadAsStreamAsync(
-                                cancellationToken
-                            );
-                            using FileStream fileStream = new(
-                                tempZipPath,
-                                FileMode.Create,
-                                FileAccess.Write,
-                                FileShare.None,
-                                StreamBufferSize,
-                                FileOptions.Asynchronous | FileOptions.SequentialScan
-                            );
-
-                            byte[] buffer = new byte[StreamBufferSize];
-                            long totalRead = 0L;
-                            int read;
-                            long lastReportedBytes = 0L;
-                            Stopwatch speedStopwatch = Stopwatch.StartNew();
-
-                            while (
-                                (
-                                    read = await contentStream.ReadAsync(
-                                        buffer.AsMemory(0, buffer.Length),
+                                    string? resolvedUrl = await TryResolveReleaseAssetUrlAsync(
                                         cancellationToken
+                                    );
+                                    if (
+                                        !string.IsNullOrEmpty(resolvedUrl)
+                                        && resolvedUrl != downloadUrl
                                     )
-                                ) > 0
-                            )
-                            {
-                                await fileStream.WriteAsync(
-                                    buffer.AsMemory(0, read),
+                                    {
+                                        downloadUrl = resolvedUrl;
+                                        Log.Information(
+                                            "Retrying download with resolved release URL: {Url}",
+                                            downloadUrl
+                                        );
+                                        attempt--;
+                                        continue;
+                                    }
+                                }
+
+                                _ = response.EnsureSuccessStatusCode();
+                                long totalBytes = response.Content.Headers.ContentRange?.Length
+                                    ?? response.Content.Headers.ContentLength
+                                    ?? -1L;
+
+                                using Stream contentStream = await response.Content.ReadAsStreamAsync(
                                     cancellationToken
                                 );
-                                totalRead += read;
-
-                                if (
-                                    speedStopwatch.ElapsedMilliseconds >= 150
-                                    || totalRead == totalBytes
+                                using (
+                                    FileStream fileStream = new(
+                                        tempPartPath,
+                                        FileMode.Create,
+                                        FileAccess.Write,
+                                        FileShare.None,
+                                        StreamBufferSize,
+                                        FileOptions.Asynchronous | FileOptions.SequentialScan
+                                    )
                                 )
                                 {
-                                    double elapsedSec = speedStopwatch.Elapsed.TotalSeconds;
-                                    double speedMbps =
-                                        elapsedSec > 0
-                                            ? (totalRead - lastReportedBytes)
-                                                / (1024.0 * 1024.0)
-                                                / elapsedSec
-                                            : 0;
+                                    byte[] buffer = new byte[StreamBufferSize];
+                                    long totalRead = 0L;
+                                    int read;
+                                    long lastReportedBytes = 0L;
+                                    Stopwatch speedStopwatch = Stopwatch.StartNew();
 
-                                    if (totalBytes > 0)
+                                    while (
+                                        (
+                                            read = await contentStream.ReadAsync(
+                                                buffer.AsMemory(0, buffer.Length),
+                                                cancellationToken
+                                            )
+                                        ) > 0
+                                    )
                                     {
-                                        double percent = (double)totalRead / totalBytes * 100.0;
-                                        double currentMb = totalRead / (1024.0 * 1024.0);
-                                        double totalMb = totalBytes / (1024.0 * 1024.0);
-                                        onProgress?.Invoke(
-                                            $"Downloading textures... {percent:F0}% ({currentMb:F1} / {totalMb:F1} MB - {speedMbps:F1} MB/s)",
-                                            percent
+                                        await fileStream.WriteAsync(
+                                            buffer.AsMemory(0, read),
+                                            cancellationToken
+                                        );
+                                        totalRead += read;
+
+                                        if (
+                                            speedStopwatch.ElapsedMilliseconds >= 150
+                                            || totalRead == totalBytes
+                                        )
+                                        {
+                                            double elapsedSec = speedStopwatch.Elapsed.TotalSeconds;
+                                            double speedMbps =
+                                                elapsedSec > 0
+                                                    ? (totalRead - lastReportedBytes)
+                                                        / (1024.0 * 1024.0)
+                                                        / elapsedSec
+                                                    : 0;
+
+                                            if (totalBytes > 0)
+                                            {
+                                                double percent = (double)totalRead / totalBytes * 100.0;
+                                                double currentMb = totalRead / (1024.0 * 1024.0);
+                                                double totalMb = totalBytes / (1024.0 * 1024.0);
+                                                onProgress?.Invoke(
+                                                    $"Downloading textures... {percent:F0}% ({currentMb:F1} / {totalMb:F1} MB - {speedMbps:F1} MB/s)",
+                                                    percent
+                                                );
+                                            }
+                                            else
+                                            {
+                                                double mbRead = totalRead / (1024.0 * 1024.0);
+                                                onProgress?.Invoke(
+                                                    $"Downloading textures... ({mbRead:F1} MB - {speedMbps:F1} MB/s)",
+                                                    0
+                                                );
+                                            }
+
+                                            lastReportedBytes = totalRead;
+                                            speedStopwatch.Restart();
+                                        }
+                                    }
+
+                                    if (totalBytes > 0 && totalRead < totalBytes)
+                                    {
+                                        throw new IOException(
+                                            $"Download was incomplete: received {totalRead} of {totalBytes} bytes."
                                         );
                                     }
-                                    else
-                                    {
-                                        double mbRead = totalRead / (1024.0 * 1024.0);
-                                        onProgress?.Invoke(
-                                            $"Downloading textures... ({mbRead:F1} MB - {speedMbps:F1} MB/s)",
-                                            0
-                                        );
-                                    }
-
-                                    lastReportedBytes = totalRead;
-                                    speedStopwatch.Restart();
                                 }
-                            }
 
-                            downloadSucceeded = true;
-                            break;
-                        }
-                        catch (Exception ex)
-                            when (attempt < maxAttempts
-                                && !cancellationToken.IsCancellationRequested
-                            )
-                        {
-                            int delaySeconds = (int)Math.Pow(2, attempt - 1);
-                            Log.Warning(
-                                ex,
-                                "Download attempt {Attempt} failed. Retrying in {Delay}s...",
-                                attempt,
-                                delaySeconds
-                            );
-                            onProgress?.Invoke(
-                                $"Connection interrupted. Retrying in {delaySeconds}s (attempt {attempt}/{maxAttempts})...",
-                                0
-                            );
-
-                            if (File.Exists(tempZipPath))
-                            {
-                                try
+                                if (File.Exists(tempZipPath))
                                 {
-                                    File.Delete(tempZipPath);
+                                    try
+                                    {
+                                        File.Delete(tempZipPath);
+                                    }
+                                    catch { }
                                 }
-                                catch { }
-                            }
+                                File.Move(tempPartPath, tempZipPath);
 
-                            await Task.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken);
+                                downloadSucceeded = true;
+                                break;
+                            }
+                            catch (Exception ex)
+                                when (attempt < maxAttemptsPerMirror
+                                    && !cancellationToken.IsCancellationRequested
+                                )
+                            {
+                                lastException = ex;
+                                int delaySeconds = (int)Math.Pow(2, attempt - 1);
+                                Log.Warning(
+                                    ex,
+                                    "Download attempt {Attempt} from mirror {Url} failed. Retrying in {Delay}s...",
+                                    attempt,
+                                    downloadUrl,
+                                    delaySeconds
+                                );
+                                onProgress?.Invoke(
+                                    $"Connection interrupted. Retrying in {delaySeconds}s...",
+                                    0
+                                );
+
+                                if (File.Exists(tempPartPath))
+                                {
+                                    try
+                                    {
+                                        File.Delete(tempPartPath);
+                                    }
+                                    catch { }
+                                }
+                                if (File.Exists(tempZipPath))
+                                {
+                                    try
+                                    {
+                                        File.Delete(tempZipPath);
+                                    }
+                                    catch { }
+                                }
+
+                                await Task.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken);
+                            }
+                            catch (Exception ex) when (!cancellationToken.IsCancellationRequested)
+                            {
+                                lastException = ex;
+                                Log.Warning(
+                                    ex,
+                                    "Mirror {Url} failed. Falling back to next mirror...",
+                                    downloadUrl
+                                );
+
+                                if (File.Exists(tempPartPath))
+                                {
+                                    try
+                                    {
+                                        File.Delete(tempPartPath);
+                                    }
+                                    catch { }
+                                }
+                                if (File.Exists(tempZipPath))
+                                {
+                                    try
+                                    {
+                                        File.Delete(tempZipPath);
+                                    }
+                                    catch { }
+                                }
+                                break;
+                            }
+                        }
+
+                        if (downloadSucceeded)
+                        {
+                            break;
                         }
                     }
 
                     if (!downloadSucceeded)
                     {
                         throw new HttpRequestException(
-                            $"Failed to download textures after {maxAttempts} attempts."
+                            "Failed to download textures from all configured mirrors.",
+                            lastException
                         );
                     }
                 }
@@ -349,10 +487,36 @@ namespace TextureSwapper.Services
                             safeTargetRoot += Path.DirectorySeparatorChar;
                         }
 
+                        string versionFile = Path.Combine(
+                            safeTargetRoot,
+                            Constants.TexturesVersionFileName
+                        );
+
+                        if (Directory.Exists(safeTargetRoot) && !File.Exists(versionFile))
+                        {
+                            Log.Warning(
+                                "Previous incomplete or unversioned Textures directory detected. Cleaning up before fresh extraction..."
+                            );
+                            try
+                            {
+                                Directory.Delete(safeTargetRoot, recursive: true);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(ex, "Failed to fully purge partial Textures directory.");
+                            }
+                        }
+
+                        if (File.Exists(versionFile))
+                        {
+                            File.Delete(versionFile);
+                        }
+
                         Directory.CreateDirectory(safeTargetRoot);
 
                         int totalEntries = archive.Entries.Count;
                         int processedEntries = 0;
+                        int failedEntries = 0;
 
                         foreach (ZipArchiveEntry entry in archive.Entries)
                         {
@@ -420,9 +584,10 @@ namespace TextureSwapper.Services
                             }
                             catch (Exception ex)
                             {
+                                failedEntries++;
                                 Log.Warning(
                                     ex,
-                                    "Failed to extract '{Entry}' to '{Dest}'; skipping.",
+                                    "Failed to extract '{Entry}' to '{Dest}'.",
                                     entry.FullName,
                                     destPath
                                 );
@@ -443,11 +608,17 @@ namespace TextureSwapper.Services
                             }
                         }
 
-                        string versionFile = Path.Combine(
-                            safeTargetRoot,
-                            Constants.TexturesVersionFileName
+                        if (failedEntries > 0 || (totalEntries > 0 && processedEntries == 0))
+                        {
+                            throw new IOException(
+                                $"Texture archive extraction incomplete: {failedEntries} entry/entries failed."
+                            );
+                        }
+
+                        File.WriteAllText(
+                            versionFile,
+                            $"Version={Constants.RequiredTexturesPackVersion}\nInstalledAt={DateTime.UtcNow:O}"
                         );
-                        File.WriteAllText(versionFile, $"InstalledAt={DateTime.UtcNow:O}");
                     },
                     cancellationToken
                 );
@@ -462,19 +633,31 @@ namespace TextureSwapper.Services
             }
             finally
             {
-                if (!isLocalFileOverride && File.Exists(tempZipPath))
+                if (!isLocalFileOverride)
                 {
-                    try
+                    if (File.Exists(tempPartPath))
                     {
-                        File.Delete(tempZipPath);
+                        try
+                        {
+                            File.Delete(tempPartPath);
+                        }
+                        catch { }
                     }
-                    catch (Exception ex)
+
+                    if (File.Exists(tempZipPath))
                     {
-                        Log.Warning(
-                            ex,
-                            "Failed to delete temporary textures zip file: {Path}",
-                            tempZipPath
-                        );
+                        try
+                        {
+                            File.Delete(tempZipPath);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warning(
+                                ex,
+                                "Failed to delete temporary textures zip file: {Path}",
+                                tempZipPath
+                            );
+                        }
                     }
                 }
             }

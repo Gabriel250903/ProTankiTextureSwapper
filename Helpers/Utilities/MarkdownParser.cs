@@ -1,3 +1,4 @@
+using Serilog;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -5,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using Serilog;
 
 namespace TextureSwapper.Helpers.Utilities
 {

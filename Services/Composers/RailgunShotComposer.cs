@@ -1,8 +1,8 @@
+using Serilog;
 using System.Buffers;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;

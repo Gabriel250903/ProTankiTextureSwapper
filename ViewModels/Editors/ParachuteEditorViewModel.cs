@@ -1,11 +1,11 @@
+using Microsoft.Win32;
+using Serilog;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -108,16 +108,6 @@ namespace TextureSwapper.ViewModels.Editors
 
         private async Task ExecuteApplyAndSwap(object? obj)
         {
-            if (!IsPremiumUnlocked)
-            {
-                _ = NotificationService.ShowAsync(
-                    "Premium Feature Locked",
-                    "The Custom Parachute Editor is a ProTanki Premium feature! Please unlock Premium in Settings.",
-                    ControlAppearance.Danger
-                );
-                return;
-            }
-
             try
             {
                 IsApplying = true;

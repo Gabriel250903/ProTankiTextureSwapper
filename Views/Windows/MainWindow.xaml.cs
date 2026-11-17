@@ -1,12 +1,10 @@
-using System.Diagnostics;
+using Serilog;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Serilog;
-using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Utilities;
@@ -14,7 +12,6 @@ using TextureSwapper.ViewModels;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using TextBlock = Wpf.Ui.Controls.TextBlock;
 
 namespace TextureSwapper.Views.Windows
@@ -43,15 +40,13 @@ namespace TextureSwapper.Views.Windows
             }
             ApplicationThemeManager.Changed += OnAppThemeChanged;
 
-            Loaded += async (_, _) =>
+            Loaded += (_, _) =>
             {
                 if (_mainViewModel.IsSeasonalThemeActive)
                 {
                     _mainViewModel.SeasonalAudioService.PlayLaunchGreeting();
                     _mainViewModel.SeasonalAudioService.SetAmbientDrone(true);
                 }
-
-                await CheckAndShowDiscordInviteAsync();
             };
 
             PreviewMouseLeftButtonDown += OnGlobalPreviewMouseLeftButtonDown;
@@ -72,11 +67,6 @@ namespace TextureSwapper.Views.Windows
 
         private void OnGlobalPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!_mainViewModel.IsHalloweenThemeActive)
-            {
-                return;
-            }
-
             try
             {
                 DependencyObject? current = e.OriginalSource as DependencyObject;
@@ -354,93 +344,6 @@ namespace TextureSwapper.Views.Windows
             _mainViewModel.AdminVM.CloseRequested -= OnAdminCloseRequested;
             _mainViewModel.AdminVM.AdminNotificationRequested -= AdminOverlay.ShowToastAsync;
             AdminOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private async Task CheckAndShowDiscordInviteAsync()
-        {
-            try
-            {
-                if (_mainViewModel.Settings.HasSeenDiscordInvite)
-                {
-                    return;
-                }
-
-                string title =
-                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Title")
-                    ?? "Join the Discord Server";
-                string header =
-                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Header")
-                    ?? "Welcome to Texture Swapper V2!";
-                string body =
-                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Body")
-                    ?? "Join the official Discord server to follow the latest news, announcements, texture updates, and sneak peeks.\n\nConnect with other swappers, get support, and share your suggestions!";
-                string joinText =
-                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Join")
-                    ?? "Join Discord Server";
-                string laterText =
-                    _mainViewModel.LocalizationService.GetString("Loc_DiscordInvite_Later")
-                    ?? "Maybe Later";
-
-                StackPanel panel = new() { Margin = new Thickness(0, 10, 0, 10), MaxWidth = 500 };
-
-                TextBlock headerBlock = new()
-                {
-                    Text = header,
-                    FontSize = 18,
-                    FontWeight = FontWeights.Bold,
-                    Margin = new Thickness(0, 0, 0, 12),
-                    TextWrapping = TextWrapping.Wrap,
-                };
-
-                TextBlock bodyBlock = new()
-                {
-                    Text = body,
-                    FontSize = 13.5,
-                    Opacity = 0.85,
-                    LineHeight = 20,
-                    TextWrapping = TextWrapping.Wrap,
-                };
-
-                _ = panel.Children.Add(headerBlock);
-                _ = panel.Children.Add(bodyBlock);
-
-                MessageBox messageBox = new()
-                {
-                    Title = title,
-                    Content = panel,
-                    PrimaryButtonText = joinText,
-                    SecondaryButtonText = laterText,
-                    MaxWidth = 540,
-                };
-
-                MessageBoxResult result = await messageBox.ShowDialogAsync();
-                if (result == MessageBoxResult.Primary)
-                {
-                    try
-                    {
-                        _ = Process.Start(
-                            new ProcessStartInfo
-                            {
-                                FileName = Constants.DiscordInviteUrl,
-                                UseShellExecute = true,
-                            }
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to launch Discord invite URL.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to display Discord invite notice.");
-            }
-            finally
-            {
-                _mainViewModel.Settings.HasSeenDiscordInvite = true;
-                _mainViewModel.SaveSettings();
-            }
         }
     }
 }

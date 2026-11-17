@@ -1286,5 +1286,101 @@
     "Name": "Best Helper 2025",
     "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
     "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Best Helper 2025_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Irbis 2.0",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Irbis 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Emerald 2.0",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Emerald 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Tiger 2.0",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Tiger 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Matrix 2.0",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Matrix 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Overdrive Core",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Overdrive Core_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Void Rift",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Void Rift_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Event Horizon",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Event Horizon_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Monochrome 2.0",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Monochrome 2.0_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Liquid Chrome",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Liquid Chrome_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Aurora Ribbon",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Aurora Ribbon_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Silk",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Silk_preview.png"
+  },
+  {
+    "IsPremium": true,
+    "Category": "Paints",
+    "ItemName": "Noizy Paints",
+    "Name": "Eclipse",
+    "SourceFolder": "Textures/Encrypted/Paints/Noizy Paints",
+    "PreviewImage": "Textures/Encrypted/Paints/Noizy Paints/Eclipse_preview.png"
   }
 ]

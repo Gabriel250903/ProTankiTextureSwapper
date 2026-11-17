@@ -256,7 +256,6 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMS8xNjYvMzIwMjM1MTA0MzA3MjIvZGV0YWlsc19hbHBoYS5qcGc=",
-    "IsPremium": true,
     "Tags": [
       "Demonic",
       "Old"
@@ -678,7 +677,6 @@
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8xNzYvMzIwMjM1MTA0MjU3MTcvZGV0YWlsc19hbHBoYS5qcGc=",
-    "IsPremium": true,
     "Tags": [
       "Demonic",
       "Old"
@@ -703,12 +701,13 @@
     "Category": "Turrets",
     "ItemName": "Isida",
     "Name": "Isida DC",
-    "SourceFolder": "Textures/Turrets/Isida/DC/M3",
-    "PreviewImage": "Textures/Turrets/Isida/DC/M3/Isida_DC.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Isida/DC/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Isida/DC/M3/Isida_DC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMjAyMzUxMDQyNDI1Ni9kZXRhaWxzLmpwZw==",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMjAyMzUxMDQyNDI1Ni9saWdodG1hcC5qcGc=",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMjAyMzUxMDQyNDI1Ni9kZXRhaWxzX2FscGhhLmpwZw==",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMjAyMzUxMDQyNDI1Ni9vYmplY3QuM2Rz"
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC81NC8zMjAyMzUxMDQyNDI1Ni9vYmplY3QuM2Rz",
+    "IsPremium": true
   },
   {
     "Category": "Turrets",
@@ -744,12 +743,13 @@
     "Category": "Turrets",
     "ItemName": "Shaft",
     "Name": "Shaft DC",
-    "SourceFolder": "Textures/Turrets/Shaft/DC/M3",
-    "PreviewImage": "Textures/Turrets/Shaft/DC/M3/Shaft_DC.png",
+    "SourceFolder": "Textures/Encrypted/Turrets/Shaft/DC/M3",
+    "PreviewImage": "Textures/Encrypted/Turrets/Shaft/DC/M3/Shaft_DC.png",
     "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzIwMjM1MTA0MjY1NDYvZGV0YWlscy5qcGc=",
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzIwMjM1MTA0MjY1NDYvbGlnaHRtYXAuanBn",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzIwMjM1MTA0MjY1NDYvZGV0YWlsc19hbHBoYS5qcGc=",
-    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzIwMjM1MTA0MjY1NDYvb2JqZWN0LjNkcw=="
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC8yMDYvMzIwMjM1MTA0MjY1NDYvb2JqZWN0LjNkcw==",
+    "IsPremium": true
   },
   {
     "Category": "Turrets",

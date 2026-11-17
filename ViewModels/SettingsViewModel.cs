@@ -1,9 +1,9 @@
+using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
@@ -14,7 +14,7 @@ using Wpf.Ui.Controls;
 
 namespace TextureSwapper.ViewModels;
 
-public class SettingsViewModel : ViewModelBase
+public class SettingsViewModel : ViewModelBase, IDisposable
 {
     private readonly ISettingsService _settingsService;
 
@@ -26,7 +26,9 @@ public class SettingsViewModel : ViewModelBase
 
     private readonly IDeviceBanService _deviceBanService;
 
-    private readonly IHudService _hudService;
+    private readonly Services.PackLogListener? _packLogListener;
+
+    private readonly SemaphoreSlim _scriptPatchLock = new(1, 1);
 
     private string _activationStatusText = string.Empty;
 
@@ -549,6 +551,44 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
+    public IReadOnlyList<string> AvailableDownloadMirrors { get; } =
+    [
+        "Cloudflare (Fast)",
+        "GitHub Releases"
+    ];
+
+    public string SelectedDownloadMirror
+    {
+        get =>
+            string.Equals(
+                Settings.PreferredTextureMirror,
+                "GitHub",
+                StringComparison.OrdinalIgnoreCase
+            )
+                ? "GitHub Releases"
+                : "Cloudflare (Fast)";
+        set
+        {
+            string clean = value == "GitHub Releases" ? "GitHub" : "Cloudflare";
+            if (
+                !string.Equals(
+                    Settings.PreferredTextureMirror,
+                    clean,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+            {
+                Settings.PreferredTextureMirror = clean;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(SelectedDownloadMirror));
+                Log.Information(
+                    "Settings changed: Preferred Texture Download Mirror set to {Mirror}",
+                    clean
+                );
+            }
+        }
+    }
+
     public ICommand CheckForUpdatesCommand { get; }
 
     public ICommand CopyHardwareIdCommand { get; }
@@ -563,37 +603,183 @@ public class SettingsViewModel : ViewModelBase
 
     public ICommand OpenLogsFolderCommand { get; }
 
-    public ICommand InstallLoaderPatchCommand { get; }
+    public IReadOnlyList<string> AvailableClientModes { get; } =
+    [
+        "HTML5 Client (New)",
+        "Flash Client (Legacy)"
+    ];
 
-    public bool EnableCenteredHud
+    public bool IsHtml5Client => _mainViewModel.IsHtml5Client;
+
+    public bool IsFlashClient => _mainViewModel.IsFlashClient;
+
+    public string SelectedClientMode
     {
-        get => Settings.EnableCenteredHud;
+        get => IsHtml5Client ? "HTML5 Client (New)" : "Flash Client (Legacy)";
         set
         {
-            if (Settings.EnableCenteredHud != value)
+            ClientType target =
+                value != null && value.StartsWith("HTML5", StringComparison.OrdinalIgnoreCase)
+                    ? ClientType.Html5
+                    : ClientType.Flash;
+            if (Settings.ActiveClient != target)
             {
-                Settings.EnableCenteredHud = value;
-                _settingsService.Save(Settings);
-                OnPropertyChanged(nameof(EnableCenteredHud));
-                _ = HandleCenteredHudToggleAsync(value);
+                _mainViewModel.SwitchClient(target);
+                if (!IsHtml5Client)
+                {
+                    Settings.EnableProTankiPack = false;
+                    Settings.EnableSkinAnimations = false;
+                }
+                else
+                {
+                    _ = RefreshHtml5ScriptTogglesAsync();
+                }
+                OnPropertyChanged(nameof(EnableProTankiPack));
+                OnPropertyChanged(nameof(EnableSkinAnimations));
+                OnPropertyChanged(nameof(SelectedClientMode));
+                OnPropertyChanged(nameof(IsHtml5Client));
+                OnPropertyChanged(nameof(IsFlashClient));
+                OnPropertyChanged(nameof(ActiveCachePath));
+                ExecuteRefreshLogs(null);
             }
         }
     }
 
-    public bool IsLoaderPatched => _hudService.IsLoaderPatched();
+    public string ActiveCachePath => _mainViewModel.CachePath;
 
-    public string LoaderPatchStatusText =>
-        IsLoaderPatched
-            ? "Patched (Local Overrides Active)"
-            : "Not Patched (Required for HUD overrides)";
+    public ICommand BrowseCachePathCommand { get; }
+
+    public ICommand ResetCachePathCommand { get; }
+
+    public IReadOnlyList<string> AvailableShaderHotkeys
+    {
+        get
+        {
+            string current = SelectedShaderHotkey;
+            return string.IsNullOrWhiteSpace(current)
+                || Core.Constants.AllowedShaderHotkeys.Contains(current, StringComparer.OrdinalIgnoreCase)
+                ? Core.Constants.AllowedShaderHotkeys
+                : (IReadOnlyList<string>)[.. Core.Constants.AllowedShaderHotkeys, current];
+        }
+    }
+
+    public bool EnablePackLogListener
+    {
+        get => Settings.EnablePackLogListener;
+        set
+        {
+            if (Settings.EnablePackLogListener != value)
+            {
+                Settings.EnablePackLogListener = value;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(EnablePackLogListener));
+
+                Services.PackLogListener? listener =
+                    App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+                if (value || Settings.EnableProTankiPack)
+                {
+                    listener?.Start();
+                }
+                else
+                {
+                    listener?.Stop();
+                }
+            }
+        }
+    }
+
+    public bool EnableProTankiPack
+    {
+        get => Settings.EnableProTankiPack;
+        set
+        {
+            if (Settings.EnableProTankiPack != value)
+            {
+                Settings.EnableProTankiPack = value;
+                OnPropertyChanged(nameof(EnableProTankiPack));
+                _ = HandleShadersToggleAsync(value, isHotkeyUpdate: false);
+            }
+        }
+    }
+
+    public string SelectedShaderHotkey
+    {
+        get => Core.Constants.NormalizeShaderHotkey(Settings.ProTankiPackHotkey);
+        set
+        {
+            string normalized = Core.Constants.NormalizeShaderHotkey(value);
+            if (
+                !string.Equals(
+                    Settings.ProTankiPackHotkey,
+                    normalized,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+            {
+                string previous = Settings.ProTankiPackHotkey;
+                Settings.ProTankiPackHotkey = normalized;
+                OnPropertyChanged(nameof(SelectedShaderHotkey));
+                if (Settings.EnableProTankiPack && IsHtml5Client)
+                {
+                    _ = HandleShadersToggleAsync(true, isHotkeyUpdate: true, previousHotkey: previous);
+                }
+                else
+                {
+                    _settingsService.Save(Settings);
+                }
+            }
+        }
+    }
+
+    public bool EnableSkinAnimations
+    {
+        get => Settings.EnableSkinAnimations;
+        set
+        {
+            if (Settings.EnableSkinAnimations != value)
+            {
+                Settings.EnableSkinAnimations = value;
+                OnPropertyChanged(nameof(EnableSkinAnimations));
+                _ = HandleSkinAnimationsToggleAsync(value, isHotkeyUpdate: false);
+            }
+        }
+    }
+
+    public string SelectedSkinAnimHotkey
+    {
+        get => Core.Constants.NormalizeShaderHotkey(Settings.SkinAnimMenuHotkey);
+        set
+        {
+            string normalized = Core.Constants.NormalizeShaderHotkey(value);
+            if (
+                !string.Equals(
+                    Settings.SkinAnimMenuHotkey,
+                    normalized,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+            {
+                string previous = Settings.SkinAnimMenuHotkey;
+                Settings.SkinAnimMenuHotkey = normalized;
+                OnPropertyChanged(nameof(SelectedSkinAnimHotkey));
+                if (Settings.EnableSkinAnimations && IsHtml5Client)
+                {
+                    _ = HandleSkinAnimationsToggleAsync(true, isHotkeyUpdate: true, previousHotkey: previous);
+                }
+                else
+                {
+                    _settingsService.Save(Settings);
+                }
+            }
+        }
+    }
 
     public SettingsViewModel(
         ISettingsService settingsService,
         MainViewModel mainViewModel,
         ILocalizationService localizationService,
         IPremiumService premiumService,
-        IDeviceBanService deviceBanService,
-        IHudService hudService
+        IDeviceBanService deviceBanService
     )
     {
         _settingsService = settingsService;
@@ -601,15 +787,57 @@ public class SettingsViewModel : ViewModelBase
         _localizationService = localizationService;
         _premiumService = premiumService;
         _deviceBanService = deviceBanService;
-        _hudService = hudService;
+        _packLogListener =
+            App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+        if (_packLogListener != null)
+        {
+            _packLogListener.MenuHotkeyChanged += OnPackMenuHotkeyChanged;
+        }
         Settings = mainViewModel.Settings;
 
-        Settings.EnableCenteredHud = _hudService.IsCenteredHudEnabled();
-
-        InstallLoaderPatchCommand = new AsyncRelayCommand(
-            ExecuteInstallLoaderPatch,
-            _ => !IsLoading
-        );
+        if (!IsHtml5Client)
+        {
+            Settings.EnableProTankiPack = false;
+            Settings.EnableSkinAnimations = false;
+        }
+        else
+        {
+            _ = RefreshHtml5ScriptTogglesAsync();
+        }
+        BrowseCachePathCommand = new RelayCommand(_ =>
+        {
+            _mainViewModel.BrowseCommand.Execute(null);
+            OnPropertyChanged(nameof(ActiveCachePath));
+            ExecuteRefreshLogs(null);
+        });
+        ResetCachePathCommand = new RelayCommand(_ =>
+        {
+            if (IsHtml5Client)
+            {
+                Settings.CustomHtml5CachePath = null;
+            }
+            else
+            {
+                Settings.CustomCachePath = null;
+            }
+            _settingsService.Save(Settings);
+            _mainViewModel.Html5CacheService.InvalidateCache();
+            _mainViewModel.CachePath = _mainViewModel.ResolveActiveCachePath();
+            OnPropertyChanged(nameof(ActiveCachePath));
+            Log.Information(
+                "Reset {Client} cache path to auto-detected default: {Path}",
+                Settings.ActiveClient,
+                _mainViewModel.CachePath
+            );
+            ExecuteRefreshLogs(null);
+        });
+        _mainViewModel.ActiveClientChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(SelectedClientMode));
+            OnPropertyChanged(nameof(IsHtml5Client));
+            OnPropertyChanged(nameof(IsFlashClient));
+            OnPropertyChanged(nameof(ActiveCachePath));
+        };
         BuyPremiumCommand = new RelayCommand(_ =>
         {
             ExecuteBuyPremium();
@@ -1090,114 +1318,157 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
-    private async Task HandleCenteredHudToggleAsync(bool enable)
+    private async Task RefreshHtml5ScriptTogglesAsync()
     {
         try
         {
-            IsLoading = true;
-            UpdateStatus = enable ? "Applying Centered HUD..." : "Restoring Default HUD...";
-
-            if (enable)
+            string cachePath = _mainViewModel.CachePath;
+            (bool shadersEnabled, bool skinAnimEnabled) = await Task.Run(() =>
+                _mainViewModel.Html5CacheService.GetAppliedScriptStatus(cachePath)
+            );
+            if (!IsHtml5Client)
             {
-                if (!_hudService.IsLoaderPatched())
-                {
-                    await _mainViewModel.ShowNotificationAsync(
-                        "StandaloneLoader Not Patched",
-                        "The StandaloneLoader patch is required to load custom HUD files. Click 'Install Patch' below.",
-                        ControlAppearance.Caution
-                    );
-                }
+                return;
+            }
 
-                (bool success, string? error) = await _hudService.ApplyCenteredHudAsync();
-                if (success)
-                {
-                    string msg = Helpers.Utilities.FileHelper.IsGameRunning()
-                        ? "Centered Supplies HUD applied! Restart ProTanki to see the centered supplies in battle."
-                        : "Centered Supplies HUD applied! Launch ProTanki to play with the centered HUD.";
-                    await _mainViewModel.ShowNotificationAsync(
-                        "Centered HUD",
-                        msg,
-                        ControlAppearance.Success
-                    );
-                }
-                else
-                {
-                    await _mainViewModel.ShowNotificationAsync(
-                        "Error",
-                        error ?? "Failed to apply Centered HUD.",
-                        ControlAppearance.Danger
-                    );
-                }
-            }
-            else
-            {
-                (bool success, string? error) = _hudService.RestoreDefaultHud();
-                if (success)
-                {
-                    await _mainViewModel.ShowNotificationAsync(
-                        "Default HUD",
-                        "Default supplies HUD restored.",
-                        ControlAppearance.Info
-                    );
-                }
-                else
-                {
-                    await _mainViewModel.ShowNotificationAsync(
-                        "Error",
-                        error ?? "Failed to restore HUD.",
-                        ControlAppearance.Danger
-                    );
-                }
-            }
+            Settings.EnableProTankiPack = shadersEnabled;
+            Settings.EnableSkinAnimations = skinAnimEnabled;
+            OnPropertyChanged(nameof(EnableProTankiPack));
+            OnPropertyChanged(nameof(EnableSkinAnimations));
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to toggle centered HUD.");
-            await _mainViewModel.ShowNotificationAsync(
-                "Error",
-                ex.Message,
-                ControlAppearance.Danger
-            );
-        }
-        finally
-        {
-            IsLoading = false;
-            OnPropertyChanged(nameof(IsLoaderPatched));
-            OnPropertyChanged(nameof(LoaderPatchStatusText));
+            Log.Debug(ex, "Failed to refresh HTML5 script toggles.");
         }
     }
 
-    private async Task ExecuteInstallLoaderPatch(object? parameter)
+    private async Task HandleShadersToggleAsync(
+        bool enable,
+        bool isHotkeyUpdate,
+        string? previousHotkey = null
+    )
     {
+        await _scriptPatchLock.WaitAsync();
         try
         {
-            IsLoading = true;
-            UpdateStatus = "Installing StandaloneLoader patch...";
+            if (!IsHtml5Client)
+            {
+                if (enable && !isHotkeyUpdate)
+                {
+                    Settings.EnableProTankiPack = false;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(EnableProTankiPack));
+                    await _mainViewModel.ShowNotificationAsync(
+                        "HTML5 Client Only",
+                        "ProTanki Pack is only supported on the HTML5 client.",
+                        ControlAppearance.Caution
+                    );
+                }
+                return;
+            }
 
-            (bool success, string? error) = await _hudService.InstallLoaderPatchAsync();
-            OnPropertyChanged(nameof(IsLoaderPatched));
-            OnPropertyChanged(nameof(LoaderPatchStatusText));
+            IsLoading = true;
+            UpdateStatus = enable
+                ? (
+                    isHotkeyUpdate
+                        ? $"Updating ProTanki Pack Hotkey ({SelectedShaderHotkey})..."
+                        : "Applying ProTanki Pack..."
+                )
+                : "Removing ProTanki Pack...";
+
+            if (
+                Helpers.Utilities.FileHelper.IsGameRunning()
+                || Helpers.Utilities.FileHelper.IsCacheFileLocked(_mainViewModel.CachePath)
+            )
+            {
+                if (!isHotkeyUpdate)
+                {
+                    Settings.EnableProTankiPack = !enable;
+                    OnPropertyChanged(nameof(EnableProTankiPack));
+                }
+                else if (!string.IsNullOrEmpty(previousHotkey))
+                {
+                    Settings.ProTankiPackHotkey = previousHotkey;
+                    OnPropertyChanged(nameof(SelectedShaderHotkey));
+                }
+
+                await _mainViewModel.ShowNotificationAsync(
+                    "ProTanki Running",
+                    "ProTanki is currently running or cache files are locked. Please close the game before changing ProTanki Pack.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            string hotkeyToApply = SelectedShaderHotkey;
+            (bool success, string? error) = enable
+                ? await Task.Run(() =>
+                    _mainViewModel.Html5CacheService.ApplyShaders(
+                        _mainViewModel.CachePath,
+                        hotkeyToApply
+                    )
+                )
+                : await Task.Run(() =>
+                    _mainViewModel.Html5CacheService.RestoreDefaultShaders(_mainViewModel.CachePath)
+                );
 
             if (success)
             {
+                Settings.EnableProTankiPack = enable;
+                Settings.EnableSkinAnimations = false;
+                _settingsService.Save(Settings);
+                if (enable || Settings.EnablePackLogListener)
+                {
+                    _packLogListener?.Start();
+                }
+                else
+                {
+                    _packLogListener?.Stop();
+                }
                 await _mainViewModel.ShowNotificationAsync(
-                    "Patch Installed",
-                    "ProTanki StandaloneLoader was successfully patched! Custom HUD overrides are now active.",
-                    ControlAppearance.Success
+                    enable ? "ProTanki Pack Active" : "ProTanki Pack Removed",
+                    enable
+                        ? $"ProTanki Pack applied! Launch ProTanki and press [{hotkeyToApply}] in-game to hide or show the menu."
+                        : "ProTanki Pack removed from client cache.",
+                    enable ? ControlAppearance.Success : ControlAppearance.Info
                 );
             }
             else
             {
+                if (!isHotkeyUpdate)
+                {
+                    Settings.EnableProTankiPack = !enable;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(EnableProTankiPack));
+                }
+                else if (!string.IsNullOrEmpty(previousHotkey))
+                {
+                    Settings.ProTankiPackHotkey = previousHotkey;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(SelectedShaderHotkey));
+                }
+
                 await _mainViewModel.ShowNotificationAsync(
-                    "Patch Installation",
-                    error ?? "Patch installation failed or was cancelled.",
+                    "Error",
+                    error ?? "Failed to update HTML5 3D Shaders.",
                     ControlAppearance.Danger
                 );
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error installing StandaloneLoader patch.");
+            Log.Error(ex, "Failed to toggle HTML5 3D Shaders.");
+            if (!isHotkeyUpdate)
+            {
+                Settings.EnableProTankiPack = !enable;
+                OnPropertyChanged(nameof(EnableProTankiPack));
+            }
+            else if (!string.IsNullOrEmpty(previousHotkey))
+            {
+                Settings.ProTankiPackHotkey = previousHotkey;
+                OnPropertyChanged(nameof(SelectedShaderHotkey));
+            }
+
             await _mainViewModel.ShowNotificationAsync(
                 "Error",
                 ex.Message,
@@ -1207,6 +1478,156 @@ public class SettingsViewModel : ViewModelBase
         finally
         {
             IsLoading = false;
+            _ = _scriptPatchLock.Release();
         }
+    }
+
+    private async Task HandleSkinAnimationsToggleAsync(
+        bool enable,
+        bool isHotkeyUpdate,
+        string? previousHotkey = null
+    )
+    {
+        await _scriptPatchLock.WaitAsync();
+        try
+        {
+            if (!IsHtml5Client)
+            {
+                if (enable && !isHotkeyUpdate)
+                {
+                    Settings.EnableSkinAnimations = false;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(EnableSkinAnimations));
+                    await _mainViewModel.ShowNotificationAsync(
+                        "HTML5 Client Only",
+                        "3D Skin Animations are only supported on the HTML5 client.",
+                        ControlAppearance.Caution
+                    );
+                }
+                return;
+            }
+
+            IsLoading = true;
+            UpdateStatus = enable
+                ? (
+                    isHotkeyUpdate
+                        ? $"Updating Skin Animation Hotkey ({SelectedSkinAnimHotkey})..."
+                        : "Applying 3D Skin Animations..."
+                )
+                : "Removing 3D Skin Animations...";
+
+            if (
+                Helpers.Utilities.FileHelper.IsGameRunning()
+                || Helpers.Utilities.FileHelper.IsCacheFileLocked(_mainViewModel.CachePath)
+            )
+            {
+                if (!isHotkeyUpdate)
+                {
+                    Settings.EnableSkinAnimations = !enable;
+                    OnPropertyChanged(nameof(EnableSkinAnimations));
+                }
+                else if (!string.IsNullOrEmpty(previousHotkey))
+                {
+                    Settings.SkinAnimMenuHotkey = previousHotkey;
+                    OnPropertyChanged(nameof(SelectedSkinAnimHotkey));
+                }
+
+                await _mainViewModel.ShowNotificationAsync(
+                    "ProTanki Running",
+                    "ProTanki is currently running or cache files are locked. Please close the game before changing Skin Animations.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            string hotkeyToApply = SelectedSkinAnimHotkey;
+            (bool success, string? error) = enable
+                ? await Task.Run(() =>
+                    _mainViewModel.Html5CacheService.ApplySkinAnimations(
+                        _mainViewModel.CachePath,
+                        hotkeyToApply
+                    )
+                )
+                : await Task.Run(() =>
+                    _mainViewModel.Html5CacheService.RestoreDefaultSkinAnimations(_mainViewModel.CachePath)
+                );
+
+            if (success)
+            {
+                Settings.EnableSkinAnimations = enable;
+                _settingsService.Save(Settings);
+                await _mainViewModel.ShowNotificationAsync(
+                    enable ? "Skin Animations Active" : "Skin Animations Removed",
+                    enable
+                        ? $"3D Skin Animations applied! Launch ProTanki and press [{hotkeyToApply}] in-game to open the animation preset menu."
+                        : "HTML5 3D Skin Animations removed from client cache.",
+                    enable ? ControlAppearance.Success : ControlAppearance.Info
+                );
+            }
+            else
+            {
+                if (!isHotkeyUpdate)
+                {
+                    Settings.EnableSkinAnimations = !enable;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(EnableSkinAnimations));
+                }
+                else if (!string.IsNullOrEmpty(previousHotkey))
+                {
+                    Settings.SkinAnimMenuHotkey = previousHotkey;
+                    _settingsService.Save(Settings);
+                    OnPropertyChanged(nameof(SelectedSkinAnimHotkey));
+                }
+
+                await _mainViewModel.ShowNotificationAsync(
+                    "Error",
+                    error ?? "Failed to update HTML5 3D Skin Animations.",
+                    ControlAppearance.Danger
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to toggle HTML5 3D Skin Animations.");
+            if (!isHotkeyUpdate)
+            {
+                Settings.EnableSkinAnimations = !enable;
+                OnPropertyChanged(nameof(EnableSkinAnimations));
+            }
+            else if (!string.IsNullOrEmpty(previousHotkey))
+            {
+                Settings.SkinAnimMenuHotkey = previousHotkey;
+                OnPropertyChanged(nameof(SelectedSkinAnimHotkey));
+            }
+
+            await _mainViewModel.ShowNotificationAsync(
+                "Error",
+                ex.Message,
+                ControlAppearance.Danger
+            );
+        }
+        finally
+        {
+            IsLoading = false;
+            _ = _scriptPatchLock.Release();
+        }
+    }
+
+    private void OnPackMenuHotkeyChanged(string hotkey)
+    {
+        _ = Application.Current?.Dispatcher.InvokeAsync(() =>
+        {
+            OnPropertyChanged(nameof(AvailableShaderHotkeys));
+            OnPropertyChanged(nameof(SelectedShaderHotkey));
+        });
+    }
+
+    public void Dispose()
+    {
+        if (_packLogListener != null)
+        {
+            _packLogListener.MenuHotkeyChanged -= OnPackMenuHotkeyChanged;
+        }
+        GC.SuppressFinalize(this);
     }
 }

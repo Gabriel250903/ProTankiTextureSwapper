@@ -763,7 +763,7 @@
             Margin="0,20,20,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Panel.ZIndex="2000"
+            Panel.ZIndex="10010"
             IsClosable="False"
             IsOpen="False" />
 

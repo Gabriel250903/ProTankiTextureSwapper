@@ -312,12 +312,6 @@
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
-
-            <controls:PremiumLockOverlayControl
-                Grid.ColumnSpan="2"
-                Panel.ZIndex="9999"
-                FeatureTitle="{DynamicResource Loc_Parachute_Title}"
-                IsLocked="{Binding IsPremiumLocked}" />
         </Grid>
 
         <ui:InfoBar

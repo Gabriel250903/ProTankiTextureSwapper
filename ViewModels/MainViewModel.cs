@@ -1,11 +1,12 @@
+using Serilog;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -14,6 +15,7 @@ using TextureSwapper.Helpers.Utilities;
 using TextureSwapper.Seasonal;
 using TextureSwapper.ViewModels.Base;
 using TextureSwapper.ViewModels.Tabs;
+using TextureSwapper.Views.Windows;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
@@ -53,20 +55,21 @@ namespace TextureSwapper.ViewModels
         public ISmokyShotComposer SmokyShotComposer => ShotEffectComposers.Smoky;
         public IParachuteComposer ParachuteComposer { get; }
         public IPropComposer PropComposer { get; }
-        public IHudService HudService { get; }
+        public IHtml5CacheService Html5CacheService { get; }
+        public IBntArchiveService BntArchiveService { get; }
         public SeasonalThemeService SeasonalThemeService { get; }
         public SeasonalAudioService SeasonalAudioService { get; }
 
-        public SeasonalThemeService HalloweenThemeService => SeasonalThemeService;
-        public SeasonalAudioService HalloweenSoundService => SeasonalAudioService;
+        public event EventHandler<ClientType>? ActiveClientChanged;
+
+        public bool IsHtml5Client => Settings.ActiveClient == ClientType.Html5;
+        public bool IsFlashClient => Settings.ActiveClient == ClientType.Flash;
+        public string ActiveClientDisplayName =>
+            IsHtml5Client ? "HTML5 Client" : "Flash Client";
 
         public bool IsSeasonalThemeActive => SeasonalThemeService.IsSeasonalActive;
-        public bool IsHalloweenThemeActive => IsSeasonalThemeActive;
-
         public bool IsSeasonalAtmosphereVisible =>
             IsSeasonalThemeActive && Settings.EnableSeasonalAtmosphereAnimation;
-        public bool IsHalloweenAtmosphereVisible => IsSeasonalAtmosphereVisible;
-
         public string AppLogoSource =>
             (IsSeasonalThemeActive && Settings.EnableSeasonalAppLogo)
                 ? SeasonalThemeConfig.Current.AppLogoSource
@@ -95,14 +98,8 @@ namespace TextureSwapper.ViewModels
         public void NotifySeasonalVisualsChanged()
         {
             OnPropertyChanged(nameof(IsSeasonalAtmosphereVisible));
-            OnPropertyChanged(nameof(IsHalloweenAtmosphereVisible));
             OnPropertyChanged(nameof(AppLogoSource));
             OnPropertyChanged(nameof(AppTitleText));
-        }
-
-        public void NotifyHalloweenVisualsChanged()
-        {
-            NotifySeasonalVisualsChanged();
         }
 
         public string DeviceHwidDisplay => DeviceBanService.GetDeviceHardwareId();
@@ -154,9 +151,7 @@ namespace TextureSwapper.ViewModels
         public ShotEffectsTabViewModel ShotEffectsTabVM { get; }
         public BackupsTabViewModel BackupsTabVM { get; }
         public AdminViewModel AdminVM { get; }
-
         public AppSettings Settings { get; }
-
         public List<SkinModel> AllSkins { get; set; } = [];
 
         public bool IsLoading
@@ -217,7 +212,8 @@ namespace TextureSwapper.ViewModels
             IShotEffectComposerRegistry shotEffectComposers,
             IParachuteComposer parachuteComposer,
             IPropComposer propComposer,
-            IHudService hudService,
+            IHtml5CacheService html5CacheService,
+            IBntArchiveService bntArchiveService,
             SeasonalThemeService seasonalThemeService,
             SeasonalAudioService seasonalAudioService
         )
@@ -236,7 +232,8 @@ namespace TextureSwapper.ViewModels
             ShotEffectComposers = shotEffectComposers;
             ParachuteComposer = parachuteComposer;
             PropComposer = propComposer;
-            HudService = hudService;
+            Html5CacheService = html5CacheService;
+            BntArchiveService = bntArchiveService;
             SeasonalThemeService = seasonalThemeService;
             SeasonalAudioService = seasonalAudioService;
             SeasonalThemeService.SeasonalThemeChanged += (_, active) =>
@@ -254,9 +251,7 @@ namespace TextureSwapper.ViewModels
             SeasonalThemeService.SeasonalThemeChanged += (_, _) =>
             {
                 OnPropertyChanged(nameof(IsSeasonalThemeActive));
-                OnPropertyChanged(nameof(IsHalloweenThemeActive));
                 OnPropertyChanged(nameof(IsSeasonalAtmosphereVisible));
-                OnPropertyChanged(nameof(IsHalloweenAtmosphereVisible));
                 OnPropertyChanged(nameof(AppLogoSource));
                 OnPropertyChanged(nameof(AppTitleText));
                 OnPropertyChanged(nameof(NavSkinsText));
@@ -278,7 +273,7 @@ namespace TextureSwapper.ViewModels
             BackupsTabVM = new BackupsTabViewModel(this);
             AdminVM = new AdminViewModel(this, notificationService);
 
-            CachePath = Settings.CustomCachePath ?? SwapService.DetectCachePath();
+            CachePath = ResolveActiveCachePath();
 
             BrowseCommand = new RelayCommand(ExecuteBrowse);
             RestoreCommand = new AsyncRelayCommand(ExecuteRestore, _ => !IsLoading);
@@ -402,25 +397,64 @@ namespace TextureSwapper.ViewModels
 
                 if (!TextureDownloadService.AreTexturesInstalled())
                 {
-                    UpdateStatus = "Downloading textures...";
-                    bool downloaded = await TextureDownloadService.DownloadAndExtractTexturesAsync(
-                        (status, percent) =>
-                        {
-                            Application.Current?.Dispatcher.Invoke(() =>
-                            {
-                                UpdateStatus = status;
-                            });
-                        }
-                    );
+                    bool shouldDownload = true;
+                    string initialPreference = Settings?.PreferredTextureMirror ?? "Cloudflare";
 
-                    if (!downloaded)
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Log.Warning(
-                            "Could not download initial texture pack. App will run in offline mode."
+                        TextureSourceSelectionDialog dialog = new(initialPreference);
+                        if (Application.Current?.MainWindow != null && Application.Current.MainWindow.IsVisible)
+                        {
+                            dialog.Owner = Application.Current.MainWindow;
+                        }
+
+                        bool? dialogResult = dialog.ShowDialog();
+                        if (dialogResult == true)
+                        {
+                            if (Settings != null)
+                            {
+                                Settings.PreferredTextureMirror = dialog.SelectedMirror;
+                                SettingsService.Save(Settings);
+                            }
+                            shouldDownload = true;
+                        }
+                        else
+                        {
+                            shouldDownload = false;
+                        }
+                    });
+
+                    if (shouldDownload)
+                    {
+                        UpdateStatus = "Connecting to download server...";
+                        bool downloaded = await TextureDownloadService.DownloadAndExtractTexturesAsync(
+                            (status, percent) =>
+                            {
+                                Application.Current?.Dispatcher.Invoke(() =>
+                                {
+                                    UpdateStatus = status;
+                                });
+                            }
                         );
+
+                        if (!downloaded)
+                        {
+                            Log.Warning(
+                                "Could not download initial texture pack. App will run in offline mode."
+                            );
+                            _ = NotificationService.ShowAsync(
+                                "Texture Pack",
+                                "Could not download texture pack. The app will continue in offline mode.",
+                                ControlAppearance.Caution
+                            );
+                        }
+                    }
+                    else
+                    {
+                        Log.Information("User skipped initial texture pack download. Running in offline mode.");
                         _ = NotificationService.ShowAsync(
                             "Texture Pack",
-                            "Could not download texture pack. The app will continue in offline mode.",
+                            "Texture download was skipped. Texture swapping will be unavailable until textures are downloaded.",
                             ControlAppearance.Caution
                         );
                     }
@@ -467,6 +501,8 @@ namespace TextureSwapper.ViewModels
                     await SkinSyncService.SyncAndLoadSkinsAsync();
 
                 SkinSyncService.ProgressChanged -= HandleProgressChanged;
+
+                await SyncHtml5ScriptsAsync();
 
                 if (UpdateService.IsOffline)
                 {
@@ -584,6 +620,172 @@ namespace TextureSwapper.ViewModels
                     ControlAppearance.Danger
                 );
             }
+        }
+
+        private int _deferredPackSyncActive;
+
+        private async Task SyncHtml5ScriptsAsync()
+        {
+            try
+            {
+                bool scriptFileUpdated = false;
+                if (!UpdateService.IsOffline)
+                {
+                    string[] scriptPaths =
+                    [
+                        "Assets/Pack/protanki_pack.js",
+                    ];
+
+                    foreach (string relativePath in scriptPaths)
+                    {
+                        string? remoteContent = await UpdateService.FetchRemoteTextFileAsync(
+                            relativePath
+                        );
+                        if (string.IsNullOrWhiteSpace(remoteContent))
+                        {
+                            continue;
+                        }
+
+                        string localPath = Path.Combine(
+                            AppDomain.CurrentDomain.BaseDirectory,
+                            relativePath.Replace('/', Path.DirectorySeparatorChar)
+                        );
+                        string? existing = File.Exists(localPath)
+                            ? await File.ReadAllTextAsync(localPath, Encoding.UTF8)
+                            : null;
+
+                        if (!string.Equals(existing, remoteContent, StringComparison.Ordinal))
+                        {
+                            string? dir = Path.GetDirectoryName(localPath);
+                            if (!string.IsNullOrEmpty(dir))
+                            {
+                                _ = Directory.CreateDirectory(dir);
+                            }
+
+                            await File.WriteAllTextAsync(
+                                localPath,
+                                remoteContent,
+                                Encoding.UTF8
+                            );
+                            scriptFileUpdated = true;
+                            Log.Information("Updated local HTML5 script from remote: {Path}", relativePath);
+                        }
+                    }
+                }
+
+                if (
+                    IsHtml5Client
+                    && !string.IsNullOrWhiteSpace(CachePath)
+                    && Directory.Exists(CachePath)
+                )
+                {
+                    if (!CacheService.IsGameRunning())
+                    {
+                        await Task.Run(() => ApplyHtml5ScriptsToCache(CachePath));
+                    }
+                    else
+                    {
+                        string packHotkey = string.IsNullOrWhiteSpace(Settings.ProTankiPackHotkey)
+                            ? "F8"
+                            : Settings.ProTankiPackHotkey;
+                        bool updatePending = await Task.Run(() =>
+                            scriptFileUpdated
+                            || Html5CacheService.IsShadersUpdatePending(CachePath, packHotkey)
+                        );
+                        if (updatePending)
+                        {
+                            ScheduleDeferredPackSync(CachePath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to sync HTML5 scripts.");
+            }
+        }
+
+        private void ApplyHtml5ScriptsToCache(string cachePath)
+        {
+            (bool detectedShaders, bool detectedSkinAnim) =
+                Html5CacheService.GetAppliedScriptStatus(cachePath);
+            bool shadersEnabled = Settings.EnableProTankiPack || detectedShaders;
+            bool skinAnimEnabled = Settings.EnableSkinAnimations || detectedSkinAnim;
+            string shaderHotkey = string.IsNullOrWhiteSpace(Settings.ProTankiPackHotkey)
+                ? "F8"
+                : Settings.ProTankiPackHotkey;
+            string skinAnimHotkey = string.IsNullOrWhiteSpace(Settings.SkinAnimMenuHotkey)
+                ? "F9"
+                : Settings.SkinAnimMenuHotkey;
+
+            Html5CacheService.SyncAppliedScripts(
+                cachePath,
+                shadersEnabled,
+                shaderHotkey,
+                skinAnimEnabled,
+                skinAnimHotkey
+            );
+        }
+
+        private void ScheduleDeferredPackSync(string cachePath)
+        {
+            const string updateMsg = "ProTanki Pack update is ready. Please restart ProTanki to apply the changes.";
+            Services.PackLogListener.PendingUpdateMessage = updateMsg;
+
+            Services.PackLogListener? listener =
+                App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+            bool startedTemporaryListener = false;
+            if (listener != null && !listener.IsRunning)
+            {
+                listener.Start();
+                startedTemporaryListener = listener.IsRunning;
+            }
+
+            _ = NotificationService.ShowAsync(
+                "ProTanki Pack Update Ready",
+                "An updated ProTanki Pack was downloaded while ProTanki is running. It will be applied automatically as soon as ProTanki closes.",
+                ControlAppearance.Info
+            );
+
+            if (Interlocked.CompareExchange(ref _deferredPackSyncActive, 1, 0) != 0)
+            {
+                return;
+            }
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    while (CacheService.IsGameRunning())
+                    {
+                        await Task.Delay(3000).ConfigureAwait(false);
+                    }
+
+                    Services.PackLogListener.PendingUpdateMessage = null;
+                    if (
+                        startedTemporaryListener
+                        && !Settings.EnablePackLogListener
+                        && !Settings.EnableProTankiPack
+                    )
+                    {
+                        listener?.Stop();
+                    }
+
+                    if (Directory.Exists(cachePath))
+                    {
+                        ApplyHtml5ScriptsToCache(cachePath);
+                        Log.Information("Deferred ProTanki Pack sync completed after game exit.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Deferred ProTanki Pack sync failed.");
+                }
+                finally
+                {
+                    _ = Interlocked.Exchange(ref _deferredPackSyncActive, 0);
+                }
+            });
         }
 
         public async Task<bool> EnsureSafeToOperate()
@@ -739,12 +941,9 @@ namespace TextureSwapper.ViewModels
 
         public static string FormatVersion(Version? version)
         {
-            if (version == null)
-            {
-                return "3.0";
-            }
-
-            return version.Build > 0
+            return version == null
+                ? "3.0"
+                : version.Build > 0
                 ? $"{version.Major}.{version.Minor}.{version.Build}"
                 : $"{version.Major}.{version.Minor}";
         }
@@ -769,11 +968,49 @@ namespace TextureSwapper.ViewModels
             return new Version(v.Major, v.Minor, Math.Max(0, v.Build), Math.Max(0, v.Revision));
         }
 
+        public string ResolveActiveCachePath()
+        {
+            return Settings.ActiveClient == ClientType.Html5
+                ? !string.IsNullOrWhiteSpace(Settings.CustomHtml5CachePath)
+                    ? Settings.CustomHtml5CachePath
+                    : SwapService.DetectCachePath(ClientType.Html5)
+                : !string.IsNullOrWhiteSpace(Settings.CustomCachePath)
+                ? Settings.CustomCachePath
+                : SwapService.DetectCachePath(ClientType.Flash);
+        }
+
+        public void SwitchClient(ClientType newClient)
+        {
+            if (Settings.ActiveClient == newClient)
+            {
+                return;
+            }
+
+            Settings.ActiveClient = newClient;
+            SettingsService.Save(Settings);
+            Html5CacheService.InvalidateCache();
+            CachePath = ResolveActiveCachePath();
+            BackupsTabVM.LoadBackups();
+
+            OnPropertyChanged(nameof(IsHtml5Client));
+            OnPropertyChanged(nameof(IsFlashClient));
+            OnPropertyChanged(nameof(ActiveClientDisplayName));
+            ActiveClientChanged?.Invoke(this, newClient);
+
+            Log.Information(
+                "Switched active ProTanki client to {Client}. CachePath: {CachePath}",
+                newClient,
+                CachePath
+            );
+        }
+
         private void ExecuteBrowse(object? parameter)
         {
             Microsoft.Win32.OpenFolderDialog dialog = new()
             {
-                Title = "Select ProTanki Cache Folder",
+                Title = IsHtml5Client
+                    ? "Select ProTanki HTML5 Cache Folder"
+                    : "Select ProTanki Flash Cache Folder",
                 InitialDirectory = string.IsNullOrEmpty(CachePath)
                     ? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                     : CachePath,
@@ -782,9 +1019,21 @@ namespace TextureSwapper.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 CachePath = dialog.FolderName;
-                Settings.CustomCachePath = CachePath;
+                if (IsHtml5Client)
+                {
+                    Settings.CustomHtml5CachePath = CachePath;
+                }
+                else
+                {
+                    Settings.CustomCachePath = CachePath;
+                }
                 SettingsService.Save(Settings);
-                Log.Information("User selected cache path: {Path}", CachePath);
+                Html5CacheService.InvalidateCache();
+                Log.Information(
+                    "User selected custom {Client} cache path: {Path}",
+                    Settings.ActiveClient,
+                    CachePath
+                );
             }
         }
 

@@ -18,6 +18,7 @@ namespace TextureSwapper.Core.Interfaces
         Task<(List<InGamePaintModel>? Paints, string? RawJson)> FetchRemoteInGamePaintsFileAsync(
             string fileName
         );
+        Task<string?> FetchRemoteTextFileAsync(string relativePath);
         Task<GitHubReleaseModel?> CheckForAppUpdatesAsync();
         Task DownloadAndRunInstallerAsync(string downloadUrl, Action<double>? onProgress = null);
         Task EnsureAssetsExistAsync(SkinModel skin, Action<string>? onProgress = null);

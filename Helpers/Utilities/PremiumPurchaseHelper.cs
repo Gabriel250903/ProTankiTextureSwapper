@@ -1,6 +1,6 @@
+using Serilog;
 using System.Diagnostics;
 using System.Windows;
-using Serilog;
 using TextureSwapper.Core;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
@@ -24,7 +24,7 @@ namespace TextureSwapper.Helpers.Utilities
                         + "Join the Discord server and open a ticket (or DM 'noizy3345') to discuss details.\n"
                         + "Instant key generation & delivery directly from the developer\n\n"
                         + "Automated Web Store\n\n"
-                        + "Instant checkout via Gumroad (~$6.28 / 5.61€ including regional VAT/taxes).",
+                        + "Instant checkout via Gumroad (including regional VAT/taxes).",
                     PrimaryButtonText = "Join Discord Server",
                     SecondaryButtonText = "Open Gumroad",
                     CloseButtonText = "Cancel",

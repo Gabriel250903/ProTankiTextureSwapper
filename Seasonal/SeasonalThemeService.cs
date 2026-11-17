@@ -1,3 +1,4 @@
+using Serilog;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -5,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -37,23 +37,14 @@ namespace TextureSwapper.Seasonal
             IsRemoteAllowed && IsThematicGoldAllowed && !Settings.DisableThematicGold;
 
         public event EventHandler<bool>? SeasonalThemeChanged;
-        public event EventHandler<bool>? HalloweenThemeChanged
-        {
-            add => SeasonalThemeChanged += value;
-            remove => SeasonalThemeChanged -= value;
-        }
 
         public bool IsWithinSeasonalWindow =>
             IsRemoteAllowed && SeasonalThemeConfig.ActiveSeason != SeasonType.None;
-
-        public bool IsWithinHalloweenWindow => IsWithinSeasonalWindow;
 
         public bool IsSeasonalActive =>
             SeasonalThemeConfig.ActiveSeason != SeasonType.None
             && IsRemoteAllowed
             && (Settings.IsSeasonalThemeSelected || Settings.ForceSeasonalPreview);
-
-        public bool IsHalloweenActive => IsSeasonalActive;
 
         private void TryLoadLocalConfig()
         {
@@ -116,11 +107,6 @@ namespace TextureSwapper.Seasonal
             {
                 Log.Debug("Could not fetch remote_config.json from GitHub: {Message}", ex.Message);
             }
-        }
-
-        public Task SyncRemoteHalloweenConfigAsync(IUpdateService updateService)
-        {
-            return SyncRemoteSeasonalConfigAsync(updateService);
         }
 
         public void CheckAndApply(bool notify = true, bool force = false)

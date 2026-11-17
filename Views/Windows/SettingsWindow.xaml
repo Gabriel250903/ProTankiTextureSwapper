@@ -382,6 +382,82 @@
                 <ui:TextBlock
                     Margin="0,0,0,2"
                     FontTypography="Subtitle"
+                    Text="Game Client &amp; Cache" />
+                <ui:TextBlock
+                    Margin="0,0,0,10"
+                    FontTypography="Caption"
+                    Opacity="0.7"
+                    Text="Switch between the HTML5 and Flash clients and manage the active cache directory." />
+                <ui:Card Margin="0,0,0,20" Padding="15">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="Active ProTanki Client" />
+                                <ui:TextBlock
+                                    FontTypography="Caption"
+                                    Opacity="0.6"
+                                    Text="Choose which client TextureSwapper targets for swaps and backups" />
+                            </StackPanel>
+                            <ComboBox
+                                Grid.Column="1"
+                                MinWidth="200"
+                                ItemsSource="{Binding AvailableClientModes}"
+                                SelectedItem="{Binding SelectedClientMode, Mode=TwoWay}" />
+                        </Grid>
+
+                        <Separator Margin="0,0,0,12" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+                        <ui:TextBlock
+                            Margin="0,0,0,6"
+                            FontWeight="SemiBold"
+                            Text="Active Cache Directory" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Padding="10,6"
+                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                                <ui:TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="Consolas, Courier New, monospace"
+                                    FontSize="12"
+                                    Opacity="0.85"
+                                    Text="{Binding ActiveCachePath}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTip="{Binding ActiveCachePath}" />
+                            </Border>
+                            <ui:Button
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Appearance="Secondary"
+                                Command="{Binding BrowseCachePathCommand}"
+                                Content="Browse"
+                                Icon="{ui:SymbolIcon FolderOpen24}" />
+                            <ui:Button
+                                Grid.Column="2"
+                                Margin="6,0,0,0"
+                                Appearance="Secondary"
+                                Command="{Binding ResetCachePathCommand}"
+                                Content="Auto-Detect"
+                                Icon="{ui:SymbolIcon ArrowCounterclockwise24}"
+                                ToolTip="Reset to default auto-detected cache path" />
+                        </Grid>
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:TextBlock
+                    Margin="0,0,0,2"
+                    FontTypography="Subtitle"
                     Text="Backups" />
                 <ui:TextBlock
                     Margin="0,0,0,10"
@@ -644,44 +720,65 @@
                     Text="Customize in-game battle interfaces, supplies positions, and animate paints." />
                 <ui:Card Margin="0,0,0,20" Padding="15">
                     <StackPanel>
-                        <Grid Margin="0,0,0,12">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="Enable Custom .swf" />
-                                <ui:TextBlock
-                                    FontTypography="Caption"
-                                    Opacity="0.6"
-                                    Text="Enable the custom .swf" />
-                            </StackPanel>
-                            <ui:ToggleSwitch
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding EnableCenteredHud, Mode=TwoWay}" />
-                        </Grid>
+                        <StackPanel IsEnabled="{Binding IsHtml5Client}">
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ui:TextBlock FontWeight="SemiBold" Text="Enable ProTanki Pack (HTML5 only)" />
+                                    <ui:TextBlock
+                                        FontTypography="Caption"
+                                        Opacity="0.6"
+                                        Text="Inject WebGL2 shaders, weather, tank tracks, skyboxes, and 3D skin animations into the HTML5 client" />
+                                </StackPanel>
+                                <ui:ToggleSwitch
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding EnableProTankiPack, Mode=TwoWay}" />
+                            </Grid>
 
-                        <Separator Margin="0,0,0,12" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ui:TextBlock FontWeight="SemiBold" Text="In-Game ProTanki Pack Menu Hotkey" />
+                                    <ui:TextBlock
+                                        FontTypography="Caption"
+                                        Opacity="0.6"
+                                        Text="Key used in-game to show or hide the ProTanki Pack menu" />
+                                </StackPanel>
+                                <ComboBox
+                                    Grid.Column="1"
+                                    MinWidth="110"
+                                    VerticalAlignment="Center"
+                                    ItemsSource="{Binding AvailableShaderHotkeys}"
+                                    SelectedItem="{Binding SelectedShaderHotkey, Mode=TwoWay}" />
+                            </Grid>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel VerticalAlignment="Center">
-                                <ui:TextBlock FontWeight="SemiBold" Text="StandaloneLoader Override Patch" />
-                                <ui:TextBlock
-                                    FontTypography="Caption"
-                                    Opacity="0.6"
-                                    Text="{Binding LoaderPatchStatusText}" />
-                            </StackPanel>
-                            <ui:Button
-                                Grid.Column="1"
-                                Command="{Binding InstallLoaderPatchCommand}"
-                                Content="Install Patch"
-                                Icon="{ui:SymbolIcon ShieldCheckmark24}" />
-                        </Grid>
+                            <Separator Margin="0,0,0,12" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ui:TextBlock FontWeight="SemiBold" Text="Enable ProTanki Pack Client Logger" />
+                                    <ui:TextBlock
+                                        FontTypography="Caption"
+                                        Opacity="0.6"
+                                        Text="Forward in-game client and ProTanki Pack errors to TextureSwapper logs (port 47921)" />
+                                </StackPanel>
+                                <ui:ToggleSwitch
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding EnablePackLogListener, Mode=TwoWay}" />
+                            </Grid>
+                        </StackPanel>
                     </StackPanel>
                 </ui:Card>
 
@@ -714,6 +811,25 @@
                                 Command="{Binding CheckForUpdatesCommand}"
                                 Content="Check for Updates"
                                 Icon="{ui:SymbolIcon ArrowSync24}" />
+                        </Grid>
+
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <ui:TextBlock FontWeight="SemiBold" Text="Textures Download Mirror" />
+                                <ui:TextBlock
+                                    FontTypography="Caption"
+                                    Opacity="0.6"
+                                    Text="Preferred download server for the textures pack" />
+                            </StackPanel>
+                            <ComboBox
+                                Grid.Column="1"
+                                MinWidth="180"
+                                ItemsSource="{Binding AvailableDownloadMirrors}"
+                                SelectedItem="{Binding SelectedDownloadMirror, Mode=TwoWay}" />
                         </Grid>
 
                         <Border
@@ -900,7 +1016,7 @@
             Margin="0,20,20,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Panel.ZIndex="1000"
+            Panel.ZIndex="10010"
             IsClosable="True"
             IsOpen="False" />
     </Grid>

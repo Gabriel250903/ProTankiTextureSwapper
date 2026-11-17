@@ -5,6 +5,9 @@ namespace TextureSwapper.Core.Interfaces
     public interface ISwapService
     {
         string DetectCachePath();
+        string DetectCachePath(ClientType clientType);
+        bool IsHtml5CachePath(string cachePath);
+        bool IsTargetCached(string cachePath, string target);
         string SelectiveBackup(string cachePath, SkinModel skin);
         string SelectiveBackup(string cachePath, ShotEffectModel shotEffect);
         string? Swap(

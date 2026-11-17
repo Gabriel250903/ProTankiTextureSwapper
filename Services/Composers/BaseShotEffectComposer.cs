@@ -1,10 +1,10 @@
+using Serilog;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Net.Http;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Utilities;

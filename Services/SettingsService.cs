@@ -1,6 +1,6 @@
+using Serilog;
 using System.IO;
 using System.Text.Json;
-using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 
@@ -31,6 +31,11 @@ namespace TextureSwapper.Services
                     AppSettings settings =
                         JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions)
                         ?? new AppSettings();
+                    if (string.IsNullOrWhiteSpace(settings.PackIpcToken))
+                    {
+                        settings.PackIpcToken = Guid.NewGuid().ToString("N");
+                        Save(settings);
+                    }
                     _cachedSettings = settings;
                     return settings;
                 }
@@ -40,7 +45,7 @@ namespace TextureSwapper.Services
                 Log.Error(ex, "Failed to load Settings.");
             }
 
-            _cachedSettings = new AppSettings();
+            _cachedSettings = new AppSettings { PackIpcToken = Guid.NewGuid().ToString("N") };
             return _cachedSettings;
         }
 

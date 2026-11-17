@@ -6,7 +6,6 @@ using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
-using TextureSwapper.Helpers.Utilities;
 using TextureSwapper.ViewModels.Base;
 using Wpf.Ui.Controls;
 
@@ -337,8 +336,7 @@ namespace TextureSwapper.ViewModels.Tabs
                 List<string> activeTargets = [];
                 foreach (string target in potentialTargets)
                 {
-                    string cachePath = FileHelper.GetSafePath(_mainVM.CachePath, target);
-                    if (File.Exists(cachePath))
+                    if (_mainVM.SwapService.IsTargetCached(_mainVM.CachePath, target))
                     {
                         activeTargets.Add(target);
                     }

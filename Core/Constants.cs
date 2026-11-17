@@ -2,7 +2,6 @@ namespace TextureSwapper.Core
 {
     public static class Constants
     {
-        public const string AppName = "ProTanki Texture Swapper";
         public const string GameProcessName = "ProTanki";
         public const string HullsSkinsJson = "skins_hulls.json";
         public const string TurretsSkinsJson = "skins_turrets.json";
@@ -14,25 +13,37 @@ namespace TextureSwapper.Core
         public const string BackupsDir = "Backups";
         public const string OriginalsDir = "Originals";
         public const string LogsDir = "Logs";
-        public const string AppLogFile = "app-log.txt";
         public const string StandaloneLoaderDir = "StandaloneLoader";
         public const string LocalStoreDir = "Local Store";
         public const string CacheDirName = "cache";
-        public const string GitHubRepo = "Gabriel250903/ProTankiTextureSwapper";
+        public const string Html5AppDataDir = "ProTanki";
+        public const string Html5IndexedDbDir = "IndexedDB";
+        public const string Html5LevelDbDir = "https_play-protanki.com_0.indexeddb.leveldb";
+        public const string Html5BlobDir = "https_play-protanki.com_0.indexeddb.blob";
+        public const string Html5LocalInstallSubPath = @"Programs\protanki";
         public const string GitHubRawUrl =
             "https://raw.githubusercontent.com/Gabriel250903/ProTankiTextureSwapper/main";
         public const string GitHubApiUrl =
             "https://api.github.com/repos/Gabriel250903/ProTankiTextureSwapper";
         public const string TexturesZipFileName = "textures.zip";
         public const string TexturesVersionFileName = ".textures_version";
+        public const string RequiredTexturesPackVersion = "4.0";
+        public const string TexturesWorkerDownloadUrl =
+            "https://textureswapper-gatekeeper.flytoxp.workers.dev/textures.zip";
         public const string TexturesLatestDownloadUrl =
             "https://github.com/Gabriel250903/ProTankiTextureSwapper/releases/latest/download/textures.zip";
+
+        public static readonly string[] TexturesDownloadMirrors =
+        [
+            TexturesWorkerDownloadUrl,
+            TexturesLatestDownloadUrl,
+        ];
         public const string PublisherPublicKey =
             "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEPW3oT7Mz3IlRPzkQvJCqo/6BmmnifQipLjbAf54zrg2JaaPZrOdwy8oJR9kcsCHSEELCMLzbfcBoVSGgyVFeWQ==";
         public const string SpawnersSkinsJson = "skins_spawners.json";
         public const string GatekeeperWorkerUrl =
             "https://textureswapper-gatekeeper.flytoxp.workers.dev";
-        public const string GatekeeperApiKey = "ts-gk-84823a89d9c0c6d91365df8241ce7ba8";
+        public const string GatekeeperClientAppId = "ts-gk-84823a89d9c0c6d91365df8241ce7ba8";
         public const string GumroadBuyUrl = "https://flytoxp.gumroad.com/l/mfdjom";
         public const string DiscordInviteUrl = "https://discord.gg/3Bgs7Jd9xk";
         public const string DiscordContactUsername = "noizy3345";
@@ -104,12 +115,8 @@ namespace TextureSwapper.Core
 
         public const string HammerPelletTrailImageTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzEyLzMyMDI1NDM2MjI0NDM3L2ltYWdlLmpwZw==";
-        public const string HammerPelletTrailAlphaTarget =
-            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzEyLzMyMDI1NDM2MjI0NDM3L2FscGhhLmpwZw==";
         public const string HammerPelletTrailImageRev2Target =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83My8yNjQvMzIwMjU0MzYyMjQ0NjMvaW1hZ2UuanBn";
-        public const string HammerPelletTrailAlphaRev2Target =
-            "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83My8yNjQvMzIwMjU0MzYyMjQ0NjMvYWxwaGEuanBn";
         public const string HammerSparkleTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8zLzExLzMyMDI1NDM2MzA3MTU0L2ltYWdlLmpwZw==";
         public const string HammerSparkleRev2Target =
@@ -244,5 +251,72 @@ namespace TextureSwapper.Core
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzIzMi8zMjAyMzUxMDM1NjMxNS9pbWFnZS5qcGc=";
         public const string SmokyGlowAlphaTarget =
             "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8yLzIzMi8zMjAyMzUxMDM1NjMxNS9hbHBoYS5qcGc=";
+
+        public static readonly string[] AllowedShaderHotkeys =
+        [
+            "F8",
+            "F7",
+            "F9",
+            "F10",
+            "Insert",
+            "Home",
+            "End",
+        ];
+
+        private static readonly HashSet<string> ModifierOnlyKeyCodes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "ControlLeft",
+            "ControlRight",
+            "ShiftLeft",
+            "ShiftRight",
+            "AltLeft",
+            "AltRight",
+            "MetaLeft",
+            "MetaRight",
+            "Escape",
+        };
+
+        public static bool IsValidShaderHotkey(string? hotkey)
+        {
+            if (string.IsNullOrWhiteSpace(hotkey))
+            {
+                return false;
+            }
+
+            string trimmed = hotkey.Trim();
+            if (trimmed.Length > 32 || ModifierOnlyKeyCodes.Contains(trimmed))
+            {
+                return false;
+            }
+
+            foreach (char ch in trimmed)
+            {
+                if (!char.IsAsciiLetterOrDigit(ch))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static string NormalizeShaderHotkey(string? hotkey)
+        {
+            if (!IsValidShaderHotkey(hotkey))
+            {
+                return "F8";
+            }
+
+            string trimmed = hotkey!.Trim();
+            foreach (string allowed in AllowedShaderHotkeys)
+            {
+                if (string.Equals(allowed, trimmed, StringComparison.OrdinalIgnoreCase))
+                {
+                    return allowed;
+                }
+            }
+
+            return trimmed;
+        }
     }
 }

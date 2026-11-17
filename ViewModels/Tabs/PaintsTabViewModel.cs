@@ -1,10 +1,10 @@
+using Serilog;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
@@ -542,27 +542,6 @@ namespace TextureSwapper.ViewModels.Tabs
                         ControlAppearance.Caution
                     );
                     return;
-                }
-
-                if (
-                    skinsToApply.Any(s =>
-                        s.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
-                    )
-                )
-                {
-                    if (
-                        !_mainVM.HudService.IsLoaderPatched()
-                        || !_mainVM.HudService.IsCenteredHudEnabled()
-                    )
-                    {
-                        _mainVM.IsLoading = false;
-                        await _mainVM.NotificationService.ShowAsync(
-                            "Patch Required",
-                            "Animated paints require the Custom HUD patch to be installed\n\nPlease install the patch and use it in HUD settings to use animated paints.",
-                            ControlAppearance.Caution
-                        );
-                        return;
-                    }
                 }
 
                 List<SkinModel> swapCopies = [];

@@ -70,7 +70,7 @@ namespace TextureSwapper.Seasonal
                 ThemeKey = "Halloween",
                 DisplayName = "Halloween",
                 AppTitle = "🎃 ProTanki Texture Swapper 🎃",
-                AppLogoSource = "pack://application:,,,/Assets/halloween_logo.png",
+                AppLogoSource = "pack://application:,,,/Assets/logo.png",
                 AccentColor = Color.FromRgb(0xFF, 0x75, 0x18),
                 FontFileName = "Creepster-Regular.ttf",
                 FontFamilyName = "Creepster",
@@ -87,12 +87,5 @@ namespace TextureSwapper.Seasonal
             Definitions.TryGetValue(ActiveSeason, out SeasonalThemeDefinition? def)
                 ? def
                 : Definitions[SeasonType.None];
-
-        public static SeasonalThemeDefinition Get(SeasonType season)
-        {
-            return Definitions.TryGetValue(season, out SeasonalThemeDefinition? def)
-                ? def
-                : Definitions[SeasonType.None];
-        }
     }
 }

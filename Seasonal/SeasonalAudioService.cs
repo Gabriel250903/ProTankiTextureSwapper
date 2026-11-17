@@ -1,9 +1,9 @@
+using Serilog;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
-using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 
@@ -62,18 +62,6 @@ namespace TextureSwapper.Seasonal
             catch
             {
                 Log.Warning("Failed to stop MCI alias {Alias}", alias);
-            }
-        }
-
-        public static void Close(string alias)
-        {
-            try
-            {
-                _ = mciSendString($"close {alias}", null, 0, IntPtr.Zero);
-            }
-            catch
-            {
-                Log.Warning("Failed to close MCI alias {Alias}", alias);
             }
         }
     }
@@ -193,11 +181,6 @@ namespace TextureSwapper.Seasonal
             SeasonalWinMciAudio.Play("seasonal_click");
         }
 
-        public void PlayHollowClick()
-        {
-            PlayClick();
-        }
-
         public void PlayCardSelect()
         {
             PlayClick();
@@ -224,16 +207,6 @@ namespace TextureSwapper.Seasonal
             {
                 SeasonalWinMciAudio.Play("seasonal_special");
             }
-        }
-
-        public void PlayEvilLaugh(bool force = false)
-        {
-            PlaySpecialCue(force);
-        }
-
-        public void PlayGhostWail()
-        {
-            PlaySpecialCue(force: false);
         }
 
         public void PlayLaunchGreeting()

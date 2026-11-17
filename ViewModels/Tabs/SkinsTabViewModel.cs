@@ -1,7 +1,7 @@
+using Serilog;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Serilog;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.Services;
@@ -518,12 +518,8 @@ namespace TextureSwapper.ViewModels.Tabs
 
                 foreach (var group in groups)
                 {
-                    List<SkinModel> matches;
-
-                    if (mode == "Legacy")
-                    {
-                        matches =
-                        [
+                    List<SkinModel> matches = mode == "Legacy"
+                        ? [
                             .. group.Where(s =>
                                 (
                                     s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase)
@@ -534,21 +530,14 @@ namespace TextureSwapper.ViewModels.Tabs
                                 )
                                 && !s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
                             ),
-                        ];
-                    }
-                    else if (mode == "XT")
-                    {
-                        matches =
-                        [
+                        ]
+                        : mode == "XT"
+                            ? [
                             .. group.Where(s =>
                                 s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase)
                             ),
-                        ];
-                    }
-                    else
-                    {
-                        matches =
-                            mode == "LC on XT"
+                        ]
+                            : mode == "LC on XT"
                                 ?
                                 [
                                     .. group.Where(s =>
@@ -597,8 +586,6 @@ namespace TextureSwapper.ViewModels.Tabs
                                         ]
                                     : []
                             : [];
-                    }
-
                     if (matches.Count > 0)
                     {
                         toSelect.AddRange(matches);
@@ -719,14 +706,14 @@ namespace TextureSwapper.ViewModels.Tabs
                 string skinList =
                     highDetailSkins.Count > 5
                         ? string.Join("\n• ", highDetailSkins.Take(5).Select(s => s.Name))
-                            + $"\n• ...and {highDetailSkins.Count - 5} more"
+                            + $"\n\n ... and {highDetailSkins.Count - 5} more skins"
                         : string.Join("\n• ", highDetailSkins.Select(s => s.Name));
 
                 MessageBox warnBox = new()
                 {
                     Title = "Quick heads-up",
                     Content =
-                        $"You're applying high-detail skin textures:\n• {skinList}\n\nA few things to keep in mind:\n• The game might take a bit longer to load.\n• You might face occasional FPS stutters or drops in battle.\n• In some cases, the client might crash.\n\nWant to apply anyway?",
+                        $"You're applying high-detail skin textures:\n\n• {skinList}\n\nA few things to keep in mind:\n• The game might take a bit longer to load.\n• You might face occasional FPS stutters or drops in battle.\n\nWant to apply anyway?",
                     PrimaryButtonText = "Apply anyway",
                     CloseButtonText = "Cancel",
                     MaxWidth = 540,
