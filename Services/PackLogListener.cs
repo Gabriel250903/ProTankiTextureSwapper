@@ -1,9 +1,10 @@
-using Serilog;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -13,12 +14,55 @@ namespace TextureSwapper.Services
     public sealed class PackLogListener(ISettingsService settingsService) : IDisposable
     {
         private const string Prefix = "http://127.0.0.1:47921/";
+        private static readonly HttpClient TranslateHttpClient = new()
+        {
+            Timeout = TimeSpan.FromSeconds(8),
+        };
         private static readonly byte[] TransparentGif =
         [
-            0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x21, 0xF9, 0x04, 0x01, 0x00, 0x00, 0x00,
-            0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02,
-            0x44, 0x01, 0x00, 0x3B,
+            0x47,
+            0x49,
+            0x46,
+            0x38,
+            0x39,
+            0x61,
+            0x01,
+            0x00,
+            0x01,
+            0x00,
+            0x80,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0xFF,
+            0xFF,
+            0xFF,
+            0x21,
+            0xF9,
+            0x04,
+            0x01,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x2C,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x01,
+            0x00,
+            0x01,
+            0x00,
+            0x00,
+            0x02,
+            0x02,
+            0x44,
+            0x01,
+            0x00,
+            0x3B,
         ];
 
         private readonly ISettingsService _settingsService = settingsService;
@@ -62,7 +106,11 @@ namespace TextureSwapper.Services
                 catch (Exception ex)
                 {
                     IsRunning = false;
-                    Log.Warning(ex, "Could not start ProTanki Pack log listener on {Prefix}", Prefix);
+                    Log.Warning(
+                        ex,
+                        "Could not start ProTanki Pack log listener on {Prefix}",
+                        Prefix
+                    );
                     StopInternal();
                 }
             }
@@ -84,10 +132,26 @@ namespace TextureSwapper.Services
         private void StopInternal()
         {
             IsRunning = false;
-            try { _cts?.Cancel(); } catch { }
-            try { _listener?.Stop(); } catch { }
-            try { _listener?.Close(); } catch { }
-            try { _cts?.Dispose(); } catch { }
+            try
+            {
+                _cts?.Cancel();
+            }
+            catch { }
+            try
+            {
+                _listener?.Stop();
+            }
+            catch { }
+            try
+            {
+                _listener?.Close();
+            }
+            catch { }
+            try
+            {
+                _cts?.Dispose();
+            }
+            catch { }
             _listener = null;
             _cts = null;
         }
@@ -112,8 +176,18 @@ namespace TextureSwapper.Services
 
         private static bool IsAllowedOrigin(string? origin)
         {
-            return string.IsNullOrWhiteSpace(origin) || string.Equals(origin, "null", StringComparison.OrdinalIgnoreCase) || Uri.TryCreate(origin, UriKind.Absolute, out Uri? uri) && (uri.Host.Equals("play-protanki.com", StringComparison.OrdinalIgnoreCase)
-                    || uri.Host.EndsWith(".play-protanki.com", StringComparison.OrdinalIgnoreCase));
+            return string.IsNullOrWhiteSpace(origin)
+                || string.Equals(origin, "null", StringComparison.OrdinalIgnoreCase)
+                || (
+                    Uri.TryCreate(origin, UriKind.Absolute, out Uri? uri)
+                    && (
+                        uri.Host.Equals("play-protanki.com", StringComparison.OrdinalIgnoreCase)
+                        || uri.Host.EndsWith(
+                            ".play-protanki.com",
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
+                );
         }
 
         private bool IsAuthorizedRequest(HttpListenerRequest request, string? fallbackToken = null)
@@ -125,10 +199,11 @@ namespace TextureSwapper.Services
             }
 
             string provided = request.Headers["X-PTPack-Token"] ?? fallbackToken ?? string.Empty;
-            return provided.Length == expected.Length && CryptographicOperations.FixedTimeEquals(
-                Encoding.UTF8.GetBytes(provided),
-                Encoding.UTF8.GetBytes(expected)
-            );
+            return provided.Length == expected.Length
+                && CryptographicOperations.FixedTimeEquals(
+                    Encoding.UTF8.GetBytes(provided),
+                    Encoding.UTF8.GetBytes(expected)
+                );
         }
 
         private async Task HandleRequestAsync(HttpListenerContext ctx)
@@ -148,7 +223,8 @@ namespace TextureSwapper.Services
                     ctx.Response.Headers["Vary"] = "Origin";
                 }
                 ctx.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
-                ctx.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, X-PTPack-Token";
+                ctx.Response.Headers["Access-Control-Allow-Headers"] =
+                    "Content-Type, X-PTPack-Token";
 
                 if (ctx.Request.HttpMethod.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase))
                 {
@@ -158,7 +234,10 @@ namespace TextureSwapper.Services
                 }
 
                 if (
-                    ctx.Request.Url?.AbsolutePath.Equals("/ptpack-status", StringComparison.OrdinalIgnoreCase) == true
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/ptpack-status",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
                 )
                 {
                     if (!IsAuthorizedRequest(ctx.Request))
@@ -181,7 +260,10 @@ namespace TextureSwapper.Services
                     ctx.Response.OutputStream.Write(bytes, 0, bytes.Length);
                 }
                 else if (
-                    ctx.Request.Url?.AbsolutePath.Equals("/ptpack-log", StringComparison.OrdinalIgnoreCase) == true
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/ptpack-log",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
                 )
                 {
                     if (!IsAuthorizedRequest(ctx.Request, ctx.Request.QueryString["token"]))
@@ -207,11 +289,18 @@ namespace TextureSwapper.Services
                                 using JsonDocument doc = JsonDocument.Parse(body);
                                 if (doc.RootElement.ValueKind == JsonValueKind.Object)
                                 {
-                                    if (doc.RootElement.TryGetProperty("level", out JsonElement lvlEl))
+                                    if (
+                                        doc.RootElement.TryGetProperty(
+                                            "level",
+                                            out JsonElement lvlEl
+                                        )
+                                    )
                                     {
                                         level = lvlEl.GetString() ?? level;
                                     }
-                                    if (doc.RootElement.TryGetProperty("msg", out JsonElement msgEl))
+                                    if (
+                                        doc.RootElement.TryGetProperty("msg", out JsonElement msgEl)
+                                    )
                                     {
                                         message = msgEl.GetString() ?? body;
                                     }
@@ -228,7 +317,10 @@ namespace TextureSwapper.Services
                         }
                     }
 
-                    if (!string.IsNullOrWhiteSpace(message) && _settingsService.Load().EnablePackLogListener)
+                    if (
+                        !string.IsNullOrWhiteSpace(message)
+                        && _settingsService.Load().EnablePackLogListener
+                    )
                     {
                         if (message.Length > 2000)
                         {
@@ -263,7 +355,10 @@ namespace TextureSwapper.Services
                     }
                 }
                 else if (
-                    ctx.Request.Url?.AbsolutePath.Equals("/ptpack-hotkey", StringComparison.OrdinalIgnoreCase) == true
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/ptpack-hotkey",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
                 )
                 {
                     if (!ctx.Request.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
@@ -291,7 +386,10 @@ namespace TextureSwapper.Services
                                 using JsonDocument doc = JsonDocument.Parse(body);
                                 if (
                                     doc.RootElement.ValueKind == JsonValueKind.Object
-                                    && doc.RootElement.TryGetProperty("hotkey", out JsonElement hotkeyEl)
+                                    && doc.RootElement.TryGetProperty(
+                                        "hotkey",
+                                        out JsonElement hotkeyEl
+                                    )
                                 )
                                 {
                                     requestedKey = hotkeyEl.GetString() ?? string.Empty;
@@ -312,11 +410,20 @@ namespace TextureSwapper.Services
 
                     string normalized = Constants.NormalizeShaderHotkey(requestedKey);
                     AppSettings settings = _settingsService.Load();
-                    if (!string.Equals(settings.ProTankiPackHotkey, normalized, StringComparison.Ordinal))
+                    if (
+                        !string.Equals(
+                            settings.ProTankiPackHotkey,
+                            normalized,
+                            StringComparison.Ordinal
+                        )
+                    )
                     {
                         settings.ProTankiPackHotkey = normalized;
                         _settingsService.Save(settings);
-                        Log.Information("[Client/ProTanki Pack] ProTanki Pack menu hotkey synced from client: {Hotkey}", normalized);
+                        Log.Information(
+                            "[Client/ProTanki Pack] ProTanki Pack menu hotkey synced from client: {Hotkey}",
+                            normalized
+                        );
                         MenuHotkeyChanged?.Invoke(normalized);
                     }
 
@@ -328,7 +435,83 @@ namespace TextureSwapper.Services
                     ctx.Response.OutputStream.Write(bytes, 0, bytes.Length);
                 }
                 else if (
-                    ctx.Request.Url?.AbsolutePath.Equals("/ptpack-logs", StringComparison.OrdinalIgnoreCase) == true
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/ptpack-translate",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
+                )
+                {
+                    if (!IsAuthorizedRequest(ctx.Request))
+                    {
+                        ctx.Response.StatusCode = 403;
+                        return;
+                    }
+
+                    string q = ctx.Request.QueryString["q"] ?? string.Empty;
+                    string tl = ctx.Request.QueryString["tl"] ?? "en";
+                    if (string.IsNullOrWhiteSpace(q))
+                    {
+                        ctx.Response.StatusCode = 400;
+                        return;
+                    }
+
+                    try
+                    {
+                        string targetUrl =
+                            $"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={Uri.EscapeDataString(tl)}&dt=t&q={Uri.EscapeDataString(q)}";
+                        string rawJson = await TranslateHttpClient
+                            .GetStringAsync(targetUrl)
+                            .ConfigureAwait(false);
+                        using JsonDocument doc = JsonDocument.Parse(rawJson);
+                        StringBuilder sb = new();
+                        if (
+                            doc.RootElement.ValueKind == JsonValueKind.Array
+                            && doc.RootElement.GetArrayLength() > 0
+                        )
+                        {
+                            JsonElement segs = doc.RootElement[0];
+                            if (segs.ValueKind == JsonValueKind.Array)
+                            {
+                                foreach (JsonElement seg in segs.EnumerateArray())
+                                {
+                                    if (
+                                        seg.ValueKind == JsonValueKind.Array
+                                        && seg.GetArrayLength() > 0
+                                        && seg[0].ValueKind == JsonValueKind.String
+                                    )
+                                    {
+                                        sb.Append(seg[0].GetString());
+                                    }
+                                }
+                            }
+                        }
+                        string srcLang =
+                            doc.RootElement.ValueKind == JsonValueKind.Array
+                            && doc.RootElement.GetArrayLength() > 2
+                            && doc.RootElement[2].ValueKind == JsonValueKind.String
+                                ? (doc.RootElement[2].GetString() ?? string.Empty)
+                                : string.Empty;
+
+                        string outJson = JsonSerializer.Serialize(
+                            new { text = sb.ToString(), srcLang }
+                        );
+                        byte[] bytes = Encoding.UTF8.GetBytes(outJson);
+                        ctx.Response.StatusCode = 200;
+                        ctx.Response.ContentType = "application/json; charset=utf-8";
+                        ctx.Response.Headers["Cache-Control"] = "no-store";
+                        ctx.Response.OutputStream.Write(bytes, 0, bytes.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Debug(ex, "Local translate proxy failed.");
+                        ctx.Response.StatusCode = 502;
+                    }
+                }
+                else if (
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/ptpack-logs",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
                 )
                 {
                     if (!IsAuthorizedRequest(ctx.Request))
@@ -379,7 +562,63 @@ namespace TextureSwapper.Services
                         content = "Error reading log file: " + ex.Message;
                     }
 
-                    string json = JsonSerializer.Serialize(new { ok = true, file = fileName, content });
+                    string json = JsonSerializer.Serialize(
+                        new
+                        {
+                            ok = true,
+                            file = fileName,
+                            content,
+                        }
+                    );
+                    byte[] bytes = Encoding.UTF8.GetBytes(json);
+                    ctx.Response.StatusCode = 200;
+                    ctx.Response.ContentType = "application/json; charset=utf-8";
+                    ctx.Response.Headers["Cache-Control"] = "no-store";
+                    ctx.Response.OutputStream.Write(bytes, 0, bytes.Length);
+                }
+                else if (
+                    ctx.Request.Url?.AbsolutePath.Equals(
+                        "/patch-report",
+                        StringComparison.OrdinalIgnoreCase
+                    ) == true
+                )
+                {
+                    if (!IsAuthorizedRequest(ctx.Request))
+                    {
+                        ctx.Response.StatusCode = 403;
+                        return;
+                    }
+
+                    string reportPath = Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "Backups",
+                        "Html5",
+                        "last_patch_report.json"
+                    );
+
+                    PatchRunReport? report = null;
+                    string? readError = null;
+                    if (File.Exists(reportPath))
+                    {
+                        try
+                        {
+                            string raw = File.ReadAllText(reportPath, Encoding.UTF8);
+                            report = JsonSerializer.Deserialize<PatchRunReport>(raw);
+                        }
+                        catch (Exception ex)
+                        {
+                            readError = ex.Message;
+                        }
+                    }
+
+                    string json = JsonSerializer.Serialize(
+                        new
+                        {
+                            ok = true,
+                            report,
+                            error = readError,
+                        }
+                    );
                     byte[] bytes = Encoding.UTF8.GetBytes(json);
                     ctx.Response.StatusCode = 200;
                     ctx.Response.ContentType = "application/json; charset=utf-8";
@@ -394,7 +633,11 @@ namespace TextureSwapper.Services
             catch { }
             finally
             {
-                try { ctx.Response.Close(); } catch { }
+                try
+                {
+                    ctx.Response.Close();
+                }
+                catch { }
             }
         }
 

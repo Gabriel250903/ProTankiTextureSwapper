@@ -1,7 +1,7 @@
-using Serilog;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -10,11 +10,13 @@ namespace TextureSwapper.Services
 {
     public sealed class SkinSyncService(
         IUpdateService updateService,
-        ISettingsService settingsService
+        ISettingsService settingsService,
+        IEquipmentTargetService? equipmentTargetService = null
     ) : ISkinSyncService
     {
         private readonly IUpdateService _updateService = updateService;
         private readonly ISettingsService _settingsService = settingsService;
+        private readonly IEquipmentTargetService? _equipmentTargetService = equipmentTargetService;
         public event Action<string>? ProgressChanged;
         public event Action<SkinModel>? SkinPreviewUpdated;
         private readonly JsonSerializerOptions options = new() { WriteIndented = true };
@@ -409,6 +411,45 @@ namespace TextureSwapper.Services
                 Log.Error(ex, "Failed to sync remote ingame_paints.json");
             }
 
+            try
+            {
+                if (!_updateService.IsOffline && !_settingsService.Load().SkipRemoteTargetSync)
+                {
+                    string localTargetsPath = Path.Combine(baseDir, Constants.EquipmentTargetsJson);
+                    string localTargetsJson = File.Exists(localTargetsPath)
+                        ? await File.ReadAllTextAsync(localTargetsPath, cancellationToken)
+                        : string.Empty;
+                    string? remoteTargetsJson = await _updateService.FetchRemoteTextFileAsync(
+                        Constants.EquipmentTargetsJson
+                    );
+                    if (
+                        !string.IsNullOrWhiteSpace(remoteTargetsJson)
+                        && remoteTargetsJson != localTargetsJson
+                    )
+                    {
+                        EquipmentTargetsCatalog? parsedTargets =
+                            JsonSerializer.Deserialize<EquipmentTargetsCatalog>(remoteTargetsJson);
+                        if (parsedTargets != null)
+                        {
+                            await AtomicWriteAllTextAsync(
+                                localTargetsPath,
+                                remoteTargetsJson,
+                                cancellationToken
+                            );
+                            Log.Information("Updated local equipment_targets.json from remote.");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to sync remote equipment_targets.json");
+            }
+            finally
+            {
+                _equipmentTargetService?.Reload();
+            }
+
             return (combinedSkins, remoteInGamePaints);
         }
 
@@ -540,10 +581,7 @@ namespace TextureSwapper.Services
                         Constants.BackupsDir,
                         "Html5"
                     )
-                    : Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        Constants.BackupsDir
-                    );
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.BackupsDir);
             if (!Directory.Exists(backupsRoot))
             {
                 return [];

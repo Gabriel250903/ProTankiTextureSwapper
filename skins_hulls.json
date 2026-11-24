@@ -579,7 +579,8 @@
     "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2xpZ2h0bWFwLmpwZw==",
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHNfYWxwaGEuanBn",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L29iamVjdC4zZHM=",
-    "IsExperimental": true
+    "IsExperimental": true,
+    "IsPremium": true
   },
   {
     "Category": "Hulls",
@@ -748,6 +749,19 @@
     "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL2RldGFpbHNfYWxwaGEuanBn",
     "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC8xMC80LzMyMDIzNTEwNDIxNDEyL29iamVjdC4zZHM=",
     "IsPremium": true,
+    "IsExperimental": true
+  },
+  {
+    "Category": "Hulls",
+    "ItemName": "Hornet",
+    "Name": "???",
+    "SourceFolder": "Textures/Hulls/Hornet/Glitch/M3",
+    "PreviewImage": "Textures/Hulls/Hornet/Glitch/M3/preview.png",
+    "DetailsTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHMuanBn",
+    "LightmapTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2xpZ2h0bWFwLmpwZw==",
+    "AlphaTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L2RldGFpbHNfYWxwaGEuanBn",
+    "ModelTarget": "aHR0cDovLzE0Ni41OS4xMTAuMTAzLzAvMC83LzE0LzMyMDIzNTEwNDE0Mjc1L29iamVjdC4zZHM=",
+    "IsPremium": false,
     "IsExperimental": true
   }
 ]

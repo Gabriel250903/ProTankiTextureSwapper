@@ -1,10 +1,10 @@
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;

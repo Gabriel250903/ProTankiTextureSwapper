@@ -14,6 +14,7 @@ namespace TextureSwapper.Core.Models
         public string? CustomHtml5CachePath { get; set; }
         public string? LastSelectedCategory { get; set; }
         public string? LastSelectedItemName { get; set; }
+        public string LastSelectedGarageTier { get; set; } = "M3";
         public double UIScale { get; set; } = 1.0;
         public bool IsPremiumUnlocked { get; set; }
         public string PremiumLicenseKey { get; set; } = string.Empty;
@@ -53,5 +54,8 @@ namespace TextureSwapper.Core.Models
         public bool EnablePackLogListener { get; set; } = false;
         public string PackIpcToken { get; set; } = string.Empty;
         public bool HasSelectedClient { get; set; } = false;
+        public string ShotDynamicLightingMode { get; set; } = "Matched";
+        public Dictionary<string, Html5TurretLightOverride> ActiveHtml5ShotLighting { get; set; } =
+            new(StringComparer.OrdinalIgnoreCase);
     }
 }

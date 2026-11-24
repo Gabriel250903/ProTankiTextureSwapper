@@ -1,8 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Seasonal;
@@ -10,6 +10,7 @@ using TextureSwapper.Services;
 using TextureSwapper.Services.Composers;
 using TextureSwapper.ViewModels;
 using TextureSwapper.ViewModels.Editors;
+using TextureSwapper.ViewModels.Tabs;
 using TextureSwapper.Views.Windows;
 
 namespace TextureSwapper
@@ -52,7 +53,11 @@ namespace TextureSwapper
             {
                 if (args.ExceptionObject is Exception ex)
                 {
-                    Log.Fatal(ex, "Unhandled AppDomain exception (IsTerminating={IsTerminating})", args.IsTerminating);
+                    Log.Fatal(
+                        ex,
+                        "Unhandled AppDomain exception (IsTerminating={IsTerminating})",
+                        args.IsTerminating
+                    );
                 }
                 Log.CloseAndFlush();
             };
@@ -90,8 +95,7 @@ namespace TextureSwapper
                     ServiceProvider.GetRequiredService<ILocalizationService>();
                 ISettingsService settingsService =
                     ServiceProvider.GetRequiredService<ISettingsService>();
-                ICacheService cacheService =
-                    ServiceProvider.GetRequiredService<ICacheService>();
+                ICacheService cacheService = ServiceProvider.GetRequiredService<ICacheService>();
                 Core.Models.AppSettings settings = settingsService.Load();
                 if (settings.EnablePackLogListener || settings.EnableProTankiPack)
                 {
@@ -105,8 +109,12 @@ namespace TextureSwapper
 
                 if (!settings.HasSelectedClient)
                 {
-                    bool isFlashDetected = cacheService.IsClientDetected(Core.Models.ClientType.Flash);
-                    bool isHtml5Detected = cacheService.IsClientDetected(Core.Models.ClientType.Html5);
+                    bool isFlashDetected = cacheService.IsClientDetected(
+                        Core.Models.ClientType.Flash
+                    );
+                    bool isHtml5Detected = cacheService.IsClientDetected(
+                        Core.Models.ClientType.Html5
+                    );
 
                     ClientSelectionDialog clientDialog = new(
                         settings.ActiveClient,
@@ -146,6 +154,7 @@ namespace TextureSwapper
             _ = services.AddSingleton<ISwapService, SwapService>();
             _ = services.AddSingleton<ICacheService, CacheService>();
             _ = services.AddSingleton<ISettingsService, SettingsService>();
+            _ = services.AddSingleton<IEquipmentTargetService, EquipmentTargetService>();
             _ = services.AddSingleton<ISkinSyncService, SkinSyncService>();
             _ = services.AddSingleton<IWindowService, WindowService>();
             _ = services.AddSingleton<INotificationService, NotificationService>();
@@ -174,6 +183,8 @@ namespace TextureSwapper
             _ = services.AddSingleton<IPropArchiveService, PropArchiveService>();
             _ = services.AddSingleton<IMeshService, MeshService>();
             _ = services.AddSingleton<IAdminAuthService, AdminAuthService>();
+            _ = services.AddSingleton<IChatService, ChatService>();
+            _ = services.AddSingleton<ChatTabViewModel>();
             _ = services.AddSingleton<PackLogListener>();
             _ = services.AddSingleton<MainViewModel>();
             _ = services.AddSingleton<MainWindow>();
@@ -187,7 +198,9 @@ namespace TextureSwapper
         {
             try
             {
-                (ServiceProvider?.GetService(typeof(PackLogListener)) as PackLogListener)?.Dispose();
+                (
+                    ServiceProvider?.GetService(typeof(PackLogListener)) as PackLogListener
+                )?.Dispose();
             }
             catch (Exception ex)
             {

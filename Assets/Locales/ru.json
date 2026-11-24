@@ -9,7 +9,7 @@
   "Loc_Nav_PropsEditor": "Редактор пропсов",
   "Loc_Nav_AdminPanel": "Панель администратора",
   "Loc_Nav_Settings": "Настройки",
-  "Loc_Tab_Skins": "СКИНИ",
+  "Loc_Tab_Skins": "СКИНЫ",
   "Loc_Tab_Paints": "КРАСКИ",
   "Loc_Tab_BackupHistory": "ИСТОРИЯ БЭКАПОВ",
   "Loc_Tab_ShotEffects": "ЭФФЕКТЫ ВЫСТРЕЛОВ",
@@ -382,5 +382,8 @@
   "Loc_DiscordInvite_Body": "Присоединяйтесь к нашему официальному серверу Discord, чтобы следить за последними новостями, анонсами, обновлениями текстур и эксклюзивными материалами.\n\nОбщайтесь с игроками, получайте помощь и делитесь предложениями!",
   "Loc_DiscordInvite_Join": "Перейти в Discord",
   "Loc_DiscordInvite_Later": "Позже",
-  "Loc_ShotEffects_Classic2010": "Применить Классический 2010"
+  "Loc_ShotEffects_Classic2010": "Применить Классический 2010",
+  "Loc_Skins_GarageTier": "МОДИФИКАЦИЯ",
+  "Loc_Skins_M3ModelBadge": "МОДЕЛЬ M3",
+  "Loc_Skins_M3ModelTooltip": "Применяет 3D-модель M3 на ваш танк/пушку более низкой модификации"
 }

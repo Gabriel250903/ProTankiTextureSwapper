@@ -2,9 +2,11 @@ using System.Windows.Input;
 
 namespace TextureSwapper.Helpers.Commands
 {
-    public class RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null) : ICommand
+    public class RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
+        : ICommand
     {
-        private readonly Action<object?> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        private readonly Action<object?> _execute =
+            execute ?? throw new ArgumentNullException(nameof(execute));
         private readonly Predicate<object?>? _canExecute = canExecute;
 
         public bool CanExecute(object? parameter)

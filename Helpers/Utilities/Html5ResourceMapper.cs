@@ -71,5 +71,17 @@ namespace TextureSwapper.Helpers.Utilities
                 return false;
             }
         }
+
+        public static string EncodeHtml5Target(long resourceId, string fileName, long version = 0)
+        {
+            long high = (resourceId >> 32) & 0xFFFFFFFFL;
+            long b2 = (resourceId >> 16) & 0xFFL;
+            long b1 = (resourceId >> 8) & 0xFFL;
+            long b0 = resourceId & 0xFFL;
+            string escapedFile = Uri.EscapeDataString(fileName ?? string.Empty);
+            string url =
+                $"http://146.59.110.103/{Convert.ToString(high, 8)}/{Convert.ToString(b2, 8)}/{Convert.ToString(b1, 8)}/{Convert.ToString(b0, 8)}/{Convert.ToString(version, 8)}/{escapedFile}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
+        }
     }
 }

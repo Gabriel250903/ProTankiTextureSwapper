@@ -1,8 +1,8 @@
-using Serilog;
 using System.Buffers;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -247,7 +247,8 @@ namespace TextureSwapper.Services.Composers
                     {
                         int flareW = flareTemplate.Width;
                         int flareH = flareTemplate.Height;
-                        int flareRadius = 45;
+                        int flareRadius = (int)
+                            Math.Round(45 * Math.Clamp(options.ChargeSize, 0.5, 2.5));
 
                         for (int dy = -flareRadius; dy <= flareRadius; dy++)
                         {
@@ -338,51 +339,56 @@ namespace TextureSwapper.Services.Composers
             (
                 CachedTextureData? template,
                 string primaryTarget,
-                string legacyTarget
+                string alphaTarget,
+                string legacyTarget,
+                bool isCharge
             )[] texturesToRecolor =
             [
                 (
                     _charge1Template,
                     Constants.RailgunCharge1Target,
-                    Constants.RailgunLegacyCharge1Target
+                    Constants.RailgunCharge1AlphaTarget,
+                    Constants.RailgunLegacyCharge1Target,
+                    true
                 ),
                 (
                     _charge2Template,
                     Constants.RailgunCharge2Target,
-                    Constants.RailgunLegacyCharge2Target
+                    Constants.RailgunCharge2AlphaTarget,
+                    Constants.RailgunLegacyCharge2Target,
+                    true
                 ),
                 (
                     _chargeSphereTemplate,
                     Constants.RailgunChargeSphereTarget,
-                    Constants.RailgunLegacyChargeSphereTarget
+                    Constants.RailgunChargeSphereAlphaTarget,
+                    Constants.RailgunLegacyChargeSphereTarget,
+                    true
                 ),
                 (
                     _beamCoreTemplate,
                     Constants.RailgunBeamCoreTarget,
-                    Constants.RailgunLegacyBeamCoreTarget
+                    Constants.RailgunBeamCoreAlphaTarget,
+                    Constants.RailgunLegacyBeamCoreTarget,
+                    false
                 ),
                 (
                     _beamSpiralTemplate,
                     Constants.RailgunBeamSpiralTarget,
-                    Constants.RailgunLegacyBeamSpiralTarget
+                    Constants.RailgunBeamSpiralAlphaTarget,
+                    Constants.RailgunLegacyBeamSpiralTarget,
+                    false
                 ),
             ];
-
-            RailgunShotRenderOptions gameOptions = new()
-            {
-                Hue = (options.Hue + 180.0) % 360.0,
-                Saturation = options.Saturation,
-                Brightness = options.Brightness,
-                Contrast = options.Contrast,
-                Invert = options.Invert,
-            };
 
             int savedCount = 0;
             foreach (
                 (
                     CachedTextureData? template,
                     string primaryTarget,
-                    string legacyTarget
+                    string alphaTarget,
+                    string legacyTarget,
+                    bool isCharge
                 ) in texturesToRecolor
             )
             {
@@ -391,29 +397,49 @@ namespace TextureSwapper.Services.Composers
                     continue;
                 }
 
-                byte[] recoloredPixels = RecolorPixels(template, gameOptions, isGameTexture: true);
+                CachedTextureData sourceTemplate =
+                    isCharge && Math.Abs(options.ChargeSize - 1.0) > 0.001
+                        ? ScaleCentered(template, options.ChargeSize)
+                        : template;
+
+                byte[] recoloredPixels = RecolorPixels(sourceTemplate, options, isGameTexture: true);
+                byte[] alphaPixels = BuildAlphaPixels(recoloredPixels, sourceTemplate.Width * sourceTemplate.Height);
                 try
                 {
                     BitmapSource bmp = BitmapSource.Create(
-                        template.Width,
-                        template.Height,
+                        sourceTemplate.Width,
+                        sourceTemplate.Height,
                         96,
                         96,
                         PixelFormats.Bgr32,
                         null,
                         recoloredPixels,
-                        template.Width * 4
+                        sourceTemplate.Width * 4
                     );
 
                     byte[] jpegBytes = EncodeToJpeg(bmp, 95);
 
+                    BitmapSource alphaBmp = BitmapSource.Create(
+                        sourceTemplate.Width,
+                        sourceTemplate.Height,
+                        96,
+                        96,
+                        PixelFormats.Bgr32,
+                        null,
+                        alphaPixels,
+                        sourceTemplate.Width * 4
+                    );
+                    byte[] alphaJpegBytes = EncodeToJpeg(alphaBmp, 95);
+
                     File.WriteAllBytes(Path.Combine(outputDirectory, primaryTarget), jpegBytes);
+                    File.WriteAllBytes(Path.Combine(outputDirectory, alphaTarget), alphaJpegBytes);
                     File.WriteAllBytes(Path.Combine(outputDirectory, legacyTarget), jpegBytes);
                     savedCount++;
                 }
                 finally
                 {
                     ArrayPool<byte>.Shared.Return(recoloredPixels);
+                    ArrayPool<byte>.Shared.Return(alphaPixels);
                 }
             }
 
@@ -472,7 +498,7 @@ namespace TextureSwapper.Services.Composers
                     continue;
                 }
 
-                double luminance = ((0.299 * r) + (0.587 * g) + (0.114 * b)) / 255.0;
+                double luminance = Math.Max(r, Math.Max(g, b)) / 255.0;
                 if (luminance < 0.005)
                 {
                     output[offset] = 0;
@@ -495,7 +521,7 @@ namespace TextureSwapper.Services.Composers
                 double outG = pureG / 255.0 * lum;
                 double outB = pureB / 255.0 * lum;
 
-                if (!isGameTexture && lum > 0.85)
+                if (lum > 0.85)
                 {
                     double core = (lum - 0.85) / 0.15;
                     core = core * core * 0.5;
@@ -511,6 +537,99 @@ namespace TextureSwapper.Services.Composers
             }
 
             return output;
+        }
+
+        private static byte[] BuildAlphaPixels(byte[] recoloredBgr32, int totalPixels)
+        {
+            byte[] alpha = ArrayPool<byte>.Shared.Rent(totalPixels * 4);
+            for (int i = 0; i < totalPixels; i++)
+            {
+                int offset = i * 4;
+                byte peak = Math.Max(
+                    recoloredBgr32[offset],
+                    Math.Max(recoloredBgr32[offset + 1], recoloredBgr32[offset + 2])
+                );
+                byte a = peak < 4 ? (byte)0 : peak;
+                alpha[offset] = a;
+                alpha[offset + 1] = a;
+                alpha[offset + 2] = a;
+                alpha[offset + 3] = 255;
+            }
+            return alpha;
+        }
+
+        private static CachedTextureData ScaleCentered(CachedTextureData template, double scale)
+        {
+            double clampedScale = Math.Clamp(scale, 0.5, 3.0);
+            int width = template.Width;
+            int height = template.Height;
+            byte[] src = template.Pixels;
+            byte[] dst = new byte[width * height * 4];
+
+            double cx = (width - 1) * 0.5;
+            double cy = (height - 1) * 0.5;
+            double invScale = 1.0 / clampedScale;
+
+            for (int y = 0; y < height; y++)
+            {
+                double sy = ((y - cy) * invScale) + cy;
+                if (sy < 0 || sy > height - 1)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        dst[((y * width) + x) * 4 + 3] = 255;
+                    }
+                    continue;
+                }
+
+                int y0 = (int)Math.Floor(sy);
+                int y1 = Math.Min(y0 + 1, height - 1);
+                double fy = sy - y0;
+
+                for (int x = 0; x < width; x++)
+                {
+                    int dstOffset = ((y * width) + x) * 4;
+                    double sx = ((x - cx) * invScale) + cx;
+                    if (sx < 0 || sx > width - 1)
+                    {
+                        dst[dstOffset + 3] = 255;
+                        continue;
+                    }
+
+                    int x0 = (int)Math.Floor(sx);
+                    int x1 = Math.Min(x0 + 1, width - 1);
+                    double fx = sx - x0;
+
+                    int i00 = ((y0 * width) + x0) * 4;
+                    int i10 = ((y0 * width) + x1) * 4;
+                    int i01 = ((y1 * width) + x0) * 4;
+                    int i11 = ((y1 * width) + x1) * 4;
+
+                    for (int c = 0; c < 3; c++)
+                    {
+                        double top = src[i00 + c] + ((src[i10 + c] - src[i00 + c]) * fx);
+                        double bot = src[i01 + c] + ((src[i11 + c] - src[i01 + c]) * fx);
+                        double val = top + ((bot - top) * fy);
+                        double dx = (x - cx) / cx;
+                        double dy = (y - cy) / cy;
+                        double r = Math.Sqrt((dx * dx) + (dy * dy));
+                        if (r > 0.72)
+                        {
+                            double fade = Math.Clamp((0.98 - r) / (0.98 - 0.72), 0.0, 1.0);
+                            val *= fade * fade;
+                        }
+                        dst[dstOffset + c] = (byte)Math.Clamp(val, 0.0, 255.0);
+                    }
+                    dst[dstOffset + 3] = 255;
+                }
+            }
+
+            return new CachedTextureData
+            {
+                Width = width,
+                Height = height,
+                Pixels = dst,
+            };
         }
 
         private static void EnsureTemplatesLoaded()

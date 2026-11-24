@@ -1,10 +1,10 @@
-using Serilog;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Utilities;
@@ -50,6 +50,11 @@ namespace TextureSwapper.Views.Windows
             };
 
             PreviewMouseLeftButtonDown += OnGlobalPreviewMouseLeftButtonDown;
+
+            _mainViewModel.ChatTabVM.NavigateToGiftedSkinRequested += (_, skinName) =>
+            {
+                Dispatcher.Invoke(() => NavigateToGiftedSkin(skinName));
+            };
 
             Closed += (_, _) =>
             {
@@ -161,6 +166,13 @@ namespace TextureSwapper.Views.Windows
                     case "ShotEffects":
                         MainTabControl.SelectedIndex = 3;
                         break;
+                    case "ChristmasChat":
+                        MainTabControl.SelectedIndex = 4;
+                        if (_mainViewModel.IsChristmasChatVisible)
+                        {
+                            _ = _mainViewModel.ChatTabVM.EnsureConnectedAsync();
+                        }
+                        break;
                     case "Settings":
                         _mainViewModel.OpenSettingsCommand.Execute(null);
                         selectedItem.IsActive = false;
@@ -174,12 +186,53 @@ namespace TextureSwapper.Views.Windows
                                     "Paints" => 1,
                                     "Backups" => 2,
                                     "ShotEffects" => 3,
+                                    "ChristmasChat" => 4,
                                     _ => -1,
                                 };
                                 navItem.IsActive = tabIndex == MainTabControl.SelectedIndex;
                             }
                         }
                         break;
+                }
+            }
+        }
+
+        private void NavigateToGiftedSkin(string skinName)
+        {
+            SkinModel? match = _mainViewModel.AllSkins.FirstOrDefault(s =>
+                s.Name.Equals(skinName, StringComparison.OrdinalIgnoreCase)
+            );
+            bool isPaint =
+                match != null
+                && match.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase);
+
+            if (isPaint)
+            {
+                MainTabControl.SelectedIndex = 1;
+                _mainViewModel.SkinsTabVM.SelectedCategory = "Paints";
+                _mainViewModel.PaintsTabVM.CustomPaintSearchQuery = skinName;
+            }
+            else
+            {
+                MainTabControl.SelectedIndex = 0;
+                _mainViewModel.SkinsTabVM.ShowOnlyGiftedSkins = true;
+                _mainViewModel.SkinsTabVM.SearchQuery = skinName;
+            }
+
+            foreach (object? item in RootNavigation.MenuItems)
+            {
+                if (item is NavigationViewItem navItem)
+                {
+                    int tabIndex = navItem.Tag?.ToString() switch
+                    {
+                        "Skins" => 0,
+                        "Paints" => 1,
+                        "Backups" => 2,
+                        "ShotEffects" => 3,
+                        "ChristmasChat" => 4,
+                        _ => -1,
+                    };
+                    navItem.IsActive = tabIndex == MainTabControl.SelectedIndex;
                 }
             }
         }

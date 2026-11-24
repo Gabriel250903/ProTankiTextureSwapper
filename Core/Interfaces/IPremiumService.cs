@@ -40,5 +40,10 @@ namespace TextureSwapper.Core.Interfaces
         );
         Task<SeasonalEventResult> ProcessSeasonalEventAsync(string nickname);
         Task<byte[]?> GetAssetDecryptionKeyAsync(bool forceRefresh = false);
+        event EventHandler? UnlockedChristmasSkinsChanged;
+        string? UnlockedChristmasSkinId { get; }
+        IReadOnlyList<string> UnlockedChristmasSkinIds { get; }
+        void SetUnlockedChristmasSkinId(string? skinId);
+        void SetUnlockedChristmasSkinIds(IEnumerable<string>? skinIds);
     }
 }

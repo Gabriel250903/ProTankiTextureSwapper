@@ -1,6 +1,6 @@
-using Serilog;
 using System.Windows;
 using System.Windows.Controls;
+using Serilog;
 using Wpf.Ui.Controls;
 
 namespace TextureSwapper.Views.Controls

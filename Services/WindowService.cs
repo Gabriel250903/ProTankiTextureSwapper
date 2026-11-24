@@ -1,5 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.ViewModels;
 using TextureSwapper.ViewModels.Editors;

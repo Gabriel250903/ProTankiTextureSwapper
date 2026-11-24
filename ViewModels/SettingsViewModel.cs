@@ -1,9 +1,9 @@
-using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
@@ -552,10 +552,7 @@ public class SettingsViewModel : ViewModelBase, IDisposable
     }
 
     public IReadOnlyList<string> AvailableDownloadMirrors { get; } =
-    [
-        "Cloudflare (Fast)",
-        "GitHub Releases"
-    ];
+    ["Cloudflare (Fast)", "GitHub Releases"];
 
     public string SelectedDownloadMirror
     {
@@ -604,10 +601,7 @@ public class SettingsViewModel : ViewModelBase, IDisposable
     public ICommand OpenLogsFolderCommand { get; }
 
     public IReadOnlyList<string> AvailableClientModes { get; } =
-    [
-        "HTML5 Client (New)",
-        "Flash Client (Legacy)"
-    ];
+    ["HTML5 Client (New)", "Flash Client (Legacy)"];
 
     public bool IsHtml5Client => _mainViewModel.IsHtml5Client;
 
@@ -656,8 +650,12 @@ public class SettingsViewModel : ViewModelBase, IDisposable
         get
         {
             string current = SelectedShaderHotkey;
-            return string.IsNullOrWhiteSpace(current)
-                || Core.Constants.AllowedShaderHotkeys.Contains(current, StringComparer.OrdinalIgnoreCase)
+            return
+                string.IsNullOrWhiteSpace(current)
+                || Core.Constants.AllowedShaderHotkeys.Contains(
+                    current,
+                    StringComparer.OrdinalIgnoreCase
+                )
                 ? Core.Constants.AllowedShaderHotkeys
                 : (IReadOnlyList<string>)[.. Core.Constants.AllowedShaderHotkeys, current];
         }
@@ -675,7 +673,8 @@ public class SettingsViewModel : ViewModelBase, IDisposable
                 OnPropertyChanged(nameof(EnablePackLogListener));
 
                 Services.PackLogListener? listener =
-                    App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+                    App.ServiceProvider?.GetService(typeof(Services.PackLogListener))
+                    as Services.PackLogListener;
                 if (value || Settings.EnableProTankiPack)
                 {
                     listener?.Start();
@@ -721,12 +720,58 @@ public class SettingsViewModel : ViewModelBase, IDisposable
                 OnPropertyChanged(nameof(SelectedShaderHotkey));
                 if (Settings.EnableProTankiPack && IsHtml5Client)
                 {
-                    _ = HandleShadersToggleAsync(true, isHotkeyUpdate: true, previousHotkey: previous);
+                    _ = HandleShadersToggleAsync(
+                        true,
+                        isHotkeyUpdate: true,
+                        previousHotkey: previous
+                    );
                 }
                 else
                 {
                     _settingsService.Save(Settings);
                 }
+            }
+        }
+    }
+
+    private const string ShotLightingMatchedLabel = "Matched Color Glow";
+    private const string ShotLightingNoGlowLabel = "No Glow (Disable Shot Lighting)";
+
+    public IReadOnlyList<string> AvailableShotLightingModes { get; } =
+    [ShotLightingMatchedLabel, ShotLightingNoGlowLabel];
+
+    public string SelectedShotLightingMode
+    {
+        get =>
+            string.Equals(
+                Settings.ShotDynamicLightingMode,
+                "NoGlow",
+                StringComparison.OrdinalIgnoreCase
+            )
+                ? ShotLightingNoGlowLabel
+                : ShotLightingMatchedLabel;
+        set
+        {
+            string targetMode = string.Equals(
+                value,
+                ShotLightingNoGlowLabel,
+                StringComparison.Ordinal
+            )
+                ? "NoGlow"
+                : "Matched";
+            if (
+                !string.Equals(
+                    Settings.ShotDynamicLightingMode,
+                    targetMode,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+            {
+                string previousMode = Settings.ShotDynamicLightingMode;
+                Settings.ShotDynamicLightingMode = targetMode;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(SelectedShotLightingMode));
+                _ = HandleShotLightingModeChangeAsync(previousMode);
             }
         }
     }
@@ -764,7 +809,11 @@ public class SettingsViewModel : ViewModelBase, IDisposable
                 OnPropertyChanged(nameof(SelectedSkinAnimHotkey));
                 if (Settings.EnableSkinAnimations && IsHtml5Client)
                 {
-                    _ = HandleSkinAnimationsToggleAsync(true, isHotkeyUpdate: true, previousHotkey: previous);
+                    _ = HandleSkinAnimationsToggleAsync(
+                        true,
+                        isHotkeyUpdate: true,
+                        previousHotkey: previous
+                    );
                 }
                 else
                 {
@@ -788,7 +837,8 @@ public class SettingsViewModel : ViewModelBase, IDisposable
         _premiumService = premiumService;
         _deviceBanService = deviceBanService;
         _packLogListener =
-            App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+            App.ServiceProvider?.GetService(typeof(Services.PackLogListener))
+            as Services.PackLogListener;
         if (_packLogListener != null)
         {
             _packLogListener.MenuHotkeyChanged += OnPackMenuHotkeyChanged;
@@ -1482,6 +1532,55 @@ public class SettingsViewModel : ViewModelBase, IDisposable
         }
     }
 
+    private async Task HandleShotLightingModeChangeAsync(string previousMode)
+    {
+        if (!IsHtml5Client)
+        {
+            return;
+        }
+
+        await _scriptPatchLock.WaitAsync();
+        try
+        {
+            if (
+                Helpers.Utilities.FileHelper.IsGameRunning()
+                || Helpers.Utilities.FileHelper.IsCacheFileLocked(_mainViewModel.CachePath)
+            )
+            {
+                Settings.ShotDynamicLightingMode = previousMode;
+                _settingsService.Save(Settings);
+                OnPropertyChanged(nameof(SelectedShotLightingMode));
+                await _mainViewModel.ShowNotificationAsync(
+                    "ProTanki Running",
+                    "ProTanki is currently running or cache files are locked. Please close the game before changing Shot Dynamic Lighting.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            IsLoading = true;
+            UpdateStatus = "Updating HTML5 Shot Dynamic Lighting...";
+            string cachePath = _mainViewModel.CachePath;
+            await Task.Run(() =>
+                _mainViewModel.Html5CacheService.SyncShotDynamicLighting(cachePath)
+            );
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to sync HTML5 Shot Dynamic Lighting mode.");
+            await _mainViewModel.ShowNotificationAsync(
+                "Error",
+                ex.Message,
+                ControlAppearance.Danger
+            );
+        }
+        finally
+        {
+            IsLoading = false;
+            _ = _scriptPatchLock.Release();
+        }
+    }
+
     private async Task HandleSkinAnimationsToggleAsync(
         bool enable,
         bool isHotkeyUpdate,
@@ -1549,7 +1648,9 @@ public class SettingsViewModel : ViewModelBase, IDisposable
                     )
                 )
                 : await Task.Run(() =>
-                    _mainViewModel.Html5CacheService.RestoreDefaultSkinAnimations(_mainViewModel.CachePath)
+                    _mainViewModel.Html5CacheService.RestoreDefaultSkinAnimations(
+                        _mainViewModel.CachePath
+                    )
                 );
 
             if (success)

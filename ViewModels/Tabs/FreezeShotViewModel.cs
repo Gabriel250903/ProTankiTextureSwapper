@@ -6,6 +6,7 @@ using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
+using TextureSwapper.Helpers.Utilities;
 using TextureSwapper.ViewModels.Base;
 using Wpf.Ui.Controls;
 
@@ -202,6 +203,7 @@ namespace TextureSwapper.ViewModels.Tabs
                     PreviewImage = "",
                     Targets = [Constants.FreezeMainBallTarget, Constants.FreezeBounceBallTarget],
                 };
+                ShotLightingColorHelper.ApplyOptionsToModel(customEffect, options);
 
                 string? result = await Task.Run(() =>
                     _mainVM.SwapService.SwapShotEffect(_mainVM.CachePath, customEffect)

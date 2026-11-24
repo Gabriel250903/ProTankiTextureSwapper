@@ -49,6 +49,67 @@ namespace TextureSwapper.Core.Models
             }
         }
 
+        [JsonIgnore]
+        public bool IsXtTargetSkin => Name.EndsWith(" on XT", StringComparison.OrdinalIgnoreCase);
+
+        [JsonIgnore]
+        public bool HasCustomModel => !string.IsNullOrEmpty(ModelTarget);
+
+        [JsonIgnore]
+        public string TargetTier { get; set; } = "M3";
+
+        [JsonIgnore]
+        public string? FallbackModelPath { get; set; }
+
+        private bool _usesM3ModelFallback;
+
+        [JsonIgnore]
+        public bool UsesM3ModelFallback
+        {
+            get => _usesM3ModelFallback;
+            set
+            {
+                if (_usesM3ModelFallback != value)
+                {
+                    _usesM3ModelFallback = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isAvailableForActiveTier = true;
+
+        [JsonIgnore]
+        public bool IsAvailableForActiveTier
+        {
+            get => _isAvailableForActiveTier;
+            set
+            {
+                if (_isAvailableForActiveTier != value)
+                {
+                    _isAvailableForActiveTier = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _activeTierUnavailableReason = string.Empty;
+
+        [JsonIgnore]
+        public string ActiveTierUnavailableReason
+        {
+            get => _activeTierUnavailableReason;
+            set
+            {
+                string next = value ?? string.Empty;
+                if (_activeTierUnavailableReason != next)
+                {
+                    _activeTierUnavailableReason = next;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private bool _isPremium;
         public bool IsPremium
         {
@@ -59,9 +120,30 @@ namespace TextureSwapper.Core.Models
                 {
                     _isPremium = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(ShowPremiumLockBadge));
                 }
             }
         }
+
+        private bool _isEventUnlocked;
+
+        [JsonIgnore]
+        public bool IsEventUnlocked
+        {
+            get => _isEventUnlocked;
+            set
+            {
+                if (_isEventUnlocked != value)
+                {
+                    _isEventUnlocked = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ShowPremiumLockBadge));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool ShowPremiumLockBadge => IsPremium && !IsEventUnlocked;
 
         private bool _isExperimental;
         public bool IsExperimental
@@ -521,6 +603,23 @@ namespace TextureSwapper.Core.Models
                 ? GetModificationPath(SourceFolder, SelectedModification)
             : SourceFolder;
 
+        public bool HasModificationAvailable(string mod)
+        {
+            return mod.ToUpperInvariant() switch
+            {
+                "M0" => IsM0Available,
+                "M1" => IsM1Available,
+                "M2" => IsM2Available,
+                "M3" => IsM3Available,
+                _ => false,
+            };
+        }
+
+        public string GetModificationFolder(string mod)
+        {
+            return GetModificationPath(SourceFolder, mod);
+        }
+
         private bool _modificationsCached = false;
 
         public void RefreshAvailableModifications(bool force = false)
@@ -914,8 +1013,14 @@ namespace TextureSwapper.Core.Models
                     .EnumerateFiles(folder)
                     .Any(f =>
                     {
-                        string fn = Path.GetFileNameWithoutExtension(f).ToLowerInvariant();
-                        return fn is "details" or "lightmap" or "alpha";
+                        string name = Path.GetFileName(f);
+                        if (name.EndsWith(".enc", StringComparison.OrdinalIgnoreCase))
+                        {
+                            name = name[..^4];
+                        }
+
+                        string fn = Path.GetFileNameWithoutExtension(name).ToLowerInvariant();
+                        return fn is "details" or "lightmap" or "alpha" or "object";
                     });
             }
             catch

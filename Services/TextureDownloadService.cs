@@ -1,17 +1,18 @@
-using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 
 namespace TextureSwapper.Services
 {
-    public sealed class TextureDownloadService(ISettingsService? settingsService = null) : ITextureDownloadService
+    public sealed class TextureDownloadService(ISettingsService? settingsService = null)
+        : ITextureDownloadService
     {
         private static readonly HttpClient _httpClient;
         private const int StreamBufferSize = 131072;
@@ -211,15 +212,21 @@ namespace TextureSwapper.Services
 
                 if (!isLocalFileOverride)
                 {
-                    string preferredMirror = _settingsService?.Load()?.PreferredTextureMirror ?? "Cloudflare";
-                    string[] candidateMirrors = !string.IsNullOrEmpty(envOverride)
-                        ? [envOverride]
-                        : string.Equals(preferredMirror, "GitHub", StringComparison.OrdinalIgnoreCase)
-                            ? [
-                            Constants.TexturesLatestDownloadUrl,
-                            Constants.TexturesWorkerDownloadUrl,
-                        ]
-                            : Constants.TexturesDownloadMirrors;
+                    string preferredMirror =
+                        _settingsService?.Load()?.PreferredTextureMirror ?? "Cloudflare";
+                    string[] candidateMirrors =
+                        !string.IsNullOrEmpty(envOverride) ? [envOverride]
+                        : string.Equals(
+                            preferredMirror,
+                            "GitHub",
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                            ?
+                            [
+                                Constants.TexturesLatestDownloadUrl,
+                                Constants.TexturesWorkerDownloadUrl,
+                            ]
+                        : Constants.TexturesDownloadMirrors;
                     bool downloadSucceeded = false;
                     Exception? lastException = null;
 
@@ -275,13 +282,13 @@ namespace TextureSwapper.Services
                                 }
 
                                 _ = response.EnsureSuccessStatusCode();
-                                long totalBytes = response.Content.Headers.ContentRange?.Length
+                                long totalBytes =
+                                    response.Content.Headers.ContentRange?.Length
                                     ?? response.Content.Headers.ContentLength
                                     ?? -1L;
 
-                                using Stream contentStream = await response.Content.ReadAsStreamAsync(
-                                    cancellationToken
-                                );
+                                using Stream contentStream =
+                                    await response.Content.ReadAsStreamAsync(cancellationToken);
                                 using (
                                     FileStream fileStream = new(
                                         tempPartPath,
@@ -329,7 +336,8 @@ namespace TextureSwapper.Services
 
                                             if (totalBytes > 0)
                                             {
-                                                double percent = (double)totalRead / totalBytes * 100.0;
+                                                double percent =
+                                                    (double)totalRead / totalBytes * 100.0;
                                                 double currentMb = totalRead / (1024.0 * 1024.0);
                                                 double totalMb = totalBytes / (1024.0 * 1024.0);
                                                 onProgress?.Invoke(
@@ -408,7 +416,10 @@ namespace TextureSwapper.Services
                                     catch { }
                                 }
 
-                                await Task.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken);
+                                await Task.Delay(
+                                    TimeSpan.FromSeconds(delaySeconds),
+                                    cancellationToken
+                                );
                             }
                             catch (Exception ex) when (!cancellationToken.IsCancellationRequested)
                             {
@@ -503,7 +514,10 @@ namespace TextureSwapper.Services
                             }
                             catch (Exception ex)
                             {
-                                Log.Warning(ex, "Failed to fully purge partial Textures directory.");
+                                Log.Warning(
+                                    ex,
+                                    "Failed to fully purge partial Textures directory."
+                                );
                             }
                         }
 

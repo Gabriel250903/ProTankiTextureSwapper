@@ -1,9 +1,10 @@
-using Serilog;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using Serilog;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
+using TextureSwapper.Helpers.Utilities;
 using TextureSwapper.Services;
 using TextureSwapper.ViewModels.Base;
 using TextureSwapper.Views.Windows;
@@ -15,11 +16,21 @@ namespace TextureSwapper.ViewModels.Tabs
 {
     public class SkinsTabViewModel : ViewModelBase
     {
+        private sealed record QueuedSkinSwap(
+            SkinModel BaseSkin,
+            string TargetTier,
+            SkinModel ResolvedSkin
+        );
+
         private readonly MainViewModel _mainVM;
+        private readonly Dictionary<string, QueuedSkinSwap> _queuedSwaps = new(
+            StringComparer.OrdinalIgnoreCase
+        );
         private string _selectedItemName = string.Empty;
         private SkinModel? _selectedSkin;
         private string _selectedCategory = string.Empty;
         private string _searchQuery = string.Empty;
+        private string _selectedGarageTier = "M3";
         private CancellationTokenSource? _searchDebounceCts;
 
         public ObservableCollection<string> Categories { get; } = [];
@@ -43,6 +54,47 @@ namespace TextureSwapper.ViewModels.Tabs
                     FilterSkins();
                 }
             }
+        }
+
+        private bool _showOnlyGiftedSkins;
+        public bool ShowOnlyGiftedSkins
+        {
+            get => _showOnlyGiftedSkins;
+            set
+            {
+                if (SetProperty(ref _showOnlyGiftedSkins, value))
+                {
+                    FilterSkins();
+                }
+            }
+        }
+
+        public bool HasGiftedSkins =>
+            !_mainVM.PremiumService.IsPremiumUnlocked
+            && _mainVM.AllSkins.Any(s => s.IsEventUnlocked);
+
+        public string GiftedSkinsButtonText
+        {
+            get
+            {
+                int count = _mainVM.AllSkins.Count(s => s.IsEventUnlocked);
+                return $"🎁 My Gifts ({count})";
+            }
+        }
+
+        public ICommand ToggleGiftedFilterCommand =>
+            new RelayCommand(_ => ShowOnlyGiftedSkins = !ShowOnlyGiftedSkins);
+
+        public void RefreshGiftedSkinsState()
+        {
+            if (!HasGiftedSkins && _showOnlyGiftedSkins)
+            {
+                _showOnlyGiftedSkins = false;
+                OnPropertyChanged(nameof(ShowOnlyGiftedSkins));
+            }
+            OnPropertyChanged(nameof(HasGiftedSkins));
+            OnPropertyChanged(nameof(GiftedSkinsButtonText));
+            FilterSkins();
         }
 
         private string _selectedSortOption = "Name (A-Z)";
@@ -70,8 +122,137 @@ namespace TextureSwapper.ViewModels.Tabs
                     {
                         _mainVM.SaveSettings();
                     }
+                    OnPropertyChanged(nameof(IsGarageTierSelectorVisible));
+                    OnPropertyChanged(nameof(ShowNonM3Banner));
+                    OnPropertyChanged(nameof(IsNonM3PartialTargets));
+                    OnPropertyChanged(nameof(NonM3BannerText));
                     FilterItems();
                 }
+            }
+        }
+
+        public string SelectedGarageTier
+        {
+            get => _selectedGarageTier;
+            set
+            {
+                string next = string.IsNullOrWhiteSpace(value)
+                    ? "M3"
+                    : value.Trim().ToUpperInvariant();
+                if (next is not ("M3" or "M2" or "M1"))
+                {
+                    next = "M3";
+                }
+
+                if (SetProperty(ref _selectedGarageTier, next))
+                {
+                    _mainVM.Settings.LastSelectedGarageTier = next;
+                    if (!_mainVM.IsLoading)
+                    {
+                        _mainVM.SaveSettings();
+                    }
+                    RefreshTierStates();
+                    RefreshAvailableTags();
+                    FilterSkins();
+                    NotifyTierPropertiesChanged();
+                }
+            }
+        }
+
+        public bool IsGarageTierSelectorVisible =>
+            SelectedCategory.Equals("Hulls", StringComparison.OrdinalIgnoreCase)
+            || SelectedCategory.Equals("Turrets", StringComparison.OrdinalIgnoreCase);
+
+        public bool IsM3TierSelected => SelectedGarageTier == "M3";
+        public bool IsM2TierSelected => SelectedGarageTier == "M2";
+        public bool IsM1TierSelected => SelectedGarageTier == "M1";
+
+        public bool IsM2TierEnabled => _mainVM.IsHtml5Client;
+        public bool IsM1TierEnabled =>
+            _mainVM.IsHtml5Client && _mainVM.EquipmentTargetService.HasAnyMappedTargets("M1");
+
+        public string M2TierToolTip =>
+            _mainVM.IsHtml5Client
+                ? "Target M2 turrets & hulls in your garage (HTML5)"
+                : "M2 tier is available for HTML5 Client only";
+
+        public string M1TierToolTip =>
+            !_mainVM.IsHtml5Client ? "M1 tier is available for HTML5 Client only"
+            : _mainVM.EquipmentTargetService.HasAnyMappedTargets("M1")
+                ? "Target M1 turrets & hulls in your garage (HTML5)"
+            : "M1 support coming soon";
+
+        public bool ShowNonM3Banner => IsGarageTierSelectorVisible && SelectedGarageTier != "M3";
+
+        public bool IsNonM3PartialTargets =>
+            SelectedGarageTier != "M3"
+            && _mainVM.EquipmentTargetService.GetMappedCount(SelectedGarageTier)
+                < _mainVM.EquipmentTargetService.GetTotalEquipmentCount();
+
+        public string NonM3BannerText
+        {
+            get
+            {
+                if (SelectedGarageTier == "M3")
+                {
+                    return string.Empty;
+                }
+
+                int mapped = _mainVM.EquipmentTargetService.GetMappedCount(SelectedGarageTier);
+                int total = _mainVM.EquipmentTargetService.GetTotalEquipmentCount();
+
+                return mapped == 0
+                        ? $"No {SelectedGarageTier} targets scanned yet (0/{total}). View {SelectedGarageTier} items in ProTanki HTML5 and run Html5TargetScanner to map their Resource IDs."
+                    : mapped < total
+                        ? $"Targeting {SelectedGarageTier} garage items ({mapped}/{total} mapped) — native {SelectedGarageTier} textures are used when available; otherwise M3 models are applied automatically."
+                    : $"Targeting {SelectedGarageTier} garage items (HTML5) — native {SelectedGarageTier} textures are used when available; otherwise M3 models are applied automatically.";
+            }
+        }
+
+        public bool IsXtQuickSelectVisible => SelectedGarageTier == "M3";
+
+        public string SelectedQueueSummary
+        {
+            get
+            {
+                if (_queuedSwaps.Count == 0)
+                {
+                    return string.Empty;
+                }
+
+                bool hasEquipment = _queuedSwaps.Values.Any(q =>
+                    q.BaseSkin.Category is "Hulls" or "Turrets"
+                );
+                if (!hasEquipment)
+                {
+                    return $"{_queuedSwaps.Count} selected";
+                }
+
+                if (_queuedSwaps.Count == 1)
+                {
+                    QueuedSkinSwap single = _queuedSwaps.Values.First();
+                    return single.BaseSkin.Category is "Hulls" or "Turrets"
+                        ? $"1 selected ({single.TargetTier})"
+                        : "1 selected";
+                }
+
+                List<string> tierParts =
+                [
+                    .. _queuedSwaps
+                        .Values.Where(q => q.BaseSkin.Category is "Hulls" or "Turrets")
+                        .GroupBy(q => q.TargetTier)
+                        .OrderByDescending(g => g.Key)
+                        .Select(g => $"{g.Count()} {g.Key}"),
+                ];
+                int otherCount = _queuedSwaps.Values.Count(q =>
+                    q.BaseSkin.Category is not ("Hulls" or "Turrets")
+                );
+                if (otherCount > 0)
+                {
+                    tierParts.Add($"{otherCount} Other");
+                }
+
+                return $"{_queuedSwaps.Count} selected ({string.Join(", ", tierParts)})";
             }
         }
 
@@ -136,29 +317,38 @@ namespace TextureSwapper.ViewModels.Tabs
         }
 
         public string SelectAllText =>
-            _mainVM.AllSkins.Any(s => s.IsSelected && s.Category != "Paints")
-                ? "Deselect all textures"
-                : "Select all available textures";
+            _queuedSwaps.Count > 0 ? "Deselect all textures" : "Select all available textures";
         public string SelectAllIcon =>
-            _mainVM.AllSkins.Any(s => s.IsSelected && s.Category != "Paints")
-                ? "DismissCircle24"
-                : "CheckmarkCircle24";
+            _queuedSwaps.Count > 0 ? "DismissCircle24" : "CheckmarkCircle24";
 
         public ICommand SwapCommand { get; }
         public ICommand SelectAllAvailableCommand { get; }
         public ICommand ToggleSkinSelectionCommand { get; }
         public ICommand SelectTagFilterCommand { get; }
+        public ICommand SetGarageTierCommand { get; }
         public ICommand ClearCacheCommand => _mainVM.ClearCacheCommand;
         public ICommand RestoreCommand => _mainVM.RestoreCommand;
 
         public SkinsTabViewModel(MainViewModel mainVM)
         {
             _mainVM = mainVM;
+
+            string savedTier = _mainVM.Settings.LastSelectedGarageTier ?? "M3";
+            _selectedGarageTier =
+                _mainVM.IsHtml5Client
+                && (
+                    savedTier.Equals("M2", StringComparison.OrdinalIgnoreCase)
+                    || (
+                        savedTier.Equals("M1", StringComparison.OrdinalIgnoreCase)
+                        && _mainVM.EquipmentTargetService.HasAnyMappedTargets("M1")
+                    )
+                )
+                    ? savedTier.ToUpperInvariant()
+                    : "M3";
+
             SwapCommand = new AsyncRelayCommand(
                 ExecuteSwap,
-                _ =>
-                    !_mainVM.IsLoading
-                    && _mainVM.AllSkins.Any(s => s.IsSelected && s.Category != "Paints")
+                _ => !_mainVM.IsLoading && _queuedSwaps.Count > 0
             );
             SelectAllAvailableCommand = new RelayCommand(ExecuteSelectAllAvailable);
             ToggleSkinSelectionCommand = new RelayCommand(ExecuteToggleSkinSelection);
@@ -169,6 +359,62 @@ namespace TextureSwapper.ViewModels.Tabs
                     SelectedTagFilter = tag;
                 }
             });
+            SetGarageTierCommand = new RelayCommand(param =>
+            {
+                if (param is string tier && !string.IsNullOrWhiteSpace(tier))
+                {
+                    string normalized = tier.Trim().ToUpperInvariant();
+                    if (normalized == "M2" && !IsM2TierEnabled)
+                    {
+                        return;
+                    }
+                    if (normalized == "M1" && !IsM1TierEnabled)
+                    {
+                        return;
+                    }
+                    if (normalized is "M3" or "M2" or "M1")
+                    {
+                        SelectedGarageTier = normalized;
+                    }
+                }
+            });
+
+            _mainVM.ActiveClientChanged += (_, newClient) =>
+            {
+                if (newClient != ClientType.Html5)
+                {
+                    List<string> toRemove =
+                    [
+                        .. _queuedSwaps
+                            .Where(kvp =>
+                                !kvp.Value.TargetTier.Equals(
+                                    "M3",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                            .Select(kvp => kvp.Key),
+                    ];
+                    foreach (string key in toRemove)
+                    {
+                        _ = _queuedSwaps.Remove(key);
+                    }
+
+                    if (_selectedGarageTier != "M3")
+                    {
+                        SelectedGarageTier = "M3";
+                    }
+                    else
+                    {
+                        RefreshTierStates();
+                    }
+                }
+
+                NotifyTierPropertiesChanged();
+                OnPropertyChanged(nameof(SelectedQueueSummary));
+                OnPropertyChanged(nameof(SelectAllText));
+                OnPropertyChanged(nameof(SelectAllIcon));
+                CommandManager.InvalidateRequerySuggested();
+            };
         }
 
         public void OnSkinsLoaded()
@@ -177,11 +423,110 @@ namespace TextureSwapper.ViewModels.Tabs
             {
                 foreach (SkinModel skin in _mainVM.AllSkins)
                 {
-                    skin.RefreshAvailableModifications();
+                    skin.RefreshAvailableModifications(force: true);
                 }
             }
+            RevalidateQueuedSwaps();
+            RefreshTierStates();
             InitializeCategories();
             FilterItems();
+            NotifyTierPropertiesChanged();
+        }
+
+        private void NotifyTierPropertiesChanged()
+        {
+            OnPropertyChanged(nameof(IsGarageTierSelectorVisible));
+            OnPropertyChanged(nameof(IsM3TierSelected));
+            OnPropertyChanged(nameof(IsM2TierSelected));
+            OnPropertyChanged(nameof(IsM1TierSelected));
+            OnPropertyChanged(nameof(IsM2TierEnabled));
+            OnPropertyChanged(nameof(IsM1TierEnabled));
+            OnPropertyChanged(nameof(M2TierToolTip));
+            OnPropertyChanged(nameof(M1TierToolTip));
+            OnPropertyChanged(nameof(ShowNonM3Banner));
+            OnPropertyChanged(nameof(IsNonM3PartialTargets));
+            OnPropertyChanged(nameof(NonM3BannerText));
+            OnPropertyChanged(nameof(IsXtQuickSelectVisible));
+        }
+
+        private static string MakeQueueKey(SkinModel skin, string tier)
+        {
+            return $"{skin.Category}:{skin.ItemName}:{skin.Name}@{tier.ToUpperInvariant()}";
+        }
+
+        private void RevalidateQueuedSwaps()
+        {
+            if (_queuedSwaps.Count == 0)
+            {
+                return;
+            }
+
+            List<string> keys = [.. _queuedSwaps.Keys];
+            foreach (string key in keys)
+            {
+                QueuedSkinSwap q = _queuedSwaps[key];
+                SkinTierResolution res = _mainVM.EquipmentTargetService.ResolveSkinForTier(
+                    q.BaseSkin,
+                    q.TargetTier
+                );
+                if (res.IsAvailable && res.ResolvedSkin != null)
+                {
+                    _queuedSwaps[key] = q with { ResolvedSkin = res.ResolvedSkin };
+                }
+                else
+                {
+                    _ = _queuedSwaps.Remove(key);
+                }
+            }
+
+            OnPropertyChanged(nameof(SelectedQueueSummary));
+            OnPropertyChanged(nameof(SelectAllText));
+            OnPropertyChanged(nameof(SelectAllIcon));
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void RefreshTierStates()
+        {
+            if (_mainVM.AllSkins == null)
+            {
+                return;
+            }
+
+            foreach (SkinModel skin in _mainVM.AllSkins)
+            {
+                if (skin.Category is "Hulls" or "Turrets")
+                {
+                    SkinTierResolution res = _mainVM.EquipmentTargetService.ResolveSkinForTier(
+                        skin,
+                        SelectedGarageTier
+                    );
+                    skin.UsesM3ModelFallback = res.UsesM3ModelFallback;
+                    skin.IsAvailableForActiveTier = res.IsAvailable;
+                    skin.ActiveTierUnavailableReason = res.UnavailableReason ?? string.Empty;
+
+                    string desiredMod =
+                        SelectedGarageTier != "M3"
+                        && skin.HasModificationAvailable(SelectedGarageTier)
+                            ? SelectedGarageTier
+                        : skin.IsM3Available ? "M3"
+                        : skin.SelectedModification;
+                    if (!string.IsNullOrEmpty(desiredMod))
+                    {
+                        skin.SelectedModification = desiredMod;
+                    }
+
+                    skin.IsSelected = _queuedSwaps.ContainsKey(
+                        MakeQueueKey(skin, SelectedGarageTier)
+                    );
+                }
+                else if (skin.Category != "Paints")
+                {
+                    skin.UsesM3ModelFallback = false;
+                    skin.IsAvailableForActiveTier = true;
+                    skin.ActiveTierUnavailableReason = string.Empty;
+                    skin.IsSelected = _queuedSwaps.ContainsKey(MakeQueueKey(skin, "M3"));
+                }
+            }
         }
 
         private void InitializeCategories()
@@ -295,9 +640,11 @@ namespace TextureSwapper.ViewModels.Tabs
             }
 
             string allLabel = $"All {SelectedCategory}";
+            bool hideXtTargets = IsGarageTierSelectorVisible && SelectedGarageTier != "M3";
             IEnumerable<SkinModel> categorySkins = _mainVM.AllSkins.Where(s =>
                 s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
                 && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
+                && (!hideXtTargets || !s.IsXtTargetSkin)
             );
 
             HashSet<string> tagsInView = new(StringComparer.OrdinalIgnoreCase);
@@ -369,26 +716,38 @@ namespace TextureSwapper.ViewModels.Tabs
                 FilteredSkins.Clear();
                 string allLabel = $"All {SelectedCategory}";
                 string currentQuery = SearchQuery?.Trim() ?? string.Empty;
+                bool hideXtTargets = IsGarageTierSelectorVisible && SelectedGarageTier != "M3";
 
-                IEnumerable<SkinModel> matching = _mainVM.AllSkins.Where(s =>
-                    s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
-                    && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
-                    && (
-                        string.IsNullOrEmpty(currentQuery)
-                        || s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
-                        || s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
-                        || s.ComputedTags.Any(t =>
-                            t.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                IEnumerable<SkinModel> matching = ShowOnlyGiftedSkins
+                    ? _mainVM.AllSkins.Where(s =>
+                        s.IsEventUnlocked
+                        && (!hideXtTargets || !s.IsXtTargetSkin)
+                        && (
+                            string.IsNullOrEmpty(currentQuery)
+                            || s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                            || s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
                         )
                     )
-                    && (
-                        SelectedTagFilter == "All"
-                        || s.ComputedTags.Contains(
-                            SelectedTagFilter,
-                            StringComparer.OrdinalIgnoreCase
+                    : _mainVM.AllSkins.Where(s =>
+                        s.Category.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase)
+                        && (SelectedItemName == allLabel || s.ItemName == SelectedItemName)
+                        && (!hideXtTargets || !s.IsXtTargetSkin)
+                        && (
+                            string.IsNullOrEmpty(currentQuery)
+                            || s.Name.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                            || s.ItemName.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                            || s.ComputedTags.Any(t =>
+                                t.Contains(currentQuery, StringComparison.OrdinalIgnoreCase)
+                            )
                         )
-                    )
-                );
+                        && (
+                            SelectedTagFilter == "All"
+                            || s.ComputedTags.Contains(
+                                SelectedTagFilter,
+                                StringComparer.OrdinalIgnoreCase
+                            )
+                        )
+                    );
 
                 matching = SelectedSortOption switch
                 {
@@ -427,9 +786,24 @@ namespace TextureSwapper.ViewModels.Tabs
 
         private static bool TargetsOverlap(SkinModel a, SkinModel b)
         {
-            return (!string.IsNullOrEmpty(a.DetailsTarget) && a.DetailsTarget == b.DetailsTarget)
-                || (!string.IsNullOrEmpty(a.LightmapTarget) && a.LightmapTarget == b.LightmapTarget)
-                || (!string.IsNullOrEmpty(a.AlphaTarget) && a.AlphaTarget == b.AlphaTarget);
+            return
+                Html5ResourceMapper.TryDecodeBase64Target(
+                    a.DetailsTarget,
+                    out Html5ResourceTarget? decA
+                )
+                && Html5ResourceMapper.TryDecodeBase64Target(
+                    b.DetailsTarget,
+                    out Html5ResourceTarget? decB
+                )
+                && decA != null
+                && decB != null
+                ? decA.ResourceId == decB.ResourceId
+                : (!string.IsNullOrEmpty(a.DetailsTarget) && a.DetailsTarget == b.DetailsTarget)
+                    || (
+                        !string.IsNullOrEmpty(a.LightmapTarget)
+                        && a.LightmapTarget == b.LightmapTarget
+                    )
+                    || (!string.IsNullOrEmpty(a.AlphaTarget) && a.AlphaTarget == b.AlphaTarget);
         }
 
         public void UpdateFilteredSkinsRows()
@@ -454,36 +828,93 @@ namespace TextureSwapper.ViewModels.Tabs
 
         private void ExecuteToggleSkinSelection(object? parameter)
         {
-            if (parameter is SkinModel skin)
+            if (parameter is not SkinModel skin)
             {
-                skin.IsSelected = !skin.IsSelected;
-                Log.Information(
-                    $"Toggled selection for skin: {skin.Name}. New state: {skin.IsSelected}"
-                );
+                return;
+            }
 
-                if (skin.IsSelected)
+            string tier = skin.Category is "Hulls" or "Turrets" ? SelectedGarageTier : "M3";
+            string queueKey = MakeQueueKey(skin, tier);
+
+            if (_queuedSwaps.Remove(queueKey))
+            {
+                skin.IsSelected = false;
+                Log.Information(
+                    "Deselected skin: {SkinName} ({ItemName} {Tier})",
+                    skin.Name,
+                    skin.ItemName,
+                    tier
+                );
+            }
+            else
+            {
+                SkinTierResolution res = _mainVM.EquipmentTargetService.ResolveSkinForTier(
+                    skin,
+                    tier
+                );
+                if (!res.IsAvailable || res.ResolvedSkin == null)
                 {
-                    foreach (SkinModel otherSkin in _mainVM.AllSkins)
-                    {
-                        if (
-                            otherSkin != skin
-                            && otherSkin.Category == skin.Category
-                            && otherSkin.ItemName == skin.ItemName
-                            && otherSkin.IsSelected
-                            && TargetsOverlap(skin, otherSkin)
-                        )
-                        {
-                            otherSkin.IsSelected = false;
-                            Log.Information(
-                                $"Deselected conflicting skin {otherSkin.Name} because {skin.Name} was selected."
-                            );
-                        }
-                    }
+                    _ = _mainVM.NotificationService.ShowAsync(
+                        $"Unavailable for {tier}",
+                        res.UnavailableReason ?? $"'{skin.Name}' is not available for {tier}.",
+                        ControlAppearance.Caution
+                    );
+                    return;
                 }
 
-                CommandManager.InvalidateRequerySuggested();
-                OnPropertyChanged(nameof(SelectAllText));
-                OnPropertyChanged(nameof(SelectAllIcon));
+                EvictOverlappingQueuedSwaps(res.ResolvedSkin, tier);
+                _queuedSwaps[queueKey] = new QueuedSkinSwap(skin, tier, res.ResolvedSkin);
+                skin.IsSelected = true;
+
+                Log.Information(
+                    "Selected skin: {SkinName} ({ItemName} {Tier}, mode={Mode})",
+                    skin.Name,
+                    skin.ItemName,
+                    tier,
+                    res.Mode
+                );
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+            OnPropertyChanged(nameof(SelectAllText));
+            OnPropertyChanged(nameof(SelectAllIcon));
+            OnPropertyChanged(nameof(SelectedQueueSummary));
+        }
+
+        private void EvictOverlappingQueuedSwaps(SkinModel resolvedCandidate, string activeTier)
+        {
+            List<string> conflictingKeys =
+            [
+                .. _queuedSwaps
+                    .Where(kvp => TargetsOverlap(resolvedCandidate, kvp.Value.ResolvedSkin))
+                    .Select(kvp => kvp.Key),
+            ];
+
+            foreach (string conflictKey in conflictingKeys)
+            {
+                QueuedSkinSwap removed = _queuedSwaps[conflictKey];
+                _ = _queuedSwaps.Remove(conflictKey);
+
+                string expectedVisibleTier = removed.BaseSkin.Category is "Hulls" or "Turrets"
+                    ? SelectedGarageTier
+                    : "M3";
+                if (
+                    removed.TargetTier.Equals(
+                        expectedVisibleTier,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+                {
+                    removed.BaseSkin.IsSelected = false;
+                }
+
+                Log.Information(
+                    "Deselected conflicting skin {OtherName} ({OtherTier}) because {CandidateName} ({ActiveTier}) was selected.",
+                    removed.BaseSkin.Name,
+                    removed.TargetTier,
+                    resolvedCandidate.Name,
+                    activeTier
+                );
             }
         }
 
@@ -494,6 +925,7 @@ namespace TextureSwapper.ViewModels.Tabs
             if (mode == "Deselect")
             {
                 Log.Information("Deselecting all textures.");
+                _queuedSwaps.Clear();
                 foreach (SkinModel skin in _mainVM.AllSkins)
                 {
                     if (skin.Category != "Paints")
@@ -509,7 +941,21 @@ namespace TextureSwapper.ViewModels.Tabs
             }
             else
             {
-                Log.Information("Selecting all {Mode} skins.", mode);
+                if (mode == "LC on XT" && SelectedGarageTier != "M3")
+                {
+                    _ = _mainVM.NotificationService.ShowAsync(
+                        "Unavailable for " + SelectedGarageTier,
+                        "LC on XT targets are only available in M3 mode.",
+                        ControlAppearance.Info
+                    );
+                    return;
+                }
+
+                Log.Information(
+                    "Selecting all {Mode} skins for tier {Tier}.",
+                    mode,
+                    SelectedGarageTier
+                );
 
                 List<SkinModel> toSelect = [];
                 var groups = _mainVM
@@ -518,74 +964,77 @@ namespace TextureSwapper.ViewModels.Tabs
 
                 foreach (var group in groups)
                 {
-                    List<SkinModel> matches = mode == "Legacy"
-                        ? [
-                            .. group.Where(s =>
-                                (
-                                    s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase)
-                                    || s.Name.EndsWith(
-                                        " Legacy",
+                    bool hideXtForGroup =
+                        group.Key.Category is "Hulls" or "Turrets" && SelectedGarageTier != "M3";
+                    IEnumerable<SkinModel> pool = hideXtForGroup
+                        ? group.Where(s => !s.IsXtTargetSkin)
+                        : group;
+
+                    List<SkinModel> matches =
+                        mode == "Legacy"
+                            ?
+                            [
+                                .. pool.Where(s =>
+                                    (
+                                        s.Name.EndsWith(" LC", StringComparison.OrdinalIgnoreCase)
+                                        || s.Name.EndsWith(
+                                            " Legacy",
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                    )
+                                    && !s.Name.EndsWith(
+                                        " LC on XT",
                                         StringComparison.OrdinalIgnoreCase
                                     )
-                                )
-                                && !s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
-                            ),
-                        ]
+                                ),
+                            ]
                         : mode == "XT"
-                            ? [
-                            .. group.Where(s =>
-                                s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase)
-                            ),
-                        ]
-                            : mode == "LC on XT"
-                                ?
-                                [
-                                    .. group.Where(s =>
-                                        s.Name.EndsWith(
-                                            " LC on XT",
-                                            StringComparison.OrdinalIgnoreCase
-                                        )
-                                    ),
-                                ]
-                            : mode == "Demonic"
-                                ?
-                                [
-                                    .. group.Where(s =>
-                                        s.Name.Contains(
-                                            "Demonic",
-                                            StringComparison.OrdinalIgnoreCase
-                                        )
-                                        || s.Name.Contains(
-                                            " DC",
-                                            StringComparison.OrdinalIgnoreCase
-                                        )
-                                    ),
-                                ]
-                            : mode == "Old"
-                                ? group.Key.Category == "Supplies"
-                                        ?
-                                        [
-                                            .. group.Where(s =>
-                                                s.Name.Contains(
-                                                    "Old",
-                                                    StringComparison.OrdinalIgnoreCase
-                                                )
-                                            ),
-                                        ]
-                                    : []
-                            : mode == "New"
-                                ? group.Key.Category == "Supplies"
-                                        ?
-                                        [
-                                            .. group.Where(s =>
-                                                !s.Name.Contains(
-                                                    "Old",
-                                                    StringComparison.OrdinalIgnoreCase
-                                                )
-                                            ),
-                                        ]
-                                    : []
-                            : [];
+                            ?
+                            [
+                                .. pool.Where(s =>
+                                    s.Name.EndsWith(" XT", StringComparison.OrdinalIgnoreCase)
+                                ),
+                            ]
+                        : mode == "LC on XT"
+                            ?
+                            [
+                                .. pool.Where(s =>
+                                    s.Name.EndsWith(" LC on XT", StringComparison.OrdinalIgnoreCase)
+                                ),
+                            ]
+                        : mode == "Demonic"
+                            ?
+                            [
+                                .. pool.Where(s =>
+                                    s.Name.Contains("Demonic", StringComparison.OrdinalIgnoreCase)
+                                    || s.Name.Contains(" DC", StringComparison.OrdinalIgnoreCase)
+                                ),
+                            ]
+                        : mode == "Old"
+                            ? group.Key.Category == "Supplies"
+                                    ?
+                                    [
+                                        .. pool.Where(s =>
+                                            s.Name.Contains(
+                                                "Old",
+                                                StringComparison.OrdinalIgnoreCase
+                                            )
+                                        ),
+                                    ]
+                                : []
+                        : mode == "New"
+                            ? group.Key.Category == "Supplies"
+                                    ?
+                                    [
+                                        .. pool.Where(s =>
+                                            !s.Name.Contains(
+                                                "Old",
+                                                StringComparison.OrdinalIgnoreCase
+                                            )
+                                        ),
+                                    ]
+                                : []
+                        : [];
                     if (matches.Count > 0)
                     {
                         toSelect.AddRange(matches);
@@ -595,27 +1044,29 @@ namespace TextureSwapper.ViewModels.Tabs
                 int selectedCount = 0;
                 foreach (SkinModel skin in toSelect)
                 {
-                    foreach (SkinModel otherSkin in _mainVM.AllSkins)
+                    string tier = skin.Category is "Hulls" or "Turrets" ? SelectedGarageTier : "M3";
+                    SkinTierResolution res = _mainVM.EquipmentTargetService.ResolveSkinForTier(
+                        skin,
+                        tier
+                    );
+                    if (!res.IsAvailable || res.ResolvedSkin == null)
                     {
-                        if (
-                            otherSkin != skin
-                            && otherSkin.Category == skin.Category
-                            && otherSkin.ItemName == skin.ItemName
-                            && otherSkin.IsSelected
-                            && TargetsOverlap(skin, otherSkin)
-                        )
-                        {
-                            otherSkin.IsSelected = false;
-                        }
+                        continue;
                     }
 
+                    EvictOverlappingQueuedSwaps(res.ResolvedSkin, tier);
+                    _queuedSwaps[MakeQueueKey(skin, tier)] = new QueuedSkinSwap(
+                        skin,
+                        tier,
+                        res.ResolvedSkin
+                    );
                     skin.IsSelected = true;
                     selectedCount++;
                 }
 
                 _ = _mainVM.NotificationService.ShowAsync(
                     "Selected All",
-                    $"Selected {selectedCount} textures ({mode} priority) for batch application.",
+                    $"Selected {selectedCount} textures ({mode}, {SelectedGarageTier}) for batch application.",
                     ControlAppearance.Info
                 );
             }
@@ -623,6 +1074,7 @@ namespace TextureSwapper.ViewModels.Tabs
             CommandManager.InvalidateRequerySuggested();
             OnPropertyChanged(nameof(SelectAllText));
             OnPropertyChanged(nameof(SelectAllIcon));
+            OnPropertyChanged(nameof(SelectedQueueSummary));
         }
 
         private async Task ExecuteSwap(object? parameter)
@@ -632,12 +1084,30 @@ namespace TextureSwapper.ViewModels.Tabs
                 return;
             }
 
-            List<SkinModel> selectedSkins =
-            [
-                .. _mainVM.AllSkins.Where(s => s.IsSelected && s.Category != "Paints"),
-            ];
+            List<SkinModel> skinsToApply = [.. _queuedSwaps.Values.Select(q => q.ResolvedSkin)];
+            if (skinsToApply.Count == 0 && SelectedSkin != null)
+            {
+                string tier = SelectedSkin.Category is "Hulls" or "Turrets"
+                    ? SelectedGarageTier
+                    : "M3";
+                SkinTierResolution res = _mainVM.EquipmentTargetService.ResolveSkinForTier(
+                    SelectedSkin,
+                    tier
+                );
+                if (!res.IsAvailable || res.ResolvedSkin == null)
+                {
+                    await _mainVM.NotificationService.ShowAsync(
+                        $"Unavailable for {tier}",
+                        res.UnavailableReason
+                            ?? $"'{SelectedSkin.Name}' is not available for {tier}.",
+                        ControlAppearance.Caution
+                    );
+                    return;
+                }
+                skinsToApply.Add(res.ResolvedSkin);
+            }
 
-            if (selectedSkins.Count == 0 && SelectedSkin == null)
+            if (skinsToApply.Count == 0)
             {
                 await _mainVM.NotificationService.ShowAsync(
                     LocalizationService.Instance.GetString("Loc_Msg_Warning"),
@@ -650,9 +1120,6 @@ namespace TextureSwapper.ViewModels.Tabs
             string notificationTitle = string.Empty;
             string notificationMessage = string.Empty;
             ControlAppearance notificationAppearance = ControlAppearance.Info;
-
-            List<SkinModel> skinsToApply =
-                selectedSkins.Count != 0 ? selectedSkins : [SelectedSkin!];
 
             if (skinsToApply.Any(s => s.ItemName == "Gold Box"))
             {
@@ -731,12 +1198,46 @@ namespace TextureSwapper.ViewModels.Tabs
             {
                 _mainVM.IsLoading = true;
 
-                if (skinsToApply.Any(s => s.IsPremium) && !_mainVM.PremiumService.IsPremiumUnlocked)
+                List<SkinModel> blockedPremiumSkins = skinsToApply
+                    .Where(s =>
+                        s.IsPremium
+                        && !_mainVM.PremiumService.UnlockedChristmasSkinIds.Contains(
+                            s.Name,
+                            StringComparer.OrdinalIgnoreCase
+                        )
+                    )
+                    .ToList();
+
+                if (
+                    blockedPremiumSkins.Count == 1
+                    && !_mainVM.PremiumService.IsPremiumUnlocked
+                    && _mainVM.ChatTabVM.HasPendingSkinVoucher
+                )
+                {
+                    SkinModel chosen = blockedPremiumSkins[0];
+                    (bool claimed, string? unlockedId, string? claimErr) =
+                        await _mainVM.ChatService.ClaimSkinVoucherAsync(chosen.Name, chosen.Name);
+                    if (claimed && !string.IsNullOrEmpty(unlockedId))
+                    {
+                        _mainVM.PremiumService.SetUnlockedChristmasSkinId(unlockedId);
+                        blockedPremiumSkins.Clear();
+                    }
+                    else
+                    {
+                        _mainVM.IsLoading = false;
+                        await _mainVM.NotificationService.ShowAsync(
+                            "Voucher Claim Failed",
+                            claimErr ?? "Could not claim your 1-Skin Voucher.",
+                            ControlAppearance.Danger
+                        );
+                        return;
+                    }
+                }
+
+                if (blockedPremiumSkins.Count > 0 && !_mainVM.PremiumService.IsPremiumUnlocked)
                 {
                     _mainVM.IsLoading = false;
-                    IEnumerable<string> premiumSkinNames = skinsToApply
-                        .Where(s => s.IsPremium)
-                        .Select(s => s.Name);
+                    IEnumerable<string> premiumSkinNames = blockedPremiumSkins.Select(s => s.Name);
                     await _mainVM.NotificationService.ShowAsync(
                         "Premium Required",
                         $"The following skin(s) require an active Premium license:\n- {string.Join("\n- ", premiumSkinNames)}\n\nPlease activate Premium in Settings to use them.",
@@ -776,6 +1277,7 @@ namespace TextureSwapper.ViewModels.Tabs
                         _mainVM.SeasonalAudioService.PlayApplySuccess();
                     }
 
+                    _queuedSwaps.Clear();
                     foreach (SkinModel skin in _mainVM.AllSkins)
                     {
                         if (skin.Category != "Paints")
@@ -809,6 +1311,7 @@ namespace TextureSwapper.ViewModels.Tabs
                 CommandManager.InvalidateRequerySuggested();
                 OnPropertyChanged(nameof(SelectAllText));
                 OnPropertyChanged(nameof(SelectAllIcon));
+                OnPropertyChanged(nameof(SelectedQueueSummary));
             }
 
             if (!string.IsNullOrEmpty(notificationTitle))
@@ -875,6 +1378,8 @@ namespace TextureSwapper.ViewModels.Tabs
                 IsPremium = original.IsPremium,
                 IsExperimental = original.IsExperimental,
                 SelectedModification = original.SelectedModification,
+                TargetTier = original.TargetTier,
+                FallbackModelPath = original.FallbackModelPath,
             };
 
             switch (choice)

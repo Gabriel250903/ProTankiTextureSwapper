@@ -1,5 +1,3 @@
-using Microsoft.Win32;
-using Serilog;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +6,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -165,6 +165,104 @@ namespace TextureSwapper.ViewModels
         public bool IsLicensesTabSelected => _selectedTab == "Licenses";
         public bool IsBansTabSelected => _selectedTab == "Bans";
         public bool IsLogsTabSelected => _selectedTab == "Logs";
+        public bool IsNorthPoleTabSelected => _selectedTab == "NorthPole";
+
+        public ObservableCollection<ChatParticipantItem> ChatParticipants { get; } = [];
+
+        private ChatParticipantItem? _selectedChatParticipant;
+        public ChatParticipantItem? SelectedChatParticipant
+        {
+            get => _selectedChatParticipant;
+            set
+            {
+                if (SetProperty(ref _selectedChatParticipant, value) && value != null)
+                {
+                    TargetSnowflakeHwid = value.Hwid;
+                }
+            }
+        }
+
+        private string _targetSnowflakeHwid = string.Empty;
+        public string TargetSnowflakeHwid
+        {
+            get => _targetSnowflakeHwid;
+            set => _ = SetProperty(ref _targetSnowflakeHwid, value);
+        }
+
+        private string _snowflakeDeltaAmount = "25";
+        public string SnowflakeDeltaAmount
+        {
+            get => _snowflakeDeltaAmount;
+            set => _ = SetProperty(ref _snowflakeDeltaAmount, value);
+        }
+
+        private int _chatTotalTickets;
+        public int ChatTotalTickets
+        {
+            get => _chatTotalTickets;
+            private set => _ = SetProperty(ref _chatTotalTickets, value);
+        }
+
+        private int _chatMessageCount;
+        public int ChatMessageCount
+        {
+            get => _chatMessageCount;
+            private set => _ = SetProperty(ref _chatMessageCount, value);
+        }
+
+        private string _chatRaffleStatusText = "Click Refresh to load Christmas Chat stats.";
+        public string ChatRaffleStatusText
+        {
+            get => _chatRaffleStatusText;
+            private set => _ = SetProperty(ref _chatRaffleStatusText, value);
+        }
+
+        private bool _isChatRaffleBusy;
+        public bool IsChatRaffleBusy
+        {
+            get => _isChatRaffleBusy;
+            private set => _ = SetProperty(ref _isChatRaffleBusy, value);
+        }
+
+        public ICommand RefreshChatStatsCommand { get; }
+        public ICommand DrawChatRaffleWinnerCommand { get; }
+        public ICommand ResetChatEventCommand { get; }
+        public ICommand AddSnowflakesCommand { get; }
+        public ICommand RemoveSnowflakesCommand { get; }
+        public ICommand CopyParticipantHwidCommand { get; }
+        public ICommand GrantPremiumSkinCommand { get; }
+        public ICommand GrantSkinVoucherCommand { get; }
+        public ICommand GrantNorthPoleBadgeCommand { get; }
+        public ICommand GrantSevenDayTrialCommand { get; }
+
+        public ObservableCollection<string> AvailablePremiumSkins { get; } = [];
+        public ObservableCollection<string> AvailableNorthPoleBadges { get; } =
+        [
+            "👑 North Pole Legend",
+            "🎅 Santa's VIP",
+            "🌌 Aurora Spirit",
+            "❄️ Ice Monarch",
+            "🎄 Elf",
+            "⛄ Frosty",
+            "🦌 Reindeer",
+            "✨ Starlight",
+            "🍪 Gingerbread",
+            "🔔 Jingle Bell",
+        ];
+
+        private string _selectedGrantSkinName = string.Empty;
+        public string SelectedGrantSkinName
+        {
+            get => _selectedGrantSkinName;
+            set => _ = SetProperty(ref _selectedGrantSkinName, value);
+        }
+
+        private string _selectedGrantBadgeName = "🎅 Santa's VIP";
+        public string SelectedGrantBadgeName
+        {
+            get => _selectedGrantBadgeName;
+            set => _ = SetProperty(ref _selectedGrantBadgeName, value);
+        }
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -581,6 +679,7 @@ namespace TextureSwapper.ViewModels
                     OnPropertyChanged(nameof(IsLicensesTabSelected));
                     OnPropertyChanged(nameof(IsBansTabSelected));
                     OnPropertyChanged(nameof(IsLogsTabSelected));
+                    OnPropertyChanged(nameof(IsNorthPoleTabSelected));
 
                     if (IsLicensesTabSelected)
                     {
@@ -594,8 +693,51 @@ namespace TextureSwapper.ViewModels
                     {
                         RefreshLogs();
                     }
+                    else if (IsNorthPoleTabSelected)
+                    {
+                        _ = RefreshChatStatsAsync();
+                    }
                 }
             });
+
+            RefreshChatStatsCommand = new AsyncRelayCommand(async _ =>
+                await RefreshChatStatsAsync()
+            );
+            DrawChatRaffleWinnerCommand = new AsyncRelayCommand(async _ =>
+                await DrawChatRaffleWinnerAsync()
+            );
+            ResetChatEventCommand = new AsyncRelayCommand(async _ => await ResetChatEventAsync());
+            AddSnowflakesCommand = new AsyncRelayCommand(async _ =>
+                await AdjustSnowflakesAsync(isAdd: true)
+            );
+            RemoveSnowflakesCommand = new AsyncRelayCommand(async _ =>
+                await AdjustSnowflakesAsync(isAdd: false)
+            );
+            CopyParticipantHwidCommand = new RelayCommand(p =>
+            {
+                string hwid = p is ChatParticipantItem item ? item.Hwid : TargetSnowflakeHwid;
+                if (!string.IsNullOrWhiteSpace(hwid))
+                {
+                    Clipboard.SetText(hwid);
+                    ShowNotificationSafe(
+                        "Copied",
+                        "HWID copied to clipboard.",
+                        ControlAppearance.Success
+                    );
+                }
+            });
+            GrantPremiumSkinCommand = new AsyncRelayCommand(async _ =>
+                await GrantNorthPoleRewardAsync("skin", SelectedGrantSkinName)
+            );
+            GrantSkinVoucherCommand = new AsyncRelayCommand(async _ =>
+                await GrantNorthPoleRewardAsync("skin_voucher", "1")
+            );
+            GrantNorthPoleBadgeCommand = new AsyncRelayCommand(async _ =>
+                await GrantNorthPoleRewardAsync("badge", SelectedGrantBadgeName)
+            );
+            GrantSevenDayTrialCommand = new AsyncRelayCommand(async _ =>
+                await GrantNorthPoleRewardAsync("trial", "7")
+            );
 
             CopyKeyCommand = new RelayCommand(p =>
             {
@@ -775,11 +917,7 @@ namespace TextureSwapper.ViewModels
                 if (Directory.Exists(logFolder))
                 {
                     _ = Process.Start(
-                        new ProcessStartInfo
-                        {
-                            FileName = logFolder,
-                            UseShellExecute = true,
-                        }
+                        new ProcessStartInfo { FileName = logFolder, UseShellExecute = true }
                     );
                 }
             });
@@ -2663,6 +2801,293 @@ namespace TextureSwapper.ViewModels
             catch (Exception ex)
             {
                 AdminLogContent = $"Error reading log file: {ex.Message}";
+            }
+        }
+
+        private void RefreshAvailablePremiumSkins()
+        {
+            if (_mainViewModel.AllSkins == null)
+            {
+                return;
+            }
+            List<string> premiumNames = _mainViewModel
+                .AllSkins.Where(s => s.IsPremium && !string.IsNullOrWhiteSpace(s.Name))
+                .Select(s => s.Name.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            string current = SelectedGrantSkinName;
+            AvailablePremiumSkins.Clear();
+            foreach (string name in premiumNames)
+            {
+                AvailablePremiumSkins.Add(name);
+            }
+            if (string.IsNullOrWhiteSpace(current) && AvailablePremiumSkins.Count > 0)
+            {
+                SelectedGrantSkinName = AvailablePremiumSkins[0];
+            }
+            else
+            {
+                SelectedGrantSkinName = current;
+            }
+        }
+
+        private async Task RefreshChatStatsAsync()
+        {
+            RefreshAvailablePremiumSkins();
+            string secret = AdminSession.CurrentSecret ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(secret) || IsChatRaffleBusy)
+            {
+                return;
+            }
+
+            try
+            {
+                IsChatRaffleBusy = true;
+                ChatAdminStatsResult res = await _mainViewModel.ChatService.GetAdminStatsAsync(
+                    secret
+                );
+                if (!res.Success)
+                {
+                    ChatRaffleStatusText = $"Error: {res.Error}";
+                    return;
+                }
+
+                ChatParticipants.Clear();
+                foreach (ChatParticipantItem p in res.Participants)
+                {
+                    ChatParticipants.Add(p);
+                }
+
+                ChatTotalTickets = res.TotalTickets;
+                ChatMessageCount = res.MessageCount;
+                ChatRaffleStatusText = res.EventEnded
+                    ? $"🏆 Winner: {res.WinnerNickname} | Key: {res.WinnerKey}"
+                    : $"Active — {res.Participants.Count} participant(s), {res.TotalTickets} total ❄️ tickets, {res.MessageCount} stored msgs";
+            }
+            finally
+            {
+                IsChatRaffleBusy = false;
+            }
+        }
+
+        private async Task DrawChatRaffleWinnerAsync()
+        {
+            string secret = AdminSession.CurrentSecret ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(secret) || IsChatRaffleBusy)
+            {
+                return;
+            }
+
+            System.Windows.MessageBoxResult confirm = System.Windows.MessageBox.Show(
+                "Draw the 1-of-1 Christmas 2026 Lifetime Key winner now?\n\nThis picks 1 weighted winner (1 ❄️ = 1 ticket), generates their XMAS Lifetime key, and ends the raffle.",
+                "Confirm Raffle Draw",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Question
+            );
+            if (confirm != System.Windows.MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                IsChatRaffleBusy = true;
+                (
+                    bool success,
+                    string? winnerNick,
+                    int winnerSnowflakes,
+                    string? key,
+                    string? error
+                ) = await _mainViewModel.ChatService.DrawRaffleWinnerAsync(secret);
+
+                if (!success)
+                {
+                    ShowNotificationSafe(
+                        "Draw Failed",
+                        error ?? "Could not draw winner.",
+                        ControlAppearance.Danger
+                    );
+                    return;
+                }
+
+                ShowNotificationSafe(
+                    "🏆 Raffle Winner Drawn!",
+                    $"Winner: {winnerNick} ({winnerSnowflakes} ❄️)\nLifetime Key: {key}",
+                    ControlAppearance.Success
+                );
+                IsChatRaffleBusy = false;
+                await RefreshChatStatsAsync();
+            }
+            finally
+            {
+                IsChatRaffleBusy = false;
+            }
+        }
+
+        private async Task ResetChatEventAsync()
+        {
+            string secret = AdminSession.CurrentSecret ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(secret) || IsChatRaffleBusy)
+            {
+                return;
+            }
+
+            System.Windows.MessageBoxResult confirm = System.Windows.MessageBox.Show(
+                "Reset ALL Christmas Chat test data?\n\nThis permanently clears all participants, Snowflakes, streaks, badges, chat messages, 1-Skin Vouchers, and raffle winner state.",
+                "Confirm Reset Test Data",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning
+            );
+            if (confirm != System.Windows.MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                IsChatRaffleBusy = true;
+                (bool success, string? msg) = await _mainViewModel.ChatService.ResetChatEventAsync(
+                    secret
+                );
+
+                ShowNotificationSafe(
+                    success ? "Reset Complete" : "Reset Failed",
+                    msg ?? (success ? "Test data cleared." : "Unknown error."),
+                    success ? ControlAppearance.Success : ControlAppearance.Danger
+                );
+                IsChatRaffleBusy = false;
+                await RefreshChatStatsAsync();
+            }
+            finally
+            {
+                IsChatRaffleBusy = false;
+            }
+        }
+
+        private async Task AdjustSnowflakesAsync(bool isAdd)
+        {
+            string secret = AdminSession.CurrentSecret ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(secret) || IsChatRaffleBusy)
+            {
+                return;
+            }
+
+            string hwid = (TargetSnowflakeHwid ?? string.Empty).Trim().ToLowerInvariant();
+            if (hwid.Length != 64)
+            {
+                ShowNotificationSafe(
+                    "Invalid HWID",
+                    "Please select a participant or paste a valid 64-character HWID.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            if (!int.TryParse(SnowflakeDeltaAmount?.Trim(), out int amount) || amount <= 0)
+            {
+                ShowNotificationSafe(
+                    "Invalid Amount",
+                    "Enter a positive whole number of Snowflakes.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            int delta = isAdd ? amount : -amount;
+            try
+            {
+                IsChatRaffleBusy = true;
+                (bool success, int newBalance, string? error) =
+                    await _mainViewModel.ChatService.AdjustSnowflakesAsync(secret, hwid, delta);
+
+                if (!success)
+                {
+                    ShowNotificationSafe(
+                        "Update Failed",
+                        error ?? "Could not adjust Snowflakes.",
+                        ControlAppearance.Danger
+                    );
+                    return;
+                }
+
+                ShowNotificationSafe(
+                    "Snowflakes Updated",
+                    $"{(delta > 0 ? "+" : "")}{delta} ❄️ applied to {hwid[..12]}... (New balance: {newBalance} ❄️)",
+                    ControlAppearance.Success
+                );
+                IsChatRaffleBusy = false;
+                await RefreshChatStatsAsync();
+            }
+            finally
+            {
+                IsChatRaffleBusy = false;
+            }
+        }
+
+        private async Task GrantNorthPoleRewardAsync(string rewardType, string value)
+        {
+            string secret = AdminSession.CurrentSecret ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(secret) || IsChatRaffleBusy)
+            {
+                return;
+            }
+
+            string hwid = (TargetSnowflakeHwid ?? string.Empty).Trim().ToLowerInvariant();
+            if (hwid.Length != 64)
+            {
+                ShowNotificationSafe(
+                    "Invalid HWID",
+                    "Please select a participant or paste a valid 64-character HWID.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            string cleanValue = (value ?? string.Empty).Trim();
+            if (
+                (rewardType == "skin" || rewardType == "badge")
+                && string.IsNullOrWhiteSpace(cleanValue)
+            )
+            {
+                ShowNotificationSafe(
+                    "Missing Selection",
+                    rewardType == "skin"
+                        ? "Please select or enter a Premium Skin name."
+                        : "Please select a badge.",
+                    ControlAppearance.Caution
+                );
+                return;
+            }
+
+            string nick = SelectedChatParticipant?.Nickname ?? "Player";
+            try
+            {
+                IsChatRaffleBusy = true;
+                (bool success, string? msg) =
+                    await _mainViewModel.ChatService.GrantAdminRewardAsync(
+                        secret,
+                        hwid,
+                        rewardType,
+                        cleanValue,
+                        nick
+                    );
+
+                ShowNotificationSafe(
+                    success ? "🎁 Reward Granted" : "Grant Failed",
+                    msg ?? (success ? "Reward granted." : "Could not grant reward."),
+                    success ? ControlAppearance.Success : ControlAppearance.Danger
+                );
+                IsChatRaffleBusy = false;
+                if (success)
+                {
+                    await RefreshChatStatsAsync();
+                }
+            }
+            finally
+            {
+                IsChatRaffleBusy = false;
             }
         }
 

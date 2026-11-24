@@ -1,4 +1,3 @@
-using Serilog;
 using System.Buffers.Binary;
 using System.Globalization;
 using System.IO;
@@ -6,8 +5,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
+using TextureSwapper.Helpers.Utilities;
 using ZstdSharp;
 
 namespace TextureSwapper.Services
@@ -23,7 +24,7 @@ namespace TextureSwapper.Services
 
         private const byte ObjectStoreDataEntryType = 0x01;
         private const byte BlobEntryType = 0x03;
-        
+
         private static readonly byte[] BytesFieldTag =
         [
             0x22,
@@ -59,8 +60,9 @@ namespace TextureSwapper.Services
             (byte)'B',
         ];
         private static readonly byte[] ObjectTrailer = [0x7B, 0x08];
-        private static readonly byte[] WrapperMimeUtf16Be =
-            Encoding.BigEndianUnicode.GetBytes("application/vnd.blink-idb-value-wrapper");
+        private static readonly byte[] WrapperMimeUtf16Be = Encoding.BigEndianUnicode.GetBytes(
+            "application/vnd.blink-idb-value-wrapper"
+        );
 
         private readonly IBntArchiveService _bntArchiveService = bntArchiveService;
         private readonly object _syncLock = new();
@@ -76,8 +78,27 @@ namespace TextureSwapper.Services
         private string? _cachedCoreBundlePath;
         private string? _cachedGarageBundlePath;
         private string? _cachedHudBundlePath;
-        private readonly Dictionary<string, (long Length, long LastWriteTicks, bool IsCore, bool IsGarage, bool IsHud)> _bundleIndexCache =
-            new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<
+            string,
+            (
+                long Length,
+                long LastWriteTicks,
+                bool IsCore,
+                bool IsGarage,
+                bool IsHud,
+                bool IsBattleLighting
+            )
+        > _bundleIndexCache = new(StringComparer.OrdinalIgnoreCase);
+
+        private const string BackupManifestFileName = "manifest.json";
+        private const string LastPatchReportFileName = "last_patch_report.json";
+        private static readonly JsonSerializerOptions DiagnosticJsonOptions = new()
+        {
+            WriteIndented = true,
+        };
+        private static readonly object ManifestFileSync = new();
+
+        public PatchRunReport? LastPatchReport { get; private set; }
 
         private sealed class ResourceRecord
         {
@@ -158,9 +179,7 @@ namespace TextureSwapper.Services
 
         public bool ResourceExists(string cacheRootPath, long resourceId)
         {
-            if (
-                !TryResolveHtml5Paths(cacheRootPath, out string levelDbDir, out string blobDir)
-            )
+            if (!TryResolveHtml5Paths(cacheRootPath, out string levelDbDir, out string blobDir))
             {
                 return false;
             }
@@ -187,11 +206,64 @@ namespace TextureSwapper.Services
             }
         }
 
+        public IReadOnlyList<long> GetCachedResourceIds(string cacheRootPath)
+        {
+            if (!TryResolveHtml5Paths(cacheRootPath, out string levelDbDir, out string blobDir))
+            {
+                return [];
+            }
+
+            lock (_syncLock)
+            {
+                EnsureIndexLoaded(levelDbDir);
+                if (_cachedRecords == null || _cachedRecords.Count == 0)
+                {
+                    return [];
+                }
+
+                HashSet<long> ids = [];
+                foreach (KeyValuePair<string, ResourceRecord> kvp in _cachedRecords)
+                {
+                    if (!kvp.Key.EndsWith(":default", StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    ReadOnlySpan<char> idPart = kvp.Key.AsSpan(
+                        0,
+                        kvp.Key.Length - ":default".Length
+                    );
+                    if (
+                        !long.TryParse(
+                            idPart,
+                            NumberStyles.Integer,
+                            CultureInfo.InvariantCulture,
+                            out long resourceId
+                        )
+                    )
+                    {
+                        continue;
+                    }
+
+                    ResourceRecord rec = kvp.Value;
+                    bool exists = rec.IsExternalBlob
+                        ? File.Exists(GetBlobFilePath(blobDir, rec.DatabaseId, rec.BlobNumber))
+                        : rec.DataValueBytes.Length > 0;
+                    if (exists)
+                    {
+                        _ = ids.Add(resourceId);
+                    }
+                }
+
+                List<long> sorted = [.. ids];
+                sorted.Sort();
+                return sorted;
+            }
+        }
+
         public byte[]? ReadRawBntBytes(string cacheRootPath, long resourceId)
         {
-            if (
-                !TryResolveHtml5Paths(cacheRootPath, out string levelDbDir, out string blobDir)
-            )
+            if (!TryResolveHtml5Paths(cacheRootPath, out string levelDbDir, out string blobDir))
             {
                 return null;
             }
@@ -356,10 +428,7 @@ namespace TextureSwapper.Services
 
                         AppendWriteBatchToWal(
                             levelDbDir,
-                            [
-                                (rec.RawUserKey, newDataVal),
-                                (blobEntryUserKey, newBlobVal),
-                            ]
+                            [(rec.RawUserKey, newDataVal), (blobEntryUserKey, newBlobVal)]
                         );
 
                         rec.DataValueBytes = newDataVal;
@@ -376,7 +445,11 @@ namespace TextureSwapper.Services
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to write external blob and WAL metadata for resource {ResourceId}", resourceId);
+                        Log.Error(
+                            ex,
+                            "Failed to write external blob and WAL metadata for resource {ResourceId}",
+                            resourceId
+                        );
                         if (blobReplaced)
                         {
                             try
@@ -392,7 +465,11 @@ namespace TextureSwapper.Services
                             }
                             catch (Exception rbEx)
                             {
-                                Log.Error(rbEx, "Failed to restore blob {BlobPath} after WAL failure", blobPath);
+                                Log.Error(
+                                    rbEx,
+                                    "Failed to restore blob {BlobPath} after WAL failure",
+                                    blobPath
+                                );
                             }
                         }
 
@@ -424,7 +501,11 @@ namespace TextureSwapper.Services
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to write inline WAL metadata for resource {ResourceId}", resourceId);
+                        Log.Error(
+                            ex,
+                            "Failed to write inline WAL metadata for resource {ResourceId}",
+                            resourceId
+                        );
                         _cachedRecords = null;
                         _cachedLevelDbSnapshot = null;
                         return false;
@@ -441,12 +522,7 @@ namespace TextureSwapper.Services
         private static string GetBlobFilePath(string blobDir, byte databaseId, ulong blobNumber)
         {
             ulong folderByte = (blobNumber >> 8) & 0xFF;
-            return Path.Combine(
-                blobDir,
-                $"{databaseId}",
-                $"{folderByte:x2}",
-                $"{blobNumber:x}"
-            );
+            return Path.Combine(blobDir, $"{databaseId}", $"{folderByte:x2}", $"{blobNumber:x}");
         }
 
         private static byte[]? ReadUncompressedV8Payload(ResourceRecord rec, string blobDir)
@@ -472,18 +548,12 @@ namespace TextureSwapper.Services
                 rawV8 = rec.DataValueBytes[pos..];
             }
 
-            return rawV8.Length >= 3
-                && rawV8[0] == 0xFF
-                && rawV8[1] == 0x11
-                && rawV8[2] == 0x02
+            return rawV8.Length >= 3 && rawV8[0] == 0xFF && rawV8[1] == 0x11 && rawV8[2] == 0x02
                 ? SnappyDecompress(rawV8.AsSpan(3))
                 : rawV8;
         }
 
-        private static byte[]? RebuildV8Payload(
-            byte[] existingV8,
-            ReadOnlySpan<byte> newBntBytes
-        )
+        private static byte[]? RebuildV8Payload(byte[] existingV8, ReadOnlySpan<byte> newBntBytes)
         {
             int bytesTagIdx = IndexOfBytes(existingV8, BytesFieldTag, 0);
             if (bytesTagIdx < 0)
@@ -534,11 +604,7 @@ namespace TextureSwapper.Services
             string snapshotKey = GetDirectorySnapshotKey(levelDbDir);
             if (
                 _cachedRecords != null
-                && string.Equals(
-                    _cachedLevelDbDir,
-                    levelDbDir,
-                    StringComparison.OrdinalIgnoreCase
-                )
+                && string.Equals(_cachedLevelDbDir, levelDbDir, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(_cachedLevelDbSnapshot, snapshotKey, StringComparison.Ordinal)
             )
             {
@@ -551,8 +617,10 @@ namespace TextureSwapper.Services
             foreach (string file in Directory.GetFiles(levelDbDir).OrderBy(f => f))
             {
                 string ext = Path.GetExtension(file);
-                if (ext.Equals(".ldb", StringComparison.OrdinalIgnoreCase)
-                    || ext.Equals(".sst", StringComparison.OrdinalIgnoreCase))
+                if (
+                    ext.Equals(".ldb", StringComparison.OrdinalIgnoreCase)
+                    || ext.Equals(".sst", StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     try
                     {
@@ -580,8 +648,10 @@ namespace TextureSwapper.Services
             allEntries.Sort((a, b) => a.Seq.CompareTo(b.Seq));
 
             ulong maxSeq = allEntries.Count > 0 ? allEntries[^1].Seq : 1;
-            Dictionary<(byte DbId, byte StoreId, string Key), (byte[] RawKey, byte[] Val)> dataMap =
-                [];
+            Dictionary<
+                (byte DbId, byte StoreId, string Key),
+                (byte[] RawKey, byte[] Val)
+            > dataMap = [];
             Dictionary<(byte DbId, byte StoreId, string Key), byte[]> blobMap = [];
 
             foreach ((_, byte vtype, byte[] ukey, byte[] val) in allEntries)
@@ -603,7 +673,11 @@ namespace TextureSwapper.Services
                         string? keyStr = DecodeIdbStringKey(ukey, 5);
                         if (keyStr != null)
                         {
-                            (byte dbId, byte storeId, string keyStr) composite = (dbId, storeId, keyStr);
+                            (byte dbId, byte storeId, string keyStr) composite = (
+                                dbId,
+                                storeId,
+                                keyStr
+                            );
                             if (vtype == 1)
                             {
                                 dataMap[composite] = (ukey, val);
@@ -619,7 +693,11 @@ namespace TextureSwapper.Services
                         string? keyStr = DecodeIdbStringKey(ukey, 5);
                         if (keyStr != null)
                         {
-                            (byte dbId, byte storeId, string keyStr) composite = (dbId, storeId, keyStr);
+                            (byte dbId, byte storeId, string keyStr) composite = (
+                                dbId,
+                                storeId,
+                                keyStr
+                            );
                             if (vtype == 1)
                             {
                                 blobMap[composite] = val;
@@ -633,16 +711,10 @@ namespace TextureSwapper.Services
                 }
             }
 
-            Dictionary<string, ResourceRecord> records = new(
-                dataMap.Count,
-                StringComparer.Ordinal
-            );
+            Dictionary<string, ResourceRecord> records = new(dataMap.Count, StringComparer.Ordinal);
 
             foreach (
-                (
-                    (byte dbId, byte storeId, string keyStr),
-                    (byte[] rawKey, byte[] val)
-                ) in dataMap
+                ((byte dbId, byte storeId, string keyStr), (byte[] rawKey, byte[] val)) in dataMap
             )
             {
                 if (val.Length == 0)
@@ -657,8 +729,7 @@ namespace TextureSwapper.Services
                 }
                 ReadOnlySpan<byte> rem = val.AsSpan(pos);
 
-                bool isBlob =
-                    rem.Length >= 3 && rem[0] == 0xFF && rem[1] == 0x11 && rem[2] == 0x01;
+                bool isBlob = rem.Length >= 3 && rem[0] == 0xFF && rem[1] == 0x11 && rem[2] == 0x01;
                 ulong blobNum = 0;
                 byte[]? blobEntryVal = null;
 
@@ -713,10 +784,7 @@ namespace TextureSwapper.Services
 
             string logPath =
                 _activeLogFilePath
-                ?? Directory
-                    .GetFiles(levelDbDir, "*.log")
-                    .OrderBy(f => f)
-                    .LastOrDefault()
+                ?? Directory.GetFiles(levelDbDir, "*.log").OrderBy(f => f).LastOrDefault()
                 ?? Path.Combine(levelDbDir, "000012.log");
 
             ulong startSeq = _maxSequenceNumber + 1;
@@ -852,9 +920,7 @@ namespace TextureSwapper.Services
             }
 
             int footerStart = data.Length - 48;
-            ulong magic = BinaryPrimitives.ReadUInt64LittleEndian(
-                data.AsSpan(footerStart + 40, 8)
-            );
+            ulong magic = BinaryPrimitives.ReadUInt64LittleEndian(data.AsSpan(footerStart + 40, 8));
             if (magic != 0xDB4775248B80FB57UL)
             {
                 return;
@@ -886,7 +952,10 @@ namespace TextureSwapper.Services
                 {
                     continue;
                 }
-                if (blockOffset > (ulong)footerStart || blockSize > (ulong)footerStart - blockOffset)
+                if (
+                    blockOffset > (ulong)footerStart
+                    || blockSize > (ulong)footerStart - blockOffset
+                )
                 {
                     continue;
                 }
@@ -1128,7 +1197,11 @@ namespace TextureSwapper.Services
                 pos += 7;
                 if (pos + length > n)
                 {
-                    Log.Warning("Truncated LevelDB WAL record in {File} at offset {Offset}. Stopping WAL parse.", filePath, pos - 7);
+                    Log.Warning(
+                        "Truncated LevelDB WAL record in {File} at offset {Offset}. Stopping WAL parse.",
+                        filePath,
+                        pos - 7
+                    );
                     break;
                 }
 
@@ -1165,7 +1238,10 @@ namespace TextureSwapper.Services
                 {
                     if (!inFragment)
                     {
-                        Log.Warning("Orphaned LevelDB WAL middle fragment in {File}. Stopping WAL parse.", filePath);
+                        Log.Warning(
+                            "Orphaned LevelDB WAL middle fragment in {File}. Stopping WAL parse.",
+                            filePath
+                        );
                         break;
                     }
                     frag.Write(chunk);
@@ -1175,7 +1251,10 @@ namespace TextureSwapper.Services
                 {
                     if (!inFragment)
                     {
-                        Log.Warning("Orphaned LevelDB WAL last fragment in {File}. Stopping WAL parse.", filePath);
+                        Log.Warning(
+                            "Orphaned LevelDB WAL last fragment in {File}. Stopping WAL parse.",
+                            filePath
+                        );
                         break;
                     }
                     frag.Write(chunk);
@@ -1183,7 +1262,11 @@ namespace TextureSwapper.Services
                 }
                 else
                 {
-                    Log.Warning("Unknown LevelDB WAL record type {Type} in {File}. Stopping WAL parse.", rtype, filePath);
+                    Log.Warning(
+                        "Unknown LevelDB WAL record type {Type} in {File}. Stopping WAL parse.",
+                        rtype,
+                        filePath
+                    );
                     break;
                 }
 
@@ -1416,7 +1499,9 @@ namespace TextureSwapper.Services
 
             int charCount = (int)charCountRaw;
             int byteLen = charCount * 2;
-            return pos + byteLen > ukey.Length ? null : Encoding.BigEndianUnicode.GetString(ukey, pos, byteLen);
+            return pos + byteLen > ukey.Length
+                ? null
+                : Encoding.BigEndianUnicode.GetString(ukey, pos, byteLen);
         }
 
         private static byte[] BuildUserKey(byte[] prefix, string key)
@@ -1484,7 +1569,11 @@ namespace TextureSwapper.Services
             try
             {
                 StringBuilder sb = new();
-                foreach (string file in Directory.GetFiles(dirPath, searchPattern).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
+                foreach (
+                    string file in Directory
+                        .GetFiles(dirPath, searchPattern)
+                        .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
+                )
                 {
                     FileInfo fi = new(file);
                     _ = sb.Append(fi.Name)
@@ -1502,9 +1591,11 @@ namespace TextureSwapper.Services
             }
         }
 
-        private (string? CorePath, string? GaragePath, string? HudPath) EnsureCacheDataBundlesIndexed(
-            string cacheDataDir
-        )
+        private (
+            string? CorePath,
+            string? GaragePath,
+            string? HudPath
+        ) EnsureCacheDataBundlesIndexed(string cacheDataDir)
         {
             lock (_syncLock)
             {
@@ -1515,13 +1606,23 @@ namespace TextureSwapper.Services
                         cacheDataDir,
                         StringComparison.OrdinalIgnoreCase
                     )
-                    && string.Equals(_cachedCacheDataSnapshot, snapshotKey, StringComparison.Ordinal)
+                    && string.Equals(
+                        _cachedCacheDataSnapshot,
+                        snapshotKey,
+                        StringComparison.Ordinal
+                    )
                 )
                 {
                     return (_cachedCoreBundlePath, _cachedGarageBundlePath, _cachedHudBundlePath);
                 }
 
-                if (!string.Equals(_cachedCacheDataDir, cacheDataDir, StringComparison.OrdinalIgnoreCase))
+                if (
+                    !string.Equals(
+                        _cachedCacheDataDir,
+                        cacheDataDir,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
                 {
                     _bundleIndexCache.Clear();
                 }
@@ -1542,9 +1643,20 @@ namespace TextureSwapper.Services
                     bool isCore;
                     bool isGarage;
                     bool isHud;
+                    bool isBattleLighting;
 
                     if (
-                        _bundleIndexCache.TryGetValue(filePath, out (long Length, long LastWriteTicks, bool IsCore, bool IsGarage, bool IsHud) cached)
+                        _bundleIndexCache.TryGetValue(
+                            filePath,
+                            out (
+                                long Length,
+                                long LastWriteTicks,
+                                bool IsCore,
+                                bool IsGarage,
+                                bool IsHud,
+                                bool IsBattleLighting
+                            ) cached
+                        )
                         && cached.Length == len
                         && cached.LastWriteTicks == ticks
                     )
@@ -1552,21 +1664,36 @@ namespace TextureSwapper.Services
                         isCore = cached.IsCore;
                         isGarage = cached.IsGarage;
                         isHud = cached.IsHud;
+                        isBattleLighting = cached.IsBattleLighting;
                     }
                     else
                     {
                         if (!TryReadZstdBundle(filePath, out _, out string jsText))
                         {
-                            _bundleIndexCache[filePath] = (len, ticks, false, false, false);
+                            _bundleIndexCache[filePath] = (len, ticks, false, false, false, false);
                             continue;
                         }
 
                         isCore = jsText.Contains("TankPaintMaterial", StringComparison.Ordinal);
-                        isGarage = jsText.Contains("app-garage-tank-preview", StringComparison.Ordinal);
-                        isHud = !isCore
+                        isGarage = jsText.Contains(
+                            "app-garage-tank-preview",
+                            StringComparison.Ordinal
+                        );
+                        isHud =
+                            !isCore
                             && jsText.Contains("app-inventory-panel", StringComparison.Ordinal)
                             && jsText.Contains("cooldownStartTime", StringComparison.Ordinal);
-                        _bundleIndexCache[filePath] = (len, ticks, isCore, isGarage, isHud);
+                        isBattleLighting =
+                            jsText.Contains("flashDynamicLight", StringComparison.Ordinal)
+                            && jsText.Contains("lightSources", StringComparison.Ordinal);
+                        _bundleIndexCache[filePath] = (
+                            len,
+                            ticks,
+                            isCore,
+                            isGarage,
+                            isHud,
+                            isBattleLighting
+                        );
                     }
 
                     if (corePath == null && isCore)
@@ -1583,7 +1710,11 @@ namespace TextureSwapper.Services
                     }
                 }
 
-                foreach (string stale in _bundleIndexCache.Keys.Where(k => !seenFiles.Contains(k)).ToList())
+                foreach (
+                    string stale in _bundleIndexCache
+                        .Keys.Where(k => !seenFiles.Contains(k))
+                        .ToList()
+                )
                 {
                     _ = _bundleIndexCache.Remove(stale);
                 }
@@ -1614,20 +1745,17 @@ namespace TextureSwapper.Services
 
             (string? corePath, _, _) = EnsureCacheDataBundlesIndexed(cacheDataDir);
             string coreJs = string.Empty;
-            bool coreRead =
-                corePath != null
-                && TryReadZstdBundle(corePath, out _, out coreJs);
+            bool coreRead = corePath != null && TryReadZstdBundle(corePath, out _, out coreJs);
             bool shadersEnabled =
-                coreRead
-                && coreJs.Contains(ShadersStartMarker, StringComparison.Ordinal);
+                coreRead && coreJs.Contains(ShadersStartMarker, StringComparison.Ordinal);
             bool skinAnimationsEnabled =
-                coreRead
-                && coreJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal);
+                coreRead && coreJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal);
             return (shadersEnabled, skinAnimationsEnabled);
         }
 
         private const string AnimPaintMarker = "__tsAnimPaintV2";
         private static readonly byte[] ZstdMagic = [0x28, 0xB5, 0x2F, 0xFD];
+
         [GeneratedRegex(
             @"function\s+[A-Za-z0-9_$]+\((?<arg>[A-Za-z0-9_$]+)\)\{let\s+[A-Za-z0-9_$]+=\k<arg>\['image'\];return\{'width':"
         )]
@@ -1672,7 +1800,12 @@ namespace TextureSwapper.Services
                 byte[] rawBytes;
                 try
                 {
-                    using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using FileStream fs = new(
+                        filePath,
+                        FileMode.Open,
+                        FileAccess.Read,
+                        FileShare.ReadWrite
+                    );
                     if (fs.Length < 4)
                     {
                         continue;
@@ -1705,7 +1838,10 @@ namespace TextureSwapper.Services
 
                 string jsText = Encoding.UTF8.GetString(decompressed);
                 bool isCore = jsText.Contains("TankPaintMaterial", StringComparison.Ordinal);
-                bool isGarage = jsText.Contains("app-garage-tank-preview", StringComparison.Ordinal);
+                bool isGarage = jsText.Contains(
+                    "app-garage-tank-preview",
+                    StringComparison.Ordinal
+                );
 
                 if (!isCore && !isGarage)
                 {
@@ -1735,11 +1871,14 @@ namespace TextureSwapper.Services
 
                 if (hasOldOrCurrentPatch && File.Exists(backupFile))
                 {
-                    bool coreUpToDate = !isCore || jsText.Contains(AnimPaintMarker, StringComparison.Ordinal);
-                    bool garageUpToDate = !isGarage || (
-                        !jsText.Contains("f0=0x2710,b0=0x64", StringComparison.Ordinal)
-                        && jsText.Contains("__tsGarageStage", StringComparison.Ordinal)
-                    );
+                    bool coreUpToDate =
+                        !isCore || jsText.Contains(AnimPaintMarker, StringComparison.Ordinal);
+                    bool garageUpToDate =
+                        !isGarage
+                        || (
+                            !jsText.Contains("f0=0x2710,b0=0x64", StringComparison.Ordinal)
+                            && jsText.Contains("__tsGarageStage", StringComparison.Ordinal)
+                        );
                     if (coreUpToDate && garageUpToDate)
                     {
                         continue;
@@ -1748,14 +1887,37 @@ namespace TextureSwapper.Services
                     try
                     {
                         byte[] origBytes = File.ReadAllBytes(backupFile);
-                        byte[] origDecompressed = DecompressZstdStream(origBytes);
-                        string origJs = Encoding.UTF8.GetString(origDecompressed);
                         if (
-                            (isCore && origJs.Contains("TankPaintMaterial", StringComparison.Ordinal))
-                            || (isGarage && origJs.Contains("app-garage-tank-preview", StringComparison.Ordinal))
+                            TryVerifyBackupManifest(
+                                originalsCacheDataDir,
+                                cacheDataDir,
+                                fileName,
+                                origBytes,
+                                out _
+                            )
                         )
                         {
-                            jsText = origJs;
+                            byte[] origDecompressed = DecompressZstdStream(origBytes);
+                            string origJs = Encoding.UTF8.GetString(origDecompressed);
+                            if (
+                                (
+                                    isCore
+                                    && origJs.Contains(
+                                        "TankPaintMaterial",
+                                        StringComparison.Ordinal
+                                    )
+                                )
+                                || (
+                                    isGarage
+                                    && origJs.Contains(
+                                        "app-garage-tank-preview",
+                                        StringComparison.Ordinal
+                                    )
+                                )
+                            )
+                            {
+                                jsText = origJs;
+                            }
                         }
                     }
                     catch { }
@@ -1770,7 +1932,8 @@ namespace TextureSwapper.Services
                     if (m.Success)
                     {
                         string argName = m.Groups["arg"].Value;
-                        string hookCall = $"{argName}&&window.{AnimPaintMarker}&&window.{AnimPaintMarker}({argName});";
+                        string hookCall =
+                            $"{argName}&&window.{AnimPaintMarker}&&window.{AnimPaintMarker}({argName});";
                         int bracePos = m.Value.IndexOf('{');
                         string replacement =
                             AnimPaintHelperJs
@@ -1787,7 +1950,10 @@ namespace TextureSwapper.Services
                     }
                     else
                     {
-                        Log.Warning("Could not locate Y$ material helper in HTML5 core bundle {File}", fileName);
+                        Log.Warning(
+                            "Could not locate Y$ material helper in HTML5 core bundle {File}",
+                            fileName
+                        );
                     }
                 }
 
@@ -1823,31 +1989,39 @@ namespace TextureSwapper.Services
                     patchedJs = existingShaderBlock + patchedJs;
                 }
 
-                _ = Directory.CreateDirectory(originalsCacheDataDir);
-                if (!File.Exists(backupFile))
+                byte[] cleanBackupBytes = hadShaders
+                    ? CompressZstdRaw(Encoding.UTF8.GetBytes(jsText))
+                    : rawBytes;
+                bool saveCleanBackup =
+                    !jsText.Contains(ShotLightCoreMarker, StringComparison.Ordinal)
+                    && !jsText.Contains(SkinAnimStartMarker, StringComparison.Ordinal)
+                    && !jsText.Contains("__tsAnimPaint", StringComparison.Ordinal);
+
+                try
                 {
-                    byte[] cleanBackupBytes = hadShaders
-                        ? CompressZstdRaw(Encoding.UTF8.GetBytes(jsText))
-                        : rawBytes;
-                    File.WriteAllBytes(backupFile, cleanBackupBytes);
+                    WritePatchedZstdBundle(
+                        cacheDataDir,
+                        originalsCacheDataDir,
+                        filePath,
+                        fileName,
+                        cleanBackupBytes,
+                        rawBytes.Length,
+                        patchedJs,
+                        saveBackup: saveCleanBackup,
+                        patchName: "AnimatedPaints",
+                        cleanOriginalJsForFingerprint: jsText
+                    );
+                }
+                catch (IOException ex)
+                {
+                    Log.Warning(
+                        ex,
+                        "Aborted Animated Paints patch on {File} due to cache lock/IO error.",
+                        fileName
+                    );
+                    return false;
                 }
 
-                string data1Path = Path.Combine(cacheDataDir, "data_1");
-                string data1Backup = Path.Combine(originalsCacheDataDir, "data_1");
-                if (File.Exists(data1Path) && !File.Exists(data1Backup))
-                {
-                    File.Copy(data1Path, data1Backup, overwrite: false);
-                }
-
-                byte[] patchedUtf8 = Encoding.UTF8.GetBytes(patchedJs);
-                byte[] recompressed = CompressZstdForCache(patchedUtf8, rawBytes.Length, out bool exactSizeMatched);
-
-                if (!exactSizeMatched && File.Exists(data1Path))
-                {
-                    UpdateData1FileSize(data1Path, fileName, recompressed.Length);
-                }
-
-                File.WriteAllBytes(filePath, recompressed);
                 if (isCore)
                 {
                     if (
@@ -1859,7 +2033,10 @@ namespace TextureSwapper.Services
                     }
                 }
                 anyModified = true;
-                Log.Information("Patched HTML5 cached JS bundle {File} for Animated Paints.", fileName);
+                Log.Information(
+                    "Patched HTML5 cached JS bundle {File} for Animated Paints.",
+                    fileName
+                );
             }
 
             if (anyModified)
@@ -1877,13 +2054,7 @@ namespace TextureSwapper.Services
                 return false;
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
             if (!Directory.Exists(originalsCacheDataDir))
             {
                 return false;
@@ -1892,6 +2063,16 @@ namespace TextureSwapper.Services
             string cacheDataDir = Path.Combine(rootDir, "Cache", "Cache_Data");
             if (!Directory.Exists(cacheDataDir))
             {
+                return false;
+            }
+
+            try
+            {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                Log.Warning(ex, "Cannot restore Animated Paints while ProTanki cache is locked.");
                 return false;
             }
 
@@ -1929,7 +2110,14 @@ namespace TextureSwapper.Services
 
                 if (
                     currentJs.Contains(ShadersStartMarker, StringComparison.Ordinal)
-                    && TryReadZstdBundle(backupFile, out _, out string backupJs)
+                    && TryReadZstdBundle(backupFile, out byte[] backupRawBytes, out string backupJs)
+                    && TryVerifyBackupManifest(
+                        originalsCacheDataDir,
+                        cacheDataDir,
+                        fileName,
+                        backupRawBytes,
+                        out string verifyErr
+                    )
                 )
                 {
                     _ = StripShadersBlock(currentJs, out string? activeShaderBlock);
@@ -1942,21 +2130,26 @@ namespace TextureSwapper.Services
                             fileName,
                             currentBytes,
                             currentBytes.Length,
-                            activeShaderBlock + StripShadersBlock(backupJs, out _)
+                            activeShaderBlock + StripShadersBlock(backupJs, out _),
+                            saveBackup: false
                         );
                         restoredAny = true;
                         continue;
                     }
                 }
 
-                if (TryReadZstdBundle(backupFile, out byte[] origBytes, out _))
+                if (
+                    TryRestoreVerifiedBackupAtomic(
+                        cacheDataDir,
+                        originalsCacheDataDir,
+                        destPath,
+                        fileName,
+                        currentBytes.Length,
+                        backupFile,
+                        out _
+                    )
+                )
                 {
-                    string data1Path = Path.Combine(cacheDataDir, "data_1");
-                    if (origBytes.Length != currentBytes.Length && File.Exists(data1Path))
-                    {
-                        UpdateData1FileSize(data1Path, fileName, origBytes.Length);
-                    }
-                    File.Copy(backupFile, destPath, overwrite: true);
                     restoredAny = true;
                 }
             }
@@ -1965,7 +2158,10 @@ namespace TextureSwapper.Services
             {
                 ClearCodeCacheJs(rootDir);
                 InvalidateCache();
-                Log.Information("Restored original HTML5 Cache_Data JS bundles for Animated Paints.");
+                Log.Information(
+                    "Restored original HTML5 Cache_Data JS bundles for Animated Paints."
+                );
+                SyncShotDynamicLighting(cacheRootPath);
             }
 
             return restoredAny;
@@ -2011,22 +2207,26 @@ namespace TextureSwapper.Services
                 return (false, "HTML5 Cache_Data directory not found.");
             }
 
+            try
+            {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                return (false, ex.Message);
+            }
+
             string? shaderBlock = LoadShaderScriptPayload(toggleHotkey);
             if (string.IsNullOrEmpty(shaderBlock))
             {
-                return (false, "ProTanki Pack script asset (Assets/Pack/protanki_pack.js) not found.");
+                return (false, "ProTanki Pack script asset (Scripts/protanki_pack.js) not found.");
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
 
             bool foundCoreBundle = false;
             bool anyModified = false;
+            List<BundlePatchDiagnostic> diagnostics = [];
 
             foreach (string filePath in Directory.EnumerateFiles(cacheDataDir, "f_*"))
             {
@@ -2043,42 +2243,90 @@ namespace TextureSwapper.Services
 
                 foundCoreBundle = true;
                 string cleanJs = StripShadersBlock(jsText, out string? existingBlock);
-                bool hadLegacySkinAnim = cleanJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal);
+                bool hadLegacySkinAnim = cleanJs.Contains(
+                    SkinAnimStartMarker,
+                    StringComparison.Ordinal
+                );
                 if (hadLegacySkinAnim)
                 {
                     cleanJs = StripSkinAnimBlock(cleanJs, out _);
                 }
+                string fingerprint = ComputeBuildFingerprint(cleanJs);
+
                 if (
                     !hadLegacySkinAnim
                     && string.Equals(existingBlock, shaderBlock, StringComparison.Ordinal)
                 )
                 {
+                    diagnostics.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = fileName,
+                            BundleKind = "Core",
+                            Feature = "ProTankiPack",
+                            Status = "AlreadyPatched",
+                            BuildFingerprint = fingerprint,
+                        }
+                    );
                     continue;
                 }
 
                 byte[] backupRawBytes = rawBytes;
                 string backupFile = Path.Combine(originalsCacheDataDir, fileName);
-                if (!File.Exists(backupFile) && (!string.IsNullOrEmpty(existingBlock) || hadLegacySkinAnim))
+                if (
+                    !File.Exists(backupFile)
+                    && (!string.IsNullOrEmpty(existingBlock) || hadLegacySkinAnim)
+                )
                 {
                     backupRawBytes = CompressZstdRaw(Encoding.UTF8.GetBytes(cleanJs));
                 }
 
                 string patchedJs = shaderBlock + cleanJs;
-                WritePatchedZstdBundle(
-                    cacheDataDir,
-                    originalsCacheDataDir,
-                    filePath,
-                    fileName,
-                    backupRawBytes,
-                    rawBytes.Length,
-                    patchedJs,
-                    saveBackup: !cleanJs.Contains("__tsAnimPaint", StringComparison.Ordinal)
-                );
+                try
+                {
+                    WritePatchedZstdBundle(
+                        cacheDataDir,
+                        originalsCacheDataDir,
+                        filePath,
+                        fileName,
+                        backupRawBytes,
+                        rawBytes.Length,
+                        patchedJs,
+                        saveBackup: !cleanJs.Contains("__tsAnimPaint", StringComparison.Ordinal)
+                            && !cleanJs.Contains(ShotLightCoreMarker, StringComparison.Ordinal),
+                        patchName: "ProTankiPack",
+                        cleanOriginalJsForFingerprint: cleanJs
+                    );
+                }
+                catch (IOException ex)
+                {
+                    diagnostics.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = fileName,
+                            BundleKind = "Core",
+                            Feature = "ProTankiPack",
+                            Status = "Failed",
+                            BuildFingerprint = fingerprint,
+                            Reason = ex.Message,
+                        }
+                    );
+                    RecordAndSavePatchReport(cacheDataDir, diagnostics, replaceAll: true);
+                    return (false, ex.Message);
+                }
+
                 anyModified = true;
-                Log.Information(
-                    "Applied ProTanki Pack to cached bundle {File}.",
-                    fileName
+                diagnostics.Add(
+                    new BundlePatchDiagnostic
+                    {
+                        FileName = fileName,
+                        BundleKind = "Core",
+                        Feature = "ProTankiPack",
+                        Status = "Patched",
+                        BuildFingerprint = fingerprint,
+                    }
                 );
+                Log.Information("Applied ProTanki Pack to cached bundle {File}.", fileName);
             }
 
             if (anyModified)
@@ -2088,13 +2336,37 @@ namespace TextureSwapper.Services
 
             if (!foundCoreBundle)
             {
+                diagnostics.Add(
+                    new BundlePatchDiagnostic
+                    {
+                        FileName = "(none)",
+                        BundleKind = "Core",
+                        Feature = "ProTankiPack",
+                        Status = "Failed",
+                        Reason =
+                            "Core 3D engine bundle (TankPaintMaterial) not found in Cache_Data.",
+                        MissingSignatures = ["TankPaintMaterial"],
+                    }
+                );
+                RecordAndSavePatchReport(cacheDataDir, diagnostics, replaceAll: true);
                 return (
                     false,
                     "Core 3D engine bundle not found in cache yet. Please launch ProTanki once to cache the game files."
                 );
             }
 
-            SyncRepairCooldown(cacheRootPath, enabled: true);
+            ApplyGarageFeatureHooks(cacheRootPath, diagnostics);
+            ApplyBattleFeatureHooks(cacheRootPath, diagnostics);
+            if (ChatService.IsAdminDevice)
+            {
+                ApplyChatTranslatorHooks(cacheRootPath, diagnostics);
+            }
+            else
+            {
+                RestoreChatTranslatorHooks(cacheRootPath);
+            }
+            SyncRepairCooldown(cacheRootPath, enabled: true, diagnostics);
+            RecordAndSavePatchReport(cacheDataDir, diagnostics, replaceAll: true);
 
             return (true, null);
         }
@@ -2112,13 +2384,16 @@ namespace TextureSwapper.Services
                 return (true, null);
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            try
+            {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                return (false, ex.Message);
+            }
+
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
 
             bool anyModified = false;
 
@@ -2137,45 +2412,61 @@ namespace TextureSwapper.Services
 
                 string strippedJs = StripShadersBlock(jsText, out _);
                 bool hasAnimPaint = strippedJs.Contains("__tsAnimPaint", StringComparison.Ordinal);
-                bool hasSkinAnim = strippedJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal);
+                bool hasSkinAnim = strippedJs.Contains(
+                    SkinAnimStartMarker,
+                    StringComparison.Ordinal
+                );
+                bool hasShotLight = strippedJs.Contains(
+                    ShotLightCoreMarker,
+                    StringComparison.Ordinal
+                );
 
                 string backupFile = Path.Combine(originalsCacheDataDir, fileName);
                 bool restoredFromBackup = false;
 
-                if (!hasAnimPaint && !hasSkinAnim && File.Exists(backupFile))
+                if (!hasAnimPaint && !hasSkinAnim && !hasShotLight && File.Exists(backupFile))
                 {
                     try
                     {
-                        if (
-                            TryReadZstdBundle(backupFile, out byte[] backupBytes, out string backupJs)
-                            && backupJs.Contains("TankPaintMaterial", StringComparison.Ordinal)
-                            && !backupJs.Contains(ShadersStartMarker, StringComparison.Ordinal)
-                        )
-                        {
-                            string data1Path = Path.Combine(cacheDataDir, "data_1");
-                            if (backupBytes.Length != rawBytes.Length && File.Exists(data1Path))
-                            {
-                                UpdateData1FileSize(data1Path, fileName, backupBytes.Length);
-                            }
-
-                            File.Copy(backupFile, filePath, overwrite: true);
-                            restoredFromBackup = true;
-                        }
+                        restoredFromBackup = TryRestoreVerifiedBackupAtomic(
+                            cacheDataDir,
+                            originalsCacheDataDir,
+                            filePath,
+                            fileName,
+                            rawBytes.Length,
+                            backupFile,
+                            out _,
+                            backupJs =>
+                                backupJs.Contains("TankPaintMaterial", StringComparison.Ordinal)
+                                && !backupJs.Contains(ShadersStartMarker, StringComparison.Ordinal)
+                        );
+                    }
+                    catch (IOException ex)
+                    {
+                        return (false, ex.Message);
                     }
                     catch { }
                 }
 
                 if (!restoredFromBackup)
                 {
-                    WritePatchedZstdBundle(
-                        cacheDataDir,
-                        originalsCacheDataDir,
-                        filePath,
-                        fileName,
-                        rawBytes,
-                        rawBytes.Length,
-                        strippedJs
-                    );
+                    try
+                    {
+                        WritePatchedZstdBundle(
+                            cacheDataDir,
+                            originalsCacheDataDir,
+                            filePath,
+                            fileName,
+                            rawBytes,
+                            rawBytes.Length,
+                            strippedJs,
+                            saveBackup: false
+                        );
+                    }
+                    catch (IOException ex)
+                    {
+                        return (false, ex.Message);
+                    }
                 }
 
                 anyModified = true;
@@ -2187,6 +2478,9 @@ namespace TextureSwapper.Services
                 ClearCodeCacheJs(rootDir);
             }
 
+            RestoreGarageFeatureHooks(cacheRootPath);
+            RestoreBattleFeatureHooks(cacheRootPath);
+            RestoreChatTranslatorHooks(cacheRootPath);
             SyncRepairCooldown(cacheRootPath, enabled: false);
 
             return (true, null);
@@ -2194,15 +2488,29 @@ namespace TextureSwapper.Services
 
         private static string StripShadersBlock(string jsText, out string? extractedBlock)
         {
-            return StripMarkerBlock(jsText, ShadersStartMarker, ShadersEndMarker, out extractedBlock);
+            return StripMarkerBlock(
+                jsText,
+                ShadersStartMarker,
+                ShadersEndMarker,
+                out extractedBlock
+            );
         }
 
         private static string StripSkinAnimBlock(string jsText, out string? extractedBlock)
         {
-            return StripMarkerBlock(jsText, SkinAnimStartMarker, SkinAnimEndMarker, out extractedBlock);
+            return StripMarkerBlock(
+                jsText,
+                SkinAnimStartMarker,
+                SkinAnimEndMarker,
+                out extractedBlock
+            );
         }
 
-        private void SyncRepairCooldown(string cacheRootPath, bool enabled)
+        private void SyncRepairCooldown(
+            string cacheRootPath,
+            bool enabled,
+            List<BundlePatchDiagnostic>? diagnostics = null
+        )
         {
             if (!TryResolveProTankiRoot(cacheRootPath, out string rootDir))
             {
@@ -2215,22 +2523,53 @@ namespace TextureSwapper.Services
                 return;
             }
 
-            _ = EnsureCacheDataBundlesIndexed(cacheDataDir);
-            List<string> hudPaths = [.. _bundleIndexCache
-                .Where(kv => kv.Value.IsHud && File.Exists(kv.Key))
-                .Select(kv => kv.Key)];
-            if (hudPaths.Count == 0)
+            try
             {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                Log.Warning(ex, "Repair cooldown sync skipped due to cache lock.");
+                diagnostics?.Add(
+                    new BundlePatchDiagnostic
+                    {
+                        FileName = "(hud)",
+                        BundleKind = "HUD",
+                        Feature = "RepairCooldown",
+                        Status = "Failed",
+                        Reason = ex.Message,
+                    }
+                );
                 return;
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            _ = EnsureCacheDataBundlesIndexed(cacheDataDir);
+            List<string> hudPaths =
+            [
+                .. _bundleIndexCache
+                    .Where(kv => kv.Value.IsHud && File.Exists(kv.Key))
+                    .Select(kv => kv.Key),
+            ];
+            if (hudPaths.Count == 0)
+            {
+                if (enabled)
+                {
+                    diagnostics?.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = "(none)",
+                            BundleKind = "HUD",
+                            Feature = "RepairCooldown",
+                            Status = "Skipped",
+                            Reason = "HUD inventory bundle not found in cache.",
+                            MissingSignatures = ["app-inventory-panel", "cooldownStartTime"],
+                        }
+                    );
+                }
+                return;
+            }
+
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
             bool anyModified = false;
 
             foreach (string hudPath in hudPaths)
@@ -2240,12 +2579,27 @@ namespace TextureSwapper.Services
                     continue;
                 }
 
-                bool hasCurrentPatch = jsText.Contains(RepairCooldownMarker, StringComparison.Ordinal);
+                string fileName = Path.GetFileName(hudPath);
+                string fingerprint = ComputeBuildFingerprint(jsText);
+                bool hasCurrentPatch = jsText.Contains(
+                    RepairCooldownMarker,
+                    StringComparison.Ordinal
+                );
                 bool hasLegacyPatch =
                     jsText.Contains(LegacyRepairCooldownMarkerV2, StringComparison.Ordinal)
                     || jsText.Contains(LegacyRepairCooldownMarkerV1, StringComparison.Ordinal);
                 if (enabled && hasCurrentPatch)
                 {
+                    diagnostics?.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = fileName,
+                            BundleKind = "HUD",
+                            Feature = "RepairCooldown",
+                            Status = "AlreadyPatched",
+                            BuildFingerprint = fingerprint,
+                        }
+                    );
                     continue;
                 }
                 if (!enabled && !hasCurrentPatch && !hasLegacyPatch)
@@ -2259,16 +2613,30 @@ namespace TextureSwapper.Services
                     : jsText;
                 if (hasLegacyPatch && !migrated)
                 {
-                    Log.Warning("Could not migrate legacy repair cooldown patch in HTML5 HUD bundle {File}", Path.GetFileName(hudPath));
+                    Log.Warning(
+                        "Could not migrate legacy repair cooldown patch in HTML5 HUD bundle {File}",
+                        fileName
+                    );
+                    diagnostics?.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = fileName,
+                            BundleKind = "HUD",
+                            Feature = "RepairCooldown",
+                            Status = "Skipped",
+                            BuildFingerprint = fingerprint,
+                            Reason = "Legacy repair cooldown patch migration failed.",
+                        }
+                    );
                     continue;
                 }
 
+                List<string> missingSigs = [];
                 bool applied = false;
-                string patchedJs = enabled
-                    ? ApplyRepairCooldownPatch(sourceJs, out applied)
-                    : hasCurrentPatch
-                        ? RemoveRepairCooldownPatch(sourceJs, out applied)
-                        : sourceJs;
+                string patchedJs =
+                    enabled ? ApplyRepairCooldownPatch(sourceJs, out applied, missingSigs)
+                    : hasCurrentPatch ? RemoveRepairCooldownPatch(sourceJs, out applied)
+                    : sourceJs;
                 if (!enabled && hasLegacyPatch)
                 {
                     applied = true;
@@ -2278,7 +2646,19 @@ namespace TextureSwapper.Services
                     Log.Warning(
                         "Could not safely {Action} repair cooldown patch in HTML5 HUD bundle {File}",
                         enabled ? "apply" : "remove",
-                        Path.GetFileName(hudPath)
+                        fileName
+                    );
+                    diagnostics?.Add(
+                        new BundlePatchDiagnostic
+                        {
+                            FileName = fileName,
+                            BundleKind = "HUD",
+                            Feature = "RepairCooldown",
+                            Status = "Skipped",
+                            BuildFingerprint = fingerprint,
+                            Reason = "Repair cooldown signatures did not match.",
+                            MissingSignatures = missingSigs,
+                        }
                     );
                     continue;
                 }
@@ -2287,7 +2667,6 @@ namespace TextureSwapper.Services
                     continue;
                 }
 
-                string fileName = Path.GetFileName(hudPath);
                 WritePatchedZstdBundle(
                     cacheDataDir,
                     originalsCacheDataDir,
@@ -2295,9 +2674,22 @@ namespace TextureSwapper.Services
                     fileName,
                     rawBytes,
                     rawBytes.Length,
-                    patchedJs
+                    patchedJs,
+                    saveBackup: enabled && !hasLegacyPatch,
+                    patchName: "RepairCooldown",
+                    cleanOriginalJsForFingerprint: sourceJs
                 );
                 anyModified = true;
+                diagnostics?.Add(
+                    new BundlePatchDiagnostic
+                    {
+                        FileName = fileName,
+                        BundleKind = "HUD",
+                        Feature = "RepairCooldown",
+                        Status = "Patched",
+                        BuildFingerprint = fingerprint,
+                    }
+                );
                 Log.Information(
                     "{Action} repair cooldown persistence in HTML5 HUD bundle {File}.",
                     enabled ? "Applied" : "Removed",
@@ -2345,11 +2737,12 @@ namespace TextureSwapper.Services
         private static string RestoreLegacyRepairCooldownPatch(string jsText, out bool restored)
         {
             restored = false;
-            string? marker = jsText.StartsWith(LegacyRepairCooldownMarkerV2, StringComparison.Ordinal)
-                ? LegacyRepairCooldownMarkerV2
+            string? marker =
+                jsText.StartsWith(LegacyRepairCooldownMarkerV2, StringComparison.Ordinal)
+                    ? LegacyRepairCooldownMarkerV2
                 : jsText.StartsWith(LegacyRepairCooldownMarkerV1, StringComparison.Ordinal)
                     ? LegacyRepairCooldownMarkerV1
-                    : null;
+                : null;
             if (marker == null)
             {
                 return jsText;
@@ -2364,7 +2757,8 @@ namespace TextureSwapper.Services
 
             body = PatchedRepairLockedGuardRegex.Replace(
                 body,
-                m => $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value}))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
+                m =>
+                    $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value}))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
                 1
             );
 
@@ -2372,7 +2766,8 @@ namespace TextureSwapper.Services
             {
                 body = LegacyRepairFullHealthStateV2Regex.Replace(
                     body,
-                    m => $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
+                    m =>
+                        $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
                     1
                 );
                 restored = true;
@@ -2384,7 +2779,8 @@ namespace TextureSwapper.Services
                 const string lIPlaceholder = "lI";
                 body = LegacyRepairFullHealthStateRegex.Replace(
                     body,
-                    m => $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{guardMatch.Groups["lI"].Value ?? lIPlaceholder}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
+                    m =>
+                        $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{guardMatch.Groups["lI"].Value ?? lIPlaceholder}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
                     1
                 );
                 restored = true;
@@ -2394,7 +2790,11 @@ namespace TextureSwapper.Services
             return jsText;
         }
 
-        private static string ApplyRepairCooldownPatch(string jsText, out bool applied)
+        private static string ApplyRepairCooldownPatch(
+            string jsText,
+            out bool applied,
+            List<string>? missingSignatures = null
+        )
         {
             applied = false;
             if (jsText.Contains(RepairCooldownMarker, StringComparison.Ordinal))
@@ -2404,6 +2804,7 @@ namespace TextureSwapper.Services
 
             if (!jsText.Contains("app-inventory-panel", StringComparison.Ordinal))
             {
+                missingSignatures?.Add("app-inventory-panel");
                 return jsText;
             }
 
@@ -2411,17 +2812,27 @@ namespace TextureSwapper.Services
             MatchCollection stateMatches = RepairFullHealthStateRegex.Matches(jsText);
             if (guardMatches.Count != 1 || stateMatches.Count != 1)
             {
+                if (guardMatches.Count != 1)
+                {
+                    missingSignatures?.Add($"RepairLockedGuard(matches={guardMatches.Count})");
+                }
+                if (stateMatches.Count != 1)
+                {
+                    missingSignatures?.Add($"RepairFullHealthState(matches={stateMatches.Count})");
+                }
                 return jsText;
             }
 
             string patched = RepairLockedGuardRegex.Replace(
                 jsText,
-                m => $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value})&&!({m.Groups["slot"].Value}['item']['id']===0x1&&({m.Groups["slot"].Value}['lockBits']&0x2)!==0&&({m.Groups["slot"].Value}['lockBits']&0x1)===0&&({m.Groups["slot"].Value}['item']['cooldownStartTime']??-0x1)>=0x0))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
+                m =>
+                    $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value})&&!({m.Groups["slot"].Value}['item']['id']===0x1&&({m.Groups["slot"].Value}['lockBits']&0x2)!==0&&({m.Groups["slot"].Value}['lockBits']&0x1)===0&&({m.Groups["slot"].Value}['item']['cooldownStartTime']??-0x1)>=0x0))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
                 1
             );
             patched = RepairFullHealthStateRegex.Replace(
                 patched,
-                m => $"return {m.Groups["full"].Value}?({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0&&{m.Groups["slot"].Value}['item']['cooldownTime']>0x0&&(performance['now']()-{m.Groups["slot"].Value}['item']['cooldownStartTime'])<{m.Groups["slot"].Value}['item']['cooldownTime']?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{{'cooldownVisible':!![],'cooldownStatus':Math['max'](0x0,Math['min'](0x1,(performance['now']()-{m.Groups["slot"].Value}['item']['cooldownStartTime'])/{m.Groups["slot"].Value}['item']['cooldownTime']))}}):{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
+                m =>
+                    $"return {m.Groups["full"].Value}?({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0&&{m.Groups["slot"].Value}['item']['cooldownTime']>0x0&&(performance['now']()-{m.Groups["slot"].Value}['item']['cooldownStartTime'])<{m.Groups["slot"].Value}['item']['cooldownTime']?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{{'cooldownVisible':!![],'cooldownStatus':Math['max'](0x0,Math['min'](0x1,(performance['now']()-{m.Groups["slot"].Value}['item']['cooldownStartTime'])/{m.Groups["slot"].Value}['item']['cooldownTime']))}}):{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
                 1
             );
             patched = patched.Insert(0, RepairCooldownMarker);
@@ -2432,12 +2843,16 @@ namespace TextureSwapper.Services
         private static string RemoveRepairCooldownPatch(string jsText, out bool removed)
         {
             removed = false;
-            if (!jsText.StartsWith(RepairCooldownMarker, StringComparison.Ordinal))
+            if (!jsText.Contains(RepairCooldownMarker, StringComparison.Ordinal))
             {
                 return jsText;
             }
 
-            string body = jsText[RepairCooldownMarker.Length..];
+            string body = jsText.Replace(
+                RepairCooldownMarker,
+                string.Empty,
+                StringComparison.Ordinal
+            );
             if (
                 PatchedRepairLockedGuardRegex.Matches(body).Count != 1
                 || PatchedRepairFullHealthStateRegex.Matches(body).Count != 1
@@ -2448,12 +2863,14 @@ namespace TextureSwapper.Services
 
             string restored = PatchedRepairLockedGuardRegex.Replace(
                 body,
-                m => $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value}))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
+                m =>
+                    $"if({m.Groups["mf"].Value}({m.Groups["slot"].Value}))return {m.Groups["assign"].Value}({m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value})",
                 1
             );
             restored = PatchedRepairFullHealthStateRegex.Replace(
                 restored,
-                m => $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
+                m =>
+                    $"return {m.Groups["full"].Value}?{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["lI"].Value}):{m.Groups["mf"].Value}({m.Groups["slot"].Value})||({m.Groups["slot"].Value}['item']?.['cooldownStartTime']??-0x1)>=0x0?{m.Groups["slot"].Value}:{m.Groups["merge"].Value}({m.Groups["merge"].Value}({{}},{m.Groups["slot"].Value}),{m.Groups["qd"].Value});",
                 1
             );
             removed = true;
@@ -2510,19 +2927,25 @@ namespace TextureSwapper.Services
                 return (false, "HTML5 Cache_Data directory not found.");
             }
 
+            try
+            {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                return (false, ex.Message);
+            }
+
             string? animBlock = LoadSkinAnimScriptPayload(toggleHotkey, out _);
             if (string.IsNullOrEmpty(animBlock))
             {
-                return (false, "Skin animations script asset (Assets/Animations/protanki_skin_animations.js) not found.");
+                return (
+                    false,
+                    "Skin animations script asset (Scripts/protanki_skin_animations.js) not found."
+                );
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
 
             bool foundCoreBundle = false;
             bool anyModified = false;
@@ -2555,22 +2978,29 @@ namespace TextureSwapper.Services
                 }
 
                 string patchedJs = animBlock + cleanJs;
-                WritePatchedZstdBundle(
-                    cacheDataDir,
-                    originalsCacheDataDir,
-                    filePath,
-                    fileName,
-                    backupRawBytes,
-                    rawBytes.Length,
-                    patchedJs,
-                    saveBackup: !cleanJs.Contains("__tsAnimPaint", StringComparison.Ordinal)
-                        && !cleanJs.Contains(ShadersStartMarker, StringComparison.Ordinal)
-                );
+                try
+                {
+                    WritePatchedZstdBundle(
+                        cacheDataDir,
+                        originalsCacheDataDir,
+                        filePath,
+                        fileName,
+                        backupRawBytes,
+                        rawBytes.Length,
+                        patchedJs,
+                        saveBackup: !cleanJs.Contains("__tsAnimPaint", StringComparison.Ordinal)
+                            && !cleanJs.Contains(ShotLightCoreMarker, StringComparison.Ordinal)
+                            && !cleanJs.Contains(ShadersStartMarker, StringComparison.Ordinal),
+                        patchName: "SkinAnimations",
+                        cleanOriginalJsForFingerprint: cleanJs
+                    );
+                }
+                catch (IOException ex)
+                {
+                    return (false, ex.Message);
+                }
                 anyModified = true;
-                Log.Information(
-                    "Applied ProTanki Pack to cached bundle {File}.",
-                    fileName
-                );
+                Log.Information("Applied ProTanki Pack to cached bundle {File}.", fileName);
             }
 
             if (anyModified)
@@ -2589,7 +3019,9 @@ namespace TextureSwapper.Services
             return (true, null);
         }
 
-        public (bool Success, string? ErrorMessage) RestoreDefaultSkinAnimations(string cacheRootPath)
+        public (bool Success, string? ErrorMessage) RestoreDefaultSkinAnimations(
+            string cacheRootPath
+        )
         {
             if (!TryResolveProTankiRoot(cacheRootPath, out string rootDir))
             {
@@ -2602,13 +3034,16 @@ namespace TextureSwapper.Services
                 return (true, null);
             }
 
-            string originalsCacheDataDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Backups",
-                "Html5",
-                "Originals",
-                "Cache_Data"
-            );
+            try
+            {
+                EnsureCacheUnlocked(cacheDataDir);
+            }
+            catch (IOException ex)
+            {
+                return (false, ex.Message);
+            }
+
+            string originalsCacheDataDir = GetOriginalsCacheDataDir();
 
             bool anyModified = false;
 
@@ -2628,48 +3063,64 @@ namespace TextureSwapper.Services
                 string strippedJs = StripSkinAnimBlock(jsText, out _);
                 bool hasAnimPaint = strippedJs.Contains("__tsAnimPaint", StringComparison.Ordinal);
                 bool hasShaders = strippedJs.Contains(ShadersStartMarker, StringComparison.Ordinal);
+                bool hasShotLight = strippedJs.Contains(
+                    ShotLightCoreMarker,
+                    StringComparison.Ordinal
+                );
 
                 string backupFile = Path.Combine(originalsCacheDataDir, fileName);
                 bool restoredFromBackup = false;
 
-                if (!hasAnimPaint && !hasShaders && File.Exists(backupFile))
+                if (!hasAnimPaint && !hasShaders && !hasShotLight && File.Exists(backupFile))
                 {
                     try
                     {
-                        if (
-                            TryReadZstdBundle(backupFile, out byte[] backupBytes, out string backupJs)
-                            && backupJs.Contains("TankPaintMaterial", StringComparison.Ordinal)
-                            && !backupJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal)
-                        )
-                        {
-                            string data1Path = Path.Combine(cacheDataDir, "data_1");
-                            if (backupBytes.Length != rawBytes.Length && File.Exists(data1Path))
-                            {
-                                UpdateData1FileSize(data1Path, fileName, backupBytes.Length);
-                            }
-
-                            File.Copy(backupFile, filePath, overwrite: true);
-                            restoredFromBackup = true;
-                        }
+                        restoredFromBackup = TryRestoreVerifiedBackupAtomic(
+                            cacheDataDir,
+                            originalsCacheDataDir,
+                            filePath,
+                            fileName,
+                            rawBytes.Length,
+                            backupFile,
+                            out _,
+                            backupJs =>
+                                backupJs.Contains("TankPaintMaterial", StringComparison.Ordinal)
+                                && !backupJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal)
+                        );
+                    }
+                    catch (IOException ex)
+                    {
+                        return (false, ex.Message);
                     }
                     catch { }
                 }
 
                 if (!restoredFromBackup)
                 {
-                    WritePatchedZstdBundle(
-                        cacheDataDir,
-                        originalsCacheDataDir,
-                        filePath,
-                        fileName,
-                        rawBytes,
-                        rawBytes.Length,
-                        strippedJs
-                    );
+                    try
+                    {
+                        WritePatchedZstdBundle(
+                            cacheDataDir,
+                            originalsCacheDataDir,
+                            filePath,
+                            fileName,
+                            rawBytes,
+                            rawBytes.Length,
+                            strippedJs,
+                            saveBackup: false
+                        );
+                    }
+                    catch (IOException ex)
+                    {
+                        return (false, ex.Message);
+                    }
                 }
 
                 anyModified = true;
-                Log.Information("Removed HTML5 Skin Animations from cached bundle {File}.", fileName);
+                Log.Information(
+                    "Removed HTML5 Skin Animations from cached bundle {File}.",
+                    fileName
+                );
             }
 
             if (anyModified)
@@ -2685,8 +3136,7 @@ namespace TextureSwapper.Services
             hashMarker = string.Empty;
             string scriptPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
-                "Assets",
-                "Animations",
+                "Scripts",
                 "protanki_skin_animations.js"
             );
             if (!File.Exists(scriptPath))
@@ -2701,7 +3151,8 @@ namespace TextureSwapper.Services
             string script = File.ReadAllText(scriptPath, Encoding.UTF8)
                 .Replace("__TS_SKIN_ANIM_HOTKEY__", safeKeyToken, StringComparison.Ordinal);
 
-            hashMarker = $"{SkinAnimHashMarkerPrefix}{ComputeShortHash(script)}{SkinAnimHashMarkerSuffix}";
+            hashMarker =
+                $"{SkinAnimHashMarkerPrefix}{ComputeShortHash(script)}{SkinAnimHashMarkerSuffix}";
             return $"{SkinAnimStartMarker}\n{hashMarker}\n{script}\n{SkinAnimEndMarker}\n";
         }
 
@@ -2775,8 +3226,10 @@ namespace TextureSwapper.Services
             bool needsShadersUpdate =
                 expectedShadersHash != null
                 && coreJs != null
-                && (!coreJs.Contains(expectedShadersHash, StringComparison.Ordinal)
-                    || coreJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal));
+                && (
+                    !coreJs.Contains(expectedShadersHash, StringComparison.Ordinal)
+                    || coreJs.Contains(SkinAnimStartMarker, StringComparison.Ordinal)
+                );
 
             bool needsSkinAnimUpdate =
                 !shadersEnabled
@@ -2818,6 +3271,7 @@ namespace TextureSwapper.Services
             }
 
             SyncRepairCooldown(cacheRootPath, shadersEnabled);
+            SyncShotDynamicLighting(cacheRootPath);
         }
 
         private string GetPackIpcToken()
@@ -2826,6 +3280,12 @@ namespace TextureSwapper.Services
                 settingsService
                 ?? App.ServiceProvider?.GetService(typeof(ISettingsService)) as ISettingsService;
             return svc?.Load().PackIpcToken ?? string.Empty;
+        }
+
+        private static string LoadScriptModule(string fileName)
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts", fileName);
+            return File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : string.Empty;
         }
 
         private string? LoadShaderScriptPayload(string toggleHotkey)
@@ -2838,8 +3298,7 @@ namespace TextureSwapper.Services
             hashMarker = string.Empty;
             string scriptPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
-                "Assets",
-                "Pack",
+                "Scripts",
                 "protanki_pack.js"
             );
             if (!File.Exists(scriptPath))
@@ -2855,8 +3314,7 @@ namespace TextureSwapper.Services
             string animModuleJs = string.Empty;
             string animPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
-                "Assets",
-                "Animations",
+                "Scripts",
                 "protanki_skin_animations.js"
             );
             if (File.Exists(animPath))
@@ -2866,10 +3324,38 @@ namespace TextureSwapper.Services
 
             string script = File.ReadAllText(scriptPath, Encoding.UTF8)
                 .Replace("/*__TS_SKIN_ANIM_MODULE__*/", animModuleJs, StringComparison.Ordinal)
+                .Replace(
+                    "/*__TS_COMBO_MGR_MODULE__*/",
+                    LoadScriptModule("ComboManager.js"),
+                    StringComparison.Ordinal
+                )
+                .Replace(
+                    "/*__TS_FAV_PAINTS_MODULE__*/",
+                    LoadScriptModule("FavoritePaints.js"),
+                    StringComparison.Ordinal
+                )
+                .Replace(
+                    "/*__TS_SUPPLY_TIMERS_MODULE__*/",
+                    ChatService.IsAdminDevice ? LoadScriptModule("SupplyTimers.js") : string.Empty,
+                    StringComparison.Ordinal
+                )
+                .Replace(
+                    "/*__TS_BATTLE_HISTORY_MODULE__*/",
+                    ChatService.IsAdminDevice ? LoadScriptModule("BattleHistory.js") : string.Empty,
+                    StringComparison.Ordinal
+                )
+                .Replace(
+                    "/*__TS_CHAT_TRANSLATOR_MODULE__*/",
+                    ChatService.IsAdminDevice
+                        ? LoadScriptModule("ChatTranslator.js")
+                        : string.Empty,
+                    StringComparison.Ordinal
+                )
                 .Replace("__TS_SHADER_HOTKEY__", safeKeyToken, StringComparison.Ordinal)
                 .Replace("__TS_IPC_TOKEN__", safeIpcToken, StringComparison.Ordinal);
 
-            hashMarker = $"{ShadersHashMarkerPrefix}{ComputeShortHash(script)}{ShadersHashMarkerSuffix}";
+            hashMarker =
+                $"{ShadersHashMarkerPrefix}{ComputeShortHash(script)}{ShadersHashMarkerSuffix}";
             return $"{ShadersStartMarker}\n{hashMarker}\n{script}\n{ShadersEndMarker}\n";
         }
 
@@ -2879,7 +3365,11 @@ namespace TextureSwapper.Services
             return compressor.Wrap(uncompressed).ToArray();
         }
 
-        private static bool TryReadZstdBundle(string filePath, out byte[] rawBytes, out string jsText)
+        private static bool TryReadZstdBundle(
+            string filePath,
+            out byte[] rawBytes,
+            out string jsText
+        )
         {
             rawBytes = [];
             jsText = string.Empty;
@@ -2892,7 +3382,12 @@ namespace TextureSwapper.Services
 
             try
             {
-                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using FileStream fs = new(
+                    filePath,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.ReadWrite
+                );
                 if (fs.Length < 4)
                 {
                     return false;
@@ -2918,6 +3413,534 @@ namespace TextureSwapper.Services
             }
         }
 
+        private static string GetOriginalsCacheDataDir() =>
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Backups",
+                "Html5",
+                "Originals",
+                "Cache_Data"
+            );
+
+        private static string GetPatchReportPath() =>
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Backups",
+                "Html5",
+                LastPatchReportFileName
+            );
+
+        internal static string ComputeCacheIdentityHash(string cacheDataDir)
+        {
+            string normalized = Path.GetFullPath(cacheDataDir)
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                .ToUpperInvariant();
+            byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(normalized));
+            return Convert.ToHexString(hash, 0, 8).ToLowerInvariant();
+        }
+
+        internal static string ComputeSha256Hex(byte[] data)
+        {
+            return Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
+        }
+
+        internal static string ComputeBuildFingerprint(string cleanJs)
+        {
+            byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(cleanJs));
+            return Convert.ToHexString(hash, 0, 6).ToLowerInvariant();
+        }
+
+        internal static void EnsureCacheUnlocked(string cacheDataDir, string? targetFilePath = null)
+        {
+            if (
+                TryResolveProTankiRoot(cacheDataDir, out string rootDir)
+                && FileHelper.IsCacheFileLocked(rootDir)
+            )
+            {
+                throw new IOException(
+                    "ProTanki client is running or cache files are locked. Close ProTanki before patching."
+                );
+            }
+
+            if (FileHelper.IsCacheFileLocked(cacheDataDir))
+            {
+                throw new IOException(
+                    "HTML5 Cache_Data directory is locked. Close ProTanki before patching."
+                );
+            }
+
+            if (
+                !string.IsNullOrEmpty(targetFilePath)
+                && File.Exists(targetFilePath)
+                && FileHelper.IsFileLocked(targetFilePath)
+            )
+            {
+                throw new IOException(
+                    $"Cache bundle '{Path.GetFileName(targetFilePath)}' is currently locked by another process."
+                );
+            }
+
+            string data1Path = Path.Combine(cacheDataDir, "data_1");
+            if (File.Exists(data1Path) && FileHelper.IsFileLocked(data1Path))
+            {
+                throw new IOException(
+                    "Cache index 'data_1' is currently locked by another process."
+                );
+            }
+        }
+
+        private static void WriteFileFlushed(string path, byte[] bytes)
+        {
+            using FileStream fs = new(
+                path,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                65536,
+                FileOptions.WriteThrough
+            );
+            fs.Write(bytes, 0, bytes.Length);
+            fs.Flush(flushToDisk: true);
+        }
+
+        internal static void WriteAllBytesAtomic(string targetPath, byte[] bytes)
+        {
+            string? dir = Path.GetDirectoryName(targetPath);
+            if (!string.IsNullOrEmpty(dir))
+            {
+                _ = Directory.CreateDirectory(dir);
+            }
+
+            string tempPath = $"{targetPath}.ts.tmp.{Guid.NewGuid():N}";
+            try
+            {
+                WriteFileFlushed(tempPath, bytes);
+                File.Move(tempPath, targetPath, overwrite: true);
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(tempPath))
+                    {
+                        File.Delete(tempPath);
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private static CacheBackupManifest LoadBackupManifestLocked(string originalsCacheDataDir)
+        {
+            string manifestPath = Path.Combine(originalsCacheDataDir, BackupManifestFileName);
+            if (!File.Exists(manifestPath))
+            {
+                return new CacheBackupManifest();
+            }
+
+            try
+            {
+                string json = File.ReadAllText(manifestPath, Encoding.UTF8);
+                CacheBackupManifest? manifest = JsonSerializer.Deserialize<CacheBackupManifest>(
+                    json,
+                    DiagnosticJsonOptions
+                );
+                if (manifest != null)
+                {
+                    manifest.Entries = new Dictionary<string, CacheBackupEntry>(
+                        manifest.Entries ?? [],
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                    return manifest;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(
+                    ex,
+                    "Could not parse backup manifest at {Path}; recreating manifest.",
+                    manifestPath
+                );
+            }
+
+            return new CacheBackupManifest();
+        }
+
+        internal static void SaveBackupAndManifest(
+            string originalsCacheDataDir,
+            string cacheDataDir,
+            string fileName,
+            byte[] origRawBytes,
+            string patchName,
+            string? cleanOriginalJsForFingerprint = null,
+            bool overwriteExistingBackup = false
+        )
+        {
+            _ = Directory.CreateDirectory(originalsCacheDataDir);
+            string backupFile = Path.Combine(originalsCacheDataDir, fileName);
+            if (!File.Exists(backupFile) || overwriteExistingBackup)
+            {
+                WriteAllBytesAtomic(backupFile, origRawBytes);
+            }
+
+            string data1Backup = Path.Combine(originalsCacheDataDir, "data_1");
+            string data1Src = Path.Combine(cacheDataDir, "data_1");
+            if (File.Exists(data1Src) && !File.Exists(data1Backup))
+            {
+                WriteAllBytesAtomic(data1Backup, File.ReadAllBytes(data1Src));
+            }
+
+            byte[] manifestBackupBytes = File.Exists(backupFile)
+                ? File.ReadAllBytes(backupFile)
+                : origRawBytes;
+            string fingerprintJs = cleanOriginalJsForFingerprint ?? string.Empty;
+            if (string.IsNullOrEmpty(fingerprintJs))
+            {
+                try
+                {
+                    fingerprintJs = Encoding.UTF8.GetString(
+                        DecompressZstdStream(manifestBackupBytes)
+                    );
+                }
+                catch
+                {
+                    fingerprintJs = string.Empty;
+                }
+            }
+
+            lock (ManifestFileSync)
+            {
+                CacheBackupManifest manifest = LoadBackupManifestLocked(originalsCacheDataDir);
+                if (
+                    !manifest.Entries.TryGetValue(fileName, out CacheBackupEntry? entry)
+                    || overwriteExistingBackup
+                )
+                {
+                    entry = new CacheBackupEntry
+                    {
+                        FileName = fileName,
+                        CacheIdentityHash = ComputeCacheIdentityHash(cacheDataDir),
+                        OriginalSha256 = ComputeSha256Hex(manifestBackupBytes),
+                        OriginalSize = manifestBackupBytes.Length,
+                        BuildFingerprint = string.IsNullOrEmpty(fingerprintJs)
+                            ? string.Empty
+                            : ComputeBuildFingerprint(fingerprintJs),
+                        PatchSet = [],
+                        TimestampUtc = DateTime.UtcNow,
+                    };
+                    manifest.Entries[fileName] = entry;
+                }
+
+                if (
+                    !string.IsNullOrWhiteSpace(patchName)
+                    && !entry.PatchSet.Contains(patchName, StringComparer.OrdinalIgnoreCase)
+                )
+                {
+                    entry.PatchSet.Add(patchName);
+                }
+
+                string manifestPath = Path.Combine(originalsCacheDataDir, BackupManifestFileName);
+                WriteAllBytesAtomic(
+                    manifestPath,
+                    Encoding.UTF8.GetBytes(
+                        JsonSerializer.Serialize(manifest, DiagnosticJsonOptions)
+                    )
+                );
+            }
+        }
+
+        internal static bool TryVerifyBackupManifest(
+            string originalsCacheDataDir,
+            string cacheDataDir,
+            string fileName,
+            byte[] backupBytes,
+            out string reason
+        )
+        {
+            string manifestPath = Path.Combine(originalsCacheDataDir, BackupManifestFileName);
+            if (!File.Exists(manifestPath))
+            {
+                reason = "Missing backup manifest.json (legacy filename-only backup).";
+                return false;
+            }
+
+            lock (ManifestFileSync)
+            {
+                CacheBackupManifest manifest = LoadBackupManifestLocked(originalsCacheDataDir);
+                if (!manifest.Entries.TryGetValue(fileName, out CacheBackupEntry? entry))
+                {
+                    reason = $"Backup manifest has no entry for '{fileName}'.";
+                    return false;
+                }
+
+                string expectedIdentity = ComputeCacheIdentityHash(cacheDataDir);
+                if (
+                    !string.Equals(
+                        entry.CacheIdentityHash,
+                        expectedIdentity,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+                {
+                    reason =
+                        $"Backup cache identity '{entry.CacheIdentityHash}' does not match active cache '{expectedIdentity}'.";
+                    return false;
+                }
+
+                string actualSha = ComputeSha256Hex(backupBytes);
+                if (
+                    !string.Equals(
+                        entry.OriginalSha256,
+                        actualSha,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+                {
+                    reason = $"Backup SHA-256 mismatch for '{fileName}'.";
+                    return false;
+                }
+            }
+
+            reason = string.Empty;
+            return true;
+        }
+
+        internal static bool TryRestoreVerifiedBackupAtomic(
+            string cacheDataDir,
+            string originalsCacheDataDir,
+            string destPath,
+            string fileName,
+            int currentDiskSize,
+            string backupFile,
+            out string backupJs,
+            Func<string, bool>? validateBackupJs = null
+        )
+        {
+            backupJs = string.Empty;
+            if (!File.Exists(backupFile))
+            {
+                return false;
+            }
+
+            if (!TryReadZstdBundle(backupFile, out byte[] backupBytes, out backupJs))
+            {
+                return false;
+            }
+
+            if (validateBackupJs != null && !validateBackupJs(backupJs))
+            {
+                return false;
+            }
+
+            if (
+                !TryVerifyBackupManifest(
+                    originalsCacheDataDir,
+                    cacheDataDir,
+                    fileName,
+                    backupBytes,
+                    out string reason
+                )
+            )
+            {
+                Log.Warning(
+                    "Refusing unverified backup restore for {File}: {Reason} Falling back to marker stripping.",
+                    fileName,
+                    reason
+                );
+                return false;
+            }
+
+            EnsureCacheUnlocked(cacheDataDir, destPath);
+
+            string data1Path = Path.Combine(cacheDataDir, "data_1");
+            byte[]? prevTargetBytes = File.Exists(destPath) ? File.ReadAllBytes(destPath) : null;
+            byte[]? origData1 = null;
+            byte[]? updatedData1 = null;
+            bool updateData1 = backupBytes.Length != currentDiskSize && File.Exists(data1Path);
+            if (updateData1)
+            {
+                origData1 = File.ReadAllBytes(data1Path);
+                if (
+                    !TryComputeUpdatedData1Bytes(
+                        origData1,
+                        fileName,
+                        backupBytes.Length,
+                        out updatedData1
+                    )
+                )
+                {
+                    updateData1 = false;
+                }
+            }
+
+            string bundleTempPath = $"{destPath}.ts.tmp.{Guid.NewGuid():N}";
+            string? data1TempPath = updateData1 ? $"{data1Path}.ts.tmp.{Guid.NewGuid():N}" : null;
+
+            try
+            {
+                WriteFileFlushed(bundleTempPath, backupBytes);
+                if (updateData1 && data1TempPath != null && updatedData1 != null)
+                {
+                    WriteFileFlushed(data1TempPath, updatedData1);
+                }
+
+                File.Move(bundleTempPath, destPath, overwrite: true);
+                if (new FileInfo(destPath).Length != backupBytes.Length)
+                {
+                    throw new IOException(
+                        $"Restored bundle size verification failed for {fileName}."
+                    );
+                }
+
+                if (updateData1 && data1TempPath != null && updatedData1 != null)
+                {
+                    File.Move(data1TempPath, data1Path, overwrite: true);
+                    if (new FileInfo(data1Path).Length != updatedData1.Length)
+                    {
+                        throw new IOException(
+                            $"Restored data_1 size verification failed for {fileName}."
+                        );
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Atomic backup restore failed for {File}; rolling back.", fileName);
+                try
+                {
+                    if (prevTargetBytes != null)
+                    {
+                        WriteAllBytesAtomic(destPath, prevTargetBytes);
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (updateData1 && origData1 != null)
+                    {
+                        WriteAllBytesAtomic(data1Path, origData1);
+                    }
+                }
+                catch { }
+                throw;
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(bundleTempPath))
+                        File.Delete(bundleTempPath);
+                }
+                catch { }
+                try
+                {
+                    if (data1TempPath != null && File.Exists(data1TempPath))
+                        File.Delete(data1TempPath);
+                }
+                catch { }
+            }
+        }
+
+        internal void RecordAndSavePatchReport(
+            string cacheDataDir,
+            IReadOnlyList<BundlePatchDiagnostic> entries,
+            bool replaceAll = false
+        )
+        {
+            if (entries.Count == 0 && !replaceAll)
+            {
+                return;
+            }
+
+            string cacheIdentity = ComputeCacheIdentityHash(cacheDataDir);
+            string reportPath = GetPatchReportPath();
+
+            lock (ManifestFileSync)
+            {
+                PatchRunReport report = new()
+                {
+                    TimestampUtc = DateTime.UtcNow,
+                    CacheIdentityHash = cacheIdentity,
+                    Entries = [],
+                };
+
+                if (!replaceAll && File.Exists(reportPath))
+                {
+                    try
+                    {
+                        PatchRunReport? existing = JsonSerializer.Deserialize<PatchRunReport>(
+                            File.ReadAllText(reportPath, Encoding.UTF8),
+                            DiagnosticJsonOptions
+                        );
+                        if (
+                            existing != null
+                            && string.Equals(
+                                existing.CacheIdentityHash,
+                                cacheIdentity,
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        )
+                        {
+                            report.Entries.AddRange(existing.Entries);
+                        }
+                    }
+                    catch { }
+                }
+
+                foreach (BundlePatchDiagnostic item in entries)
+                {
+                    _ = report.Entries.RemoveAll(e =>
+                        string.Equals(e.FileName, item.FileName, StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(
+                            e.Feature,
+                            item.Feature,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                    report.Entries.Add(item);
+                }
+
+                LastPatchReport = report;
+                try
+                {
+                    WriteAllBytesAtomic(
+                        reportPath,
+                        Encoding.UTF8.GetBytes(
+                            JsonSerializer.Serialize(report, DiagnosticJsonOptions)
+                        )
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Could not persist HTML5 patch diagnostic report.");
+                }
+            }
+
+            foreach (BundlePatchDiagnostic item in entries)
+            {
+                if (
+                    string.Equals(item.Status, "Failed", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(item.Status, "Skipped", StringComparison.OrdinalIgnoreCase)
+                )
+                {
+                    Log.Warning(
+                        "HTML5 patch diagnostic [{Feature}] on {File} ({Kind}, build {Fingerprint}): {Status} - {Reason} (missing: {Missing})",
+                        item.Feature,
+                        item.FileName,
+                        item.BundleKind,
+                        item.BuildFingerprint,
+                        item.Status,
+                        item.Reason ?? "n/a",
+                        item.MissingSignatures.Count > 0
+                            ? string.Join(", ", item.MissingSignatures)
+                            : "none"
+                    );
+                }
+            }
+        }
+
         private static void WritePatchedZstdBundle(
             string cacheDataDir,
             string originalsCacheDataDir,
@@ -2926,37 +3949,123 @@ namespace TextureSwapper.Services
             byte[] origRawBytes,
             int currentDiskSize,
             string patchedJs,
-            bool saveBackup = true
+            bool saveBackup = true,
+            string patchName = "unknown",
+            string? cleanOriginalJsForFingerprint = null
         )
         {
+            EnsureCacheUnlocked(cacheDataDir, filePath);
+
+            byte[] patchedUtf8 = Encoding.UTF8.GetBytes(patchedJs);
+            byte[] recompressed = CompressZstdForCache(
+                patchedUtf8,
+                currentDiskSize,
+                out bool exactSizeMatched
+            );
+
+            _ = DecompressZstdStream(recompressed);
+
             if (saveBackup)
             {
-                _ = Directory.CreateDirectory(originalsCacheDataDir);
-                string backupFile = Path.Combine(originalsCacheDataDir, fileName);
-                if (!File.Exists(backupFile))
-                {
-                    File.WriteAllBytes(backupFile, origRawBytes);
-                }
-
-                string data1Backup = Path.Combine(originalsCacheDataDir, "data_1");
-                string data1Src = Path.Combine(cacheDataDir, "data_1");
-                if (File.Exists(data1Src) && !File.Exists(data1Backup))
-                {
-                    File.Copy(data1Src, data1Backup, overwrite: false);
-                }
+                SaveBackupAndManifest(
+                    originalsCacheDataDir,
+                    cacheDataDir,
+                    fileName,
+                    origRawBytes,
+                    patchName,
+                    cleanOriginalJsForFingerprint
+                );
             }
 
             string data1Path = Path.Combine(cacheDataDir, "data_1");
-
-            byte[] patchedUtf8 = Encoding.UTF8.GetBytes(patchedJs);
-            byte[] recompressed = CompressZstdForCache(patchedUtf8, currentDiskSize, out bool exactSizeMatched);
-
-            if ((!exactSizeMatched || recompressed.Length != currentDiskSize) && File.Exists(data1Path))
+            byte[]? prevTargetBytes = File.Exists(filePath) ? File.ReadAllBytes(filePath) : null;
+            byte[]? origData1 = null;
+            byte[]? updatedData1 = null;
+            bool updateData1 =
+                (!exactSizeMatched || recompressed.Length != currentDiskSize)
+                && File.Exists(data1Path);
+            if (updateData1)
             {
-                UpdateData1FileSize(data1Path, fileName, recompressed.Length);
+                origData1 = File.ReadAllBytes(data1Path);
+                if (
+                    !TryComputeUpdatedData1Bytes(
+                        origData1,
+                        fileName,
+                        recompressed.Length,
+                        out updatedData1
+                    )
+                )
+                {
+                    updateData1 = false;
+                }
             }
 
-            File.WriteAllBytes(filePath, recompressed);
+            string bundleTempPath = $"{filePath}.ts.tmp.{Guid.NewGuid():N}";
+            string? data1TempPath = updateData1 ? $"{data1Path}.ts.tmp.{Guid.NewGuid():N}" : null;
+
+            try
+            {
+                WriteFileFlushed(bundleTempPath, recompressed);
+                if (updateData1 && data1TempPath != null && updatedData1 != null)
+                {
+                    WriteFileFlushed(data1TempPath, updatedData1);
+                }
+
+                File.Move(bundleTempPath, filePath, overwrite: true);
+                if (new FileInfo(filePath).Length != recompressed.Length)
+                {
+                    throw new IOException(
+                        $"Patched bundle size verification failed for {fileName}."
+                    );
+                }
+
+                if (updateData1 && data1TempPath != null && updatedData1 != null)
+                {
+                    File.Move(data1TempPath, data1Path, overwrite: true);
+                    if (new FileInfo(data1Path).Length != updatedData1.Length)
+                    {
+                        throw new IOException(
+                            $"Updated data_1 size verification failed for {fileName}."
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Atomic bundle write failed for {File}; rolling back.", fileName);
+                try
+                {
+                    if (prevTargetBytes != null)
+                    {
+                        WriteAllBytesAtomic(filePath, prevTargetBytes);
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (updateData1 && origData1 != null)
+                    {
+                        WriteAllBytesAtomic(data1Path, origData1);
+                    }
+                }
+                catch { }
+                throw;
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(bundleTempPath))
+                        File.Delete(bundleTempPath);
+                }
+                catch { }
+                try
+                {
+                    if (data1TempPath != null && File.Exists(data1TempPath))
+                        File.Delete(data1TempPath);
+                }
+                catch { }
+            }
         }
 
         private static bool TryResolveProTankiRoot(string cacheRootPath, out string rootDir)
@@ -2967,7 +4076,9 @@ namespace TextureSwapper.Services
                 return false;
             }
 
-            string trimmed = cacheRootPath.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string trimmed = cacheRootPath
+                .Trim()
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             if (Directory.Exists(Path.Combine(trimmed, "Cache", "Cache_Data")))
             {
                 rootDir = trimmed;
@@ -2975,7 +4086,10 @@ namespace TextureSwapper.Services
             }
 
             string? parent = Directory.GetParent(trimmed)?.FullName;
-            if (!string.IsNullOrEmpty(parent) && Directory.Exists(Path.Combine(parent, "Cache", "Cache_Data")))
+            if (
+                !string.IsNullOrEmpty(parent)
+                && Directory.Exists(Path.Combine(parent, "Cache", "Cache_Data"))
+            )
             {
                 rootDir = parent;
                 return true;
@@ -2998,14 +4112,20 @@ namespace TextureSwapper.Services
                 totalRead += read;
                 if (totalRead > maxDecompressedBytes)
                 {
-                    throw new InvalidDataException("Zstd decompressed stream exceeds maximum allowed size.");
+                    throw new InvalidDataException(
+                        "Zstd decompressed stream exceeds maximum allowed size."
+                    );
                 }
                 output.Write(buffer, 0, read);
             }
             return output.ToArray();
         }
 
-        private static byte[] CompressZstdForCache(byte[] uncompressed, int targetSize, out bool exactSizeMatched)
+        private static byte[] CompressZstdForCache(
+            byte[] uncompressed,
+            int targetSize,
+            out bool exactSizeMatched
+        )
         {
             using Compressor compressor = new(9);
             byte[] compressed = compressor.Wrap(uncompressed).ToArray();
@@ -3021,8 +4141,14 @@ namespace TextureSwapper.Services
                 int padPayloadLen = targetSize - compressed.Length - 8;
                 byte[] padded = new byte[targetSize];
                 Buffer.BlockCopy(compressed, 0, padded, 0, compressed.Length);
-                BinaryPrimitives.WriteUInt32LittleEndian(padded.AsSpan(compressed.Length, 4), 0x184D2A50u);
-                BinaryPrimitives.WriteUInt32LittleEndian(padded.AsSpan(compressed.Length + 4, 4), (uint)padPayloadLen);
+                BinaryPrimitives.WriteUInt32LittleEndian(
+                    padded.AsSpan(compressed.Length, 4),
+                    0x184D2A50u
+                );
+                BinaryPrimitives.WriteUInt32LittleEndian(
+                    padded.AsSpan(compressed.Length + 4, 4),
+                    (uint)padPayloadLen
+                );
                 exactSizeMatched = true;
                 return padded;
             }
@@ -3031,38 +4157,62 @@ namespace TextureSwapper.Services
             return compressed;
         }
 
-        private static void UpdateData1FileSize(string data1Path, string fileName, int newSize)
+        private static bool TryComputeUpdatedData1Bytes(
+            byte[] origData,
+            string fileName,
+            int newSize,
+            out byte[] updatedData
+        )
         {
+            updatedData = [];
             if (!fileName.StartsWith("f_", StringComparison.OrdinalIgnoreCase))
             {
-                return;
+                return false;
             }
 
             if (!uint.TryParse(fileName.AsSpan(2), NumberStyles.HexNumber, null, out uint fileNum))
             {
-                return;
+                return false;
             }
 
             uint targetAddr = 0x80000000u | fileNum;
-            byte[] data = File.ReadAllBytes(data1Path);
             const int headerSize = 8192;
             const int blockSize = 256;
             const int entrySize = 96;
 
-            for (int off = headerSize; off + entrySize <= data.Length; off += blockSize)
+            for (int off = headerSize; off + entrySize <= origData.Length; off += blockSize)
             {
                 for (int stream = 0; stream < 4; stream++)
                 {
-                    uint addr = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(off + ((14 + stream) * 4), 4));
+                    uint addr = BinaryPrimitives.ReadUInt32LittleEndian(
+                        origData.AsSpan(off + ((14 + stream) * 4), 4)
+                    );
                     if (addr == targetAddr)
                     {
-                        BinaryPrimitives.WriteInt32LittleEndian(data.AsSpan(off + ((10 + stream) * 4), 4), newSize);
-                        uint hash = ComputeSuperFastHash(data.AsSpan(off, 92));
-                        BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(off + (23 * 4), 4), hash);
-                        File.WriteAllBytes(data1Path, data);
-                        return;
+                        updatedData = (byte[])origData.Clone();
+                        BinaryPrimitives.WriteInt32LittleEndian(
+                            updatedData.AsSpan(off + ((10 + stream) * 4), 4),
+                            newSize
+                        );
+                        uint hash = ComputeSuperFastHash(updatedData.AsSpan(off, 92));
+                        BinaryPrimitives.WriteUInt32LittleEndian(
+                            updatedData.AsSpan(off + (23 * 4), 4),
+                            hash
+                        );
+                        return true;
                     }
                 }
+            }
+
+            return false;
+        }
+
+        private static void UpdateData1FileSize(string data1Path, string fileName, int newSize)
+        {
+            byte[] data = File.ReadAllBytes(data1Path);
+            if (TryComputeUpdatedData1Bytes(data, fileName, newSize, out byte[] updatedData))
+            {
+                WriteAllBytesAtomic(data1Path, updatedData);
             }
         }
 
@@ -3081,7 +4231,9 @@ namespace TextureSwapper.Services
             for (; len > 0; len--)
             {
                 hash += BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(pos, 2));
-                uint tmp = (uint)(BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(pos + 2, 2)) << 11) ^ hash;
+                uint tmp =
+                    (uint)(BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(pos + 2, 2)) << 11)
+                    ^ hash;
                 hash = (hash << 16) ^ tmp;
                 hash += hash >> 11;
                 pos += 4;

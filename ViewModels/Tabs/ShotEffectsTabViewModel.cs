@@ -1,8 +1,8 @@
-using Serilog;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using Serilog;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Commands;
 using TextureSwapper.ViewModels.Base;
@@ -282,8 +282,10 @@ namespace TextureSwapper.ViewModels.Tabs
             }
 
             if (
-                (selectedEffect.IsPremium || !selectedEffect.Turret.Equals("Railgun", StringComparison.OrdinalIgnoreCase))
-                && !_mainVM.Settings.IsPremiumUnlocked
+                (
+                    selectedEffect.IsPremium
+                    || !selectedEffect.Turret.Equals("Railgun", StringComparison.OrdinalIgnoreCase)
+                ) && !_mainVM.Settings.IsPremiumUnlocked
             )
             {
                 await _mainVM.NotificationService.ShowAsync(

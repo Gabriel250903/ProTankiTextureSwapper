@@ -1,6 +1,6 @@
-using Serilog;
 using System.Security.Cryptography;
 using System.Text;
+using Serilog;
 
 namespace TextureSwapper.Helpers.Utilities
 {

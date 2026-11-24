@@ -4,19 +4,12 @@ namespace TextureSwapper.Core.Interfaces
 {
     public interface IHtml5CacheService
     {
-        bool TryResolveHtml5Paths(
-            string cacheRootPath,
-            out string levelDbDir,
-            out string blobDir
-        );
+        bool TryResolveHtml5Paths(string cacheRootPath, out string levelDbDir, out string blobDir);
         bool ResourceExists(string cacheRootPath, long resourceId);
+        IReadOnlyList<long> GetCachedResourceIds(string cacheRootPath);
         byte[]? ReadRawBntBytes(string cacheRootPath, long resourceId);
         List<TaraEntry>? ReadResourceEntries(string cacheRootPath, long resourceId);
-        bool WriteRawBntBytes(
-            string cacheRootPath,
-            long resourceId,
-            ReadOnlySpan<byte> bntBytes
-        );
+        bool WriteRawBntBytes(string cacheRootPath, long resourceId, ReadOnlySpan<byte> bntBytes);
         bool WriteResourceEntries(
             string cacheRootPath,
             long resourceId,
@@ -24,7 +17,9 @@ namespace TextureSwapper.Core.Interfaces
         );
         bool EnsureAnimatedPaintEnginePatched(string cacheRootPath);
         bool RestoreAnimatedPaintEngine(string cacheRootPath);
-        (bool ShadersEnabled, bool SkinAnimationsEnabled) GetAppliedScriptStatus(string cacheRootPath);
+        (bool ShadersEnabled, bool SkinAnimationsEnabled) GetAppliedScriptStatus(
+            string cacheRootPath
+        );
         bool IsShadersEnabled(string cacheRootPath);
         (bool Success, string? ErrorMessage) ApplyShaders(
             string cacheRootPath,
@@ -44,6 +39,7 @@ namespace TextureSwapper.Core.Interfaces
             bool skinAnimEnabled = false,
             string skinAnimHotkey = "F9"
         );
+        void SyncShotDynamicLighting(string cacheRootPath);
         void InvalidateCache();
     }
 }

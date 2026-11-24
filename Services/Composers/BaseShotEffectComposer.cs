@@ -1,10 +1,10 @@
-using Serilog;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Net.Http;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Models;
 using TextureSwapper.Helpers.Utilities;
@@ -156,6 +156,47 @@ namespace TextureSwapper.Services.Composers
             }
         }
 
+        private static void ComputeRecoloredRgb(
+            byte gray,
+            double pureR,
+            double pureG,
+            double pureB,
+            double brightnessOffset,
+            double contrast,
+            bool invert,
+            out byte r,
+            out byte g,
+            out byte b
+        )
+        {
+            double luminance = gray / 255.0;
+            if (invert)
+            {
+                luminance = 1.0 - luminance;
+            }
+
+            double lum = luminance + brightnessOffset;
+            lum = ((lum - 0.5) * contrast) + 0.5;
+            lum = Math.Clamp(lum, 0.0, 1.0);
+
+            double outR = pureR * lum;
+            double outG = pureG * lum;
+            double outB = pureB * lum;
+
+            if (lum > 0.85)
+            {
+                double core = (lum - 0.85) / 0.15;
+                core = core * core * 0.5;
+                outR += (1.0 - outR) * core;
+                outG += (1.0 - outG) * core;
+                outB += (1.0 - outB) * core;
+            }
+
+            r = (byte)Math.Clamp(outR * 255.0, 0, 255);
+            g = (byte)Math.Clamp(outG * 255.0, 0, 255);
+            b = (byte)Math.Clamp(outB * 255.0, 0, 255);
+        }
+
         protected static BitmapSource ColorizePreview(
             CachedTextureData grayData,
             CachedTextureData? alphaData,
@@ -167,11 +208,20 @@ namespace TextureSwapper.Services.Composers
             int previewStride = sheetWidth * 4;
             byte[] previewPixels = ArrayPool<byte>.Shared.Rent(sheetHeight * previewStride);
 
-            double hue = options.Hue;
-            double saturation = options.Saturation;
-            double brightness = options.Brightness;
+            double brightnessOffset = options.Brightness / 100.0;
             double contrast = options.Contrast;
-            double brightnessOffset = brightness / 100.0;
+
+            ColorHelper.HslToRgb(
+                options.Hue / 360.0,
+                options.Saturation / 100.0,
+                0.5,
+                out byte baseRed,
+                out byte baseGreen,
+                out byte baseBlue
+            );
+            double pureR = baseRed / 255.0;
+            double pureG = baseGreen / 255.0;
+            double pureB = baseBlue / 255.0;
 
             byte[] grayPixels = grayData.Pixels;
             byte[]? alphaPixels = alphaData?.Pixels;
@@ -196,36 +246,22 @@ namespace TextureSwapper.Services.Composers
                             continue;
                         }
 
-                        double luminance = gray / 255.0;
-                        if (options.Invert)
-                        {
-                            luminance = 1.0 - luminance;
-                        }
-
-                        ColorHelper.HslToRgb(
-                            hue / 360.0,
-                            saturation / 100.0,
-                            luminance,
-                            out byte rgbRed,
-                            out byte rgbGreen,
-                            out byte rgbBlue
+                        ComputeRecoloredRgb(
+                            gray,
+                            pureR,
+                            pureG,
+                            pureB,
+                            brightnessOffset,
+                            contrast,
+                            options.Invert,
+                            out byte r,
+                            out byte g,
+                            out byte b
                         );
 
-                        double r = rgbRed / 255.0;
-                        double g = rgbGreen / 255.0;
-                        double b = rgbBlue / 255.0;
-
-                        r += brightnessOffset;
-                        g += brightnessOffset;
-                        b += brightnessOffset;
-
-                        r = ((r - 0.5) * contrast) + 0.5;
-                        g = ((g - 0.5) * contrast) + 0.5;
-                        b = ((b - 0.5) * contrast) + 0.5;
-
-                        previewPixels[sheetOffset] = (byte)Math.Clamp(b * 255.0, 0, 255);
-                        previewPixels[sheetOffset + 1] = (byte)Math.Clamp(g * 255.0, 0, 255);
-                        previewPixels[sheetOffset + 2] = (byte)Math.Clamp(r * 255.0, 0, 255);
+                        previewPixels[sheetOffset] = b;
+                        previewPixels[sheetOffset + 1] = g;
+                        previewPixels[sheetOffset + 2] = r;
                         previewPixels[sheetOffset + 3] = alpha;
                     }
                 }
@@ -260,12 +296,21 @@ namespace TextureSwapper.Services.Composers
             byte[] outputPixels = ArrayPool<byte>.Shared.Rent(height * stride);
             byte[] templatePixels = grayData.Pixels;
 
-            double hue = options.Hue;
-            double saturation = options.Saturation;
-            double brightness = options.Brightness;
+            double brightnessOffset = options.Brightness / 100.0;
             double contrast = options.Contrast;
-            double brightnessOffset = brightness / 100.0;
             int totalPixels = width * height;
+
+            ColorHelper.HslToRgb(
+                options.Hue / 360.0,
+                options.Saturation / 100.0,
+                0.5,
+                out byte baseRed,
+                out byte baseGreen,
+                out byte baseBlue
+            );
+            double pureR = baseRed / 255.0;
+            double pureG = baseGreen / 255.0;
+            double pureB = baseBlue / 255.0;
 
             try
             {
@@ -276,43 +321,29 @@ namespace TextureSwapper.Services.Composers
 
                     if (gray == 0)
                     {
-                        outputPixels[pixelOffset] = 255;
-                        outputPixels[pixelOffset + 1] = 255;
-                        outputPixels[pixelOffset + 2] = 255;
+                        outputPixels[pixelOffset] = 0;
+                        outputPixels[pixelOffset + 1] = 0;
+                        outputPixels[pixelOffset + 2] = 0;
                         outputPixels[pixelOffset + 3] = 255;
                         continue;
                     }
 
-                    double luminance = gray / 255.0;
-                    if (options.Invert)
-                    {
-                        luminance = 1.0 - luminance;
-                    }
-
-                    ColorHelper.HslToRgb(
-                        hue / 360.0,
-                        saturation / 100.0,
-                        luminance,
-                        out byte rgbRed,
-                        out byte rgbGreen,
-                        out byte rgbBlue
+                    ComputeRecoloredRgb(
+                        gray,
+                        pureR,
+                        pureG,
+                        pureB,
+                        brightnessOffset,
+                        contrast,
+                        options.Invert,
+                        out byte r,
+                        out byte g,
+                        out byte b
                     );
 
-                    double r = rgbRed / 255.0;
-                    double g = rgbGreen / 255.0;
-                    double b = rgbBlue / 255.0;
-
-                    r += brightnessOffset;
-                    g += brightnessOffset;
-                    b += brightnessOffset;
-
-                    r = ((r - 0.5) * contrast) + 0.5;
-                    g = ((g - 0.5) * contrast) + 0.5;
-                    b = ((b - 0.5) * contrast) + 0.5;
-
-                    outputPixels[pixelOffset] = (byte)Math.Clamp(b * 255.0, 0, 255);
-                    outputPixels[pixelOffset + 1] = (byte)Math.Clamp(g * 255.0, 0, 255);
-                    outputPixels[pixelOffset + 2] = (byte)Math.Clamp(r * 255.0, 0, 255);
+                    outputPixels[pixelOffset] = b;
+                    outputPixels[pixelOffset + 1] = g;
+                    outputPixels[pixelOffset + 2] = r;
                     outputPixels[pixelOffset + 3] = 255;
                 }
 

@@ -1,4 +1,3 @@
-using Serilog;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -7,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -57,6 +57,7 @@ namespace TextureSwapper.ViewModels
         public IPropComposer PropComposer { get; }
         public IHtml5CacheService Html5CacheService { get; }
         public IBntArchiveService BntArchiveService { get; }
+        public IEquipmentTargetService EquipmentTargetService { get; }
         public SeasonalThemeService SeasonalThemeService { get; }
         public SeasonalAudioService SeasonalAudioService { get; }
 
@@ -64,8 +65,7 @@ namespace TextureSwapper.ViewModels
 
         public bool IsHtml5Client => Settings.ActiveClient == ClientType.Html5;
         public bool IsFlashClient => Settings.ActiveClient == ClientType.Flash;
-        public string ActiveClientDisplayName =>
-            IsHtml5Client ? "HTML5 Client" : "Flash Client";
+        public string ActiveClientDisplayName => IsHtml5Client ? "HTML5 Client" : "Flash Client";
 
         public bool IsSeasonalThemeActive => SeasonalThemeService.IsSeasonalActive;
         public bool IsSeasonalAtmosphereVisible =>
@@ -91,9 +91,13 @@ namespace TextureSwapper.ViewModels
             LocalizationService.GetString("Loc_Nav_Settings") ?? "Settings";
 
         public string AppTitleText =>
-            (IsSeasonalThemeActive && Settings.EnableSeasonalAppLogo)
-                ? SeasonalThemeConfig.Current.AppTitle
-                : "ProTanki Texture Swapper";
+            IsGlobalAuroraThemeVisible
+                ? "❄️ ProTanki Texture Swapper"
+                : (
+                    (IsSeasonalThemeActive && Settings.EnableSeasonalAppLogo)
+                        ? SeasonalThemeConfig.Current.AppTitle
+                        : "ProTanki Texture Swapper"
+                );
 
         public void NotifySeasonalVisualsChanged()
         {
@@ -150,9 +154,20 @@ namespace TextureSwapper.ViewModels
         public PaintsTabViewModel PaintsTabVM { get; }
         public ShotEffectsTabViewModel ShotEffectsTabVM { get; }
         public BackupsTabViewModel BackupsTabVM { get; }
+        public ChatTabViewModel ChatTabVM { get; }
+        public IChatService ChatService { get; }
         public AdminViewModel AdminVM { get; }
         public AppSettings Settings { get; }
         public List<SkinModel> AllSkins { get; set; } = [];
+
+        private bool _isChristmasChatVisible;
+        public bool IsChristmasChatVisible
+        {
+            get => _isChristmasChatVisible;
+            private set => _ = SetProperty(ref _isChristmasChatVisible, value);
+        }
+
+        public bool IsGlobalAuroraThemeVisible => ChatTabVM.IsSpecialThemeActive;
 
         public bool IsLoading
         {
@@ -215,7 +230,10 @@ namespace TextureSwapper.ViewModels
             IHtml5CacheService html5CacheService,
             IBntArchiveService bntArchiveService,
             SeasonalThemeService seasonalThemeService,
-            SeasonalAudioService seasonalAudioService
+            SeasonalAudioService seasonalAudioService,
+            IChatService chatService,
+            ChatTabViewModel chatTabViewModel,
+            IEquipmentTargetService? equipmentTargetService = null
         )
         {
             NotificationService = notificationService;
@@ -234,8 +252,21 @@ namespace TextureSwapper.ViewModels
             PropComposer = propComposer;
             Html5CacheService = html5CacheService;
             BntArchiveService = bntArchiveService;
+            EquipmentTargetService =
+                equipmentTargetService ?? new Services.EquipmentTargetService();
             SeasonalThemeService = seasonalThemeService;
             SeasonalAudioService = seasonalAudioService;
+            ChatService = chatService;
+            ChatTabVM = chatTabViewModel;
+            ChatTabVM.PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName == nameof(ChatTabViewModel.IsSpecialThemeActive))
+                {
+                    OnPropertyChanged(nameof(IsGlobalAuroraThemeVisible));
+                    OnPropertyChanged(nameof(AppTitleText));
+                }
+            };
+            _ = CheckChristmasChatAccessAsync();
             SeasonalThemeService.SeasonalThemeChanged += (_, active) =>
             {
                 if (active)
@@ -300,7 +331,13 @@ namespace TextureSwapper.ViewModels
                     Settings.IsPremiumUnlocked = isUnlocked;
                     SettingsService.Save(Settings);
                     OnPropertyChanged(nameof(Settings));
+                    RefreshUnlockedChristmasSkins();
                 });
+            };
+
+            PremiumService.UnlockedChristmasSkinsChanged += (_, _) =>
+            {
+                Application.Current?.Dispatcher.Invoke(RefreshUnlockedChristmasSkins);
             };
 
             _ = InitializeAsync()
@@ -403,7 +440,10 @@ namespace TextureSwapper.ViewModels
                     await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
                         TextureSourceSelectionDialog dialog = new(initialPreference);
-                        if (Application.Current?.MainWindow != null && Application.Current.MainWindow.IsVisible)
+                        if (
+                            Application.Current?.MainWindow != null
+                            && Application.Current.MainWindow.IsVisible
+                        )
                         {
                             dialog.Owner = Application.Current.MainWindow;
                         }
@@ -427,15 +467,16 @@ namespace TextureSwapper.ViewModels
                     if (shouldDownload)
                     {
                         UpdateStatus = "Connecting to download server...";
-                        bool downloaded = await TextureDownloadService.DownloadAndExtractTexturesAsync(
-                            (status, percent) =>
-                            {
-                                Application.Current?.Dispatcher.Invoke(() =>
+                        bool downloaded =
+                            await TextureDownloadService.DownloadAndExtractTexturesAsync(
+                                (status, percent) =>
                                 {
-                                    UpdateStatus = status;
-                                });
-                            }
-                        );
+                                    Application.Current?.Dispatcher.Invoke(() =>
+                                    {
+                                        UpdateStatus = status;
+                                    });
+                                }
+                            );
 
                         if (!downloaded)
                         {
@@ -451,7 +492,9 @@ namespace TextureSwapper.ViewModels
                     }
                     else
                     {
-                        Log.Information("User skipped initial texture pack download. Running in offline mode.");
+                        Log.Information(
+                            "User skipped initial texture pack download. Running in offline mode."
+                        );
                         _ = NotificationService.ShowAsync(
                             "Texture Pack",
                             "Texture download was skipped. Texture swapping will be unavailable until textures are downloaded.",
@@ -514,6 +557,7 @@ namespace TextureSwapper.ViewModels
                 }
 
                 AllSkins = skins ?? [];
+                RefreshUnlockedChristmasSkins();
                 SkinsTabVM.OnSkinsLoaded();
                 PaintsTabVM.OnSkinsLoaded();
 
@@ -631,10 +675,7 @@ namespace TextureSwapper.ViewModels
                 bool scriptFileUpdated = false;
                 if (!UpdateService.IsOffline)
                 {
-                    string[] scriptPaths =
-                    [
-                        "Assets/Pack/protanki_pack.js",
-                    ];
+                    string[] scriptPaths = ["Scripts/protanki_pack.js"];
 
                     foreach (string relativePath in scriptPaths)
                     {
@@ -662,13 +703,12 @@ namespace TextureSwapper.ViewModels
                                 _ = Directory.CreateDirectory(dir);
                             }
 
-                            await File.WriteAllTextAsync(
-                                localPath,
-                                remoteContent,
-                                Encoding.UTF8
-                            );
+                            await File.WriteAllTextAsync(localPath, remoteContent, Encoding.UTF8);
                             scriptFileUpdated = true;
-                            Log.Information("Updated local HTML5 script from remote: {Path}", relativePath);
+                            Log.Information(
+                                "Updated local HTML5 script from remote: {Path}",
+                                relativePath
+                            );
                         }
                     }
                 }
@@ -729,11 +769,13 @@ namespace TextureSwapper.ViewModels
 
         private void ScheduleDeferredPackSync(string cachePath)
         {
-            const string updateMsg = "ProTanki Pack update is ready. Please restart ProTanki to apply the changes.";
+            const string updateMsg =
+                "ProTanki Pack update is ready. Please restart ProTanki to apply the changes.";
             Services.PackLogListener.PendingUpdateMessage = updateMsg;
 
             Services.PackLogListener? listener =
-                App.ServiceProvider?.GetService(typeof(Services.PackLogListener)) as Services.PackLogListener;
+                App.ServiceProvider?.GetService(typeof(Services.PackLogListener))
+                as Services.PackLogListener;
             bool startedTemporaryListener = false;
             if (listener != null && !listener.IsRunning)
             {
@@ -941,10 +983,8 @@ namespace TextureSwapper.ViewModels
 
         public static string FormatVersion(Version? version)
         {
-            return version == null
-                ? "3.0"
-                : version.Build > 0
-                ? $"{version.Major}.{version.Minor}.{version.Build}"
+            return version == null ? "3.0"
+                : version.Build > 0 ? $"{version.Major}.{version.Minor}.{version.Build}"
                 : $"{version.Major}.{version.Minor}";
         }
 
@@ -975,8 +1015,8 @@ namespace TextureSwapper.ViewModels
                     ? Settings.CustomHtml5CachePath
                     : SwapService.DetectCachePath(ClientType.Html5)
                 : !string.IsNullOrWhiteSpace(Settings.CustomCachePath)
-                ? Settings.CustomCachePath
-                : SwapService.DetectCachePath(ClientType.Flash);
+                    ? Settings.CustomCachePath
+                    : SwapService.DetectCachePath(ClientType.Flash);
         }
 
         public void SwitchClient(ClientType newClient)
@@ -1185,6 +1225,35 @@ namespace TextureSwapper.ViewModels
                     notificationAppearance
                 );
             }
+        }
+
+        public void RefreshUnlockedChristmasSkins()
+        {
+            IReadOnlyList<string> unlocked = PremiumService.UnlockedChristmasSkinIds;
+            bool isFullPremium = PremiumService.IsPremiumUnlocked;
+
+            foreach (SkinModel skin in AllSkins)
+            {
+                skin.IsEventUnlocked =
+                    skin.IsPremium
+                    && !isFullPremium
+                    && unlocked.Contains(skin.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            SkinsTabVM.RefreshGiftedSkinsState();
+            ChatTabVM.RefreshGiftedSkins();
+        }
+
+        private async Task CheckChristmasChatAccessAsync()
+        {
+            bool allowed = await ChatService.CheckAccessAsync();
+            _ = Application.Current?.Dispatcher.InvokeAsync(() =>
+            {
+                IsChristmasChatVisible = allowed;
+                ChatTabVM.RefreshSpecialThemeAccess();
+                OnPropertyChanged(nameof(IsGlobalAuroraThemeVisible));
+                OnPropertyChanged(nameof(AppTitleText));
+            });
         }
     }
 }

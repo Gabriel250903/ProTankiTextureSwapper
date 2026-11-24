@@ -1,5 +1,5 @@
-using Serilog;
 using System.Windows.Input;
+using Serilog;
 
 namespace TextureSwapper.Helpers.Commands
 {

@@ -1,4 +1,3 @@
-using Serilog;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -7,6 +6,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -25,7 +25,8 @@ namespace TextureSwapper.Services
         private readonly IBntArchiveService _bntArchiveService =
             bntArchiveService ?? new BntArchiveService();
         private readonly IHtml5CacheService _html5CacheService =
-            html5CacheService ?? new Html5CacheService(bntArchiveService ?? new BntArchiveService());
+            html5CacheService
+            ?? new Html5CacheService(bntArchiveService ?? new BntArchiveService());
         private readonly ISettingsService? _settingsService = settingsService;
         private ClientType? _cachedActiveClient;
         private DateTime _cachedClientCheckedUtc;
@@ -112,7 +113,9 @@ namespace TextureSwapper.Services
                 return Html5ResourceMapper.TryDecodeBase64Target(
                         target,
                         out Html5ResourceTarget? decoded
-                    ) && decoded != null && _html5CacheService.ResourceExists(cachePath, decoded.ResourceId);
+                    )
+                    && decoded != null
+                    && _html5CacheService.ResourceExists(cachePath, decoded.ResourceId);
             }
 
             string path = FileHelper.GetSafePath(cachePath, target);
@@ -200,8 +203,17 @@ namespace TextureSwapper.Services
                 return (src + ".enc", true);
             }
 
-            string encMirror = src.Replace("Textures/ShotEffects", "Textures/Encrypted/ShotEffects", StringComparison.OrdinalIgnoreCase)
-                .Replace("Textures\\ShotEffects", "Textures\\Encrypted\\ShotEffects", StringComparison.OrdinalIgnoreCase) + ".enc";
+            string encMirror =
+                src.Replace(
+                        "Textures/ShotEffects",
+                        "Textures/Encrypted/ShotEffects",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    .Replace(
+                        "Textures\\ShotEffects",
+                        "Textures\\Encrypted\\ShotEffects",
+                        StringComparison.OrdinalIgnoreCase
+                    ) + ".enc";
             if (File.Exists(encMirror))
             {
                 return (encMirror, true);
@@ -266,8 +278,17 @@ namespace TextureSwapper.Services
 
                 if (src.Contains("ShotEffects", StringComparison.OrdinalIgnoreCase))
                 {
-                    string remoteEncMirror = src.Replace("Textures/ShotEffects", "Textures/Encrypted/ShotEffects", StringComparison.OrdinalIgnoreCase)
-                        .Replace("Textures\\ShotEffects", "Textures\\Encrypted\\ShotEffects", StringComparison.OrdinalIgnoreCase) + ".enc";
+                    string remoteEncMirror =
+                        src.Replace(
+                                "Textures/ShotEffects",
+                                "Textures/Encrypted/ShotEffects",
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                            .Replace(
+                                "Textures\\ShotEffects",
+                                "Textures\\Encrypted\\ShotEffects",
+                                StringComparison.OrdinalIgnoreCase
+                            ) + ".enc";
                     if (TryDownloadMissingAsset(remoteEncMirror))
                     {
                         return (remoteEncMirror, true);
@@ -300,6 +321,36 @@ namespace TextureSwapper.Services
             }
 
             return (null, false);
+        }
+
+        private static string ResolveTexturesDirectory(string relativeFolder)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string primary = FileHelper.GetSafePath(baseDir, relativeFolder);
+            if (Directory.Exists(primary))
+            {
+                return primary;
+            }
+
+            string devRoot = Path.GetFullPath(Path.Combine(baseDir, "..", "..", ".."));
+            string devCandidate = FileHelper.GetSafePath(devRoot, relativeFolder);
+            return Directory.Exists(devCandidate) ? devCandidate : primary;
+        }
+
+        private static string ResolveFallbackAssetPath(string relativePath)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string primary = FileHelper.GetSafePath(baseDir, relativePath);
+            if (File.Exists(primary) || File.Exists(primary + ".enc"))
+            {
+                return primary;
+            }
+
+            string devRoot = Path.GetFullPath(Path.Combine(baseDir, "..", "..", ".."));
+            string devCandidate = FileHelper.GetSafePath(devRoot, relativePath);
+            return File.Exists(devCandidate) || File.Exists(devCandidate + ".enc")
+                ? devCandidate
+                : primary;
         }
 
         private static async Task<byte[]> DecryptAssetToBytesAsync(
@@ -483,10 +534,7 @@ namespace TextureSwapper.Services
             return false;
         }
 
-        private void EnsureHtml5OriginalsBackup(
-            string cachePath,
-            IEnumerable<string?> targets
-        )
+        private void EnsureHtml5OriginalsBackup(string cachePath, IEnumerable<string?> targets)
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string originalsDir = FileHelper.GetSafePath(
@@ -502,7 +550,8 @@ namespace TextureSwapper.Services
                     Html5ResourceMapper.TryDecodeBase64Target(
                         target,
                         out Html5ResourceTarget? decoded
-                    ) && decoded != null
+                    )
+                    && decoded != null
                 )
                 {
                     _ = resourceIds.Add(decoded.ResourceId);
@@ -528,17 +577,39 @@ namespace TextureSwapper.Services
             }
         }
 
+        private static string SanitizeFileNamePart(string value, string fallback = "skin")
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return fallback;
+            }
+
+            char[] invalid = Path.GetInvalidFileNameChars();
+            char[] chars = value.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (Array.IndexOf(invalid, chars[i]) >= 0)
+                {
+                    chars[i] = '_';
+                }
+            }
+
+            string sanitized = new string(chars).Trim();
+            return string.IsNullOrEmpty(sanitized) ? fallback : sanitized;
+        }
+
         private string SelectiveHtml5Backup(
             string cachePath,
             string backupPrefix,
             IEnumerable<string?> targets
         )
         {
+            string safePrefix = SanitizeFileNamePart(backupPrefix);
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string timestamp = $"{DateTime.UtcNow:yyyyMMdd_HHmmss_fff}_{Guid.NewGuid():N}"[..24];
             string backupZipPath = FileHelper.GetSafePath(
                 baseDir,
-                Path.Combine(Constants.BackupsDir, "Html5", $"{backupPrefix}_{timestamp}.zip")
+                Path.Combine(Constants.BackupsDir, "Html5", $"{safePrefix}_{timestamp}.zip")
             );
 
             string? dir = Path.GetDirectoryName(backupZipPath);
@@ -559,7 +630,8 @@ namespace TextureSwapper.Services
                     Html5ResourceMapper.TryDecodeBase64Target(
                         target,
                         out Html5ResourceTarget? decoded
-                    ) && decoded != null
+                    )
+                    && decoded != null
                 )
                 {
                     _ = resourceIds.Add(decoded.ResourceId);
@@ -618,7 +690,7 @@ namespace TextureSwapper.Services
 
             string texturesDir = FileHelper.GetSafePath(
                 AppDomain.CurrentDomain.BaseDirectory,
-                skin.SourceFolder
+                skin.EffectiveSourceFolder
             );
 
             foreach (string target in targets)
@@ -668,16 +740,23 @@ namespace TextureSwapper.Services
                 skin.SecondaryModelTarget,
             ];
 
+            string rawBackupPrefix =
+                !string.IsNullOrEmpty(skin.TargetTier)
+                && !skin.TargetTier.Equals("M3", StringComparison.OrdinalIgnoreCase)
+                    ? $"{skin.Name}_{skin.TargetTier}"
+                    : skin.Name;
+            string backupPrefix = SanitizeFileNamePart(rawBackupPrefix);
+
             if (IsHtml5CachePath(cachePath))
             {
-                return SelectiveHtml5Backup(cachePath, skin.Name, targets);
+                return SelectiveHtml5Backup(cachePath, backupPrefix, targets);
             }
 
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string timestamp = $"{DateTime.UtcNow:yyyyMMdd_HHmmss_fff}_{Guid.NewGuid():N}"[..24];
             string backupZipPath = FileHelper.GetSafePath(
                 baseDir,
-                Path.Combine(Constants.BackupsDir, $"{skin.Name}_{timestamp}.zip")
+                Path.Combine(Constants.BackupsDir, $"{backupPrefix}_{timestamp}.zip")
             );
 
             try
@@ -697,7 +776,7 @@ namespace TextureSwapper.Services
                     Path.Combine(Constants.BackupsDir, Constants.OriginalsDir)
                 );
 
-                string texturesDir = FileHelper.GetSafePath(baseDir, skin.SourceFolder);
+                string texturesDir = FileHelper.GetSafePath(baseDir, skin.EffectiveSourceFolder);
 
                 using ZipArchive archive = ZipFile.Open(backupZipPath, ZipArchiveMode.Create);
                 foreach (string target in targets)
@@ -795,10 +874,7 @@ namespace TextureSwapper.Services
             EnsureOriginalsBackup(cachePath, skin);
             string backupZip = SelectiveBackup(cachePath, skin);
 
-            string texturesDir = FileHelper.GetSafePath(
-                AppDomain.CurrentDomain.BaseDirectory,
-                skin.SourceFolder
-            );
+            string texturesDir = ResolveTexturesDirectory(skin.EffectiveSourceFolder);
 
             List<(string Source, string TargetBase64)> copyOperations = [];
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
@@ -862,9 +938,16 @@ namespace TextureSwapper.Services
                 }
                 if (!string.IsNullOrEmpty(skin.ModelTarget))
                 {
-                    copyOperations.Add(
-                        (FileHelper.GetSafePath(texturesDir, "object.3ds"), skin.ModelTarget)
-                    );
+                    string modelSourcePath = FileHelper.GetSafePath(texturesDir, "object.3ds");
+                    if (
+                        !File.Exists(modelSourcePath)
+                        && !File.Exists(modelSourcePath + ".enc")
+                        && !string.IsNullOrEmpty(skin.FallbackModelPath)
+                    )
+                    {
+                        modelSourcePath = ResolveFallbackAssetPath(skin.FallbackModelPath);
+                    }
+                    copyOperations.Add((modelSourcePath, skin.ModelTarget));
                 }
                 if (!string.IsNullOrEmpty(skin.TracksTarget))
                 {
@@ -898,8 +981,11 @@ namespace TextureSwapper.Services
                 }
             }
 
-            List<(string Source, Html5ResourceTarget Target, bool IsEncrypted)> resolvedOperations =
-            [];
+            List<(
+                string Source,
+                Html5ResourceTarget Target,
+                bool IsEncrypted
+            )> resolvedOperations = [];
             List<string> missingRequired = [];
             bool hasEncryptedAssets = false;
 
@@ -1001,9 +1087,7 @@ namespace TextureSwapper.Services
                     List<TaraEntry> entries = _bntArchiveService.Unpack(baseBnt);
                     bool updatedAlpha = false;
 
-                    foreach (
-                        (string src, Html5ResourceTarget target, bool isEncrypted) in group
-                    )
+                    foreach ((string src, Html5ResourceTarget target, bool isEncrypted) in group)
                     {
                         byte[] payload =
                             isEncrypted && assetDecryptionKey != null
@@ -1014,11 +1098,17 @@ namespace TextureSwapper.Services
                             skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase)
                             && (
                                 skin.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
-                                || File.Exists(FileHelper.GetSafePath(texturesDir, $"{skin.Name}.json"))
+                                || File.Exists(
+                                    FileHelper.GetSafePath(texturesDir, $"{skin.Name}.json")
+                                )
                             )
                         )
                         {
-                            payload = EnsureAnimatedPaintMetadataHeader(payload, skin.Name, texturesDir);
+                            payload = EnsureAnimatedPaintMetadataHeader(
+                                payload,
+                                skin.Name,
+                                texturesDir
+                            );
                         }
 
                         TaraEntry? existing = entries.FirstOrDefault(e =>
@@ -1072,7 +1162,9 @@ namespace TextureSwapper.Services
                 {
                     if (!_html5CacheService.EnsureAnimatedPaintEnginePatched(cachePath))
                     {
-                        Log.Warning("HTML5 core JS bundle was not found in Cache_Data; animated paint will remain static until cached.");
+                        Log.Warning(
+                            "HTML5 core JS bundle was not found in Cache_Data; animated paint will remain static until cached."
+                        );
                     }
                 }
 
@@ -1198,7 +1290,7 @@ namespace TextureSwapper.Services
             List<(string Source, string Target)> copyOperations = [];
             string texturesDir = FileHelper.GetSafePath(
                 AppDomain.CurrentDomain.BaseDirectory,
-                skin.SourceFolder
+                skin.EffectiveSourceFolder
             );
 
             if (skin.Category.Equals("Paints", StringComparison.OrdinalIgnoreCase))
@@ -1488,10 +1580,7 @@ namespace TextureSwapper.Services
                     }
                     else
                     {
-                        Log.Error(
-                            "Rollback from {BackupZip} was incomplete.",
-                            backupZip
-                        );
+                        Log.Error("Rollback from {BackupZip} was incomplete.", backupZip);
                     }
                 }
                 catch (Exception rollbackEx)
@@ -1563,7 +1652,12 @@ namespace TextureSwapper.Services
                     }
                     else if (result == "NotCached")
                     {
-                        notCachedSkins.Add(skin.Name);
+                        string label =
+                            !string.IsNullOrEmpty(skin.TargetTier)
+                            && !skin.TargetTier.Equals("M3", StringComparison.OrdinalIgnoreCase)
+                                ? $"{skin.Name} ({skin.ItemName} {skin.TargetTier})"
+                                : skin.Name;
+                        notCachedSkins.Add(label);
                     }
                     else if (result == "NotCachedSupplies")
                     {
@@ -1665,11 +1759,25 @@ namespace TextureSwapper.Services
                     && Directory.EnumerateFiles(originalsCacheDataDir, "f_*").Any();
                 bool hasBntBackup =
                     Directory.Exists(originalsRoot)
-                    && Directory.EnumerateFiles(originalsRoot, "*.bnt", SearchOption.TopDirectoryOnly).Any();
+                    && Directory
+                        .EnumerateFiles(originalsRoot, "*.bnt", SearchOption.TopDirectoryOnly)
+                        .Any();
 
-                bool jsRestored = !hasJsBackup || _html5CacheService.RestoreAnimatedPaintEngine(cachePath);
+                AppSettings? settings = ResolveSettingsService()?.Load();
+                bool hadShotLightOverrides = settings?.ActiveHtml5ShotLighting.Count > 0;
+                if (settings != null && hadShotLightOverrides)
+                {
+                    settings.ActiveHtml5ShotLighting.Clear();
+                    ResolveSettingsService()?.Save(settings);
+                }
+
+                bool jsRestored =
+                    !hasJsBackup || _html5CacheService.RestoreAnimatedPaintEngine(cachePath);
                 bool bntRestored = !hasBntBackup || RestoreFromBackup(cachePath, originalsRoot);
-                return (hasJsBackup || hasBntBackup) && jsRestored && bntRestored;
+                _html5CacheService.SyncShotDynamicLighting(cachePath);
+                return (hasJsBackup || hasBntBackup || hadShotLightOverrides)
+                    && jsRestored
+                    && bntRestored;
             }
 
             string originalsDir = Path.Combine(
@@ -1730,7 +1838,11 @@ namespace TextureSwapper.Services
                         }
                     }
 
-                    if (expectedCount == 0 || restoreCount != expectedCount || failedResources.Count > 0)
+                    if (
+                        expectedCount == 0
+                        || restoreCount != expectedCount
+                        || failedResources.Count > 0
+                    )
                     {
                         Log.Warning(
                             "HTML5 restore incomplete from {BackupPath}: restored {Restored}/{Expected}. Failed: {Failed}",
@@ -1745,6 +1857,17 @@ namespace TextureSwapper.Services
                     Log.Information(
                         $"Successfully restored all {restoreCount} HTML5 resources from directory {backupPath}."
                     );
+                    string trimmedBackup = Path.TrimEndingDirectorySeparator(backupPath);
+                    if (
+                        string.Equals(
+                            Path.GetFileName(trimmedBackup),
+                            Constants.OriginalsDir,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
+                    {
+                        ClearAllHtml5ShotLighting(cachePath);
+                    }
                     return true;
                 }
                 else if (
@@ -1756,6 +1879,7 @@ namespace TextureSwapper.Services
                     int expectedCount = 0;
                     int restoreCount = 0;
                     List<string> failedResources = [];
+                    HashSet<long> restoredResourceIds = [];
                     foreach (ZipArchiveEntry entry in archive.Entries)
                     {
                         if (!entry.Name.EndsWith(".bnt", StringComparison.OrdinalIgnoreCase))
@@ -1770,15 +1894,10 @@ namespace TextureSwapper.Services
                             using Stream s = entry.Open();
                             using MemoryStream ms = new();
                             s.CopyTo(ms);
-                            if (
-                                _html5CacheService.WriteRawBntBytes(
-                                    cachePath,
-                                    resId,
-                                    ms.ToArray()
-                                )
-                            )
+                            if (_html5CacheService.WriteRawBntBytes(cachePath, resId, ms.ToArray()))
                             {
                                 restoreCount++;
+                                _ = restoredResourceIds.Add(resId);
                             }
                             else
                             {
@@ -1787,7 +1906,11 @@ namespace TextureSwapper.Services
                         }
                     }
 
-                    if (expectedCount == 0 || restoreCount != expectedCount || failedResources.Count > 0)
+                    if (
+                        expectedCount == 0
+                        || restoreCount != expectedCount
+                        || failedResources.Count > 0
+                    )
                     {
                         Log.Warning(
                             "HTML5 zip restore incomplete from {BackupPath}: restored {Restored}/{Expected}. Failed: {Failed}",
@@ -1802,6 +1925,8 @@ namespace TextureSwapper.Services
                     Log.Information(
                         $"Successfully restored all {restoreCount} HTML5 resources from zip backup {backupPath}."
                     );
+                    string zipStem = Path.GetFileNameWithoutExtension(backupPath);
+                    ClearHtml5ShotLightingOnZipRestore(cachePath, zipStem, restoredResourceIds);
                     return true;
                 }
 
@@ -1997,12 +2122,20 @@ namespace TextureSwapper.Services
                 }
 
                 string dirName = Path.GetFileName(fullPath);
-                string? parentName = Path.GetFileName(Path.GetDirectoryName(fullPath) ?? string.Empty);
+                string? parentName = Path.GetFileName(
+                    Path.GetDirectoryName(fullPath) ?? string.Empty
+                );
 
-                return (dirName.Equals(Constants.CacheDirName, StringComparison.OrdinalIgnoreCase)
-                    && parentName.Equals(Constants.LocalStoreDir, StringComparison.OrdinalIgnoreCase)) || Directory
-                    .EnumerateDirectories(fullPath, "aHR0cDov*", SearchOption.TopDirectoryOnly)
-                    .Any();
+                return (
+                        dirName.Equals(Constants.CacheDirName, StringComparison.OrdinalIgnoreCase)
+                        && parentName.Equals(
+                            Constants.LocalStoreDir,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
+                    || Directory
+                        .EnumerateDirectories(fullPath, "aHR0cDov*", SearchOption.TopDirectoryOnly)
+                        .Any();
             }
             catch
             {
@@ -2046,6 +2179,7 @@ namespace TextureSwapper.Services
                         Directory.Delete(blobDir, true);
                     }
                     Log.Information("Successfully cleared HTML5 IndexedDB cache directories.");
+                    ClearAllHtml5ShotLighting(cachePath);
                 }
                 catch (Exception ex)
                 {
@@ -2304,7 +2438,8 @@ namespace TextureSwapper.Services
                     Html5ResourceMapper.TryDecodeBase64Target(
                         target,
                         out Html5ResourceTarget? decoded
-                    ) && decoded != null
+                    )
+                    && decoded != null
                 )
                 {
                     decodedTargets.Add(decoded);
@@ -2340,8 +2475,11 @@ namespace TextureSwapper.Services
                 shotEffect.SourceFolder
             );
 
-            List<(string Source, Html5ResourceTarget Target, bool IsEncrypted)> resolvedOperations =
-            [];
+            List<(
+                string Source,
+                Html5ResourceTarget Target,
+                bool IsEncrypted
+            )> resolvedOperations = [];
             bool hasEncryptedAssets = false;
 
             foreach (Html5ResourceTarget target in cachedTargets)
@@ -2415,9 +2553,7 @@ namespace TextureSwapper.Services
 
                     List<TaraEntry> entries = _bntArchiveService.Unpack(baseBnt);
 
-                    foreach (
-                        (string src, Html5ResourceTarget target, bool isEncrypted) in group
-                    )
+                    foreach ((string src, Html5ResourceTarget target, bool isEncrypted) in group)
                     {
                         byte[] payload =
                             isEncrypted && assetDecryptionKey != null
@@ -2456,6 +2592,8 @@ namespace TextureSwapper.Services
                 {
                     return "NotCached";
                 }
+
+                UpdateHtml5ShotLightingOnSwap(cachePath, shotEffect, cachedTargets);
 
                 Log.Information(
                     $"HTML5 Shot effect {shotEffect.Turret} {shotEffect.Name} applied successfully."
@@ -2730,10 +2868,7 @@ namespace TextureSwapper.Services
                     }
                     else
                     {
-                        Log.Error(
-                            "Rollback from {BackupZip} was incomplete.",
-                            backupZip
-                        );
+                        Log.Error("Rollback from {BackupZip} was incomplete.", backupZip);
                     }
                 }
                 catch (Exception rollbackEx)
@@ -2823,9 +2958,18 @@ namespace TextureSwapper.Services
                 WriteableBitmap wb = new(bgra);
                 byte[] headerPixels =
                 [
-                    0x53, 0x4F, 0x54, 0xFF,
-                    (byte)fps, (byte)rows, (byte)cols, 0xFF,
-                    0x00, (byte)(numFrames & 0xFF), (byte)((numFrames >> 8) & 0xFF), 0xFF,
+                    0x53,
+                    0x4F,
+                    0x54,
+                    0xFF,
+                    (byte)fps,
+                    (byte)rows,
+                    (byte)cols,
+                    0xFF,
+                    0x00,
+                    (byte)(numFrames & 0xFF),
+                    (byte)((numFrames >> 8) & 0xFF),
+                    0xFF,
                 ];
                 wb.WritePixels(new Int32Rect(0, 0, 3, 1), headerPixels, 12, 0);
 
@@ -2837,9 +2981,126 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to stamp TOS header on animated paint {SkinName}", skinName);
+                Log.Warning(
+                    ex,
+                    "Failed to stamp TOS header on animated paint {SkinName}",
+                    skinName
+                );
                 return pngBytes;
             }
+        }
+
+        private ISettingsService? ResolveSettingsService()
+        {
+            return _settingsService
+                ?? App.ServiceProvider?.GetService(typeof(ISettingsService)) as ISettingsService;
+        }
+
+        private void UpdateHtml5ShotLightingOnSwap(
+            string cachePath,
+            ShotEffectModel shotEffect,
+            IReadOnlyList<Html5ResourceTarget> swappedTargets
+        )
+        {
+            if (
+                !ShotLightingColorHelper.TryMapTurretToHtml5Kind(
+                    shotEffect.Turret,
+                    out string html5Kind
+                )
+            )
+            {
+                return;
+            }
+
+            ISettingsService? svc = ResolveSettingsService();
+            if (svc == null)
+            {
+                return;
+            }
+
+            Html5TurretLightOverride? lightOverride = ShotLightingColorHelper.ResolveOverride(
+                shotEffect
+            );
+            if (lightOverride == null)
+            {
+                return;
+            }
+
+            lightOverride.ResourceIds = [.. swappedTargets.Select(t => t.ResourceId).Distinct()];
+
+            AppSettings settings = svc.Load();
+            settings.ActiveHtml5ShotLighting[html5Kind] = lightOverride;
+            svc.Save(settings);
+
+            _html5CacheService.SyncShotDynamicLighting(cachePath);
+        }
+
+        private void ClearHtml5ShotLightingOnZipRestore(
+            string cachePath,
+            string zipStem,
+            HashSet<long> restoredResourceIds
+        )
+        {
+            ISettingsService? svc = ResolveSettingsService();
+            if (svc == null)
+            {
+                return;
+            }
+
+            AppSettings settings = svc.Load();
+            if (settings.ActiveHtml5ShotLighting.Count == 0)
+            {
+                return;
+            }
+
+            bool removedAny = false;
+            int us = zipStem.IndexOf('_');
+            string? stemKind =
+                us > 0
+                && ShotLightingColorHelper.TryMapTurretToHtml5Kind(
+                    zipStem[..us],
+                    out string parsedKind
+                )
+                    ? parsedKind
+                    : null;
+
+            foreach (string kind in settings.ActiveHtml5ShotLighting.Keys.ToList())
+            {
+                Html5TurretLightOverride ov = settings.ActiveHtml5ShotLighting[kind];
+                bool matchesByResource =
+                    ov.ResourceIds.Count > 0 && restoredResourceIds.Any(ov.ResourceIds.Contains);
+                bool matchesByNameFallback =
+                    ov.ResourceIds.Count == 0
+                    && string.Equals(kind, stemKind, StringComparison.OrdinalIgnoreCase);
+
+                if (matchesByResource || matchesByNameFallback)
+                {
+                    _ = settings.ActiveHtml5ShotLighting.Remove(kind);
+                    removedAny = true;
+                }
+            }
+
+            if (removedAny)
+            {
+                svc.Save(settings);
+                _html5CacheService.SyncShotDynamicLighting(cachePath);
+            }
+        }
+
+        private void ClearAllHtml5ShotLighting(string cachePath)
+        {
+            ISettingsService? svc = ResolveSettingsService();
+            if (svc != null)
+            {
+                AppSettings settings = svc.Load();
+                if (settings.ActiveHtml5ShotLighting.Count > 0)
+                {
+                    settings.ActiveHtml5ShotLighting.Clear();
+                    svc.Save(settings);
+                }
+            }
+
+            _html5CacheService.SyncShotDynamicLighting(cachePath);
         }
     }
 }

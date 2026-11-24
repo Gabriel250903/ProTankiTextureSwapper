@@ -1,0 +1,438 @@
+<UserControl
+  x:Class="TextureSwapper.Views.Controls.ChatTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  mc:Ignorable="d"
+>
+  <Grid>
+    <!-- Locked Mystery Screen (shown when event is locked / user lacks access) -->
+    <Border
+      Padding="36"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      Background="#CC0F172A"
+      BorderBrush="#33FDE68A"
+      BorderThickness="1.5"
+      CornerRadius="18"
+      MaxWidth="460"
+      Visibility="{Binding IsEventUnlocked, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+    >
+      <StackPanel HorizontalAlignment="Center">
+        <Border
+          Width="72"
+          Height="72"
+          Margin="0,0,0,18"
+          HorizontalAlignment="Center"
+          Background="#1E293B"
+          BorderBrush="#55FDE68A"
+          BorderThickness="1.5"
+          CornerRadius="36"
+        >
+          <ui:SymbolIcon
+            FontSize="32"
+            Foreground="#FDE68A"
+            Symbol="LockClosed24"
+          />
+        </Border>
+
+        <TextBlock
+          Margin="0,0,0,8"
+          HorizontalAlignment="Center"
+          FontFamily="{DynamicResource ActiveDisplayFont}"
+          FontSize="26"
+          FontWeight="Bold"
+          Foreground="#FDE68A"
+          Text="???"
+        />
+
+        <TextBlock
+          Margin="0,0,0,14"
+          HorizontalAlignment="Center"
+          FontSize="14"
+          FontWeight="SemiBold"
+          Foreground="#E2E8F0"
+          Text="Access Locked"
+        />
+
+        <TextBlock
+          HorizontalAlignment="Center"
+          FontSize="13"
+          Foreground="#94A3B8"
+          Text="Something special is being prepared. Check back later when the seal is lifted."
+          TextAlignment="Center"
+          TextWrapping="Wrap"
+        />
+      </StackPanel>
+    </Border>
+
+    <!-- Unlocked Event Content -->
+    <Grid Visibility="{Binding IsEventUnlocked, Converter={StaticResource BooleanToVisibilityConverter}}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+    <!-- Festive Christmas Header -->
+    <Border
+      Grid.Row="0"
+      Margin="0,0,0,12"
+      Padding="18,14"
+      BorderBrush="#EAB308"
+      BorderThickness="1.5"
+      CornerRadius="12"
+    >
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+          <GradientStop Offset="0" Color="#0F3D3E" />
+          <GradientStop Offset="0.5" Color="#14532D" />
+          <GradientStop Offset="1" Color="#7F1D1D" />
+        </LinearGradientBrush>
+      </Border.Background>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+          <TextBlock
+            FontSize="19"
+            FontWeight="Bold"
+            Foreground="#FEF9C3"
+            Text="🎄 North Pole Terminal — Christmas 2026"
+          />
+          <TextBlock
+            Margin="0,3,0,0"
+            FontSize="12"
+            Foreground="#BBF7D0"
+            Text="{Binding StatusText}"
+          />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+          <Border
+            Margin="0,0,8,0"
+            Padding="12,6"
+            Background="#166534"
+            BorderBrush="#4ADE80"
+            BorderThickness="1"
+            CornerRadius="16"
+          >
+            <TextBlock
+              FontSize="13"
+              FontWeight="Bold"
+              Foreground="#FFFFFF"
+              Text="{Binding Snowflakes, StringFormat='❄️ {0} Snowflakes'}"
+            />
+          </Border>
+          <Border
+            Margin="0,0,8,0"
+            Padding="12,6"
+            Background="#991B1B"
+            BorderBrush="#FACC15"
+            BorderThickness="1"
+            CornerRadius="16"
+          >
+            <TextBlock
+              FontSize="13"
+              FontWeight="Bold"
+              Foreground="#FEF08A"
+              Text="{Binding Streak, StringFormat='🔥 {0}d Streak'}"
+            />
+          </Border>
+          <ui:Button
+            Margin="0,0,8,0"
+            Appearance="Secondary"
+            Command="{Binding ToggleAuroraThemeCommand}"
+            Content="🌌 Aurora"
+            ToolTip="Toggle Aurora North Pole Special Theme"
+            Visibility="{Binding IsSpecialThemeAllowed, Converter={StaticResource BooleanToVisibilityConverter}}"
+          />
+          <ui:Button
+            Appearance="Secondary"
+            Command="{Binding ReconnectCommand}"
+            Content="Reconnect"
+            Visibility="{Binding IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+          />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Festive Slash Command Quick Bar + Badge Switcher -->
+    <Grid Grid.Row="1" Margin="0,0,0,10">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <WrapPanel Grid.Column="0">
+        <ui:Button
+          Margin="0,0,8,6"
+          Background="#B91C1C"
+          BorderBrush="#FACC15"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/checkin"
+          Content="🎁 /checkin"
+          Foreground="#FFFFFF"
+        />
+        <ui:Button
+          Margin="0,0,8,6"
+          Background="#15803D"
+          BorderBrush="#86EFAC"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/unwrap"
+          Content="✨ /unwrap (25 ❄️)"
+          Foreground="#FFFFFF"
+        />
+        <ui:Button
+          Margin="0,0,8,6"
+          Appearance="Secondary"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/balance"
+          Content="❄️ /balance"
+        />
+        <ui:Button
+          Margin="0,0,8,6"
+          Appearance="Secondary"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/top"
+          Content="🏆 /top"
+        />
+        <ui:Button
+          Margin="0,0,8,6"
+          Appearance="Secondary"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/rewards"
+          Content="📊 /rewards (%)"
+        />
+        <ui:Button
+          Margin="0,0,8,6"
+          Appearance="Secondary"
+          Command="{Binding QuickCommand}"
+          CommandParameter="/help"
+          Content="❓ /help"
+        />
+      </WrapPanel>
+
+      <StackPanel Grid.Column="1" VerticalAlignment="Top" Orientation="Horizontal">
+        <TextBlock
+          Margin="0,7,8,0"
+          FontSize="12"
+          FontWeight="SemiBold"
+          Foreground="#FDE68A"
+          Text="🏷️ Badge:"
+        />
+        <ComboBox
+          MinWidth="150"
+          ItemsSource="{Binding UnlockedBadges}"
+          SelectedItem="{Binding SelectedBadge, Mode=TwoWay}"
+        />
+      </StackPanel>
+    </Grid>
+
+    <!-- Received / Gifted Skins Strip -->
+    <Border
+      Grid.Row="2"
+      Margin="0,0,0,10"
+      Padding="12,8"
+      Background="#14332B"
+      BorderBrush="#4ADE80"
+      BorderThickness="1"
+      CornerRadius="10"
+      Visibility="{Binding HasGiftedSkins, Converter={StaticResource BooleanToVisibilityConverter}}"
+    >
+      <DockPanel>
+        <TextBlock
+          Margin="0,0,10,0"
+          VerticalAlignment="Center"
+          DockPanel.Dock="Left"
+          FontSize="12"
+          FontWeight="SemiBold"
+          Foreground="#BBF7D0"
+          Text="🎁 Your Gifted Skins:"
+        />
+        <ItemsControl ItemsSource="{Binding GiftedSkinNames}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <ui:Button
+                Margin="0,2,6,2"
+                Padding="10,4"
+                Background="#15803D"
+                BorderBrush="#FACC15"
+                Command="{Binding DataContext.NavigateToGiftedSkinCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                CommandParameter="{Binding}"
+                Content="{Binding}"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Foreground="#FFFFFF"
+                ToolTip="Click to jump to this skin"
+              />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </DockPanel>
+    </Border>
+
+    <!-- Winter Night / Aurora North Pole Message Feed -->
+    <Border
+      Grid.Row="3"
+      ClipToBounds="True"
+      BorderBrush="#2D6A4F"
+      BorderThickness="1.2"
+      CornerRadius="12"
+    >
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+          <GradientStop Offset="0" Color="#07131E" />
+          <GradientStop Offset="0.55" Color="#0B1520" />
+          <GradientStop Offset="1" Color="#101824" />
+        </LinearGradientBrush>
+      </Border.Background>
+      <Grid>
+        <!-- Server-Gated Aurora Borealis Glow -->
+        <Border
+          IsHitTestVisible="False"
+          Visibility="{Binding IsSpecialThemeActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+        >
+          <Border.Background>
+            <RadialGradientBrush
+              Center="0.25,0.12"
+              GradientOrigin="0.25,0.12"
+              RadiusX="0.85"
+              RadiusY="0.65"
+            >
+              <GradientStop Offset="0" Color="#4410B981" />
+              <GradientStop Offset="0.45" Color="#2806B6D4" />
+              <GradientStop Offset="0.8" Color="#18A855F7" />
+              <GradientStop Offset="1" Color="#0007131E" />
+            </RadialGradientBrush>
+          </Border.Background>
+        </Border>
+
+        <!-- Server-Gated Drifting Snowfall Canvas -->
+        <Canvas
+          x:Name="SnowfallCanvas"
+          IsHitTestVisible="False"
+          Visibility="{Binding IsSpecialThemeActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+        />
+
+        <ListBox
+          x:Name="MessagesListBox"
+          Margin="8"
+          Background="Transparent"
+          BorderThickness="0"
+          ItemsSource="{Binding Messages}"
+          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        >
+          <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem">
+              <Setter Property="Focusable" Value="False" />
+              <Setter Property="Padding" Value="3,4" />
+              <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+          </ListBox.ItemContainerStyle>
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Padding="12,8" CornerRadius="9">
+                <Border.Style>
+                  <Style TargetType="Border">
+                    <Setter Property="Background" Value="#CC151E2B" />
+                    <Setter Property="BorderBrush" Value="#334155" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsSystem}" Value="True">
+                        <Setter Property="Background" Value="#CC122B22" />
+                        <Setter Property="BorderBrush" Value="#D4AF37" />
+                        <Setter Property="BorderThickness" Value="1" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Border.Style>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+                  <Grid Grid.Row="0" Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                      Grid.Column="0"
+                      FontSize="12"
+                      FontWeight="Bold"
+                      Text="{Binding DisplayAuthor}"
+                    >
+                      <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Foreground" Value="#FCA5A5" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSystem}" Value="True">
+                              <Setter Property="Foreground" Value="#FDE047" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock
+                      Grid.Column="1"
+                      Margin="10,0,0,0"
+                      FontSize="11"
+                      Foreground="#94A3B8"
+                      Text="{Binding TimeText}"
+                    />
+                  </Grid>
+                  <TextBlock
+                    Grid.Row="1"
+                    FontSize="13"
+                    Foreground="#F8FAFC"
+                    Text="{Binding Text}"
+                    TextWrapping="Wrap"
+                  />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Border>
+
+    <!-- Input Bar -->
+    <Grid Grid.Row="4" Margin="0,10,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <ui:TextBox
+        Grid.Column="0"
+        Margin="0,0,8,0"
+        KeyDown="OnInputKeyDown"
+        PlaceholderText="Say something festive or type /help..."
+        Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+      />
+
+      <ui:Button
+        Grid.Column="1"
+        Background="#B91C1C"
+        BorderBrush="#FACC15"
+        Command="{Binding SendCommand}"
+        Content="Send 🎄"
+        Foreground="#FFFFFF"
+      />
+    </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

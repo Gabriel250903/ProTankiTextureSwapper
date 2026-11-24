@@ -1,4 +1,3 @@
-using Serilog;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -31,6 +31,60 @@ namespace TextureSwapper.Services
 
         private const string ACTIVATION_URL =
             "https://textureswapper-gatekeeper.flytoxp.workers.dev/license";
+
+        private readonly List<string> _unlockedChristmasSkinIds = [];
+
+        public event EventHandler? UnlockedChristmasSkinsChanged;
+
+        public string? UnlockedChristmasSkinId =>
+            _unlockedChristmasSkinIds.Count > 0 ? _unlockedChristmasSkinIds[0] : null;
+
+        public IReadOnlyList<string> UnlockedChristmasSkinIds => _unlockedChristmasSkinIds;
+
+        public void SetUnlockedChristmasSkinId(string? skinId)
+        {
+            if (string.IsNullOrWhiteSpace(skinId))
+            {
+                return;
+            }
+            string clean = skinId.Trim();
+            if (!_unlockedChristmasSkinIds.Contains(clean, StringComparer.OrdinalIgnoreCase))
+            {
+                _unlockedChristmasSkinIds.Add(clean);
+                UnlockedChristmasSkinsChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public void SetUnlockedChristmasSkinIds(IEnumerable<string>? skinIds)
+        {
+            List<string> next = [];
+            if (skinIds != null)
+            {
+                foreach (string id in skinIds)
+                {
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        string clean = id.Trim();
+                        if (!next.Contains(clean, StringComparer.OrdinalIgnoreCase))
+                        {
+                            next.Add(clean);
+                        }
+                    }
+                }
+            }
+
+            bool changed =
+                next.Count != _unlockedChristmasSkinIds.Count
+                || !next.SequenceEqual(_unlockedChristmasSkinIds, StringComparer.OrdinalIgnoreCase);
+
+            _unlockedChristmasSkinIds.Clear();
+            _unlockedChristmasSkinIds.AddRange(next);
+
+            if (changed)
+            {
+                UnlockedChristmasSkinsChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         private static HttpClient CreateDefaultHttpClient()
         {
@@ -127,7 +181,8 @@ namespace TextureSwapper.Services
             }
 
             string hwid = HardwareFingerprintHelper.GetMachineHwid();
-            string cacheKey = $"{hwid}|{settings.PremiumExpiresAtUtc}|{settings.PremiumActivationSignature}";
+            string cacheKey =
+                $"{hwid}|{settings.PremiumExpiresAtUtc}|{settings.PremiumActivationSignature}";
             if (
                 string.Equals(_verifiedSignatureKey, cacheKey, StringComparison.Ordinal)
                 && _verifiedSignatureResult
@@ -143,7 +198,10 @@ namespace TextureSwapper.Services
             return isValid;
         }
 
-        public bool IsPremiumUnlocked => _lastSettings != null && HasValidLocalSignature(_lastSettings) && IntegrityChecker.ValidateAssemblyIntegrity();
+        public bool IsPremiumUnlocked =>
+            _lastSettings != null
+            && HasValidLocalSignature(_lastSettings)
+            && IntegrityChecker.ValidateAssemblyIntegrity();
 
         public bool IsTrialActive =>
             _lastSettings != null
@@ -939,6 +997,26 @@ namespace TextureSwapper.Services
 
                     bool hasLicense =
                         root.TryGetProperty("hasLicense", out JsonElement hl) && hl.GetBoolean();
+                    if (
+                        root.TryGetProperty("unlockedSkinIds", out JsonElement usIdsEl)
+                        && usIdsEl.ValueKind == JsonValueKind.Array
+                    )
+                    {
+                        List<string> parsedIds = [];
+                        foreach (JsonElement item in usIdsEl.EnumerateArray())
+                        {
+                            string? val = item.GetString();
+                            if (!string.IsNullOrWhiteSpace(val))
+                            {
+                                parsedIds.Add(val);
+                            }
+                        }
+                        SetUnlockedChristmasSkinIds(parsedIds);
+                    }
+                    else if (root.TryGetProperty("unlockedSkinId", out JsonElement usEl))
+                    {
+                        SetUnlockedChristmasSkinId(usEl.GetString());
+                    }
                     string? key = root.TryGetProperty("licenseKey", out JsonElement lk)
                         ? lk.GetString()
                         : (root.TryGetProperty("key", out JsonElement k) ? k.GetString() : null);
@@ -1116,7 +1194,10 @@ namespace TextureSwapper.Services
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error syncing assigned license with server. Falling back to strict local verification.");
+                Log.Error(
+                    ex,
+                    "Error syncing assigned license with server. Falling back to strict local verification."
+                );
                 return await VerifyPremiumStatusAsync(settings);
             }
             finally
@@ -1938,7 +2019,10 @@ namespace TextureSwapper.Services
         {
             _lastSettings ??= _settingsService.Load();
 
-            if (_lastSettings == null || !IsPremiumUnlocked)
+            if (
+                _lastSettings == null
+                || (!IsPremiumUnlocked && string.IsNullOrWhiteSpace(UnlockedChristmasSkinId))
+            )
             {
                 Log.Warning("AssetKey: Cannot request key - Premium is not unlocked.");
                 return null;

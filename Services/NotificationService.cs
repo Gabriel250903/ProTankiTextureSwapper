@@ -1,5 +1,5 @@
-using Serilog;
 using System.Windows;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Views.Windows;
 using Wpf.Ui.Controls;

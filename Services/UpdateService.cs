@@ -1,4 +1,3 @@
-using Serilog;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -8,6 +7,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Windows;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -185,8 +185,10 @@ namespace TextureSwapper.Services
         {
             try
             {
-                if (!string.IsNullOrEmpty(skin.PreviewImage)
-                    && !skin.PreviewImage.StartsWith("pack:", StringComparison.OrdinalIgnoreCase))
+                if (
+                    !string.IsNullOrEmpty(skin.PreviewImage)
+                    && !skin.PreviewImage.StartsWith("pack:", StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     await EnsureFileExistsAsync(
                         skin.PreviewImage,
@@ -214,8 +216,17 @@ namespace TextureSwapper.Services
                             "Textures/Paints/Animated",
                             StringComparison.OrdinalIgnoreCase
                         )
-                        || (skin.ItemName != null && skin.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase))
-                        || (skin.ItemName != null && skin.ItemName.Equals("Noizy Paints", StringComparison.OrdinalIgnoreCase));
+                        || (
+                            skin.ItemName != null
+                            && skin.ItemName.Equals("Animated", StringComparison.OrdinalIgnoreCase)
+                        )
+                        || (
+                            skin.ItemName != null
+                            && skin.ItemName.Equals(
+                                "Noizy Paints",
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        );
 
                     if (isAnimatedOrEncrypted)
                     {
@@ -227,7 +238,8 @@ namespace TextureSwapper.Services
                             isOptional: true
                         );
                         await EnsureFileExistsAsync(
-                            Path.Combine(skin.SourceFolder, $"{skin.Name}.jpg.enc").Replace("\\", "/"),
+                            Path.Combine(skin.SourceFolder, $"{skin.Name}.jpg.enc")
+                                .Replace("\\", "/"),
                             string.Empty,
                             skin.SourceFolder,
                             onProgress,
@@ -333,7 +345,11 @@ namespace TextureSwapper.Services
                     {
                         if (isOptional)
                         {
-                            Log.Debug("Optional asset not found on remote (status {StatusCode}): {Url}", response.StatusCode, url);
+                            Log.Debug(
+                                "Optional asset not found on remote (status {StatusCode}): {Url}",
+                                response.StatusCode,
+                                url
+                            );
                             return;
                         }
                         _ = response.EnsureSuccessStatusCode();
@@ -344,7 +360,8 @@ namespace TextureSwapper.Services
                     Log.Information($"Asset downloaded and saved: {downloadLocalPath}");
                     return;
                 }
-                catch (HttpRequestException ex) when (isOptional && ex.StatusCode == HttpStatusCode.NotFound)
+                catch (HttpRequestException ex)
+                    when (isOptional && ex.StatusCode == HttpStatusCode.NotFound)
                 {
                     Log.Debug("Optional asset not found (404): {Url}", url);
                     return;

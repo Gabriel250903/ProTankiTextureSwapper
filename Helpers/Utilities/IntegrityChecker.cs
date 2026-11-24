@@ -1,9 +1,9 @@
-using Microsoft.Win32;
-using Serilog;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Win32;
+using Serilog;
 
 namespace TextureSwapper.Helpers.Utilities
 {
@@ -12,7 +12,16 @@ namespace TextureSwapper.Helpers.Utilities
         private const string RegistrySubKey = @"Software\ProTankiTextureSwapper";
         private const string HashRegistryValue = "AssemblyIntegrity";
 
+        private static readonly Lazy<bool> _cachedIntegrityResult = new(
+            VerifyAssemblyIntegrityCore
+        );
+
         public static bool ValidateAssemblyIntegrity()
+        {
+            return _cachedIntegrityResult.Value;
+        }
+
+        private static bool VerifyAssemblyIntegrityCore()
         {
 #if DEBUG
             try

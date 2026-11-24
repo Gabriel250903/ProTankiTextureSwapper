@@ -2,9 +2,11 @@ namespace TextureSwapper.Core
 {
     public static class Constants
     {
+        public const string AppName = "ProTanki Texture Swapper";
         public const string GameProcessName = "ProTanki";
         public const string HullsSkinsJson = "skins_hulls.json";
         public const string TurretsSkinsJson = "skins_turrets.json";
+        public const string EquipmentTargetsJson = "equipment_targets.json";
         public const string SuppliesSkinsJson = "skins_supplies.json";
         public const string PaintsSkinsJson = "skins_paints.json";
         public const string AnimatedPaintsSkinsJson = "skins_animated_paints.json";
@@ -27,7 +29,7 @@ namespace TextureSwapper.Core
             "https://api.github.com/repos/Gabriel250903/ProTankiTextureSwapper";
         public const string TexturesZipFileName = "textures.zip";
         public const string TexturesVersionFileName = ".textures_version";
-        public const string RequiredTexturesPackVersion = "4.0";
+        public const string RequiredTexturesPackVersion = "5.0";
         public const string TexturesWorkerDownloadUrl =
             "https://textureswapper-gatekeeper.flytoxp.workers.dev/textures.zip";
         public const string TexturesLatestDownloadUrl =
@@ -263,7 +265,9 @@ namespace TextureSwapper.Core
             "End",
         ];
 
-        private static readonly HashSet<string> ModifierOnlyKeyCodes = new(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> ModifierOnlyKeyCodes = new(
+            StringComparer.OrdinalIgnoreCase
+        )
         {
             "ControlLeft",
             "ControlRight",

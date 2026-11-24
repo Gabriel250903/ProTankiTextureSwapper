@@ -1,6 +1,6 @@
-using Serilog;
 using System.Diagnostics;
 using System.Windows;
+using Serilog;
 using TextureSwapper.Core;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;

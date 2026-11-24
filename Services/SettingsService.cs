@@ -1,6 +1,6 @@
-using Serilog;
 using System.IO;
 using System.Text.Json;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 

@@ -30,6 +30,18 @@ namespace TextureSwapper.Core.Models
         public bool IsPremium { get; set; }
         public List<string> Targets { get; set; } = [];
 
+        [JsonIgnore]
+        public string? DynamicLightColorHex { get; set; }
+
+        [JsonIgnore]
+        public bool IsDarkDynamicLight { get; set; }
+
+        [JsonIgnore]
+        public string? SecondaryDynamicLightColorHex { get; set; }
+
+        [JsonIgnore]
+        public bool IsSecondaryDarkDynamicLight { get; set; }
+
         private string? _cachedFullPreviewPath;
         private bool _previewCacheValid;
 

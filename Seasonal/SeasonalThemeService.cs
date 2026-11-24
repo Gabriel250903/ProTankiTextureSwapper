@@ -1,4 +1,3 @@
-using Serilog;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -6,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;

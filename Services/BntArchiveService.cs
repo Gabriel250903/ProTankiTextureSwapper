@@ -1,8 +1,8 @@
-using Serilog;
 using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 using System.Xml;
+using Serilog;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
 
@@ -36,9 +36,8 @@ namespace TextureSwapper.Services
                     throw new InvalidDataException("Unexpected EOF reading 1BNT filename length.");
                 }
 
-                int nameLen = (int)BinaryPrimitives.ReadUInt32LittleEndian(
-                    bntData.Slice(offset, 4)
-                );
+                int nameLen = (int)
+                    BinaryPrimitives.ReadUInt32LittleEndian(bntData.Slice(offset, 4));
                 offset += 4;
 
                 if (nameLen < 0 || offset + nameLen + 4 > bntData.Length)
@@ -49,9 +48,8 @@ namespace TextureSwapper.Services
                 string fileName = Encoding.UTF8.GetString(bntData.Slice(offset, nameLen));
                 offset += nameLen;
 
-                int dataLen = (int)BinaryPrimitives.ReadUInt32LittleEndian(
-                    bntData.Slice(offset, 4)
-                );
+                int dataLen = (int)
+                    BinaryPrimitives.ReadUInt32LittleEndian(bntData.Slice(offset, 4));
                 offset += 4;
 
                 if (dataLen < 0 || offset + dataLen > bntData.Length)

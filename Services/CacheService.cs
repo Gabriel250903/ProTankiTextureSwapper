@@ -20,19 +20,14 @@ namespace TextureSwapper.Services
 
         public bool IsClientDetected(ClientType clientType)
         {
-            string appData = Environment.GetFolderPath(
-                Environment.SpecialFolder.ApplicationData
-            );
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (clientType == ClientType.Html5)
             {
                 string roamingDir = Path.Combine(appData, Constants.Html5AppDataDir);
                 string localAppData = Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData
                 );
-                string installDir = Path.Combine(
-                    localAppData,
-                    Constants.Html5LocalInstallSubPath
-                );
+                string installDir = Path.Combine(localAppData, Constants.Html5LocalInstallSubPath);
                 return Directory.Exists(roamingDir) || Directory.Exists(installDir);
             }
             else

@@ -1,0 +1,204 @@
+﻿{
+  "Turrets": {
+    "Firebird": {
+      "M3": {
+        "ResourceId": 2076
+      },
+      "M2": {
+        "ResourceId": 2074
+      },
+      "M1": {
+        "ResourceId": 2072
+      }
+    },
+    "Freeze": {
+      "M3": {
+        "ResourceId": 2084
+      },
+      "M2": {
+        "ResourceId": 2082
+      },
+      "M1": {
+        "ResourceId": 2080
+      }
+    },
+    "Hammer": {
+      "M3": {
+        "ResourceId": 2422
+      },
+      "M2": {
+        "ResourceId": 2420
+      },
+      "M1": {
+        "ResourceId": 2418
+      }
+    },
+    "Isida": {
+      "M3": {
+        "ResourceId": 2092
+      },
+      "M2": {
+        "ResourceId": 2090
+      },
+      "M1": {
+        "ResourceId": 2088
+      }
+    },
+    "Railgun": {
+      "M3": {
+        "ResourceId": 2100
+      },
+      "M2": {
+        "ResourceId": 2098
+      },
+      "M1": {
+        "ResourceId": 2096
+      }
+    },
+    "Ricochet": {
+      "M3": {
+        "ResourceId": 2174
+      },
+      "M2": {
+        "ResourceId": 2172
+      },
+      "M1": {
+        "ResourceId": 2170
+      }
+    },
+    "Shaft": {
+      "M3": {
+        "ResourceId": 2182
+      },
+      "M2": {
+        "ResourceId": 2180
+      },
+      "M1": {
+        "ResourceId": 2178
+      }
+    },
+    "Smoky": {
+      "M3": {
+        "ResourceId": 2190
+      },
+      "M2": {
+        "ResourceId": 2188
+      },
+      "M1": {
+        "ResourceId": 2186
+      }
+    },
+    "Thunder": {
+      "M3": {
+        "ResourceId": 2406
+      },
+      "M2": {
+        "ResourceId": 2404
+      },
+      "M1": {
+        "ResourceId": 2402
+      }
+    },
+    "Twins": {
+      "M3": {
+        "ResourceId": 2414
+      },
+      "M2": {
+        "ResourceId": 2412
+      },
+      "M1": {
+        "ResourceId": 2410
+      }
+    },
+    "Vulcan": {
+      "M3": {
+        "ResourceId": 2430
+      },
+      "M2": {
+        "ResourceId": 2428
+      },
+      "M1": {
+        "ResourceId": 2426
+      }
+    }
+  },
+  "Hulls": {
+    "Dictator": {
+      "M3": {
+        "ResourceId": 1746
+      },
+      "M2": {
+        "ResourceId": 1744
+      },
+      "M1": {
+        "ResourceId": 1742
+      }
+    },
+    "Hornet": {
+      "M3": {
+        "ResourceId": 1804
+      },
+      "M2": {
+        "ResourceId": 1802
+      },
+      "M1": {
+        "ResourceId": 1750
+      }
+    },
+    "Hunter": {
+      "M3": {
+        "ResourceId": 1820
+      },
+      "M2": {
+        "ResourceId": 1818
+      },
+      "M1": {
+        "ResourceId": 1816
+      }
+    },
+    "Mammoth": {
+      "M3": {
+        "ResourceId": 1828
+      },
+      "M2": {
+        "ResourceId": 1826
+      },
+      "M1": {
+        "ResourceId": 1824
+      }
+    },
+    "Titan": {
+      "M3": {
+        "ResourceId": 1836
+      },
+      "M2": {
+        "ResourceId": 1834
+      },
+      "M1": {
+        "ResourceId": 1832
+      }
+    },
+    "Viking": {
+      "M3": {
+        "ResourceId": 2052
+      },
+      "M2": {
+        "ResourceId": 1850
+      },
+      "M1": {
+        "ResourceId": 1848
+      }
+    },
+    "Wasp": {
+      "M3": {
+        "ResourceId": 2060
+      },
+      "M2": {
+        "ResourceId": 2058
+      },
+      "M1": {
+        "ResourceId": 2056
+      }
+    }
+  }
+}

@@ -14,24 +14,138 @@
   <AssemblySearchPath path="$(InPath)" />
 
   <Module file="$(InPath)\TextureSwapper.dll">
-    <SkipType name="TextureSwapper.App" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Core.Interfaces.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Core.Models.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Services.NotificationService" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Views.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.ViewModels.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Helpers.Converters.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="TextureSwapper.Seasonal.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="XamlGeneratedNamespace.*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Window*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Control*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Content*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Dialog*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*ViewModel*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Model*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Converter*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*Proxy*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*App*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
-    <SkipType name="*AnonymousType*" skipMethods="true" skipProperties="true" skipFields="true" skipEvents="true" />
+    <SkipType
+      name="TextureSwapper.App"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Core.Interfaces.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Core.Models.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Services.NotificationService"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Views.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.ViewModels.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Helpers.Converters.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="TextureSwapper.Seasonal.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="XamlGeneratedNamespace.*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Window*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Control*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Content*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Dialog*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*ViewModel*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Model*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Converter*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*Proxy*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*App*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
+    <SkipType
+      name="*AnonymousType*"
+      skipMethods="true"
+      skipProperties="true"
+      skipFields="true"
+      skipEvents="true"
+    />
   </Module>
 </Obfuscator>

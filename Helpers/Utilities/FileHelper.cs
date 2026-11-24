@@ -1,7 +1,6 @@
-using Microsoft.Win32;
-using Serilog;
 using System.Diagnostics;
 using System.IO;
+using Serilog;
 using TextureSwapper.Core;
 
 namespace TextureSwapper.Helpers.Utilities
@@ -112,11 +111,7 @@ namespace TextureSwapper.Helpers.Utilities
                     Constants.Html5LevelDbDir,
                     "LOCK"
                 );
-                string html5Lock2 = Path.Combine(
-                    cachePath,
-                    Constants.Html5LevelDbDir,
-                    "LOCK"
-                );
+                string html5Lock2 = Path.Combine(cachePath, Constants.Html5LevelDbDir, "LOCK");
                 string html5Lock3 = Path.Combine(cachePath, "LOCK");
 
                 if (File.Exists(html5Lock1) && IsFileLocked(html5Lock1))

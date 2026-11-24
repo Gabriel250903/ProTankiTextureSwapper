@@ -381,5 +381,8 @@
   "Loc_DiscordInvite_Body": "Join our official Discord server to follow the latest news, announcements, texture updates, and sneak peeks.\n\nConnect with other players, get support, and share your suggestions!",
   "Loc_DiscordInvite_Join": "Join Discord Server",
   "Loc_DiscordInvite_Later": "Maybe Later",
-  "Loc_ShotEffects_Classic2010": "Apply Classic 2010"
+  "Loc_ShotEffects_Classic2010": "Apply Classic 2010",
+  "Loc_Skins_GarageTier": "GARAGE TIER",
+  "Loc_Skins_M3ModelBadge": "M3 MODEL",
+  "Loc_Skins_M3ModelTooltip": "Applies the M3 3D model onto your lower-tier garage item"
 }

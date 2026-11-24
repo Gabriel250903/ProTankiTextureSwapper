@@ -1,5 +1,5 @@
-using Serilog;
 using System.IO;
+using Serilog;
 
 namespace TextureSwapper.Core.Models
 {

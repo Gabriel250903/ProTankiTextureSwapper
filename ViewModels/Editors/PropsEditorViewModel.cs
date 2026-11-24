@@ -1,5 +1,3 @@
-using Microsoft.Win32;
-using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -10,6 +8,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using Microsoft.Win32;
+using Serilog;
 using TextureSwapper.Core;
 using TextureSwapper.Core.Interfaces;
 using TextureSwapper.Core.Models;
@@ -2706,9 +2706,7 @@ namespace TextureSwapper.ViewModels.Editors
                     SelectedProp.LibraryBase64Url
                 );
 
-                await Task.Run(() =>
-                    EnsureLibraryBackup(cachePath, SelectedProp.LibraryBase64Url)
-                );
+                await Task.Run(() => EnsureLibraryBackup(cachePath, SelectedProp.LibraryBase64Url));
 
                 TaraEntry? matchingTex = FindMatchingTextureEntry(
                     _currentTaraEntries,
